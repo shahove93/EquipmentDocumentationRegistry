@@ -1,0 +1,28 @@
+# Переводы строк: рабочие копии в LF, LF в репозитории.
+# Проект расположен на диске Windows (DrvFs через WSL) и не должен
+# зависеть от настроек core.autocrlf конкретной машины.
+
+* text=auto eol=lf
+
+*.py    text eol=lf
+*.md    text eol=lf
+*.txt   text eol=lf
+*.ini   text eol=lf
+*.mako  text eol=lf
+*.cfg   text eol=lf
+*.toml  text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.json  text eol=lf
+
+.env.example text eol=lf
+.gitignore  text eol=lf
+.gitattributes text eol=lf
+
+# Двоичные файлы не должны подвергаться нормализации переводов строк.
+*.pdf   binary
+*.jpg   binary
+*.jpeg  binary
+*.png   binary
+*.gz    binary
+*.zip   binary

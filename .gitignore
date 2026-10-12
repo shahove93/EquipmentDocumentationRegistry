@@ -1,0 +1,81 @@
+# --- secrets -----------------------------------------------------------
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# --- virtual environments ----------------------------------------------
+.venv/
+venv/
+env/
+
+# --- python caches and build artefacts ---------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# --- pytest and coverage -----------------------------------------------
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+
+# --- application data (user scans must never be committed) -------------
+storage/
+
+# --- logs and temporary files ------------------------------------------
+*.log
+*.log.*
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+*.rej
+*~
+*.pid
+*.swp
+
+# --- local databases and PostgreSQL dumps ------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*-wal
+*-shm
+*.sql
+*.dump
+*.backup
+pg_dump*
+
+# --- private keys and certificates -------------------------------------
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.crt
+*.cer
+id_rsa*
+.netrc
+.pgpass
+
+# --- editors -----------------------------------------------------------
+.vscode/
+.idea/
+.vs/
+
+# --- operating system / Windows ----------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/

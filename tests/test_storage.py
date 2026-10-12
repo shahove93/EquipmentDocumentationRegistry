@@ -1,0 +1,282 @@
+import io
+import os
+import stat
+
+import pytest
+
+from app.services.local_storage import LocalStorageBackend
+from app.services.storage import (
+    FileAlreadyExistsError,
+    StorageBackend,
+    StorageError,
+    StorageKeyError,
+    StoredFileNotFoundError,
+)
+
+KEY = "documents/42/9f1c2b3a-4d5e-4f60-8712-a3b4c5d6e7f8.pdf"
+
+
+@pytest.fixture
+def backend(tmp_path):
+    return LocalStorageBackend(root_path=tmp_path / "storage")
+
+
+class TestInterface:
+    def test_local_backend_implements_interface(self, backend):
+        assert isinstance(backend, StorageBackend)
+
+    def test_interface_cannot_be_instantiated(self):
+        with pytest.raises(TypeError):
+            StorageBackend()
+
+    def test_default_root_path_is_storage(self):
+        assert LocalStorageBackend().root_path.name == "storage"
+
+    def test_all_errors_share_base_class(self):
+        for error in (StorageKeyError, FileAlreadyExistsError, StoredFileNotFoundError):
+            assert issubclass(error, StorageError)
+
+
+class TestSaveAndOpen:
+    def test_save_creates_file_on_disk(self, backend, tmp_path):
+        backend.save(KEY, io.BytesIO(b"hello"))
+        assert (tmp_path / "storage" / KEY).is_file()
+
+    def test_open_returns_stored_bytes(self, backend):
+        backend.save(KEY, io.BytesIO(b"hello world"))
+        with backend.open(KEY) as stream:
+            assert stream.read() == b"hello world"
+
+    def test_open_returns_binary_stream(self, backend):
+        backend.save(KEY, io.BytesIO(b"abc"))
+        with backend.open(KEY) as stream:
+            data = stream.read()
+        assert isinstance(data, bytes)
+        assert data == b"abc"
+
+    def test_open_missing_file_raises_clear_error(self, backend):
+        with pytest.raises(StoredFileNotFoundError) as info:
+            backend.open("documents/1/missing.pdf")
+        assert "documents/1/missing.pdf" in str(info.value)
+
+    def test_save_creates_nested_directories(self, backend, tmp_path):
+        key = "documents/7/a/b/c/deep.pdf"
+        backend.save(key, io.BytesIO(b"deep"))
+        assert (tmp_path / "storage" / "documents" / "7" / "a" / "b" / "c" / "deep.pdf").is_file()
+
+    def test_save_accepts_empty_content(self, backend):
+        backend.save("documents/1/empty.pdf", io.BytesIO(b""))
+        assert backend.exists("documents/1/empty.pdf")
+
+
+class TestExists:
+    def test_exists_false_before_save(self, backend):
+        assert backend.exists(KEY) is False
+
+    def test_exists_true_after_save(self, backend):
+        backend.save(KEY, io.BytesIO(b"x"))
+        assert backend.exists(KEY) is True
+
+    def test_exists_false_after_delete(self, backend):
+        backend.save(KEY, io.BytesIO(b"x"))
+        backend.delete(KEY)
+        assert backend.exists(KEY) is False
+
+    def test_exists_returns_real_boolean(self, backend):
+        assert backend.exists(KEY) is False
+
+
+class TestDelete:
+    def test_delete_removes_file(self, backend, tmp_path):
+        backend.save(KEY, io.BytesIO(b"bye"))
+        backend.delete(KEY)
+        assert not (tmp_path / "storage" / KEY).exists()
+
+    def test_repeated_delete_is_safe(self, backend):
+        backend.save(KEY, io.BytesIO(b"bye"))
+        backend.delete(KEY)
+        backend.delete(KEY)
+        backend.delete(KEY)
+        assert backend.exists(KEY) is False
+
+    def test_delete_missing_file_is_safe(self, backend):
+        backend.delete("documents/999/never-existed.pdf")
+
+    def test_delete_keeps_siblings(self, backend):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"a"))
+        backend.save("documents/1/b.pdf", io.BytesIO(b"b"))
+        backend.delete("documents/1/a.pdf")
+        assert backend.exists("documents/1/b.pdf") is True
+
+
+class TestNoOverwrite:
+    def test_duplicate_storage_key_rejected(self, backend):
+        backend.save(KEY, io.BytesIO(b"first"))
+        with pytest.raises(FileAlreadyExistsError) as info:
+            backend.save(KEY, io.BytesIO(b"second"))
+        assert KEY in str(info.value)
+
+    def test_original_content_survives_failed_overwrite(self, backend):
+        backend.save(KEY, io.BytesIO(b"first"))
+        with pytest.raises(FileAlreadyExistsError):
+            backend.save(KEY, io.BytesIO(b"second"))
+        with backend.open(KEY) as stream:
+            assert stream.read() == b"first"
+
+    def test_exists_reports_key_as_taken(self, backend):
+        backend.save(KEY, io.BytesIO(b"first"))
+        with pytest.raises(FileAlreadyExistsError):
+            backend.save(KEY, io.BytesIO(b"second"))
+        assert backend.exists(KEY) is True
+
+
+class TestPathTraversal:
+    @pytest.mark.parametrize(
+        "key",
+        [
+            "../escape.pdf",
+            "documents/../../escape.pdf",
+            "documents/42/../../../escape.pdf",
+            "..",
+            "documents/..",
+        ],
+    )
+    def test_dotdot_rejected(self, backend, key):
+        with pytest.raises(StorageKeyError):
+            backend.save(key, io.BytesIO(b"x"))
+
+    @pytest.mark.parametrize(
+        "key",
+        [
+            "/etc/passwd",
+            "/documents/42/file.pdf",
+            "\\windows\\system32\\file.pdf",
+            "//server/share/file.pdf",
+        ],
+    )
+    def test_absolute_paths_rejected(self, backend, key):
+        with pytest.raises(StorageKeyError):
+            backend.save(key, io.BytesIO(b"x"))
+
+    @pytest.mark.parametrize(
+        "key",
+        [
+            "documents\\42\\file.pdf",
+            "C:/documents/file.pdf",
+            "C:\\documents\\file.pdf",
+        ],
+    )
+    def test_windows_paths_rejected(self, backend, key):
+        with pytest.raises(StorageKeyError):
+            backend.save(key, io.BytesIO(b"x"))
+
+    def test_nothing_written_outside_root(self, backend, tmp_path):
+        with pytest.raises(StorageKeyError):
+            backend.save("../escape.pdf", io.BytesIO(b"x"))
+        assert not (tmp_path / "escape.pdf").exists()
+
+    @pytest.mark.parametrize("key", ["", "   ", "."])
+    def test_empty_or_dot_key_rejected(self, backend, key):
+        with pytest.raises(StorageKeyError):
+            backend.save(key, io.BytesIO(b"x"))
+
+    def test_null_byte_rejected(self, backend):
+        with pytest.raises(StorageKeyError):
+            backend.save("documents/42/file\x00.pdf", io.BytesIO(b"x"))
+
+    def test_non_string_key_rejected(self, backend):
+        with pytest.raises(StorageKeyError):
+            backend.save(42, io.BytesIO(b"x"))
+
+    @pytest.mark.parametrize("operation", ["open", "exists", "delete"])
+    def test_traversal_blocked_on_every_operation(self, backend, operation):
+        with pytest.raises(StorageKeyError):
+            if operation == "open":
+                backend.open("../escape.pdf")
+            elif operation == "exists":
+                backend.exists("../escape.pdf")
+            else:
+                backend.delete("../escape.pdf")
+
+    def test_symlink_out_of_root_is_not_followed(self, backend, tmp_path):
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        secret = outside / "secret.pdf"
+        secret.write_bytes(b"secret")
+        link = tmp_path / "storage" / "link"
+        link.parent.mkdir(parents=True, exist_ok=True)
+        os.symlink(outside, link)
+        # link/secret.pdf resolves outside the root and must be refused
+        with pytest.raises(StorageKeyError):
+            backend.save("link/secret.pdf", io.BytesIO(b"x"))
+
+
+class TestBinaryFidelity:
+    def test_all_byte_values_round_trip(self, backend):
+        payload = bytes(range(256))
+        backend.save("documents/1/all-bytes.bin", io.BytesIO(payload))
+        with backend.open("documents/1/all-bytes.bin") as stream:
+            assert stream.read() == payload
+
+    def test_pdf_magic_bytes_preserved(self, backend):
+        payload = b"%PDF-1.7\n%\xe2\xe3\xcf\xd3\nbinary\x00data"
+        backend.save("documents/1/doc.pdf", io.BytesIO(payload))
+        with backend.open("documents/1/doc.pdf") as stream:
+            assert stream.read() == payload
+
+    def test_null_bytes_preserved(self, backend):
+        payload = b"\x00" * 1024
+        backend.save("documents/1/zeros.bin", io.BytesIO(payload))
+        with backend.open("documents/1/zeros.bin") as stream:
+            assert stream.read() == payload
+
+    def test_reads_in_chunks_not_whole_file(self, backend):
+        from app.services import local_storage
+
+        sizes = []
+
+        class CountingStream:
+            def __init__(self, payload):
+                self._buffer = io.BytesIO(payload)
+
+            def read(self, size=-1):
+                sizes.append(size)
+                return self._buffer.read(size)
+
+        backend.save(
+            "documents/1/stream.bin", CountingStream(b"x" * 200_000)
+        )
+
+        assert sizes, "source.read was never called"
+        assert all(size == local_storage.CHUNK_SIZE for size in sizes)
+        assert len(sizes) > 1, "file was read in a single chunk"
+
+    def test_large_stream_written_completely(self, backend):
+        payload = os.urandom(3 * 1024 * 1024)
+        backend.save("documents/1/large.bin", io.BytesIO(payload))
+        path = backend.root_path / "documents" / "1" / "large.bin"
+        assert path.stat().st_size == len(payload)
+        with backend.open("documents/1/large.bin") as stream:
+            assert stream.read() == payload
+
+    def test_file_on_disk_is_regular_file(self, backend):
+        backend.save(KEY, io.BytesIO(b"x"))
+        mode = (backend.root_path / KEY).stat().st_mode
+        assert stat.S_ISREG(mode)
+
+
+class TestPartialWriteCleanup:
+    def test_failed_stream_leaves_no_partial_file(self, backend):
+        class BrokenStream:
+            def __init__(self):
+                self._sent = False
+
+            def read(self, size=-1):
+                if self._sent:
+                    raise OSError("source stream failed")
+                self._sent = True
+                return b"partial"
+
+        with pytest.raises(OSError):
+            backend.save(KEY, BrokenStream())
+        assert backend.exists(KEY) is False
