@@ -114,16 +114,19 @@ class TestRegistration:
         ).scalar()
         assert found == 1
 
-    def test_table_does_not_live_in_public(self, db):
-        # the fixture sets search_path, so an unqualified name cannot reach public
+    def test_test_session_is_separate_from_public(self, db):
+        # The migration has since been applied to the working database, so
+        # `public` legitimately has this table too. What must still hold is that
+        # the test session never resolves an unqualified name to `public`.
+        assert db.execute(text("SELECT current_schema()")).scalar() != "public"
         found = db.execute(
             text(
                 "SELECT count(*) FROM information_schema.tables "
-                "WHERE table_schema = 'public' "
+                "WHERE table_schema = current_schema() "
                 "AND table_name = 'document_verification_events'"
             )
         ).scalar()
-        assert found == 0
+        assert found == 1
 
     def test_search_path_is_the_test_schema(self, db):
         assert db.execute(text("SELECT current_schema()")).scalar() == (
@@ -596,15 +599,18 @@ class TestModelDeclaration:
         # slow every document query for no gain
         assert "verification_events" not in Document.__mapper__.relationships.keys()
 
-    def test_service_is_untouched(self):
+    def test_service_writes_the_history(self):
+        # TASK-DOC-004 wired the history into DocumentService in the same
+        # transaction as the status change, so the service must now reference the
+        # event model and the old "gap" warning must be gone.
         import inspect
 
         from app.services import document_service
 
         source = inspect.getsource(document_service)
-        assert "DocumentVerificationEvent" not in source
+        assert "DocumentVerificationEvent" in source
         assert "_apply_status_transition" in source
-        assert "TECHNICAL GAP" in source
+        assert "TECHNICAL GAP" not in source
 
 
 class TestMigrationScript:

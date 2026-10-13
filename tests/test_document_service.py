@@ -767,20 +767,11 @@ class TestUpdateVerificationStatus:
             DocumentUpdate(verification_status=VERIFIED)
         assert "verification_status" not in DocumentUpdate.model_fields
 
-    def test_transition_is_not_recorded_yet(self, db, make_document, set_status):
-        # TEMPORARY TEST for the current architectural state.
-        #
-        # DocumentService.update resets a decided verdict, and the row really
-        # ends up pending, but the history table that TASK-DOC-003 introduced
-        # stays empty: the transition is changed without leaving a trace, which
-        # is exactly the gap this stage was meant to expose.
-        #
-        # INVERT THIS ASSERTION once the history is wired atomically into the
-        # service: an update of a significant requisite must then create a
-        # `reopened` event (from_status = the old verdict, to_status = pending)
-        # in the same transaction, and this test becomes
-        #     assert events == 1
-        # or is better replaced by a dedicated history test.
+    def test_transition_is_recorded(self, db, make_document, set_status):
+        # Task 003A made this assertion temporary: the table existed but the
+        # service did not write to it. Now that the history is part of the same
+        # transaction as the status change, a decided document that is edited
+        # must leave exactly one `reopened` event behind.
         document = set_status(make_document(), VERIFIED)
 
         updated = DocumentService.update(
@@ -791,23 +782,15 @@ class TestUpdateVerificationStatus:
         db.expire_all()
         assert db.get(Document, document.id).verification_status == PENDING
 
-        table_exists = db.execute(
-            text(
-                "SELECT count(*) FROM information_schema.tables "
-                "WHERE table_schema = 'test_file_service' "
-                "AND table_name = 'document_verification_events'"
-            )
-        ).scalar()
-        assert table_exists == 1
-
         events = db.execute(
             text(
-                "SELECT count(*) FROM document_verification_events "
-                "WHERE document_id = :i"
+                "SELECT from_status, to_status, event_type, reason "
+                "FROM document_verification_events WHERE document_id = :i"
             ),
             {"i": document.id},
-        ).scalar()
-        assert events == 0
+        ).fetchall()
+        assert len(events) == 1
+        assert events[0] == (VERIFIED, PENDING, "reopened", None)
 
 
 class TestUpdateReferentialIntegrity:

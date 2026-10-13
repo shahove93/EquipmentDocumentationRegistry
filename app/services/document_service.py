@@ -1,21 +1,30 @@
 from datetime import date
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.api.documents.schemas import DocumentCreate, DocumentUpdate
 from app.models.document import Document
 from app.models.document_type import DocumentType
+from app.models.document_verification_event import DocumentVerificationEvent
+from app.models.file import File
 from app.models.issuer import Issuer
 from app.services.document_type_service import DocumentTypeService
 from app.services.issuer_service import IssuerService
 
 DEFAULT_LIMIT = 50
 
-# Initial lifecycle state. The column also carries server_default='pending', so a
-# direct insert still lands here; naming it keeps the intent explicit.
+# Lifecycle states. They mirror ck_documents_verification_status on the table
+# and the closed sets checked by document_verification_events.
 PENDING = "pending"
+VERIFIED = "verified"
+REJECTED = "rejected"
+
+# Why a transition happened, as opposed to where it landed.
+EVENT_VERIFIED = "verified"
+EVENT_REJECTED = "rejected"
+EVENT_REOPENED = "reopened"
 
 # Names PostgreSQL gave the two foreign keys on documents, and the SQLSTATE
 # reported for any referential violation. Both are checked together, see
@@ -80,6 +89,34 @@ class InvalidValidityPeriodError(DocumentServiceError):
         )
 
 
+class DocumentHasNoFilesError(DocumentServiceError):
+    """A document without an attachment cannot be confirmed.
+
+    A verdict says the scan is the one described by the document, so there has
+    to be a scan. Raised before any column is mutated, so a refused
+    confirmation leaves the status untouched and records nothing.
+    """
+
+    def __init__(self, document_id: int) -> None:
+        self.document_id = document_id
+        super().__init__(
+            f"Document {document_id} has no attached files and cannot be verified"
+        )
+
+
+class RejectionReasonRequiredError(DocumentServiceError):
+    """A rejection was requested without a usable reason.
+
+    `ck_document_verification_events_rejected_reason` refuses a blank reason in
+    the database, but the check is repeated here so the caller gets a domain
+    error before the document is touched at all.
+    """
+
+    def __init__(self, document_id: int) -> None:
+        self.document_id = document_id
+        super().__init__(f"A rejection of document {document_id} needs a reason")
+
+
 def _foreign_key_constraint(error: IntegrityError) -> str | None:
     """Return the violated FK constraint name, or None if this is not one.
 
@@ -110,7 +147,11 @@ class DocumentService:
     concurrent delete between the two steps surface as a domain error instead of
     a raw `IntegrityError`.
 
-    Known gap: see `_apply_status_transition`.
+    Verification lifecycle: `verify` and `reject` record a decision, `update`
+    records an automatic reopening. Every event is added to the caller's session
+    before the single `_commit` of the operation, so a status change and the row
+    that explains it are committed or rolled back together. There is exactly one
+    commit per mutating method, and none of them commit twice.
     """
 
     @staticmethod
@@ -219,24 +260,127 @@ class DocumentService:
 
     @staticmethod
     def _apply_status_transition(db: Session, document: Document) -> None:
-        """Send a modified document back to `pending`.
+        """Send a modified document back to `pending` and record why.
 
-        TECHNICAL GAP — the verification history is not written yet. When the
-        verdict moves away from `verified` or `rejected` there must eventually
-        be a row in `document_verification_events` recording the previous state,
-        the new state and the reason, so that an auditor can reconstruct how the
-        document reached its current state.
+        A document that has been decided on cannot stay decided once its content
+        changes: the verdict was given for the old content. `from_status` is
+        therefore the verdict being withdrawn, and the event type is `reopened`
+        so an auditor can tell an automatic reopening from a fresh decision.
 
-        That table does not exist, and no temporary stand-in is created here.
-        Writing the event inside this method, before `_commit` runs, keeps it in
-        the same transaction as the status change: either both land or neither
-        does. Adding it after the commit, or from a separate session, would leave
-        a window in which the status moved without a corresponding event.
+        A document that is already pending has nothing to withdraw, so no event
+        is written — otherwise every edit to an undecided document would bury
+        the history under meaningless rows.
 
-        Until that exists, this service must not be wired to a live endpoint that
-        can change a document's status.
+        The event is added to the same session and stays pending until the single
+        `_commit` below, which is what makes the status change and its history
+        one atomic unit: both land or neither does.
         """
+        previous_status = document.verification_status
+        if previous_status == PENDING:
+            return
+
         document.verification_status = PENDING
+        db.add(
+            DocumentVerificationEvent(
+                document_id=document.id,
+                from_status=previous_status,
+                to_status=PENDING,
+                event_type=EVENT_REOPENED,
+                reason=None,
+            )
+        )
+
+    @staticmethod
+    def verify(
+        db: Session, document_id: int, reason: str | None = None
+    ) -> Document | None:
+        """Confirm a document, recording the decision, or return None.
+
+        A verdict only means something alongside the scan it refers to, so at
+        least one attached file is required. The check runs before the document
+        is touched, so a refused confirmation changes nothing and records
+        nothing.
+
+        `rejected → verified` is allowed directly: re-examining a rejected
+        document and clearing it does not have to pass through a pending state
+        that nobody asked for. Re-confirming an already confirmed document is a
+        no-op, so the history is not padded with rows that decided nothing.
+        """
+        document = db.get(Document, document_id)
+        if document is None:
+            return None
+
+        if document.verification_status == VERIFIED:
+            return document
+
+        DocumentService._require_attachment(db, document.id)
+
+        previous_status = document.verification_status
+        document.verification_status = VERIFIED
+        db.add(
+            DocumentVerificationEvent(
+                document_id=document.id,
+                from_status=previous_status,
+                to_status=VERIFIED,
+                event_type=EVENT_VERIFIED,
+                reason=reason,
+            )
+        )
+        DocumentService._commit(
+            db, document.document_type_id, document.issuer_id
+        )
+        db.refresh(document)
+        return document
+
+    @staticmethod
+    def reject(db: Session, document_id: int, reason: str) -> Document | None:
+        """Reject a document with a reason, recording the decision.
+
+        A rejection without a reason is not auditable, so one is required and
+        must contain something other than whitespace. The check runs before the
+        document is touched.
+
+        `verified → rejected` is allowed directly. Rejecting an already rejected
+        document is idempotent and does not touch the recorded reason: the
+        original decision stands, and rewriting history would destroy the fact
+        that the document was rejected for the reason given at the time. The
+        idempotency check therefore precedes the reason check.
+        """
+        document = db.get(Document, document_id)
+        if document is None:
+            return None
+
+        if document.verification_status == REJECTED:
+            return document
+
+        if reason is None or not reason.strip():
+            raise RejectionReasonRequiredError(document_id)
+
+        previous_status = document.verification_status
+        document.verification_status = REJECTED
+        db.add(
+            DocumentVerificationEvent(
+                document_id=document.id,
+                from_status=previous_status,
+                to_status=REJECTED,
+                event_type=EVENT_REJECTED,
+                reason=reason,
+            )
+        )
+        DocumentService._commit(
+            db, document.document_type_id, document.issuer_id
+        )
+        db.refresh(document)
+        return document
+
+    @staticmethod
+    def _require_attachment(db: Session, document_id: int) -> None:
+        """Raise DocumentHasNoFilesError unless the document has a file."""
+        attached = db.scalar(
+            select(func.count()).select_from(File).where(File.document_id == document_id)
+        )
+        if not attached:
+            raise DocumentHasNoFilesError(document_id)
 
     @staticmethod
     def _require_document_type(db: Session, document_type_id: int) -> DocumentType:
