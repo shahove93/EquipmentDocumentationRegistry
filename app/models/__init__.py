@@ -3,6 +3,7 @@ from app.models.batch import Batch
 from app.models.document import Document
 from app.models.document_links import DocumentBatch, DocumentProduct, DocumentVariant
 from app.models.document_type import DocumentType
+from app.models.document_verification_event import DocumentVerificationEvent
 from app.models.file import File
 from app.models.issuer import Issuer
 from app.models.manufacturer import Manufacturer
@@ -17,6 +18,7 @@ __all__ = [
     "DocumentProduct",
     "DocumentType",
     "DocumentVariant",
+    "DocumentVerificationEvent",
     "File",
     "Issuer",
     "Manufacturer",

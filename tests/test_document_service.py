@@ -191,15 +191,32 @@ class TestCreate:
         assert document.variants == []
         assert document.batches == []
 
-    def test_no_verification_event_table_exists(self, db, make_document):
-        # the history table is a later stage; nothing is faked in its place
-        found = db.execute(
+    def test_create_writes_no_verification_event(self, db, make_document):
+        # The history table exists in the test schema since TASK-DOC-003 added
+        # the ORM model, but DocumentService.create has no verification logic at
+        # all: a document is born pending and nothing is recorded about that.
+        #
+        # Only the test schema is inspected. Asserting anything about `public`
+        # would tie this test to whether the migration has been applied to the
+        # working database yet, which is not a property of the service.
+        in_test_schema = db.execute(
             text(
                 "SELECT count(*) FROM information_schema.tables "
-                "WHERE table_name='document_verification_events'"
+                "WHERE table_schema = 'test_file_service' "
+                "AND table_name = 'document_verification_events'"
             )
         ).scalar()
-        assert found == 0
+        assert in_test_schema == 1
+
+        document = make_document()
+        events = db.execute(
+            text(
+                "SELECT count(*) FROM document_verification_events "
+                "WHERE document_id = :i"
+            ),
+            {"i": document.id},
+        ).scalar()
+        assert events == 0
 
     def test_repeated_documents_are_allowed(self, db, make_document):
         first = make_document("ПС-001")
@@ -750,17 +767,47 @@ class TestUpdateVerificationStatus:
             DocumentUpdate(verification_status=VERIFIED)
         assert "verification_status" not in DocumentUpdate.model_fields
 
-    def test_transition_is_not_recorded_anywhere_yet(self, db, make_document, set_status):
-        # documents the known gap: no history row exists to write into
+    def test_transition_is_not_recorded_yet(self, db, make_document, set_status):
+        # TEMPORARY TEST for the current architectural state.
+        #
+        # DocumentService.update resets a decided verdict, and the row really
+        # ends up pending, but the history table that TASK-DOC-003 introduced
+        # stays empty: the transition is changed without leaving a trace, which
+        # is exactly the gap this stage was meant to expose.
+        #
+        # INVERT THIS ASSERTION once the history is wired atomically into the
+        # service: an update of a significant requisite must then create a
+        # `reopened` event (from_status = the old verdict, to_status = pending)
+        # in the same transaction, and this test becomes
+        #     assert events == 1
+        # or is better replaced by a dedicated history test.
         document = set_status(make_document(), VERIFIED)
-        DocumentService.update(db, document.id, DocumentUpdate(number="ПС-720"))
-        tables = db.execute(
+
+        updated = DocumentService.update(
+            db, document.id, DocumentUpdate(number="ПС-720")
+        )
+        assert updated.verification_status == PENDING
+
+        db.expire_all()
+        assert db.get(Document, document.id).verification_status == PENDING
+
+        table_exists = db.execute(
             text(
                 "SELECT count(*) FROM information_schema.tables "
-                "WHERE table_name='document_verification_events'"
+                "WHERE table_schema = 'test_file_service' "
+                "AND table_name = 'document_verification_events'"
             )
         ).scalar()
-        assert tables == 0
+        assert table_exists == 1
+
+        events = db.execute(
+            text(
+                "SELECT count(*) FROM document_verification_events "
+                "WHERE document_id = :i"
+            ),
+            {"i": document.id},
+        ).scalar()
+        assert events == 0
 
 
 class TestUpdateReferentialIntegrity:
