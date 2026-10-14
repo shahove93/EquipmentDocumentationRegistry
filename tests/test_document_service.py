@@ -790,7 +790,7 @@ class TestUpdateVerificationStatus:
             {"i": document.id},
         ).fetchall()
         assert len(events) == 1
-        assert events[0] == (VERIFIED, PENDING, "reopened", None)
+        assert events[0] == (VERIFIED, PENDING, "reopened", "significant_fields_changed")
 
 
 class TestUpdateReferentialIntegrity:

@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import func, select
+from sqlalchemy import func, inspect, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -12,6 +12,10 @@ from app.models.file import File
 from app.models.issuer import Issuer
 from app.services.document_type_service import DocumentTypeService
 from app.services.issuer_service import IssuerService
+from app.services.verification_history import (
+    REASON_SIGNIFICANT_FIELDS_CHANGED,
+    record_reopened,
+)
 
 DEFAULT_LIMIT = 50
 
@@ -21,10 +25,11 @@ PENDING = "pending"
 VERIFIED = "verified"
 REJECTED = "rejected"
 
-# Why a transition happened, as opposed to where it landed.
+# Why a transition happened, as opposed to where it landed. `reopened` is not
+# here: automatic reopening is owned by `verification_history.record_reopened`,
+# which is the only place allowed to write that event.
 EVENT_VERIFIED = "verified"
 EVENT_REJECTED = "rejected"
-EVENT_REOPENED = "reopened"
 
 # Names PostgreSQL gave the two foreign keys on documents, and the SQLSTATE
 # reported for any referential violation. Both are checked together, see
@@ -115,6 +120,28 @@ class RejectionReasonRequiredError(DocumentServiceError):
     def __init__(self, document_id: int) -> None:
         self.document_id = document_id
         super().__init__(f"A rejection of document {document_id} needs a reason")
+
+
+class UncommittedDocumentChangesError(DocumentServiceError):
+    """The session still holds uncommitted edits to the document being written.
+
+    Taking the row lock refreshes the document from the database, and a refresh
+    replaces the attributes rather than merging them, so local edits would be
+    dropped without a trace. Refusing the operation is the lesser of the two
+    failures: the caller is told exactly which document it owns dirty state for
+    and nothing has been written.
+
+    Every mutating method here is a complete operation that commits exactly
+    once, so a caller holding uncommitted edits to the document has already
+    stepped outside that contract.
+    """
+
+    def __init__(self, document_id: int) -> None:
+        self.document_id = document_id
+        super().__init__(
+            f"Document {document_id} has uncommitted changes in this session; "
+            "commit or discard them before calling DocumentService"
+        )
 
 
 def _foreign_key_constraint(error: IntegrityError) -> str | None:
@@ -211,47 +238,65 @@ class DocumentService:
 
         A payload that is empty, or that only repeats the values already stored,
         changes nothing and therefore commits nothing.
+
+        `service_opened` records whether this method started the transaction or
+        found one already running, so that the paths which change nothing end
+        it instead of walking away still holding the document.
         """
-        document = db.get(Document, document_id)
-        if document is None:
-            return None
+        service_opened = not db.in_transaction()
+        try:
+            document = DocumentService._locked_document(db, document_id)
+            if document is None:
+                return DocumentService._leave(db, service_opened, None)
 
-        requested = data.model_dump(exclude_unset=True)
-        if not requested:
-            return document
+            requested = data.model_dump(exclude_unset=True)
+            if not requested:
+                return DocumentService._leave(db, service_opened, document)
 
-        # Only fields whose value really differs. Repeating the current value is
-        # a no-op: it must not commit and must not reset the verification
-        # status, because nothing was actually re-asserted.
-        effective = {
-            field: value
-            for field, value in requested.items()
-            if getattr(document, field) != value
-        }
-        if not effective:
-            return document
+            # Only fields whose value really differs. Repeating the current value
+            # is a no-op: it must not commit and must not reset the verification
+            # status, because nothing was actually re-asserted.
+            effective = {
+                field: value
+                for field, value in requested.items()
+                if getattr(document, field) != value
+            }
+            if not effective:
+                return DocumentService._leave(db, service_opened, document)
 
-        # Validate the merged document before touching the ORM object, so a
-        # rejected update cannot leave a half-applied row behind. The schema can
-        # only compare the two bounds when both were sent together; here the
-        # stored value supplies whatever the patch left out.
-        valid_from = effective.get("valid_from", document.valid_from)
-        valid_to = effective.get("valid_to", document.valid_to)
-        if valid_from is not None and valid_to is not None and valid_to < valid_from:
-            raise InvalidValidityPeriodError(valid_from, valid_to)
+            # Validate the merged document before touching the ORM object, so a
+            # rejected update cannot leave a half-applied row behind. The schema
+            # can only compare the two bounds when both were sent together; here
+            # the stored value supplies whatever the patch left out.
+            valid_from = effective.get("valid_from", document.valid_from)
+            valid_to = effective.get("valid_to", document.valid_to)
+            if valid_from is not None and valid_to is not None and valid_to < valid_from:
+                raise InvalidValidityPeriodError(valid_from, valid_to)
 
-        # Referential checks also precede any mutation.
-        if "document_type_id" in effective:
-            DocumentService._require_document_type(db, effective["document_type_id"])
-        if effective.get("issuer_id") is not None:
-            DocumentService._require_issuer(db, effective["issuer_id"])
+            # Referential checks also precede any mutation.
+            if "document_type_id" in effective:
+                DocumentService._require_document_type(
+                    db, effective["document_type_id"]
+                )
+            if effective.get("issuer_id") is not None:
+                DocumentService._require_issuer(db, effective["issuer_id"])
 
-        for field, value in effective.items():
-            setattr(document, field, value)
+            for field, value in effective.items():
+                setattr(document, field, value)
 
-        if SIGNIFICANT_FIELDS.intersection(effective):
-            DocumentService._apply_status_transition(db, document)
+            if SIGNIFICANT_FIELDS.intersection(effective):
+                DocumentService._apply_status_transition(db, document)
+        except UncommittedDocumentChangesError:
+            # the session holds the caller's own uncommitted edits; ending the
+            # transaction to tidy up would throw exactly those edits away
+            raise
+        except Exception:
+            DocumentService._release(db, service_opened)
+            raise
 
+        # Outside the handler on purpose: a successful commit has already ended
+        # the transaction, and `_commit` rolls back after an IntegrityError on
+        # its own. Neither should be followed by a second rollback here.
         DocumentService._commit(
             db, document.document_type_id, document.issuer_id
         )
@@ -263,32 +308,26 @@ class DocumentService:
         """Send a modified document back to `pending` and record why.
 
         A document that has been decided on cannot stay decided once its content
-        changes: the verdict was given for the old content. `from_status` is
-        therefore the verdict being withdrawn, and the event type is `reopened`
-        so an auditor can tell an automatic reopening from a fresh decision.
+        changes: the verdict was given for the old content. The verdict being
+        withdrawn is therefore the `from_status`, and the event type is
+        `reopened` so an auditor can tell an automatic reopening from a fresh
+        decision.
 
         A document that is already pending has nothing to withdraw, so no event
         is written — otherwise every edit to an undecided document would bury
         the history under meaningless rows.
 
+        The transition itself belongs to `verification_history.record_reopened`,
+        which owns the event and the reason vocabulary; this method only names
+        the cause. Sharing it means a file added or removed tomorrow produces the
+        same kind of row as a changed requisite today, rather than a second
+        implementation that could drift apart.
+
         The event is added to the same session and stays pending until the single
         `_commit` below, which is what makes the status change and its history
         one atomic unit: both land or neither does.
         """
-        previous_status = document.verification_status
-        if previous_status == PENDING:
-            return
-
-        document.verification_status = PENDING
-        db.add(
-            DocumentVerificationEvent(
-                document_id=document.id,
-                from_status=previous_status,
-                to_status=PENDING,
-                event_type=EVENT_REOPENED,
-                reason=None,
-            )
-        )
+        record_reopened(db, document, REASON_SIGNIFICANT_FIELDS_CHANGED)
 
     @staticmethod
     def verify(
@@ -305,27 +344,40 @@ class DocumentService:
         document and clearing it does not have to pass through a pending state
         that nobody asked for. Re-confirming an already confirmed document is a
         no-op, so the history is not padded with rows that decided nothing.
+
+        `service_opened` records whether this method started the transaction or
+        found one already running; see `_release`.
         """
-        document = db.get(Document, document_id)
-        if document is None:
-            return None
+        service_opened = not db.in_transaction()
+        try:
+            document = DocumentService._locked_document(db, document_id)
+            if document is None:
+                return DocumentService._leave(db, service_opened, None)
 
-        if document.verification_status == VERIFIED:
-            return document
+            if document.verification_status == VERIFIED:
+                return DocumentService._leave(db, service_opened, document)
 
-        DocumentService._require_attachment(db, document.id)
+            DocumentService._require_attachment(db, document.id)
 
-        previous_status = document.verification_status
-        document.verification_status = VERIFIED
-        db.add(
-            DocumentVerificationEvent(
-                document_id=document.id,
-                from_status=previous_status,
-                to_status=VERIFIED,
-                event_type=EVENT_VERIFIED,
-                reason=reason,
+            previous_status = document.verification_status
+            document.verification_status = VERIFIED
+            db.add(
+                DocumentVerificationEvent(
+                    document_id=document.id,
+                    from_status=previous_status,
+                    to_status=VERIFIED,
+                    event_type=EVENT_VERIFIED,
+                    reason=reason,
+                )
             )
-        )
+        except UncommittedDocumentChangesError:
+            # the caller's own uncommitted edits must survive this refusal
+            raise
+        except Exception:
+            DocumentService._release(db, service_opened)
+            raise
+
+        # Past the handler on purpose; see `update`.
         DocumentService._commit(
             db, document.document_type_id, document.issuer_id
         )
@@ -345,28 +397,41 @@ class DocumentService:
         original decision stands, and rewriting history would destroy the fact
         that the document was rejected for the reason given at the time. The
         idempotency check therefore precedes the reason check.
+
+        `service_opened` records whether this method started the transaction or
+        found one already running; see `_release`.
         """
-        document = db.get(Document, document_id)
-        if document is None:
-            return None
+        service_opened = not db.in_transaction()
+        try:
+            document = DocumentService._locked_document(db, document_id)
+            if document is None:
+                return DocumentService._leave(db, service_opened, None)
 
-        if document.verification_status == REJECTED:
-            return document
+            if document.verification_status == REJECTED:
+                return DocumentService._leave(db, service_opened, document)
 
-        if reason is None or not reason.strip():
-            raise RejectionReasonRequiredError(document_id)
+            if reason is None or not reason.strip():
+                raise RejectionReasonRequiredError(document_id)
 
-        previous_status = document.verification_status
-        document.verification_status = REJECTED
-        db.add(
-            DocumentVerificationEvent(
-                document_id=document.id,
-                from_status=previous_status,
-                to_status=REJECTED,
-                event_type=EVENT_REJECTED,
-                reason=reason,
+            previous_status = document.verification_status
+            document.verification_status = REJECTED
+            db.add(
+                DocumentVerificationEvent(
+                    document_id=document.id,
+                    from_status=previous_status,
+                    to_status=REJECTED,
+                    event_type=EVENT_REJECTED,
+                    reason=reason,
+                )
             )
-        )
+        except UncommittedDocumentChangesError:
+            # the caller's own uncommitted edits must survive this refusal
+            raise
+        except Exception:
+            DocumentService._release(db, service_opened)
+            raise
+
+        # Past the handler on purpose; see `update`.
         DocumentService._commit(
             db, document.document_type_id, document.issuer_id
         )
@@ -397,6 +462,91 @@ class DocumentService:
         if issuer is None:
             raise IssuerNotFoundError(issuer_id)
         return issuer
+
+    @staticmethod
+    def _locked_document(db: Session, document_id: int) -> Document | None:
+        """Load a document for writing, holding its row until the transaction ends.
+
+        All three decisions live here so that every mutating method gets the
+        same ones instead of re-deriving them.
+
+        **The row is locked, not merely read.** Every mutating method decides
+        what to do from the document's current status, and that decision is only
+        valid while nobody else can change it. Two requests that both read
+        `pending`, both conclude they are free to verify, and both commit would
+        leave two `verified` events of which the second describes a transition
+        that never happened. The lock is taken before the status is examined, so
+        the second request waits and then reads what the first one committed.
+
+        **`populate_existing` is what makes waiting worth anything.** Without it
+        a document already present in the session comes straight out of the
+        identity map, so a caller that loaded it before the competing transaction
+        committed would keep deciding on the old status even after the wait.
+        With it, the attributes are replaced by what the row holds once the lock
+        is granted — which is the whole point of having waited.
+
+        **That replacement is why the pending-change guard exists.** A refresh
+        discards local edits instead of merging them. Losing a caller's work
+        silently is worse than refusing the call, so the session is asked first
+        and told which document it owns dirty state for.
+
+        `db.get` runs before the locking statement for that check alone. It is
+        a second round trip when the document is not already loaded, which is a
+        price worth paying on a write path to keep the check in front of the
+        refresh rather than behind it.
+
+        Returns None when the row is gone. That is what a concurrent delete
+        looks like from here: the locking select waits for the deleting
+        transaction and then matches nothing.
+        """
+        document = db.get(Document, document_id)
+        if document is None:
+            return None
+
+        if inspect(document).modified:
+            raise UncommittedDocumentChangesError(document_id)
+
+        statement = (
+            select(Document)
+            .where(Document.id == document_id)
+            .with_for_update()
+            .execution_options(populate_existing=True)
+        )
+        return db.execute(statement).scalar_one_or_none()
+
+    @staticmethod
+    def _release(db: Session, service_opened: bool) -> None:
+        """End the transaction this method started, if it started one.
+
+        A row lock lives until its transaction ends. Every mutating method takes
+        that lock before it knows whether it has anything to change, so without
+        this every path that changed nothing — a refused confirmation, an
+        idempotent repeat, a no-op update, a document that turned out not to
+        exist — would walk away still holding the document. Each of those would
+        make every other transaction touching it wait, for as long as the
+        caller's session happened to live.
+
+        Ownership is decided once, on entry, before any SQL runs: a session that
+        already had a transaction belongs to the caller. Rolling *that* one back
+        to free a lock would throw away whatever the caller has staged, which is
+        the opposite of what this is for. Such a transaction is left alone and
+        ending it stays the caller's responsibility — in an HTTP request
+        `get_db` already does it by closing the session.
+
+        Rolling back a transaction that has already ended would be harmless, but
+        it would be wrong for the caller in exactly the case above, so the
+        condition is explicit rather than defensive.
+        """
+        if service_opened:
+            db.rollback()
+
+    @staticmethod
+    def _leave(
+        db: Session, service_opened: bool, document: Document | None
+    ) -> Document | None:
+        """Return from a path that changed nothing, leaving no transaction."""
+        DocumentService._release(db, service_opened)
+        return document
 
     @staticmethod
     def _commit(

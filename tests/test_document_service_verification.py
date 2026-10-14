@@ -269,7 +269,9 @@ class TestReopeningOnUpdate:
         assert reopened["from_status"] == VERIFIED
         assert reopened["to_status"] == PENDING
         assert reopened["event_type"] == "reopened"
-        assert reopened["reason"] is None
+        # a changed requisite is the source of this transition, and the source is
+        # what `reason` records — see verification_history
+        assert reopened["reason"] == "significant_fields_changed"
 
     def test_rejected_to_pending_records_reopened(self, db, make_document):
         document = make_document()
