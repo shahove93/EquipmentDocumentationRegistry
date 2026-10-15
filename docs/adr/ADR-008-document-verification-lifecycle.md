@@ -9,7 +9,8 @@
 | **Миграция** | `a3f1c72d5b90` — `create document_verification_events` |
 | **Уточнено** | 2026-10-13 — правило 9 и смысл `reason`, конкурентный доступ, статус «Нерешённых вопросов» 1 и 3. Изменения приняты в [ADR-009](ADR-009-document-attachments.md); **ни одно правило ADR-008 не отменено** |
 | **Актуализировано** | 2026-10-14 — конкурентный доступ и владение транзакцией **переведены из «принято» в «реализовано»**; добавлен перечень транзакционных ограничений. Утверждённые правила не менялись |
-| **Ссылки в коде** | `app/services/document_service.py`, `app/services/verification_history.py`, `app/models/document_verification_event.py`, `app/api/documents/schemas.py` |
+| **Актуализировано** | 2026-10-15 — **общий механизм блокировки перенесён в `app/services/transaction.py`** и им пользуются оба сервиса; файловые операции реализованы, поэтому правило о возврате в `pending` при изменении состава вложений стало действующим, а правка реквизитов перестала быть единственным источником `reopened`. **Ни одно утверждённое правило не менялось** |
+| **Ссылки в коде** | `app/services/transaction.py` — общий механизм блокировки, `app/services/document_service.py`, `app/services/verification_history.py`, `app/models/document_verification_event.py`, `app/api/documents/schemas.py` |
 
 ## Контекст
 
@@ -189,8 +190,29 @@
 и `reject`. Без неё конкурентная операция прочитала бы устаревший
 `verification_status` из identity map и записала повторное событие `reopened`.
 
-Три решения живут в одном месте, `_locked_document`, чтобы методы не
-переигрывали каждое своё правило:
+Три решения живут в одном месте, чтобы методы не переигрывали каждоё своё
+правило. **Это место — `app/services/transaction.py`**, общий модуль,
+созданный отдельным заданием: `locked_document()` содержит блокирующее чтение
+и проверку незавершённых изменений, `release()` — условное завершение
+транзакции, `transaction_existed_on_entry()` — ответ на вопрос о владении.
+Им пользуются и `DocumentService`, и `FileService`, поэтому файловая
+подсистема не завела копию. **Правила не менялись — изменилось только место
+проживания.**
+
+`DocumentService._locked_document` остаётся точкой входа для этого сервиса:
+она делегирует в `transaction.locked_document` и переводит низкоуровневый
+`UncommittedChangesInSession` общего модуля в свою доменную ошибку
+`UncommittedDocumentChangesError`. `_release` делегирует в `transaction.release`,
+а `_leave` — её тонкая обёртка для путей, которые ничего не изменили. Ошибка,
+которую видит вызывающий, сохранила и имя, и предка `DocumentServiceError`,
+поэтому модули, импортирующие её из `document_service`, продолжили работать.
+
+**Низкоуровневая ошибка общего модуля переводится на границе сервиса.**
+`transaction.locked_document` поднимает `UncommittedChangesInSession` до того,
+как что-либо записано; каждый сервис превращает её в свою — `DocumentService`
+в `UncommittedDocumentChangesError`, `FileService` в
+`PendingDocumentChangesError`. Общий остаётся механизм, а не формулировка
+отказа.
 
 1. **Строка блокируется, а не просто читается.** Решение о том, что делать,
    выводится из текущего статуса и остаётся верным, только пока его никто не
@@ -243,8 +265,12 @@
    (autobegin). Блокировок она не держит.
 5. `_commit` обрабатывает `IntegrityError` и делает откат сам. Обработка ошибок
    иного рода не укреплена — отдельное задание.
-6. При интеграции `FileService` необходимо определить **общую** границу транзакции;
-   создавать независимые коммиты для одной логической операции нельзя.
+6. ~~При интеграции `FileService` необходимо определить **общую** границу
+   транзакции; создавать независимые коммиты для одной логической операции
+   нельзя.~~ **Выполнено.** Каждая файловая операция владеет **одной**
+   транзакцией и коммитит ровно один раз: метаданные файла, изменение
+   `verification_status` и событие истории попадают в один коммит. Независимых
+   коммитов на одну логическую операцию больше нет.
 
 ## Последствия
 
@@ -267,7 +293,9 @@
   к HTTP-слою, поэтому прикрепить файл, а значит и подтвердить документ,
   через API нельзя. Подтвердить документ можно только программно.
   Контракт HTTP-слоя спроектирован в
-  [ADR-009](ADR-009-document-attachments.md), но **ещё не реализован**.
+  [ADR-009](ADR-009-document-attachments.md), но **ещё не реализован**;
+  программный путь добавления и удаления вложений при этом уже существует и
+  меняет статус документа.
 - **Значимые реквизиты фиксированы константой.** Добавление нового столбца в
   `documents` потребует осознанного решения: попадёт ли он в
   `SIGNIFICANT_FIELDS`.
@@ -284,9 +312,10 @@
   решением не определялось. Его определил
   [ADR-009](ADR-009-document-attachments.md): успешное добавление или удаление
   файла у `verified` или `rejected` переводит документ в `pending` и создаёт
-  одно событие `reopened`. **Это правило принято, но не реализовано**: до его
-  реализации правка реквизитов остаётся единственным источником `reopened`,
-  а изменение состава вложений статус по-прежнему не трогает.
+  одно событие `reopened`. **Правило реализовано**: источников `reopened`
+  теперь три — `significant_fields_changed` от правки реквизитов, `file_added`
+  и `file_deleted` от файловых операций. Изменение состава вложений у `pending`
+  события по-прежнему не создаёт.
 - Решение **не утверждает** поведение `db.delete(document)` для документа с
   прикреплёнными файлами: у связи `File.document` нет `passive_deletes=True`,
   поэтому ORM пытается обнулить `files.document_id` и получает отказ по
@@ -306,8 +335,10 @@
 | Объект | Подтверждение |
 | --- | --- |
 | `app/services/document_service.py` | `SIGNIFICANT_FIELDS`, `PENDING` / `VERIFIED` / `REJECTED`; методы `verify`, `reject`; `_require_attachment`; `_apply_status_transition`; `_commit` — единственная точка коммита |
-| `app/services/document_service.py` | `_locked_document` — единственное место с `with_for_update` и `populate_existing`; проверка `inspect(document).modified`; вызывается всеми тремя мутирующими методами |
-| `app/services/document_service.py` | `_release` / `_leave` — условное завершение транзакции на путях отказа и раннего возврата; **не** вызываются при `UncommittedDocumentChangesError` и **не** на успешном пути |
+| `app/services/transaction.py` | `locked_document()` — **единственное место**, где блокируется документ (`with_for_update` + `populate_existing`) и где проверяется `inspect(document).modified`; `release()`, `transaction_existed_on_entry()`, `UncommittedChangesInSession`. Модуль создан по решению [ADR-009](ADR-009-document-attachments.md) и используется обоими сервисами |
+| `app/services/document_service.py` | `_locked_document` — точка входа сервиса: делегирует в `transaction.locked_document` и переводит `UncommittedChangesInSession` в `UncommittedDocumentChangesError`; вызывается всеми тремя мутирующими методами |
+| `app/services/file_service.py` | `_locked_file` — **второе** блокирующее чтение проекта и единственное, блокирующее строку **файла** (`files`); берётся строго после блокировки документа, порядок `Document` → `File`. Документ блокируется только через `transaction.locked_document` |
+| `app/services/document_service.py` | `_release` / `_leave` — условное завершение транзакции на путях отказа и раннего возврата; `_release` делегирует в `transaction.release`, `_leave` — её обёртка, возвращающая документ; **не** вызываются при `UncommittedDocumentChangesError` и **не** на успешном пути |
 | `app/services/verification_history.py` | `record_reopened` — единственный источник события `reopened`; `DocumentService.update` передаёт причину `significant_fields_changed` |
 | `app/services/document_service.py` | `DocumentHasNoFilesError`, `RejectionReasonRequiredError`, `UncommittedDocumentChangesError` — доменные ошибки наряду с `DocumentTypeNotFoundError`, `IssuerNotFoundError`, `InvalidValidityPeriodError` |
 | `app/api/documents/schemas.py` | `DocumentUpdate` содержит семь полей; `verification_status` среди них нет |
@@ -321,10 +352,12 @@
 
 ## Нерешённые вопросы
 
-1. ~~**Замена или удаление файла у подтверждённого документа.**~~ **Решён**
-   [ADR-009](ADR-009-document-attachments.md): успешное добавление или удаление
-   файла у `verified` или `rejected` переводит документ в `pending` и создаёт
-   одно событие `reopened`. Правило принято, реализация предстоит.
+1. ~~**Замена или удаление файла у подтверждённого документа.**~~ **Решён и
+   реализован.** [ADR-009](ADR-009-document-attachments.md) определил правило,
+   а `FileService.attach()` и `FileService.detach()` его исполняют: успешное
+   добавление или удаление файла у `verified` или `rejected` переводит документ
+   в `pending` и создаёт ровно одно событие `reopened` с причиной `file_added`
+   или `file_deleted`.
 2. **ORM-удаление документа с вложениями.** Требуется решение: либо
    `passive_deletes=True` на связи `File.document`, либо явная стратегия в
    сервисе удаления. Остаётся открытым и после

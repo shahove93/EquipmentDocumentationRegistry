@@ -1,6 +1,6 @@
 from datetime import date
 
-from sqlalchemy import func, inspect, select
+from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -10,6 +10,7 @@ from app.models.document_type import DocumentType
 from app.models.document_verification_event import DocumentVerificationEvent
 from app.models.file import File
 from app.models.issuer import Issuer
+from app.services import transaction
 from app.services.document_type_service import DocumentTypeService
 from app.services.issuer_service import IssuerService
 from app.services.verification_history import (
@@ -243,7 +244,7 @@ class DocumentService:
         found one already running, so that the paths which change nothing end
         it instead of walking away still holding the document.
         """
-        service_opened = not db.in_transaction()
+        service_opened = not transaction.transaction_existed_on_entry(db)
         try:
             document = DocumentService._locked_document(db, document_id)
             if document is None:
@@ -348,7 +349,7 @@ class DocumentService:
         `service_opened` records whether this method started the transaction or
         found one already running; see `_release`.
         """
-        service_opened = not db.in_transaction()
+        service_opened = not transaction.transaction_existed_on_entry(db)
         try:
             document = DocumentService._locked_document(db, document_id)
             if document is None:
@@ -401,7 +402,7 @@ class DocumentService:
         `service_opened` records whether this method started the transaction or
         found one already running; see `_release`.
         """
-        service_opened = not db.in_transaction()
+        service_opened = not transaction.transaction_existed_on_entry(db)
         try:
             document = DocumentService._locked_document(db, document_id)
             if document is None:
@@ -465,54 +466,26 @@ class DocumentService:
 
     @staticmethod
     def _locked_document(db: Session, document_id: int) -> Document | None:
-        """Load a document for writing, holding its row until the transaction ends.
+        """Read the document for writing, holding its row until commit or rollback.
 
-        All three decisions live here so that every mutating method gets the
-        same ones instead of re-deriving them.
+        The mechanism — the locking read, the mandatory `populate_existing`,
+        and the guard against discarding the caller's uncommitted edits — lives
+        in `app.services.transaction`, shared with `FileService` so the two
+        cannot drift into answering the same question differently.
 
-        **The row is locked, not merely read.** Every mutating method decides
-        what to do from the document's current status, and that decision is only
-        valid while nobody else can change it. Two requests that both read
-        `pending`, both conclude they are free to verify, and both commit would
-        leave two `verified` events of which the second describes a transition
-        that never happened. The lock is taken before the status is examined, so
-        the second request waits and then reads what the first one committed.
+        What stays here is this service's own wording of the refusal. The
+        shared module raises `UncommittedChangesInSession` before writing
+        anything; it becomes `UncommittedDocumentChangesError` here, so the
+        class stays a `DocumentServiceError` and callers importing it from
+        `document_service` keep working.
 
-        **`populate_existing` is what makes waiting worth anything.** Without it
-        a document already present in the session comes straight out of the
-        identity map, so a caller that loaded it before the competing transaction
-        committed would keep deciding on the old status even after the wait.
-        With it, the attributes are replaced by what the row holds once the lock
-        is granted — which is the whole point of having waited.
-
-        **That replacement is why the pending-change guard exists.** A refresh
-        discards local edits instead of merging them. Losing a caller's work
-        silently is worse than refusing the call, so the session is asked first
-        and told which document it owns dirty state for.
-
-        `db.get` runs before the locking statement for that check alone. It is
-        a second round trip when the document is not already loaded, which is a
-        price worth paying on a write path to keep the check in front of the
-        refresh rather than behind it.
-
-        Returns None when the row is gone. That is what a concurrent delete
-        looks like from here: the locking select waits for the deleting
-        transaction and then matches nothing.
+        Raises `UncommittedDocumentChangesError`; commits, rolls back and
+        flushes nothing.
         """
-        document = db.get(Document, document_id)
-        if document is None:
-            return None
-
-        if inspect(document).modified:
-            raise UncommittedDocumentChangesError(document_id)
-
-        statement = (
-            select(Document)
-            .where(Document.id == document_id)
-            .with_for_update()
-            .execution_options(populate_existing=True)
-        )
-        return db.execute(statement).scalar_one_or_none()
+        try:
+            return transaction.locked_document(db, document_id)
+        except transaction.UncommittedChangesInSession as signal:
+            raise UncommittedDocumentChangesError(signal.document_id) from signal
 
     @staticmethod
     def _release(db: Session, service_opened: bool) -> None:
@@ -537,8 +510,7 @@ class DocumentService:
         it would be wrong for the caller in exactly the case above, so the
         condition is explicit rather than defensive.
         """
-        if service_opened:
-            db.rollback()
+        transaction.release(db, service_opened)
 
     @staticmethod
     def _leave(
