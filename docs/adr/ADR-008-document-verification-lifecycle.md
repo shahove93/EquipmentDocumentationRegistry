@@ -10,8 +10,9 @@
 | **Уточнено** | 2026-10-13 — правило 9 и смысл `reason`, конкурентный доступ, статус «Нерешённых вопросов» 1 и 3. Изменения приняты в [ADR-009](ADR-009-document-attachments.md); **ни одно правило ADR-008 не отменено** |
 | **Актуализировано** | 2026-10-14 — конкурентный доступ и владение транзакцией **переведены из «принято» в «реализовано»**; добавлен перечень транзакционных ограничений. Утверждённые правила не менялись |
 | **Актуализировано** | 2026-10-15 — **общий механизм блокировки перенесён в `app/services/transaction.py`** и им пользуются оба сервиса; файловые операции реализованы, поэтому правило о возврате в `pending` при изменении состава вложений стало действующим, а правка реквизитов перестала быть единственным источником `reopened`. **Ни одно утверждённое правило не менялось** |
-| **Актуализировано** | 2026-10-18 — файловый HTTP-слой реализован (см. [ADR-009](ADR-009-document-attachments.md)): вложения загружаются, читаются и удаляются через API. **Document API по-прежнему отсутствует**, поэтому подтверждение и отклонение недостижимы по HTTP. **Ни одно утверждённое правило не менялось** |
-| **Ссылки в коде** | `app/services/transaction.py` — общий механизм блокировки, `app/services/document_service.py`, `app/services/verification_history.py`, `app/models/document_verification_event.py`, `app/api/documents/schemas.py` |
+| **Актуализировано** | 2026-10-18 — файловый HTTP-слой реализован (см. [ADR-009](ADR-009-document-attachments.md)): вложения загружаются, читаются и удаляются через API. **Ни одно утверждённое правило не менялось** |
+| **Актуализировано** | 2026-10-18 — **Document HTTP API реализован** (TASK-DOC-006B–006F): шесть операций — `POST` / `GET` коллекции, `GET` / `PATCH` карточки, `POST .../verification` (подтверждение и отклонение одним маршрутом) и `GET .../verification-history`. Добавлен read-метод `DocumentService.history()`. Подтверждение и отклонение достижимы по HTTP; сквозной сценарий проверен интеграционным набором. **Ни одно утверждённое правило не менялось** |
+| **Ссылки в коде** | `app/services/transaction.py` — общий механизм блокировки, `app/services/document_service.py`, `app/services/verification_history.py`, `app/models/document_verification_event.py`, `app/api/documents/schemas.py`, `app/api/documents/router.py` |
 
 ## Контекст
 
@@ -290,12 +291,10 @@
 
 **Отрицательные**
 
-- **Подтверждение по-прежнему недостижимо через приложение.** Файловый
-  HTTP-слой реализован в [ADR-009](ADR-009-document-attachments.md), поэтому
-  прикрепить, перечислить, скачать и удалить вложение через API уже можно.
-  Но Document API отсутствует: создать документ, изменить его и вызвать
-  `verify` или `reject` через HTTP нельзя. Подтвердить документ можно только
-  программно.
+- **Оба HTTP API анонимны.** Документ можно создать, изменить, подтвердить и
+  отклонить, а вложение — загрузить, скачать и удалить без всякой
+  аутентификации. Это сознательный риск локальной разработки: публичное
+  развёртывание запрещено до появления аутентификации и авторизации.
 - **Значимые реквизиты фиксированы константой.** Добавление нового столбца в
   `documents` потребует осознанного решения: попадёт ли он в
   `SIGNIFICANT_FIELDS`.
@@ -303,8 +302,9 @@
   объяснение человека, а в `reason` события `reopened` — машинный код источника
   перехода. Читать историю нужно с учётом этой разницы; коды перечислены в
   [ADR-009](ADR-009-document-attachments.md).
-- Две новые доменные ошибки увеличивают поверхность, которую HTTP-слой должен
-  будет отобразить в коды ответа.
+- **Доменные ошибки проверки расширяют контракт маршрута.** `DocumentHasNoFilesError`
+  и `RejectionReasonRequiredError` отображаются в `422`, а
+  `UncommittedDocumentChangesError` — в `409`; эти ответы стали частью HTTP-слоя.
 
 ## Ограничения
 
@@ -322,13 +322,15 @@
   `NOT NULL`, хотя в базе объявлен `ON DELETE CASCADE`. На историю это не
   влияет — связи `Document → события` в ORM нет. Вопрос оставлен открытым и в
   [ADR-009](ADR-009-document-attachments.md).
-- Решение **не утверждает**, что `DocumentService` можно подключать к живому
-  HTTP API: API документов отсутствует, и подтверждение недостижимо для
-  пользователя, хотя вложения уже загружаются через файловые маршруты.
-- Ссылка на этот ADR из кода **не проставлена**: на этапе, фиксирующем решение,
-  изменение Python-кода запрещено. Правило «код, меняющий описанное поведение,
-  ссылается на ADR» выполняется начиная со следующих изменений
-  `DocumentService`.
+- Решение **не утверждает**, что `DocumentService` безопасно выставлять в
+  публичный доступ: маршруты документов и вложений анонимны, аутентификации и
+  авторизации нет, поэтому публичное развёртывание запрещено. Сам факт
+  подключения сервиса к HTTP API решением не запрещён и реализован (шесть
+  операций, см. [ADR-009](ADR-009-document-attachments.md) для файловой части).
+- Ссылка на этот ADR из кода **проставлена частично**: роутер и схемы документов
+  ссылаются на правила этого решения, а `DocumentService` — на общий модуль
+  блокировки. Правило «код, меняющий описанное поведение, ссылается на ADR»
+  соблюдается начиная с изменений, последовавших за принятием решения.
 
 ## Связь с текущей реализацией
 
@@ -342,10 +344,17 @@
 | `app/services/verification_history.py` | `record_reopened` — единственный источник события `reopened`; `DocumentService.update` передаёт причину `significant_fields_changed` |
 | `app/services/document_service.py` | `DocumentHasNoFilesError`, `RejectionReasonRequiredError`, `UncommittedDocumentChangesError` — доменные ошибки наряду с `DocumentTypeNotFoundError`, `IssuerNotFoundError`, `InvalidValidityPeriodError` |
 | `app/api/documents/schemas.py` | `DocumentUpdate` содержит семь полей; `verification_status` среди них нет |
+| `app/api/documents/router.py` | шесть операций Document API: `POST` / `GET` коллекции, `GET` / `PATCH` карточки, `POST .../verification`, `GET .../verification-history`; роутер не выполняет SQL, не коммитит и не создаёт событий — правила проверки целиком в сервисе |
+| `app/services/document_service.py` | `history()` — read-метод истории: `None` для отсутствующего документа, `[]` для документа без событий, сортировка `created_at ASC, id ASC`; не коммитит, не откатывает, не блокирует |
 | `app/models/document_verification_event.py` | семь столбцов; `STATUSES` и `EVENT_TYPES`; `created_at` — `TIMESTAMPTZ` с `server_default=func.now()` |
 | `app/models/file.py` | `File.document_id` — `NOT NULL`, внешний ключ с `ON DELETE CASCADE`; у `File.document` нет `passive_deletes` |
 | `alembic/versions/a3f1c72d5b90_create_document_verification_events.py` | семь `CHECK`, внешний ключ с `ON DELETE CASCADE`, индекс `(document_id, created_at, id)` |
 | `tests/test_document_service_verification.py` | 55 тестов: переходы, идемпотентность, `notes`, откат при сбое записи события |
+| `tests/test_documents_api.py` | 65 тестов: создание, список, карточка документа через HTTP |
+| `tests/test_documents_update_api.py` | 66 тестов: `PATCH /documents/{id}`, включая отображение `DocumentTypeNotFoundError` / `IssuerNotFoundError` / `InvalidValidityPeriodError` в `422` |
+| `tests/test_documents_verification_api.py` | 53 теста: подтверждение и отклонение, идемпотентность, `404` / `422` / `409` |
+| `tests/test_documents_history_api.py` | 35 тестов: чтение истории, сортировка `created_at ASC, id ASC`, изоляция документов |
+| `tests/test_documents_integration_api.py` | 20 тестов: сквозной HTTP-сценарий жизненного цикла от создания типа до сравнения скачанных байтов |
 | `tests/test_verification_history.py` | 60 тестов: общий механизм `record_reopened`, закрытое множество причин, отсутствие транзакционных вызовов внутри функции |
 | `tests/test_document_service_concurrency.py` | 52 теста на реальной PostgreSQL: сериализация над одним документом, отсутствие повторных событий, освобождение блокировки на путях отказа и no-op, сохранность транзакции вызывающего |
 | Рабочая БД | таблица существует, ограничения и индекс присутствуют, **строк: 0** |
@@ -364,8 +373,9 @@
    [ADR-009](ADR-009-document-attachments.md).
 3. ~~**API загрузки файлов.**~~ **Реализован.** Контракт пяти маршрутов
    принят и реализован по [ADR-009](ADR-009-document-attachments.md);
-   `python-multipart` установлен. Открытым остаётся **Document API**, без
-   которого `verify` и `reject` недостижимы по HTTP.
+   `python-multipart` установлен. ~~**Document API.**~~ **Реализован**:
+   шесть операций, включая `POST .../verification` и
+   `GET .../verification-history`; `verify` и `reject` достижимы по HTTP.
 4. **Срок давности статуса.** Истечение `valid_to` не возвращает документ в
    `pending` автоматически — правило не определено.
 

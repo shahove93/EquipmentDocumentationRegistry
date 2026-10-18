@@ -1,5 +1,5 @@
-from datetime import date
-from typing import Annotated, Any, Self
+from datetime import date, datetime
+from typing import Annotated, Any, Literal, Self
 
 from pydantic import (
     BaseModel,
@@ -175,4 +175,87 @@ class DocumentListOut(RootModel[list[DocumentOut]]):
     and `/issuers` all return the page directly and carry no total, so paging
     stays the caller's concern. `limit=50` by default, at most 100, `offset=0`,
     ordered by ascending id.
+    """
+
+
+class DocumentVerificationRequest(BaseModel):
+    """Request body for confirming or rejecting a document.
+
+    One route carries both verdicts because they are two outcomes of the same
+    act — recording a decision on the document — and they share one history
+    table. `decision` chooses which `DocumentService` method runs; `reason`
+    explains a rejection and is optional when confirming.
+
+    `reason` is a real string or `None`. Pydantic v2 does not coerce numbers or
+    other objects into text, so a non-string value is refused rather than
+    silently stringified. For a rejection the reason is required and must hold
+    something other than whitespace, mirroring `DocumentService.reject`; that
+    service-side check stays in place, and this validator only spares the round
+    trip. The reason is passed through unchanged — no trimming, no rewriting —
+    so what an auditor reads is what the client sent.
+
+    `verification_status` is absent on purpose, exactly as in `DocumentUpdate`:
+    a decision is not an ordinary requisite and is expressed only by `decision`.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    decision: Literal["verified", "rejected"]
+    reason: str | None = None
+
+    @model_validator(mode="after")
+    def _rejection_needs_a_reason(self) -> Self:
+        """Refuse a rejection without a usable reason.
+
+        Only the rejection branch is checked: a confirmation is meaningful
+        without an explanation, and forcing one there would invent a rule ADR-008
+        does not state.
+        """
+        if self.decision == "rejected" and (
+            self.reason is None or not self.reason.strip()
+        ):
+            raise ValueError("a rejection requires a non-blank reason")
+        return self
+
+
+class DocumentVerificationEventOut(BaseModel):
+    """Response body representing one recorded verification event.
+
+    The fields are exactly the columns of `document_verification_events` that an
+    auditor needs — no more. `id` is exposed as the stable, monotonic handle that
+    also breaks ties inside a transaction; `document_id` tells the reader whose
+    history the row belongs to; `from_status` and `to_status` state the
+    transition; `event_type` says why it happened; `reason` carries a human
+    explanation for a rejection or one of the closed machine codes for a
+    reopening; `created_at` is when the database recorded the row.
+
+    `from_attributes` lets the schema serialise an ORM row directly, which is
+    what the history route does. Nothing here is a secret: the table holds no
+    storage keys, paths or foreign objects, and none are added.
+
+    `created_at` is a `datetime`, not a string, so FastAPI renders it as ISO-8601
+    with the offset PostgreSQL stored — `DateTime(timezone=True)`. That keeps the
+    value unambiguous for a client in another zone.
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    document_id: int
+    from_status: str
+    to_status: str
+    event_type: str
+    reason: str | None = None
+    created_at: datetime
+
+
+class DocumentVerificationEventListOut(RootModel[list[DocumentVerificationEventOut]]):
+    """Response body for a document's verification history.
+
+    A bare JSON array, matching `DocumentListOut` and every other collection in
+    the project. The history of one document is bounded by how often that
+    document was decided on or reopened — a handful of rows in practice — so
+    there is no paging, no `total` and no sorting parameter: the order is fixed
+    by the service as `created_at ASC, id ASC`, which is the order the events
+    actually happened in.
     """

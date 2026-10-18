@@ -920,7 +920,7 @@ class TestOpenApi:
             len([m for m in item if m in ("get", "post", "put", "patch", "delete")])
             for item in paths.values()
         )
-        assert operations == 26
+        assert operations == 32
 
     def test_the_download_and_delete_routes_are_both_documented(self):
         # TASK-DOC-005S added the download; TASK-DOC-005T added `DELETE

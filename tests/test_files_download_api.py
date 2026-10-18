@@ -1066,8 +1066,8 @@ class TestOpenApiAndNeighbours:
     def test_the_documented_surface_grew_by_one_route_and_one_operation(self):
         schema = app.openapi()
 
-        assert len(schema["paths"]) == 14
-        assert sum(len(item) for item in schema["paths"].values()) == 26
+        assert len(schema["paths"]) == 18
+        assert sum(len(item) for item in schema["paths"].values()) == 32
         assert set(
             schema["paths"]["/documents/{document_id}/files/{file_id}"]
         ) == {"get", "delete"}

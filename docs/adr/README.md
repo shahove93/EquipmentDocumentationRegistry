@@ -24,7 +24,7 @@
 | [ADR-005](ADR-005-one-sdr-one-product.md) | Один SDR — отдельное изделие | ✅ Принято | [ADR-005](ADR-005-one-sdr-one-product.md) | SDR не является отдельным атрибутом: он входит в наименование `Product`, и изделия с разными SDR — это разные записи `Product` |
 | [ADR-006](ADR-006-unique-size-within-product.md) | Уникальность типоразмера внутри изделия | ✅ Принято | [ADR-006](ADR-006-unique-size-within-product.md) | `ProductVariant` уникален в пределах одного `Product` по паре `(product_id, size_text)`; нарушение возвращает HTTP 409 |
 | [ADR-007](ADR-007-editable-document-type-reference.md) | Редактируемый справочник типов документов | ✅ Принято | [ADR-007](ADR-007-editable-document-type-reference.md) | `DocumentType` — справочник, который пользователь наполняет и переименовывает сам; начального наполнения в базе нет |
-| [ADR-008](ADR-008-document-verification-lifecycle.md) | Жизненный цикл проверки документа и история верификации | ✅ Принято | [ADR-008](ADR-008-document-verification-lifecycle.md) | Правила перехода между `pending` / `verified` / `rejected`, состав значимых реквизитов и атомарная запись перехода в `document_verification_events` |
+| [ADR-008](ADR-008-document-verification-lifecycle.md) | Жизненный цикл проверки документа и история верификации | ✅ Принято | [ADR-008](ADR-008-document-verification-lifecycle.md) | Правила перехода между `pending` / `verified` / `rejected`, состав значимых реквизитов и атомарная запись перехода в `document_verification_events`. **Сервисный и HTTP-слой реализованы**: шесть документных операций, включая `POST .../verification` и `GET .../verification-history` |
 | [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисный и HTTP-слой реализованы**: пять операций, DI, `FileOut` / `FileListOut`, потоковая передача; не выполнены журнал, сверки, индекс и аутентификация |
 | — | Связь сертификатов с типоразмерами | 🕓 Черновик, номер не присвоен | [DOCUMENT-VARIANT-RELATIONSHIP.md](DOCUMENT-VARIANT-RELATIONSHIP.md) | Один документ может относиться к нескольким типоразмерам, и наоборот; связь many-to-many через `document_variants` |
 
@@ -63,11 +63,16 @@
 `FileOut` / `FileListOut`, потоковая загрузка и скачивание,
 `ClosingStreamingResponse`, `python-multipart==0.0.32`.
 
+У [ADR-008](ADR-008-document-verification-lifecycle.md) **сервисный и HTTP-слой
+также реализованы**: шесть документных операций (`POST` / `GET` коллекции,
+`GET` / `PATCH` карточки, `POST .../verification`, `GET .../verification-history`)
+и read-метод `DocumentService.history()`; подтверждение и отклонение достижимы
+через HTTP.
+
 **Не реализовано то, что осталось:** постоянное хранилище журнала; сверка
 осиротевших файлов; сверка SHA-256; миграция индекса `ix_files_document_id_id`;
-аутентификация и авторизация; Document API, без которого `verify` / `reject`
-недостижимы по HTTP. Таблица «Статус реализации» в самом ADR перечисляет всё
-построчно.
+аутентификация и авторизация. Таблицы «Статус реализации» в обоих ADR
+перечисляют всё построчно.
 
 ## Прочие документы проекта
 

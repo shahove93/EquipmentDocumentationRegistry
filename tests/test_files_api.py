@@ -495,4 +495,4 @@ class TestExistingApisStillWork:
             len([m for m in v if m in ("get", "post", "put", "patch", "delete")])
             for v in paths.values()
         )
-        assert operations == 26
+        assert operations == 32

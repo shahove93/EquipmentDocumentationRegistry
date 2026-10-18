@@ -230,6 +230,57 @@ class DocumentService:
         return list(db.scalars(statement))
 
     @staticmethod
+    def history(
+        db: Session, document_id: int
+    ) -> "list[DocumentVerificationEvent] | None":
+        """Return one document's verification history in the order it happened.
+
+        `None` and `[]` are different answers and are kept apart. `None` means no
+        such document exists, so a caller can answer `404` without a second
+        query. `[]` means the document exists and has no recorded events yet,
+        which is the normal state of a document that was just created: its
+        `verification_status` is `pending` because nothing has decided it, and
+        there is nothing to explain.
+
+        Ordering is `created_at`, then `id`. PostgreSQL's `now()` is the
+        transaction timestamp, so several events written in one transaction share
+        a `created_at`; the id breaks that tie in the order the rows were
+        inserted, which is the order they were staged in. Without the second key
+        the order of such a batch would be left to the planner. The composite
+        index `ix_document_verification_events_document_id_created_at_id` matches
+        this ordering on exactly these columns and in this sequence, so the read
+        is served by the index and needs no sort.
+
+        This is a pure read. It commits nothing, rolls back nothing, flushes
+        nothing and takes no row lock: no `SELECT ... FOR UPDATE`, no `db.get`
+        on the document for writing. It uses the caller's session and opens no
+        connection of its own. The `SELECT` does begin a read transaction in
+        PostgreSQL, which is ordinary for a `GET`; that transaction is closed by
+        the request lifecycle (`get_db` closes the session), not here.
+
+        Nothing about the document is changed: not its status, not its files,
+        not its history. A reader and a writer never contend for this route
+        because the reader takes no lock.
+
+        The return annotation is quoted for the same reason as in `list` above:
+        the class defines an attribute named `list`, and under PEP 649 a lazy
+        annotation is resolved with the class namespace in scope, where that name
+        shadows the builtin and `list[...]` would raise before the annotation is
+        ever read.
+        """
+        if db.get(Document, document_id) is None:
+            return None
+        statement = (
+            select(DocumentVerificationEvent)
+            .where(DocumentVerificationEvent.document_id == document_id)
+            .order_by(
+                DocumentVerificationEvent.created_at,
+                DocumentVerificationEvent.id,
+            )
+        )
+        return list(db.scalars(statement))
+
+    @staticmethod
     def update(db: Session, document_id: int, data: DocumentUpdate) -> Document | None:
         """Apply a partial update, returning None when no such row exists.
 
