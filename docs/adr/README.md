@@ -25,7 +25,7 @@
 | [ADR-006](ADR-006-unique-size-within-product.md) | Уникальность типоразмера внутри изделия | ✅ Принято | [ADR-006](ADR-006-unique-size-within-product.md) | `ProductVariant` уникален в пределах одного `Product` по паре `(product_id, size_text)`; нарушение возвращает HTTP 409 |
 | [ADR-007](ADR-007-editable-document-type-reference.md) | Редактируемый справочник типов документов | ✅ Принято | [ADR-007](ADR-007-editable-document-type-reference.md) | `DocumentType` — справочник, который пользователь наполняет и переименовывает сам; начального наполнения в базе нет |
 | [ADR-008](ADR-008-document-verification-lifecycle.md) | Жизненный цикл проверки документа и история верификации | ✅ Принято | [ADR-008](ADR-008-document-verification-lifecycle.md) | Правила перехода между `pending` / `verified` / `rejected`, состав значимых реквизитов и атомарная запись перехода в `document_verification_events` |
-| [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисная часть реализована** (`attach`, `detach`, `upload` — обёртка, общий `app/services/transaction.py`); **HTTP-слой ещё не написан** |
+| [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисный и HTTP-слой реализованы**: пять операций, DI, `FileOut` / `FileListOut`, потоковая передача; не выполнены журнал, сверки, индекс и аутентификация |
 | — | Связь сертификатов с типоразмерами | 🕓 Черновик, номер не присвоен | [DOCUMENT-VARIANT-RELATIONSHIP.md](DOCUMENT-VARIANT-RELATIONSHIP.md) | Один документ может относиться к нескольким типоразмерам, и наоборот; связь many-to-many через `document_variants` |
 
 ## Исторические номера
@@ -52,18 +52,22 @@
 ## Решения, принятые, но не выполненные до конца
 
 Статус `Принято` означает, что решение обязательно к исполнению, а не что код
-написан. У [ADR-009](ADR-009-document-attachments.md) **сервисная часть
-реализована**: общий механизм `record_reopened()`, три кода причины,
+написан. У [ADR-009](ADR-009-document-attachments.md) **сервисный и HTTP-слой
+реализованы**: общий механизм `record_reopened()`, три кода причины,
 `FileService.attach()` / `detach()`, общий модуль
 `app/services/transaction.py`, охранник `TransactionAlreadyOpenError`,
 блокировки `Document` → `File`, автоматический возврат в `pending`,
 компенсация добавления, удаление файла только после подтверждённого `commit`,
-журналирование через `logging` и доменная ошибка `AttachmentNotFoundError`.
+журналирование через `logging`, доменная ошибка `AttachmentNotFoundError`,
+пять файловых маршрутов, DI `get_file_service` / `get_storage`,
+`FileOut` / `FileListOut`, потоковая загрузка и скачивание,
+`ClosingStreamingResponse`, `python-multipart==0.0.32`.
 
-**Не реализовано то, что осталось:** HTTP-контракт File API (маршруты, `FileOut`,
-DI), `python-multipart` не установлен; постоянное хранилище журнала; сверка
-осиротевших файлов; миграция индекса `ix_files_document_id_id`; аутентификация и
-авторизация. Таблица «Статус реализации» в самом ADR перечисляет всё построчно.
+**Не реализовано то, что осталось:** постоянное хранилище журнала; сверка
+осиротевших файлов; сверка SHA-256; миграция индекса `ix_files_document_id_id`;
+аутентификация и авторизация; Document API, без которого `verify` / `reject`
+недостижимы по HTTP. Таблица «Статус реализации» в самом ADR перечисляет всё
+построчно.
 
 ## Прочие документы проекта
 
