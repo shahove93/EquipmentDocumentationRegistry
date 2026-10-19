@@ -515,17 +515,20 @@ class TestContracts:
         for path, methods in FILE_PATHS.items():
             assert set(paths[path]) == methods, path
 
-    def test_totals_are_eighteen_paths_and_thirty_two_operations(self):
+    def test_totals_are_nineteen_paths_and_thirty_four_operations(self):
         paths = app.openapi()["paths"]
-        assert len(paths) == 18
-        assert sum(len(item) for item in paths.values()) == 32
+        assert len(paths) == 19
+        assert sum(len(item) for item in paths.values()) == 34
 
-    def test_no_document_deletion_or_equipment_linking_is_declared(self):
+    def test_no_document_deletion_or_product_level_linking_is_declared(self):
         paths = app.openapi()["paths"]
         assert "delete" not in paths["/documents"]
         assert "delete" not in paths["/documents/{document_id}"]
         assert not any("products" in path for path in paths if "/documents/" in path)
-        assert not any("variants" in path for path in paths if "/documents/" in path)
+        assert not any("batches" in path for path in paths if "/documents/" in path)
+        # TASK-DOC-007C added size linking, but only as a whole-set read and
+        # replace on one path: no per-link `DELETE`, nothing under `products`.
+        assert set(paths["/documents/{document_id}/variants"]) == {"get", "put"}
 
     def test_history_takes_no_paging_or_filter_parameters(self):
         operation = app.openapi()["paths"][

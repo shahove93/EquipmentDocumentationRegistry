@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from app.api.document_types.router import document_type_router
+from app.api.document_variants.router import document_variant_router
 from app.api.documents.router import document_router
 from app.api.files.router import files_router
 from app.api.issuers.router import issuer_router
@@ -21,5 +22,6 @@ api_router.include_router(product_router)
 api_router.include_router(variant_router)
 api_router.include_router(document_type_router)
 api_router.include_router(document_router)
+api_router.include_router(document_variant_router)
 api_router.include_router(issuer_router)
 api_router.include_router(files_router)

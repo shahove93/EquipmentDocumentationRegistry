@@ -688,8 +688,8 @@ class TestOpenApiAndNeighbours:
     def test_the_documented_surface_grew_by_one_operation(self):
         schema = app.openapi()
 
-        assert len(schema["paths"]) == 18
-        assert sum(len(item) for item in schema["paths"].values()) == 32
+        assert len(schema["paths"]) == 19
+        assert sum(len(item) for item in schema["paths"].values()) == 34
         assert set(
             schema["paths"]["/documents/{document_id}/files/{file_id}/content"]
         ) == {"get"}

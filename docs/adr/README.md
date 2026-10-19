@@ -26,7 +26,8 @@
 | [ADR-007](ADR-007-editable-document-type-reference.md) | Редактируемый справочник типов документов | ✅ Принято | [ADR-007](ADR-007-editable-document-type-reference.md) | `DocumentType` — справочник, который пользователь наполняет и переименовывает сам; начального наполнения в базе нет |
 | [ADR-008](ADR-008-document-verification-lifecycle.md) | Жизненный цикл проверки документа и история верификации | ✅ Принято | [ADR-008](ADR-008-document-verification-lifecycle.md) | Правила перехода между `pending` / `verified` / `rejected`, состав значимых реквизитов и атомарная запись перехода в `document_verification_events`. **Сервисный и HTTP-слой реализованы**: шесть документных операций, включая `POST .../verification` и `GET .../verification-history` |
 | [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисный и HTTP-слой реализованы**: пять операций, DI, `FileOut` / `FileListOut`, потоковая передача; не выполнены журнал, сверки, индекс и аутентификация |
-| — | Связь сертификатов с типоразмерами | 🕓 Черновик, номер не присвоен | [DOCUMENT-VARIANT-RELATIONSHIP.md](DOCUMENT-VARIANT-RELATIONSHIP.md) | Один документ может относиться к нескольким типоразмерам, и наоборот; связь many-to-many через `document_variants` |
+| [ADR-010](ADR-010-document-variant-links-and-search.md) | Привязка документов к типоразмерам и материальный поиск | ✅ Принято | [ADR-010](ADR-010-document-variant-links-and-search.md) | Базовая привязка MVP — `Document ↔ ProductVariant` через `document_variants`; `GET` / `PUT /documents/{id}/variants` (полная замена, идемпотентна, статус не меняет); расширенный `GET /documents` с материальными фильтрами. **Сервисный и HTTP-слой реализованы** |
+| — | Связь сертификатов с типоразмерами | 🕓 Черновик, поглощён ADR-010 | [DOCUMENT-VARIANT-RELATIONSHIP.md](DOCUMENT-VARIANT-RELATIONSHIP.md) | Историческая справка: подтверждённое требование many-to-many и структура `document_variants`. Принятое решение — [ADR-010](ADR-010-document-variant-links-and-search.md) |
 
 ## Исторические номера
 
@@ -38,11 +39,12 @@
 Следствия:
 
 - содержание этих решений **неизвестно** и здесь не реконструируется;
-- **не переиспользуйте эти номера** и **не перенумеровывайте** ADR-005…ADR-009;
-- **ADR-010 не присвоен и не зарезервирован.** Выдача номера требует отдельного
-  согласования; в частности, она не выполнена для
-  [связи сертификатов с типоразмерами](DOCUMENT-VARIANT-RELATIONSHIP.md), которая
-  остаётся черновиком без номера.
+- **не переиспользуйте эти номера** и **не перенумеровывайте** ADR-005…ADR-010;
+- **ADR-010 присвоен 2026-10-19** решению
+  [о привязке документов к типоразмерам и материальном поиске](ADR-010-document-variant-links-and-search.md).
+  Прежний черновик
+  [«Связь сертификатов с типоразмерами»](DOCUMENT-VARIANT-RELATIONSHIP.md)
+  поглощён этим решением и сохраняется как историческая справка.
 
 Номера **ADR-008** и **ADR-009** присвоены 2026-10-13 решениям
 [о жизненном цикле проверки документа](ADR-008-document-verification-lifecycle.md)
@@ -68,6 +70,14 @@
 `GET` / `PATCH` карточки, `POST .../verification`, `GET .../verification-history`)
 и read-метод `DocumentService.history()`; подтверждение и отклонение достижимы
 через HTTP.
+
+У [ADR-010](ADR-010-document-variant-links-and-search.md) **сервисный и
+HTTP-слой также реализованы**: `DocumentVariantService` (`list_variants` /
+`set_variants`), два маршрута привязки (`GET` / `PUT
+/documents/{id}/variants`) и материальные фильтры `GET /documents`. Открытые
+пункты самого решения — отдельное событие истории для изменений привязок,
+индексы под `LIKE '%…%'`, привязка к `Product` / `Batch` и семантика каскадного
+удаления `ProductVariant`.
 
 **Не реализовано то, что осталось:** постоянное хранилище журнала; сверка
 осиротевших файлов; сверка SHA-256; миграция индекса `ix_files_document_id_id`;

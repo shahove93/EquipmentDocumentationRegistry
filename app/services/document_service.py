@@ -6,10 +6,13 @@ from sqlalchemy.orm import Session
 
 from app.api.documents.schemas import DocumentCreate, DocumentUpdate
 from app.models.document import Document
+from app.models.document_links import DocumentVariant
 from app.models.document_type import DocumentType
 from app.models.document_verification_event import DocumentVerificationEvent
 from app.models.file import File
 from app.models.issuer import Issuer
+from app.models.product import Product
+from app.models.variant import ProductVariant
 from app.services import transaction
 from app.services.document_type_service import DocumentTypeService
 from app.services.issuer_service import IssuerService
@@ -53,6 +56,18 @@ SIGNIFICANT_FIELDS = frozenset(
         "issuer_id",
     }
 )
+
+
+def _contains_ci(column, value: str):
+    """Build a case-insensitive substring test for `column` against `value`.
+
+    `lower(column) LIKE '%value%'` rather than `ILIKE` keeps the case folding in
+    one well-defined place and works for the non-ASCII size labels this project
+    stores (`Ø`). `autoescape=True` neutralises `%`, `_` and the escape character
+    in the caller's value, so a search for `100%` looks for the literal text and
+    cannot smuggle a wildcard into the pattern.
+    """
+    return func.lower(column).contains(value.lower(), autoescape=True)
 
 
 class DocumentServiceError(Exception):
@@ -210,13 +225,54 @@ class DocumentService:
 
     @staticmethod
     def list(
-        db: Session, limit: int = DEFAULT_LIMIT, offset: int = 0
+        db: Session,
+        limit: int = DEFAULT_LIMIT,
+        offset: int = 0,
+        *,
+        material: str | None = None,
+        size_text: str | None = None,
+        variant_id: int | None = None,
+        manufacturer_id: int | None = None,
+        standard: str | None = None,
+        number: str | None = None,
+        status: str | None = None,
     ) -> "list[Document]":
         """Return a page of documents ordered by ascending id.
 
+        Without a filter this is the plain collection: every document, ordered by
+        id. With filters it is a search, and every supplied filter must hold for
+        a document to be returned — the filters combine with `AND`.
+
         Ordering by id rather than number keeps the page stable while documents
         are renamed, and it matches every other collection in the project.
-        The page carries no total, so paging stays the caller's concern.
+        The page carries no total, so paging stays the caller's concern. Paging
+        is applied to the already-filtered statement, in SQL; nothing is filtered
+        in Python afterwards.
+
+        **Material filters share one variant.** `material`, `standard`,
+        `size_text`, `variant_id` and `manufacturer_id` describe a product variant
+        the document covers, and they are applied together inside a single
+        correlated `EXISTS` over `document_variants → product_variants →
+        products`. A document is returned only when one of its variants satisfies
+        all of them at once. Two filters are therefore never satisfied by two
+        different variants: a certificate covering `SDR11 Ø32` and `SDR17 Ø63` is
+        **not** found by `material=SDR11&size_text=Ø63`, because no single variant
+        matches both. `EXISTS` also means a variant match never duplicates the
+        document, so no `DISTINCT` is needed and the `LIMIT`/`OFFSET` count
+        documents rather than join rows.
+
+        `number` and `status` are attributes of the document itself and are
+        filtered directly. `number` is a case-insensitive substring; `status` is
+        an exact one of `pending` / `verified` / `rejected`.
+
+        Only `document_variants` is consulted. `document_products` and
+        `document_batches` are deliberately ignored: their meaning for search is
+        not settled, so a document linked only through them is not returned by a
+        material filter.
+
+        This is a pure read: no commit, no rollback, no flush, no row lock, no
+        second session. It uses the caller's session and opens no connection of
+        its own.
 
         The return annotation is quoted because the method is named `list`: under
         PEP 649 the annotation is evaluated lazily, by which time the class
@@ -226,7 +282,54 @@ class DocumentService:
         resolvable by `typing.get_type_hints` and by anything that inspects the
         signature.
         """
-        statement = select(Document).order_by(Document.id).limit(limit).offset(offset)
+        statement = select(Document)
+
+        variant_filter = any(
+            value is not None
+            for value in (
+                material,
+                size_text,
+                variant_id,
+                manufacturer_id,
+                standard,
+            )
+        )
+        if variant_filter:
+            matching_variant = (
+                select(DocumentVariant.variant_id)
+                .join(ProductVariant, ProductVariant.id == DocumentVariant.variant_id)
+                .join(Product, Product.id == ProductVariant.product_id)
+                .where(DocumentVariant.document_id == Document.id)
+                .correlate(Document)
+            )
+            if variant_id is not None:
+                matching_variant = matching_variant.where(
+                    DocumentVariant.variant_id == variant_id
+                )
+            if size_text is not None:
+                matching_variant = matching_variant.where(
+                    ProductVariant.size_text == size_text
+                )
+            if material is not None:
+                matching_variant = matching_variant.where(
+                    _contains_ci(Product.name, material)
+                )
+            if standard is not None:
+                matching_variant = matching_variant.where(
+                    _contains_ci(Product.standard, standard)
+                )
+            if manufacturer_id is not None:
+                matching_variant = matching_variant.where(
+                    Product.manufacturer_id == manufacturer_id
+                )
+            statement = statement.where(matching_variant.exists())
+
+        if number is not None:
+            statement = statement.where(_contains_ci(Document.number, number))
+        if status is not None:
+            statement = statement.where(Document.verification_status == status)
+
+        statement = statement.order_by(Document.id).limit(limit).offset(offset)
         return list(db.scalars(statement))
 
     @staticmethod

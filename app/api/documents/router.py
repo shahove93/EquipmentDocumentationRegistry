@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Literal
 
 from fastapi import (
     APIRouter,
@@ -9,6 +9,7 @@ from fastapi import (
     Response,
     status,
 )
+from pydantic import StringConstraints
 from sqlalchemy.orm import Session
 
 from app.api.documents.schemas import (
@@ -42,6 +43,23 @@ document_router = APIRouter(prefix="/documents", tags=["documents"])
 MIN_LIMIT = 1
 MAX_LIMIT = 100
 MIN_OFFSET = 0
+
+# Search terms are non-empty after trimming. `min_length` is applied *after*
+# `strip_whitespace`, so `""` and `"   "` are both `422`: a blank filter is a
+# mistake to report, never a silent "no filter". A term that merely has
+# surrounding spaces is trimmed and used.
+MAX_SEARCH_TEXT_LENGTH = 255
+
+SearchText = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        max_length=MAX_SEARCH_TEXT_LENGTH,
+    ),
+]
+
+DocumentStatus = Literal["pending", "verified", "rejected"]
 
 
 @document_router.post(
@@ -103,20 +121,76 @@ def list_documents(
     db: Annotated[Session, Depends(get_db)],
     limit: Annotated[int, Query(ge=MIN_LIMIT, le=MAX_LIMIT)] = DEFAULT_LIMIT,
     offset: Annotated[int, Query(ge=MIN_OFFSET)] = MIN_OFFSET,
+    material: Annotated[
+        SearchText | None,
+        Query(description="Case-insensitive substring of the covered product name"),
+    ] = None,
+    size_text: Annotated[
+        SearchText | None,
+        Query(description="Exact size text of a covered product variant"),
+    ] = None,
+    variant_id: Annotated[
+        int | None,
+        Query(gt=0, description="Exact covered product variant id"),
+    ] = None,
+    manufacturer_id: Annotated[
+        int | None,
+        Query(gt=0, description="Exact manufacturer id of a covered product"),
+    ] = None,
+    standard: Annotated[
+        SearchText | None,
+        Query(
+            description="Case-insensitive substring of the covered product standard"
+        ),
+    ] = None,
+    number: Annotated[
+        SearchText | None,
+        Query(description="Case-insensitive substring of the document number"),
+    ] = None,
+    status: Annotated[
+        DocumentStatus | None,
+        Query(description="Verification status of the document"),
+    ] = None,
 ) -> DocumentListOut:
     """Return a page of documents as a bare JSON array, ordered by id.
 
-    The page is produced by `DocumentService.list`, which owns the ordering
-    (`id` ascending) and the SQL; the response carries no total, so paging stays
-    the caller's concern. An unknown page is simply empty — an empty collection
-    is `200` with `[]`, never `404`. Out-of-range paging parameters are refused
-    by the query validation as `422`.
+    Without query parameters this is the plain collection. With them it is a
+    search: every supplied filter has to hold, so the parameters combine with
+    `AND`. The page is produced by `DocumentService.list`, which owns both the
+    ordering (`id` ascending) and the SQL — the router builds no query of its own
+    and filters nothing in Python. Paging is applied after filtering, so `limit`
+    counts matching documents. The response carries no total, so paging stays the
+    caller's concern.
 
-    No filters are offered and no attachments, links or verification history are
-    embedded. Attachments have their own collection under
-    `/documents/{document_id}/files`; the rest is out of scope for this slice.
+    The `material`, `standard`, `size_text`, `variant_id` and `manufacturer_id`
+    filters all describe product variants the document covers, and the service
+    requires **one** variant to match all of them at once — a document is not
+    returned because two different covered variants match two different filters.
+    An id that names no row is not an error: it simply matches nothing, so the
+    result is `200 []`, never `404`. That keeps "no such variant" and "no
+    document covers it" the same answer, which is what a search should say.
+
+    `number` and `status` describe the document itself. Text filters are
+    case-insensitive substrings; `size_text` is an exact match (so `Ø63` is not
+    `Ø 63`); `status` is one of `pending`, `verified`, `rejected`.
+
+    Out-of-range paging, a non-positive id, an unknown `status`, or a text filter
+    that is empty or only whitespace is refused as `422` by the query validation.
+    No attachments, links or verification history are embedded, and nothing about
+    any document is changed by reading it.
     """
-    documents = DocumentService.list(db, limit=limit, offset=offset)
+    documents = DocumentService.list(
+        db,
+        limit=limit,
+        offset=offset,
+        material=material,
+        size_text=size_text,
+        variant_id=variant_id,
+        manufacturer_id=manufacturer_id,
+        standard=standard,
+        number=number,
+        status=status,
+    )
     return DocumentListOut.model_validate(documents)
 
 
