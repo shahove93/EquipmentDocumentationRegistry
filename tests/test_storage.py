@@ -4,7 +4,12 @@ import stat
 
 import pytest
 
-from app.services.local_storage import LocalStorageBackend
+from app.services import local_storage
+from app.services.local_storage import (
+    LocalStorageBackend,
+    StorageInventoryError,
+    StoredFileInfo,
+)
 from app.services.storage import (
     FileAlreadyExistsError,
     StorageBackend,
@@ -280,3 +285,203 @@ class TestPartialWriteCleanup:
         with pytest.raises(OSError):
             backend.save(KEY, BrokenStream())
         assert backend.exists(KEY) is False
+
+
+class TestIterFiles:
+    def test_yields_regular_files_recursively(self, backend):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"one"))
+        backend.save("documents/1/nested/b.jpg", io.BytesIO(b"two"))
+        backend.save("documents/2/c.png", io.BytesIO(b"three"))
+        backend.save("other/ignored.pdf", io.BytesIO(b"outside"))
+
+        found = {
+            info.storage_key: info for info in backend.iter_files("documents")
+        }
+
+        assert set(found) == {
+            "documents/1/a.pdf",
+            "documents/1/nested/b.jpg",
+            "documents/2/c.png",
+        }
+        assert all(isinstance(info, StoredFileInfo) for info in found.values())
+
+    def test_uses_forward_slash_storage_keys(self, backend):
+        backend.save("documents/7/x.pdf", io.BytesIO(b"x"))
+        keys = [info.storage_key for info in backend.iter_files("documents")]
+        assert keys == ["documents/7/x.pdf"]
+
+    def test_reports_size_and_utc_timestamp(self, backend):
+        backend.save("documents/1/size.pdf", io.BytesIO(b"123456789"))
+
+        info = next(backend.iter_files("documents"))
+
+        assert info.size_bytes == 9
+        assert info.modified_at.tzinfo is not None
+        assert info.modified_at.utcoffset().total_seconds() == 0
+
+    def test_zero_byte_file_is_yielded(self, backend):
+        backend.save("documents/1/zero.pdf", io.BytesIO(b""))
+        info = next(backend.iter_files("documents"))
+        assert info.size_bytes == 0
+
+    def test_missing_prefix_yields_nothing(self, backend):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"x"))
+        assert list(backend.iter_files("missing")) == []
+
+    def test_trailing_slash_is_accepted(self, backend):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"x"))
+        assert [i.storage_key for i in backend.iter_files("documents/")] == [
+            "documents/1/a.pdf"
+        ]
+
+    def test_missing_root_raises(self, backend):
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files("documents"))
+        assert info.value.code == "storage_root_missing"
+        assert not backend.root_path.exists()
+
+    def test_root_that_is_a_file_raises(self, tmp_path):
+        root = tmp_path / "storage"
+        root.write_bytes(b"not a directory")
+        backend = LocalStorageBackend(root_path=root)
+
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files("documents"))
+
+        assert info.value.code == "storage_root_not_directory"
+
+    @pytest.mark.parametrize(
+        "prefix",
+        [
+            "",
+            " ",
+            ".",
+            "..",
+            "/documents",
+            "\\documents",
+            "documents\\1",
+            "C:/documents",
+            "documents/../escape",
+            "documents//nested",
+            42,
+        ],
+    )
+    def test_invalid_prefix_is_rejected(self, backend, prefix):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"x"))
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files(prefix))
+        assert info.value.code == "storage_prefix_invalid"
+
+    def test_namespace_that_is_a_file_raises(self, backend):
+        backend.root_path.mkdir(parents=True)
+        (backend.root_path / "documents").write_bytes(b"not a directory")
+
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files("documents"))
+
+        assert info.value.code == "storage_namespace_not_directory"
+
+    def test_namespace_symlink_is_not_followed(self, tmp_path):
+        root = tmp_path / "storage"
+        root.mkdir()
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        (outside / "secret.pdf").write_bytes(b"secret")
+        os.symlink(outside, root / "documents")
+        backend = LocalStorageBackend(root_path=root)
+
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files("documents"))
+
+        assert info.value.code == "storage_namespace_not_directory"
+
+    def test_namespace_symlink_inside_root_is_not_followed(self, tmp_path):
+        root = tmp_path / "storage"
+        real = root / "real"
+        real.mkdir(parents=True)
+        (real / "inside.pdf").write_bytes(b"inside")
+        os.symlink(real, root / "documents")
+        backend = LocalStorageBackend(root_path=root)
+
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files("documents"))
+
+        assert info.value.code == "storage_namespace_not_directory"
+
+    def test_symlinked_file_is_not_yielded(self, backend, tmp_path):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"a"))
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        secret = outside / "secret.pdf"
+        secret.write_bytes(b"secret")
+        os.symlink(secret, backend.root_path / "documents" / "1" / "secret.pdf")
+
+        keys = [info.storage_key for info in backend.iter_files("documents")]
+
+        assert keys == ["documents/1/a.pdf"]
+
+    def test_symlinked_directory_is_not_followed(self, backend, tmp_path):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"a"))
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        (outside / "secret.pdf").write_bytes(b"secret")
+        os.symlink(outside, backend.root_path / "documents" / "link")
+
+        keys = [info.storage_key for info in backend.iter_files("documents")]
+
+        assert keys == ["documents/1/a.pdf"]
+
+    def test_special_files_are_not_yielded(self, backend):
+        if not hasattr(os, "mkfifo"):
+            pytest.skip("os.mkfifo is unavailable")
+        backend.save("documents/1/a.pdf", io.BytesIO(b"a"))
+        os.mkfifo(backend.root_path / "documents" / "1" / "pipe.pdf")
+
+        keys = [info.storage_key for info in backend.iter_files("documents")]
+
+        assert keys == ["documents/1/a.pdf"]
+
+    def test_unreadable_subdirectory_raises(self, backend):
+        if not hasattr(os, "geteuid") or os.geteuid() == 0:
+            pytest.skip("permission checks are not meaningful for this user")
+        backend.save("documents/1/a.pdf", io.BytesIO(b"a"))
+        locked = backend.root_path / "documents" / "locked"
+        locked.mkdir()
+        (locked / "hidden.pdf").write_bytes(b"hidden")
+        locked.chmod(0)
+
+        try:
+            with pytest.raises(StorageInventoryError) as info:
+                list(backend.iter_files("documents"))
+        finally:
+            locked.chmod(0o700)
+
+        assert info.value.code == "storage_unreadable"
+
+    def test_vanished_entry_raises(self, backend, monkeypatch):
+        backend.save("documents/1/a.pdf", io.BytesIO(b"a"))
+        real_listdir = os.listdir
+
+        def listdir_with_ghost(directory_fd):
+            return [*real_listdir(directory_fd), "ghost.pdf"]
+
+        monkeypatch.setattr(local_storage.os, "listdir", listdir_with_ghost)
+
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files("documents"))
+
+        assert info.value.code == "storage_entry_vanished"
+
+    def test_nothing_outside_root_is_read(self, tmp_path):
+        root = tmp_path / "storage"
+        root.mkdir()
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        (outside / "secret.pdf").write_bytes(b"secret")
+        os.symlink(outside / "secret.pdf", root / "documents-link.pdf")
+        (root / "documents").mkdir()
+        os.symlink(outside, root / "documents" / "outside")
+
+        backend = LocalStorageBackend(root_path=root)
+
+        assert list(backend.iter_files("documents")) == []

@@ -25,7 +25,7 @@
 | [ADR-006](ADR-006-unique-size-within-product.md) | Уникальность типоразмера внутри изделия | ✅ Принято | [ADR-006](ADR-006-unique-size-within-product.md) | `ProductVariant` уникален в пределах одного `Product` по паре `(product_id, size_text)`; нарушение возвращает HTTP 409 |
 | [ADR-007](ADR-007-editable-document-type-reference.md) | Редактируемый справочник типов документов | ✅ Принято | [ADR-007](ADR-007-editable-document-type-reference.md) | `DocumentType` — справочник, который пользователь наполняет и переименовывает сам; начального наполнения в базе нет |
 | [ADR-008](ADR-008-document-verification-lifecycle.md) | Жизненный цикл проверки документа и история верификации | ✅ Принято | [ADR-008](ADR-008-document-verification-lifecycle.md) | Правила перехода между `pending` / `verified` / `rejected`, состав значимых реквизитов и атомарная запись перехода в `document_verification_events`. **Сервисный и HTTP-слой реализованы**: шесть документных операций, включая `POST .../verification` и `GET .../verification-history` |
-| [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисный и HTTP-слой реализованы**: пять операций, DI, `FileOut` / `FileListOut`, потоковая передача; не выполнены журнал, сверки, индекс и аутентификация |
+| [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисный и HTTP-слой реализованы**: пять операций, DI, `FileOut` / `FileListOut`, потоковая передача; **постоянный журнал и report-only сверка осиротевших файлов реализованы**; не выполнены сверка SHA-256, индекс и аутентификация |
 | [ADR-010](ADR-010-document-variant-links-and-search.md) | Привязка документов к типоразмерам и материальный поиск | ✅ Принято | [ADR-010](ADR-010-document-variant-links-and-search.md) | Базовая привязка MVP — `Document ↔ ProductVariant` через `document_variants`; `GET` / `PUT /documents/{id}/variants` (полная замена, идемпотентна, статус не меняет); расширенный `GET /documents` с материальными фильтрами. **Сервисный и HTTP-слой реализованы** |
 | — | Связь сертификатов с типоразмерами | 🕓 Черновик, поглощён ADR-010 | [DOCUMENT-VARIANT-RELATIONSHIP.md](DOCUMENT-VARIANT-RELATIONSHIP.md) | Историческая справка: подтверждённое требование many-to-many и структура `document_variants`. Принятое решение — [ADR-010](ADR-010-document-variant-links-and-search.md) |
 
@@ -63,7 +63,11 @@
 журналирование через `logging`, доменная ошибка `AttachmentNotFoundError`,
 пять файловых маршрутов, DI `get_file_service` / `get_storage`,
 `FileOut` / `FileListOut`, потоковая загрузка и скачивание,
-`ClosingStreamingResponse`, `python-multipart==0.0.32`.
+`ClosingStreamingResponse`, `python-multipart==0.0.32`, постоянный JSON
+Lines-журнал (TASK-MVP-01) и **report-only сверка осиротевших файлов**
+(TASK-MVP-02): `LocalStorageBackend.iter_files()`,
+`app/services/storage_reconciliation.py` и CLI `python -m app.reconcile_storage`
+без удаления, DML и расписания.
 
 У [ADR-008](ADR-008-document-verification-lifecycle.md) **сервисный и HTTP-слой
 также реализованы**: шесть документных операций (`POST` / `GET` коллекции,
@@ -79,10 +83,11 @@ HTTP-слой также реализованы**: `DocumentVariantService` (`li
 индексы под `LIKE '%…%'`, привязка к `Product` / `Batch` и семантика каскадного
 удаления `ProductVariant`.
 
-**Не реализовано то, что осталось:** постоянное хранилище журнала; сверка
-осиротевших файлов; сверка SHA-256; миграция индекса `ix_files_document_id_id`;
-аутентификация и авторизация. Таблицы «Статус реализации» в обоих ADR
-перечисляют всё построчно.
+**Не реализовано то, что осталось:** сверка SHA-256; миграция индекса
+`ix_files_document_id_id`; аутентификация и авторизация. Постоянный журнал
+(TASK-MVP-01) и **report-only** сверка осиротевших файлов (TASK-MVP-02)
+реализованы; удаление кандидатов и автоматическое расписание в объём сверки
+не входят. Таблицы «Статус реализации» в обоих ADR перечисляют всё построчно.
 
 ## Прочие документы проекта
 
