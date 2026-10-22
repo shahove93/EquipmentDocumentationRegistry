@@ -15,7 +15,8 @@
 - Ветка/worktree: `main`, текущий workspace. Baseline TASK-MVP-02: `8e7fe3e`;
   TASK-MVP-01 принят на `5b9d916`.
 - Orca Run: `run_68046cea3eb4`; TASK-MVP-01 implementation/review released;
-  evidence/review закоммичены. TASK-MVP-02 design: dispatch pending.
+  evidence/review закоммичены. TASK-MVP-02 design: `task_2d70042ef4d9` /
+  `ctx_acbb6b3c25e6` / `term_36bc1621-79ff-4253-9cb9-f8e63f7f6277`.
 - Подход: TASK-MVP-02 — design before implementation; TASK-MVP-01 — A1,
   циклы 1 / 3, полные ревью 1 / 2, FAIL 0. Всего циклов TASK: 1 / 9.
 - Codex: вызовы 0 / 4, резерв 1; input 0 / 3 000 000, резерв 500 000.
