@@ -1,6 +1,6 @@
 # TASK-MVP-01 — Постоянный журнал компенсаций и неизвестных исходов
 
-Статус: IN_PROGRESS. Требования: VISION.md, ARCHITECTURE.md, ROADMAP.md,
+Статус: PASS. Требования: VISION.md, ARCHITECTURE.md, ROADMAP.md,
 ADR-005…010. Этап ROADMAP: 2.
 Предшественники с обязательным PASS: TASK-MVP-00 PASS.
 Класс риска: R1 (обоснование: конфигурация `logging`, форматтер и тесты;
@@ -76,8 +76,9 @@ ADR-009), остальные workflow-документы.
 
 ## Приёмка
 
-Решение: NOT_REVIEWED. Автор решения: независимый OpenCode-ревьюер.
-Проверенная ревизия: не назначена.
+Решение: PASS (2026-10-22). Автор решения: независимый OpenCode-ревьюер
+(R1). Проверенная ревизия: `5b9d916`; все AC-001…AC-012 пройдены, находок
+BLOCKER/MAJOR/MINOR/NIT нет.
 Сводка/счётчики: ../workflow/STATE.md. История: ../workflow/HISTORY.md.
 Подробный отчёт: ../workflow/reviews/TASK-MVP-01.md. Пакет доказательств:
 ../workflow/evidence/TASK-MVP-01-C1.md. Следующий TASK: TASK-MVP-02.
