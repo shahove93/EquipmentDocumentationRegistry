@@ -48,7 +48,7 @@
 | 2026-10-22 | TASK-MVP-00/A1/C1 | `run_68046cea3eb4` / `task_4d33d01ce1fa` / `ctx_85adc7c6460b` | R1; резерв полного ревью 1/2 | Codex: 0/2 вызовов, 0/1M input; ревью — независимый OpenCode | worker_done succeeded; проект NOT_REVIEWED | R1-ревью независимым OpenCode |
 | 2026-10-22 | TASK-MVP-00/A1/C1 | `run_68046cea3eb4` / `task_4d33d01ce1fa` / `ctx_85adc7c6460b` | Реализация: коммит `ee4e699`, evidence `docs/workflow/evidence/TASK-MVP-00-C1.md`; release — retained/user_takeover | Ревью зарезервировано 1/2 | Ожидает вердикта | Диспатч ревьюера |
 | 2026-10-22 | TASK-MVP-00/A1/C1 review | `run_68046cea3eb4` / `task_67d2d98ace9c` / `ctx_b4d619f7a180` | Ревью `3529aa1..ee4e699`; release — released | Полное ревью 1/2; Codex 0/2, 0/1M | **PASS**, находок нет | TASK-MVP-01 |
-| 2026-10-22 | TASK-MVP-01/A1/C1 | `run_68046cea3eb4` / pending / pending | Базовая ревизия `5e9e626`; чек-лист AC-001…AC-012 заморожен; R1 | Полное ревью зарезервировано 1/2; Codex 0/2, 0/1M | Ожидает диспатча | Диспатч исполнителя |
+| 2026-10-22 | TASK-MVP-01/A1/C1 | `run_68046cea3eb4` / `task_b3bcd28acaf7` / `ctx_e67979c66846` | Базовая ревизия `5e9e626`; dispatch на `6e5d4ef`; чек-лист AC-001…AC-012 заморожен; R1 | Полное ревью зарезервировано 1/2; Codex 0/2, 0/1M | Ожидает worker_done | Ждать исполнителя |
 
 ## Восстановление и лимиты
 

@@ -8,15 +8,15 @@
 - TASK/этап: TASK-MVP-01 / постоянный журнал — IN_PROGRESS. Следующий:
   TASK-MVP-02.
 - Проектный вердикт: NOT_REVIEWED. Автор/маршрут: независимый
-  OpenCode-ревьюер (R1), ревью зарезервировано; `task`/`ctx` — после диспатча.
+  OpenCode-ревьюер (R1), ревью зарезервировано.
 - Экспертное/итоговое решение Codex: NOT_REVIEWED (отдельно от TASK PASS).
 - Класс/обоснование: R1 — конфигурация `logging`, JSONL-форматтер и тесты;
   схема БД, API и бизнес-логика не меняются.
 - Ветка/worktree: `main`, текущий workspace. Baseline TASK-MVP-01: `5e9e626`;
   принятая ревизия: не назначена.
-- Orca Run: `run_68046cea3eb4`; Task/Dispatch/worker TASK-MVP-01: pending
-  dispatch. Предыдущий worker TASK-MVP-00 retained/user_takeover; ревьюер
-  released.
+- Orca Run: `run_68046cea3eb4`; TASK-MVP-01: `task_b3bcd28acaf7` /
+  `ctx_e67979c66846` / `term_0d99fac8-4782-4b0d-8072-c3bc4cd60d32`; dispatch
+  baseline `6e5d4ef`. Предыдущий worker retained/user_takeover; ревьюер released.
 - Подход: A1. Циклы TASK-MVP-01: 1 / 3. Полные ревью: зарезервировано 1 / 2;
   FAIL: 0. Диагностика C3: не назначена; всего циклов TASK: 1 / 9.
 - Codex: вызовы 0 / 2, резерв 0; input 0 / 1 000 000, резерв 0.
@@ -28,8 +28,8 @@
 - Последняя проверка: `pytest -q` — 0, 3377 passed, 1 warning, 409.01s
   (`ba6c06e`); `npm run typecheck`/`build` — 0; `alembic current` — head.
 - Открытые BLOCKER/MAJOR и NOT_RUN: нет.
-- Следующее действие/владелец: диспатчить TASK-MVP-01 исполнителю OpenCode,
-  затем R1-ревью; координатор.
+- Следующее действие/владелец: ждать worker_done TASK-MVP-01, затем R1-ревью;
+  координатор.
 - BLOCKED/нужное решение: нет.
 - Восстановление approval/Git/Orca/счётчиков: выполнено 2026-10-22; активных
   Orca Run по репозиторию нет, счётчики начаты с нуля.
