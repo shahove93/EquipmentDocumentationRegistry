@@ -9,7 +9,7 @@
 | --- | --- | --- | --- | --- | --- | --- |
 | 2026-10-22 | TASK-MVP-00 | PASS / независимый OpenCode (R1) | нет | A1/C1; 1 полное ревью; FAIL 0 | baseline `3529aa1`; принято `ee4e699` | TASK-MVP-01 |
 | 2026-10-22 | TASK-MVP-01 | PASS / независимый OpenCode (R1) | TASK-MVP-00 PASS | A1/C1; 1 полное ревью; FAIL 0 | baseline `5e9e626`; принято `5b9d916` | TASK-MVP-02 |
-| 2026-10-22 | TASK-MVP-02 | IN_PROGRESS / вердикта нет | TASK-MVP-01 PASS | R2; Codex design завершён; A1/C1 ожидает реализации; Codex 1/4 | baseline `7b785f4` | Диспатч исполнителя |
+| 2026-10-22 | TASK-MVP-02 | IN_PROGRESS / C1 реализован, вердикта нет | TASK-MVP-01 PASS | R2; Codex design завершён; A1/C1 реализован; Codex 1/4 | baseline `7b785f4`; C1 `a2b52a8` | R2-ревью Codex |
 
 ## Подходы и первопричины
 
@@ -33,6 +33,8 @@
 | 2026-10-22 | baseline | OpenCode-координатор | `ba6c06e` | `source /home/djeka/.nvm/nvm.sh; cd frontend && npm run build` | 0 / 60 modules, dist создан | Production build зелёный | вывод в сессии |
 | 2026-10-22 | baseline | OpenCode-координатор | `ba6c06e` | `.venv/bin/alembic current` | 0 / `a3f1c72d5b90 (head)` | Alembic head подтверждён | вывод в сессии |
 | 2026-10-22 | baseline | OpenCode-координатор | `ba6c06e` | `ls alembic/versions/*.py \| wc -l` | 0 / `12` | Число миграций подтверждено | вывод в сессии |
+| 2026-10-22 | TASK-MVP-02/A1/C1 | OpenCode-исполнитель | `a2b52a8` | focused-набор: storage/reconciliation/CLI + file_service/concurrency, WSL, корень | 0 / `377 passed` | focused-набор зелёный | `evidence/TASK-MVP-02-C1.md` |
+| 2026-10-22 | TASK-MVP-02/A1/C1 | OpenCode-исполнитель | `a2b52a8` | полный `pytest -q`; реальный CLI `python -m app.reconcile_storage`, WSL, корень | 0 / `3474 passed, 1 warning`; CLI 3/3/0 | полный backend и запуск зелёные | `evidence/TASK-MVP-02-C1.md` |
 
 ## Критерии приёмки и бэклог
 
@@ -52,7 +54,7 @@
 | 2026-10-22 | TASK-MVP-01/A1/C1 | `run_68046cea3eb4` / `task_b3bcd28acaf7` / `ctx_e67979c66846` | Реализация: коммит `5b9d916`, evidence `docs/workflow/evidence/TASK-MVP-01-C1.md`; release — released | Полное ревью зарезервировано 1/2; Codex 0/2, 0/1M | worker_done succeeded; проект NOT_REVIEWED | R1-ревью |
 | 2026-10-22 | TASK-MVP-01/A1/C1 review | `run_68046cea3eb4` / `task_1d61cb577817` / `ctx_7ef3ef86a791` | Ревью `5e9e626..5b9d916`; evidence переиспользовано; release — released | Полное ревью 1/2; Codex 0/2, 0/1M | **PASS**, находок нет | TASK-MVP-02 |
 | 2026-10-22 | TASK-MVP-02 design | `run_68046cea3eb4` / `task_2d70042ef4d9` / `ctx_acbb6b3c25e6` | R2 design по ADR-009; baseline `7b785f4`; design memo `msg_2a59e2195e94`; release — released | Codex calls 1/4; input design не раскрыт worker / 3M; reserve 0 | worker_done succeeded; проект NOT_REVIEWED | Реализация |
-| 2026-10-22 | TASK-MVP-02/A1/C1 | `run_68046cea3eb4` / `task_508a5a075dd1` / `ctx_f615074805a8` | Реализация по TASK-MVP-02; baseline `040018b`; R2 | Codex calls 1/4; input design не раскрыт / 3M; review reserve pending | Ожидает worker_done | Ждать исполнителя |
+| 2026-10-22 | TASK-MVP-02/A1/C1 | `run_68046cea3eb4` / `task_508a5a075dd1` / `ctx_f615074805a8` | Реализация: коммит `a2b52a8`, evidence `docs/workflow/evidence/TASK-MVP-02-C1.md` (untracked); release — released | Codex calls 1/4; input design не раскрыт / 3M; полное ревью зарезервировано 1/2 | worker_done succeeded; проект NOT_REVIEWED | R2-ревью Codex |
 
 ## Восстановление и лимиты
 
