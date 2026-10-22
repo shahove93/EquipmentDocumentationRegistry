@@ -1,6 +1,6 @@
 # TASK-MVP-00 — Baseline: frontend, проверки, документация
 
-Статус: IN_PROGRESS. Требования: VISION.md, ARCHITECTURE.md, ROADMAP.md,
+Статус: PASS. Требования: VISION.md, ARCHITECTURE.md, ROADMAP.md,
 ADR-005…010. Этап ROADMAP: 1.
 Предшественники с обязательным PASS: нет.
 Класс риска: R1 (обоснование: механическая фиксация существующего frontend,
@@ -66,7 +66,9 @@ ADR-005…010. Этап ROADMAP: 1.
 
 ## Приёмка
 
-Решение: NOT_REVIEWED. Автор решения: отдельный OpenCode-ревьюер.
-Ревизия/diff: не проверены. Сводка/счётчики: ../workflow/STATE.md.
+Решение: **PASS**. Автор решения: независимый OpenCode-ревьюер
+(`task_67d2d98ace9c` / `ctx_b4d619f7a180`). Проверенная ревизия: `ee4e699`
+(diff `3529aa1..ee4e699`). Сводка/счётчики: ../workflow/STATE.md.
 История: ../workflow/HISTORY.md. Подробный отчёт:
-../workflow/reviews/TASK-MVP-00.md.
+../workflow/reviews/TASK-MVP-00.md. Пакет доказательств:
+../workflow/evidence/TASK-MVP-00-C1.md. Следующий TASK: TASK-MVP-01.

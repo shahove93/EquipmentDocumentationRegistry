@@ -9,7 +9,7 @@
 
 | Порядок | TASK | Результат и требования | Предшественники | Критерий этапа | Риск | Статус |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | [TASK-MVP-00](docs/tasks/TASK-MVP-00.md) | Baseline: frontend закоммичен, проверки typecheck/build зелёные, backend-контрольная точка зафиксирована, `PROJECT_STATUS` актуализирован | Нет | Коммит в `main`; `3377 passed`; frontend build; нет изменений backend | R1 | IN_PROGRESS |
+| 1 | [TASK-MVP-00](docs/tasks/TASK-MVP-00.md) | Baseline: frontend закоммичен, проверки typecheck/build зелёные, backend-контрольная точка зафиксирована, `PROJECT_STATUS` актуализирован | Нет | Коммит `ee4e699`; `3377 passed`; frontend build; backend не изменён | R1 | PASS (2026-10-22) |
 | 2 | TASK-MVP-01 | Постоянный журнал компенсаций и неизвестных исходов (ADR-009) | TASK-MVP-00 PASS | Журнал переживает перезапуск; тесты | R1 | PLANNED |
 | 3 | TASK-MVP-02 | Сверка осиротевших файлов (ADR-009) | TASK-MVP-01 PASS | Операция сверки + тесты; отчёт об осиротевших blob | R2 | PLANNED |
 | 4 | TASK-MVP-03 | Сверка SHA-256 при скачивании + миграция `ix_files_document_id_id` | TASK-MVP-02 PASS | Тесты несовпадения/совпадения SHA-256; Alembic head +1 | R2 | PLANNED |
