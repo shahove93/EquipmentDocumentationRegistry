@@ -16,14 +16,14 @@
 
 | Показатель | Значение | Когда подтверждено |
 | --- | --- | --- |
-| Тесты | **3377 passed, 1 warning** | подтверждено полным прогоном после интеграционной проверки привязок и поиска (TASK-DOC-007E) на ревизии `ba6c06e` |
+| Тесты | **3400 passed, 1 warning** | подтверждено полным прогоном после реализации постоянного журнала (TASK-MVP-01) |
 | Alembic head | **`a3f1c72d5b90`** | подтверждено чтением `alembic_version` в рабочей базе; миграция применена |
 | Число миграций | **12** | подтверждено подсчётом файлов в `alembic/versions/` |
 | HTTP-операций | **34** (19 путей) | подтверждено генерацией OpenAPI после добавления двух операций привязки (`GET`/`PUT /documents/{id}/variants`) |
 | Frontend typecheck | **успешно** (`tsc --noEmit`, exit 0) | подтверждено в WSL, Node.js v24.22.0, 2026-10-22 |
 | Frontend production build | **успешно** (`vite build`, exit 0, `frontend/dist/index.html` создан) | подтверждено в WSL, Node.js v24.22.0, 2026-10-22 |
 | Ветка Git | `main` | подтверждено |
-| Базовая ревизия backend | `ba6c06e` | подтверждено `git log`; backend-файлы не изменялись |
+| Базовая ревизия backend | `ba6c06e` → коммит TASK-MVP-01 | подтверждено `git log`; в TASK-MVP-01 изменены `app/config.py`, `app/main.py` и новый `app/logging_config.py` |
 | Исходный commit | `1bd17dce832660d541bc720ec297d8d55de25c1f` | подтверждено |
 | Удалённый репозиторий | `origin` → приватный `shahove93/EquipmentDocumentationRegistry` | подтверждено; push не выполнялся |
 
@@ -128,7 +128,7 @@ React Router. Экраны: реестр документов с фильтра�
 
 | Компонент | Что готово | Чего не хватает |
 | --- | --- | --- |
-| **FileService** | `attach()` — добавление вложения одной транзакцией: блокировка документа через общий модуль, валидация сигнатуры (PDF/JPEG/PNG), потоковая запись файла и SHA-256 на лету, строка `File`, возврат в `pending` с событием `reopened` (`file_added`); `detach()` — удаление вложения одной транзакцией с блокировкой строки файла, событием `reopened` (`file_deleted`) и удалением файла с диска **только после подтверждённого `commit`**; `upload()` — тонкая обёртка над `attach()`; `list_for_document()`; охранник `TransactionAlreadyOpenError`; компенсация добавления (`_settle` / `_compensate`); журналирование через `logging`; доменные ошибки `AttachmentNotFoundError`, `PendingDocumentChangesError` | HTTP-слой реализован: `app/api/files/` (пять операций) и `app/dependencies.py`; остаются постоянный журнал, сверка осиротевших файлов и индекс `ix_files_document_id_id` |
+| **FileService** | `attach()` — добавление вложения одной транзакцией: блокировка документа через общий модуль, валидация сигнатуры (PDF/JPEG/PNG), потоковая запись файла и SHA-256 на лету, строка `File`, возврат в `pending` с событием `reopened` (`file_added`); `detach()` — удаление вложения одной транзакцией с блокировкой строки файла, событием `reopened` (`file_deleted`) и удалением файла с диска **только после подтверждённого `commit`**; `upload()` — тонкая обёртка над `attach()`; `list_for_document()`; охранник `TransactionAlreadyOpenError`; компенсация добавления (`_settle` / `_compensate`); журналирование через `logging`; доменные ошибки `AttachmentNotFoundError`, `PendingDocumentChangesError` | HTTP-слой реализован: `app/api/files/` (пять операций) и `app/dependencies.py`; остаются сверка осиротевших файлов и индекс `ix_files_document_id_id` |
 | **`app/services/transaction.py`** | Общий механизм владения транзакцией и блокировки: `locked_document()` (`SELECT ... FOR UPDATE` + `populate_existing=True` + проверка `inspect(document).modified`), `release()`, `transaction_existed_on_entry()`, `UncommittedChangesInSession`. Используется и `DocumentService`, и `FileService`; 35 тестов | Транзакционные ограничения вызывающего сохраняются — [ADR-008](adr/ADR-008-document-verification-lifecycle.md), раздел «Транзакционные ограничения» |
 | **LocalStorageBackend** | Реализация `StorageBackend`: `save` (атомарно, через `"xb"`), `open`, `exists`, `delete`; защита от выхода за пределы корня, от абсолютных путей, от Windows-путей и от `..`; запрет NUL в ключе | Инстанцируется в `app/dependencies.py` (`get_file_service`, `get_storage`); `Settings.STORAGE_ROOT` и `Settings.MAX_UPLOAD_SIZE_BYTES` читаются там же |
 | **Модели `Document`, `Batch` и таблицы связей** | ORM-модели с CHECK-ограничениями и внешними ключами, миграции, навигационные свойства | У `Document` есть Pydantic-схемы, `DocumentService` и HTTP-маршруты (`app/api/documents/`). У `Batch` по-прежнему нет ни схем, ни сервиса |
@@ -169,7 +169,8 @@ React Router. Экраны: реестр документов с фильтра�
 `FileService.attach()` / `detach()` / `upload()` / `list_for_document()`;
 автоматический возврат в `pending` с событием `reopened` (`file_added`,
 `file_deleted`); компенсация добавления; удаление файла только после
-подтверждённого `commit`; журналирование через `logging`; доменные ошибки
+подтверждённого `commit`; журналирование через `logging`; постоянный
+JSON Lines-журнал `app.*`; доменные ошибки
 `AttachmentNotFoundError`, `TransactionAlreadyOpenError`,
 `PendingDocumentChangesError`. **Document HTTP API**: шесть операций, схемы
 `DocumentCreate` / `DocumentUpdate` / `DocumentOut` / `DocumentListOut` /
@@ -185,15 +186,25 @@ React Router. Экраны: реестр документов с фильтра�
 с материальными фильтрами и сквозной интеграционный сценарий «труба → Ø63 → PDF».
 См. [ADR-010](adr/ADR-010-document-variant-links-and-search.md).
 
+**Постоянный журнал** (TASK-MVP-01): `app/logging_config.py` дописывает записи
+`app.*` уровня INFO и выше в `Settings.LOG_FILE` (по умолчанию
+`storage/logs/app.log`) в формате JSON Lines, UTF-8. Каждая запись содержит
+`timestamp` (ISO 8601 с UTC-смещением), `level`, `logger`, `message` и при
+наличии — поля аудита `operation`, `document_id`, `storage_key`,
+`failure_category`, `error_type`, `file_id`. Произвольные `extra`-поля,
+`str(error)` и traceback не пишутся; обработчик устанавливается идемпотентно и
+закрывается на shutdown lifespan `app/main.py`. Тесты —
+`tests/test_logging_config.py`.
+
 **Локальные Document API, File API и API привязок не означают готовности
 приложения к публичной эксплуатации.** Все тринадцать маршрутов документов,
 вложений и привязок анонимны; до реализации аутентификации и авторизации
 публичное развёртывание запрещено.
 
 **Решения приняты, но не выполнены** (обязательны к исполнению, доказательства в
-коде отсутствуют): постоянное хранилище журнала; сверка осиротевших файлов;
-сверка SHA-256; миграция `ix_files_document_id_id`; аутентификация и
-авторизация. Построчный перечень — в разделах «Статус реализации»
+коде отсутствуют): сверка осиротевших файлов; сверка SHA-256; миграция
+`ix_files_document_id_id`; аутентификация и авторизация. Построчный перечень —
+в разделах «Статус реализации»
 [ADR-009](adr/ADR-009-document-attachments.md) и «Ограничения» ниже.
 
 ---
@@ -252,7 +263,7 @@ React Router. Экраны: реестр документов с фильтра�
 | 22 | `_commit` обрабатывает только `IntegrityError`; обработка ошибок иного рода не укреплена — отдельное задание |
 | 23 | **Снято.** Общая граница транзакции определена и реализована: `attach()` и `detach()` владеют **одной** транзакцией и коммитят ровно один раз; `FileService._register` устранён. Общий — только **механизм** (`app/services/transaction.py`); **политика** у сервисов разная: `DocumentService` усыновляет транзакцию, `FileService` отвергает чужую охранником `TransactionAlreadyOpenError` |
 | 24 | **Реализовано.** `detach()` берёт блокировку строки файла (`SELECT ... FOR UPDATE` с фильтром по `File.id` **и** `File.document_id`) строго **после** блокировки документа, порядок `Document` → `File` сохранён. `attach()` файловую строку не блокирует — осознанная асимметрия: строка к этому моменту ещё не существует |
-| 25 | **Реализовано, но журнал непостоянен.** `_cleanup` удалён; неудачи компенсации и неизвестные исходы пишутся через `logging` с полями `operation`, `document_id`, `storage_key`, `failure_category`, `error_type` (произвольный `str(error)` не пишется). **Постоянного хранилища журнала нет** — ни обработчиков, ни места хранения: при перезапуске записи теряются |
+| 25 | **Снято (TASK-MVP-01).** `_cleanup` удалён; неудачи компенсации и неизвестные исходы пишутся через `logging` с полями `operation`, `document_id`, `storage_key`, `failure_category`, `error_type` (произвольный `str(error)` не пишется) и **дописываются в постоянный JSON Lines-журнал** `Settings.LOG_FILE` (по умолчанию `storage/logs/app.log`), UTF-8. Записи переживают перезапуск процесса |
 | 26 | Потеря соединения во время `COMMIT` оставляет неизвестный исход: откат не отменяет уже принятый сервером коммит. **Компенсация по типу исключения запрещена** — исход определяется данными: `attach` опрашивает строку по `storage_key`, а `detach` **физический файл сохраняет** (отсутствие строки там неотличимо от успеха). Осиротевший файл восстановим сверкой, потерянный — нет |
 | 27 | **Сверка осиротевших файлов не реализована.** Именно она делает безопасным сохранение файла при неизвестном исходе и закрывает вопрос «файл на диске без строки в базе». Пока её нет, осиротевшие файлы накапливаются молча |
 | 28 | **При неизвестном исходе `detach` физический файл остаётся на диске** — осознанный компромисс: удалить его значило бы рисковать потерей данных при уже принятом коммите. Цена — осиротевший blob до появления сверки |
@@ -274,26 +285,24 @@ React Router. Экраны: реестр документов с фильтра�
 Накопленные изменения TASK-DOC-007B–007E закоммичены в `ba6c06e`
 («feat(documents): add variant links and certificate search»), а существующий
 frontend зафиксирован baseline-коммитом на `main`. Push не выполнялся. Дальше
-работа идёт по ROADMAP v1.0: постоянный журнал компенсаций (TASK-MVP-01),
-сверка осиротевших файлов (TASK-MVP-02), сверка SHA-256 и миграция индекса
-(TASK-MVP-03), `BatchService` и Batch API (TASK-MVP-04), завершение frontend
-(TASK-MVP-05) и финальная приёмка этапа (TASK-MVP-06).
+работа идёт по ROADMAP v1.0: постоянный журнал компенсаций реализован в
+TASK-MVP-01; далее сверка осиротевших файлов (TASK-MVP-02), сверка SHA-256 и
+миграция индекса (TASK-MVP-03), `BatchService` и Batch API (TASK-MVP-04),
+завершение frontend (TASK-MVP-05) и финальная приёмка этапа (TASK-MVP-06).
 
 **2. Оставшиеся задачи, не входящие в Document API.**
 
 1. **Аутентификация и авторизация.** До неё публичное развёртывание обоих API
    запрещено: все тринадцать маршрутов документов, вложений и привязок анонимны.
-2. **Постоянное хранилище журнала.** Настроить обработчики `logging`, чтобы
-   записи компенсации переживали перезапуск процесса (ограничение 25).
-3. **Сверка осиротевших файлов.** Именно она делает безопасным сохранение
+2. **Сверка осиротевших файлов.** Именно она делает безопасным сохранение
    файла при неизвестном исходе (ограничения 27, 28).
-4. **Сверка SHA-256** при чтении вложения (ограничение 17).
-5. **Миграция индекса `ix_files_document_id_id`** (ограничение 16).
-6. **Привязка документов к изделиям и партиям** — привязка к типоразмерам уже
+3. **Сверка SHA-256** при чтении вложения (ограничение 17).
+4. **Миграция индекса `ix_files_document_id_id`** (ограничение 16).
+5. **Привязка документов к изделиям и партиям** — привязка к типоразмерам уже
    реализована ([ADR-010](adr/ADR-010-document-variant-links-and-search.md));
    семантика связей с `Product` и `Batch` ещё не утверждена.
-7. **BatchService и Batch API** (ограничение 1).
-8. **Индексы под материальный поиск** (`pg_trgm`/GIN) и **журналирование
+6. **BatchService и Batch API** (ограничение 1).
+7. **Индексы под материальный поиск** (`pg_trgm`/GIN) и **журналирование
    изменений привязок** — открытые пункты
    [ADR-010](adr/ADR-010-document-variant-links-and-search.md).
 
@@ -310,8 +319,9 @@ frontend зафиксирован baseline-коммитом на `main`. Push н
 
 ```
 app/
-├── main.py                 точка входа, подключение роутеров
+├── main.py                 точка входа, подключение роутеров, lifespan журнала
 ├── config.py               Settings; маскирование DATABASE_URL в repr/выводе
+├── logging_config.py       постоянный JSON Lines-журнал logger app
 ├── dependencies.py         get_file_service, get_storage
 ├── api/
 │   ├── router.py           /health + подключение восьми роутеров
@@ -332,7 +342,7 @@ app/
                             + document_variant_service.py  привязка документ ↔ типоразмер
                             + storage.py (ABC) + local_storage.py
 alembic/versions/           12 ревизий
-tests/                      55 файлов тестов + conftest.py
+tests/                      56 файлов тестов + conftest.py
 frontend/                   React 19 + Vite + TypeScript
 ├── src/                    App, pages, components, hooks, api, utils
 ├── index.html

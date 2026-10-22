@@ -5,6 +5,8 @@ MASK = "***"
 
 DEFAULT_MAX_UPLOAD_SIZE_BYTES = 100 * 1024 * 1024
 
+DEFAULT_LOG_FILE = "storage/logs/app.log"
+
 
 class Settings(BaseSettings):
     """Central application configuration loaded from the environment and .env.
@@ -31,6 +33,10 @@ class Settings(BaseSettings):
         default=DEFAULT_MAX_UPLOAD_SIZE_BYTES,
         description="Maximum accepted upload size in bytes.",
     )
+    LOG_FILE: str = Field(
+        default=DEFAULT_LOG_FILE,
+        description="Path of the persistent JSON Lines application journal.",
+    )
 
     @field_validator("DATABASE_URL")
     @classmethod
@@ -53,6 +59,13 @@ class Settings(BaseSettings):
             raise ValueError("MAX_UPLOAD_SIZE_BYTES must be greater than 0")
         return value
 
+    @field_validator("LOG_FILE")
+    @classmethod
+    def _log_file_not_empty(cls, value: str) -> str:
+        if not value or not value.strip():
+            raise ValueError("LOG_FILE must not be empty")
+        return value.strip()
+
     @field_serializer("DATABASE_URL")
     def _mask_database_url(self, value: str) -> str:
         """Mask the URL in serialized output so it cannot leak into logs."""
@@ -63,7 +76,8 @@ class Settings(BaseSettings):
             f"{type(self).__name__}("
             f"DATABASE_URL={MASK!r}, "
             f"STORAGE_ROOT={self.STORAGE_ROOT!r}, "
-            f"MAX_UPLOAD_SIZE_BYTES={self.MAX_UPLOAD_SIZE_BYTES!r})"
+            f"MAX_UPLOAD_SIZE_BYTES={self.MAX_UPLOAD_SIZE_BYTES!r}, "
+            f"LOG_FILE={self.LOG_FILE!r})"
         )
 
     __str__ = __repr__
