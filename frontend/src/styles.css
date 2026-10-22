@@ -1,0 +1,984 @@
+/*
+ * A light, quiet interface for engineering data. Everything is one file: the
+ * surface is a header, a form, a table and a few state blocks, and splitting the
+ * stylesheet would only scatter closely related rules.
+ *
+ * Palette is deliberately low-saturation, with colour reserved for verification
+ * status so a state stands out in a dense table without shouting.
+ */
+
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --border: #dfe3e8;
+  --border-strong: #c8cfd6;
+  --text: #1f2933;
+  --text-muted: #6b7280;
+  --accent: #2563eb;
+  --accent-dark: #1d4ed8;
+  --pending-fg: #92400e;
+  --pending-bg: #fef3c7;
+  --verified-fg: #15803d;
+  --verified-bg: #dcfce7;
+  --rejected-fg: #b91c1c;
+  --rejected-bg: #fee2e2;
+  --error-fg: #b91c1c;
+  --radius: 8px;
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* --- layout ------------------------------------------------------------- */
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+}
+
+.page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.page__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.page__subtitle {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* --- sections ----------------------------------------------------------- */
+
+/* Two sections, one bar. It stays out of the page column so a long table scrolls
+   under it rather than carrying it along. */
+.nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 20px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.nav__brand {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.nav__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.nav__link {
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.nav__link:hover {
+  background: #eef2f7;
+}
+
+.nav__link--active {
+  background: #e8eef7;
+  color: var(--accent-dark);
+  font-weight: 600;
+}
+
+/* --- form --------------------------------------------------------------- */
+
+.filters {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.filters__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px 16px;
+}
+
+.filters__actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field__label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.field__input {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  outline: none;
+}
+
+.field__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.field__hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+select.field__input {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+    linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 30px;
+}
+
+/* --- buttons ------------------------------------------------------------ */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-dark);
+}
+
+.button--primary {
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.button--primary:hover:not(:disabled) {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  color: #ffffff;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.link {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* --- table -------------------------------------------------------------- */
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.table th,
+.table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.table th {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+  background: #fafbfc;
+  white-space: nowrap;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.table__number {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.table__action-col {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* --- status badge ------------------------------------------------------- */
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.badge--pending {
+  color: var(--pending-fg);
+  background: var(--pending-bg);
+}
+
+.badge--verified {
+  color: var(--verified-fg);
+  background: var(--verified-bg);
+}
+
+.badge--rejected {
+  color: var(--rejected-fg);
+  background: var(--rejected-bg);
+}
+
+/* --- states ------------------------------------------------------------- */
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 48px 20px;
+  text-align: center;
+  color: var(--text);
+}
+
+.state p {
+  margin: 0;
+}
+
+.state--loading {
+  color: var(--text-muted);
+}
+
+.state--error {
+  color: var(--error-fg);
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+/* --- pagination --------------------------------------------------------- */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  background: #fafbfc;
+}
+
+.pagination__info {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pagination__buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* --- document card ------------------------------------------------------ */
+
+.backlink {
+  display: inline-block;
+  margin-bottom: 14px;
+  font-size: 14px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.card__section {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.card__section:first-child {
+  border-top: none;
+}
+
+.section-title {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Definition list: a responsive grid of label/value pairs. */
+.defs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px 24px;
+  margin: 0;
+}
+
+.defs__row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* Notes can be long, so the pair takes a full row of its own. */
+.defs__row--wide {
+  grid-column: 1 / -1;
+}
+
+.defs__term {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+.defs__value {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* A region of the card that failed on its own. */
+.block-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--error-fg);
+}
+
+.block-error p {
+  margin: 0;
+}
+
+.history__status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.history__arrow {
+  color: var(--text-muted);
+}
+
+.table__filename {
+  overflow-wrap: anywhere;
+}
+
+.badge--unknown {
+  color: var(--text);
+  background: #eceff3;
+}
+
+/* --- forms on their own screen ------------------------------------------ */
+
+.panel--form {
+  padding: 16px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px 16px;
+}
+
+/* Notes, and any other long value, take a row of their own. */
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+.field__error {
+  font-size: 12px;
+  color: var(--error-fg);
+}
+
+.field__input:disabled {
+  background: #f4f6f8;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+textarea.field__input {
+  resize: vertical;
+  min-height: 64px;
+  font-family: inherit;
+}
+
+.form__references {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.form__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* --- notices ------------------------------------------------------------ */
+
+.notice {
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+.notice--info {
+  background: #f4f6f8;
+}
+
+.notice--warning {
+  color: var(--pending-fg);
+  background: var(--pending-bg);
+  border-color: #f0d18a;
+}
+
+.notice--error {
+  color: var(--error-fg);
+  background: var(--rejected-bg);
+  border-color: #f2b8b8;
+}
+
+.notice--success {
+  color: var(--verified-fg);
+  background: var(--verified-bg);
+  border-color: #a9e3bf;
+}
+
+/* --- creating a reference row ------------------------------------------- */
+
+.creator {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 420px;
+  padding: 12px;
+  background: #fafbfc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.creator__title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.creator__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* --- blocks inside a card section --------------------------------------- */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upload__input {
+  padding: 6px 8px;
+  max-width: 100%;
+}
+
+.button--danger {
+  color: #ffffff;
+  background: var(--rejected-fg);
+  border-color: var(--rejected-fg);
+}
+
+.button--danger:hover:not(:disabled) {
+  background: #991b1b;
+  border-color: #991b1b;
+  color: #ffffff;
+}
+
+/* A second action in the same cell, worded like the link beside it. */
+.link--danger {
+  margin-left: 12px;
+  padding: 0;
+  font: inherit;
+  font-weight: 500;
+  color: var(--rejected-fg);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.link--danger:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.link--danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* The confirmation opens under its own row, so the warning has room to be
+   read rather than squeezing the action column. */
+.table__confirm-row td {
+  background: #fafbfc;
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.confirm__question {
+  margin: 0;
+  font-weight: 500;
+}
+
+.confirm__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* --- variant picker ----------------------------------------------------- */
+
+.picker {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  background: #fafbfc;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.picker__selection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.picker__count {
+  margin: 0;
+  font-size: 14px;
+}
+
+.checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 6px 16px;
+  max-height: 280px;
+  margin: 0;
+  padding: 10px;
+  overflow-y: auto;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.checklist__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px 3px 10px;
+  font-size: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+}
+
+.chip__remove {
+  padding: 0 2px;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.chip__remove:hover:not(:disabled) {
+  color: var(--error-fg);
+}
+
+/* --- card header actions ------------------------------------------------ */
+
+.page__header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --- verification decision panel ---------------------------------------- */
+
+/* The same surface as a card, but it holds an act rather than data, so it sits
+   above the card and is laid out by the form inside it. */
+.panel--verdict {
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.verdict__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.verdict__lead {
+  margin: 0;
+}
+
+/* The result of a finished decision, in the same slot the panel used. */
+.verdict-result {
+  margin-bottom: 16px;
+}
+
+/* --- catalog: materials and equipment ----------------------------------- */
+
+.catalog__list,
+.catalog__form,
+.catalog__notice {
+  margin-bottom: 16px;
+}
+
+.catalog__item {
+  margin-top: 16px;
+}
+
+.catalog__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.catalog__head .section-title {
+  margin-bottom: 4px;
+}
+
+.catalog__head p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.catalog__inline {
+  padding: 12px 16px;
+}
+
+.table__name {
+  font-weight: 500;
+}
+
+.table__row--selected td {
+  background: #eef4fb;
+}
+
+/* «Show the sizes» reads as a link but is a button: it changes which panel is
+   open instead of navigating anywhere. */
+.link--button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.link--button:hover {
+  text-decoration: underline;
+}
+
+/* The creation controls that live inside the variant picker. Dashed, because it
+   is an aside to the selection, not a step of it. */
+.picker__catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  background: #fafbfc;
+}
+
+/* The size a document is being created for, named before the requisites so the
+   direction of the relation is clear. */
+.picked {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: #fafbfc;
+}
+
+.picked p {
+  margin: 0;
+}
+
+/* The second step of a confirmation, in the action zone of the button that
+   opened it. It takes a line of its own so the warning is readable, which keeps
+   it adjacent without squeezing the buttons around it. */
+.verdict-popover {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
+}
+
+.verdict-popover__question {
+  margin: 0;
+  font-weight: 500;
+}
+
+.verdict-popover__actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* --- small screens ------------------------------------------------------ */
+
+@media (max-width: 720px) {
+  .page {
+    padding: 16px 12px 32px;
+  }
+
+  .page__header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page__title {
+    font-size: 19px;
+  }
+
+  .filters__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters__actions {
+    flex-direction: column;
+  }
+
+  .filters__actions .button {
+    width: 100%;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px 10px;
+  }
+
+  .pagination {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pagination__buttons .button {
+    flex: 1;
+  }
+
+  .card__section {
+    padding: 12px;
+  }
+
+  .defs {
+    grid-template-columns: 1fr;
+  }
+
+  .page__header .badge {
+    align-self: flex-start;
+  }
+
+  .form__grid,
+  .picker__grid,
+  .checklist {
+    grid-template-columns: 1fr;
+  }
+
+  .form__actions,
+  .creator__actions,
+  .confirm__actions,
+  .verdict-popover__actions,
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form__actions .button,
+  .creator__actions .button,
+  .confirm__actions .button,
+  .verdict-popover__actions .button,
+  .toolbar .button {
+    width: 100%;
+  }
+
+  .catalog__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .link--danger {
+    margin-left: 0;
+    margin-top: 8px;
+  }
+}

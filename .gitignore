@@ -18,6 +18,9 @@ __pycache__/
 build/
 dist/
 
+# --- node / frontend ---------------------------------------------------
+node_modules/
+
 # --- pytest and coverage -----------------------------------------------
 .pytest_cache/
 .coverage
