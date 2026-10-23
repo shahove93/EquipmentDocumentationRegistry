@@ -39,6 +39,10 @@ _ERROR_FOR_PHASE = {
     "report": ("internal_error", "report"),
 }
 
+_EXTERNAL_INVENTORY_CODES = {
+    "storage_root_missing": "root_missing",
+}
+
 
 def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -96,16 +100,18 @@ def reconcile_storage(
     try:
         log_path = Path(log_file).expanduser().resolve()
         phase = "inventory"
-        inventory = _collect_inventory(storage, log_path)
+        inventory, ignored_log_files = _collect_inventory(storage, log_path)
         phase = "database"
         stored_keys = _read_stored_keys(engine)
         phase = "report"
-        return _success_report(started_at, inventory, stored_keys)
+        return _success_report(
+            started_at, inventory, stored_keys, ignored_log_files
+        )
     except StorageInventoryError as error:
         return failure_report(
             started_at=started_at,
             finished_at=_utc_now(),
-            code=error.code,
+            code=_EXTERNAL_INVENTORY_CODES.get(error.code, error.code),
             stage="inventory",
             error_type=type(error).__name__,
         )
@@ -122,16 +128,18 @@ def reconcile_storage(
 
 def _collect_inventory(
     storage: LocalStorageBackend, log_path: Path
-) -> list[StoredFileInfo]:
+) -> tuple[list[StoredFileInfo], int]:
     inventory: list[StoredFileInfo] = []
+    ignored_log_files = 0
 
     for info in storage.iter_files(SCOPE):
         candidate = storage.root_path.joinpath(*info.storage_key.split("/"))
         if candidate == log_path:
+            ignored_log_files += 1
             continue
         inventory.append(info)
 
-    return inventory
+    return inventory, ignored_log_files
 
 
 def _read_stored_keys(engine: Engine) -> set[str]:
@@ -144,9 +152,10 @@ def _success_report(
     started_at: str,
     inventory: list[StoredFileInfo],
     stored_keys: set[str],
+    ignored_log_files: int,
 ) -> dict[str, Any]:
     matched_blobs = 0
-    ignored_regular_files = 0
+    ignored_regular_files = ignored_log_files
     orphans: list[dict[str, Any]] = []
 
     for info in inventory:
@@ -172,7 +181,7 @@ def _success_report(
         "schema_version": SCHEMA_VERSION,
         "mode": MODE,
         "scope": SCOPE,
-        "status": "ok",
+        "status": "complete",
         "complete": True,
         "started_at": started_at,
         "finished_at": _utc_now(),

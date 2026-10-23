@@ -1,11 +1,14 @@
+import errno
 import json
 import os
+import threading
 import uuid
 from datetime import datetime, timezone
+from pathlib import Path
 
 import pytest
 from sqlalchemy import event as sa_event
-from sqlalchemy import func, select
+from sqlalchemy import func, insert, select
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
@@ -13,6 +16,7 @@ from app.models.document import Document
 from app.models.document_type import DocumentType
 from app.models.document_verification_event import DocumentVerificationEvent
 from app.models.file import File
+from app.services import local_storage
 from app.services.local_storage import LocalStorageBackend, StorageInventoryError, StoredFileInfo
 from app.services.storage_reconciliation import (
     is_canonical_storage_key,
@@ -118,7 +122,7 @@ class TestReportContract:
         assert report["schema_version"] == 1
         assert report["mode"] == "report_only"
         assert report["scope"] == "documents"
-        assert report["status"] == "ok"
+        assert report["status"] == "complete"
         assert report["complete"] is True
         assert report["summary"] == {
             "scanned_blobs": 0,
@@ -147,7 +151,7 @@ class TestReportContract:
         finally:
             sa_event.remove(engine, "before_cursor_execute", record)
 
-        assert report["status"] == "ok"
+        assert report["status"] == "complete"
         assert report["summary"]["scanned_blobs"] == 0
         assert len([s for s in statements if "FROM files" in s]) == 1
 
@@ -165,7 +169,7 @@ class TestReportContract:
 
         report = run(storage, engine, log_file)
 
-        assert report["status"] == "ok"
+        assert report["status"] == "complete"
         assert report["summary"] == {
             "scanned_blobs": 3,
             "matched_blobs": 1,
@@ -231,11 +235,44 @@ class TestReportContract:
         report = run(storage, engine, log_path)
 
         assert report["summary"]["scanned_blobs"] == 1
-        assert report["summary"]["ignored_regular_files"] == 0
+        assert report["summary"]["ignored_regular_files"] == 1
         assert len(report["orphans"]) == 1
         assert report["orphans"][0]["storage_key"] != log_path.relative_to(
             storage.root_path
         ).as_posix()
+
+    def test_non_canonical_log_file_is_counted_once_as_ignored(
+        self, storage, engine
+    ):
+        log_path = storage.root_path / "documents" / "1" / "app.log"
+        storage.save(f"documents/1/{uuid.uuid4()}.pdf", io_bytes(b"real"))
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        log_path.write_bytes(b"journal")
+        (log_path.parent / "logs-dir").mkdir()
+        os.symlink(log_path, log_path.parent / "alias.log")
+
+        report = run(storage, engine, log_path)
+
+        assert report["summary"] == {
+            "scanned_blobs": 1,
+            "matched_blobs": 0,
+            "orphan_count": 1,
+            "orphan_bytes": 4,
+            "ignored_regular_files": 1,
+        }
+
+    def test_log_file_outside_documents_is_not_counted(
+        self, storage, engine, tmp_path
+    ):
+        log_path = tmp_path / "logs" / "app.log"
+        log_path.parent.mkdir(parents=True)
+        log_path.write_bytes(b"journal")
+        storage.save(f"documents/1/{uuid.uuid4()}.pdf", io_bytes(b"real"))
+
+        report = run(storage, engine, log_path)
+
+        assert report["summary"]["ignored_regular_files"] == 0
+        assert report["summary"]["scanned_blobs"] == 1
 
     def test_classifies_ignored_regular_files(
         self, storage, engine, log_file, document_id
@@ -314,7 +351,7 @@ class TestDatabaseInteraction:
             sa_event.remove(engine, "before_cursor_execute", before_cursor)
             sa_event.remove(engine, "checkout", on_checkout)
 
-        assert report["status"] == "ok"
+        assert report["status"] == "complete"
         assert len(checkouts) == 1
         assert len(statements) == 1
         assert statements[0].lstrip().upper().startswith("SELECT")
@@ -323,6 +360,106 @@ class TestDatabaseInteraction:
             word in statements[0].upper()
             for word in ("INSERT", "UPDATE", "DELETE", "FOR UPDATE")
         )
+
+    def test_committed_key_from_another_connection_is_seen_after_inventory(
+        self, storage, engine, log_file, document_id, monkeypatch
+    ):
+        key = blob_key(document_id)
+        storage.save(key, io_bytes(b"one"))
+        inventory_finished = threading.Event()
+        key_committed = threading.Event()
+        writer_errors = []
+        writer_connection = {}
+        original = storage.iter_files
+
+        def gated_iter_files(prefix):
+            yield from original(prefix)
+            inventory_finished.set()
+            if not key_committed.wait(timeout=30):
+                raise AssertionError("the writer did not commit in time")
+
+        monkeypatch.setattr(storage, "iter_files", gated_iter_files)
+
+        statements = []
+        checkouts = []
+        commits = []
+
+        def before_cursor(conn, cursor, statement, params, context, executemany):
+            statements.append((conn, statement))
+
+        def on_checkout(conn, record, proxy):
+            checkouts.append(conn)
+
+        def on_commit(conn):
+            commits.append(conn)
+
+        sa_event.listen(engine, "before_cursor_execute", before_cursor)
+        sa_event.listen(engine, "checkout", on_checkout)
+        sa_event.listen(engine, "commit", on_commit)
+
+        def writer():
+            try:
+                if not inventory_finished.wait(timeout=30):
+                    raise AssertionError("the inventory did not finish in time")
+                with engine.connect() as connection:
+                    writer_connection["value"] = connection
+                    connection.execute(
+                        insert(File).values(
+                            document_id=document_id,
+                            original_filename="scan.pdf",
+                            storage_key=key,
+                            mime_type="application/pdf",
+                            size_bytes=1,
+                            sha256="0" * 64,
+                            uploaded_at=datetime.now(timezone.utc),
+                        )
+                    )
+                    connection.commit()
+            except Exception as error:  # pragma: no cover - asserted below
+                writer_errors.append(error)
+            finally:
+                key_committed.set()
+
+        thread = threading.Thread(target=writer, name="reconciliation-writer")
+        thread.start()
+        try:
+            report = run(storage, engine, log_file)
+        finally:
+            thread.join(timeout=30)
+            sa_event.remove(engine, "before_cursor_execute", before_cursor)
+            sa_event.remove(engine, "checkout", on_checkout)
+            sa_event.remove(engine, "commit", on_commit)
+
+        assert writer_errors == []
+        assert thread.is_alive() is False
+        assert inventory_finished.is_set() is True
+        assert key_committed.is_set() is True
+
+        assert report["status"] == "complete"
+        assert report["complete"] is True
+        assert report["summary"] == {
+            "scanned_blobs": 1,
+            "matched_blobs": 1,
+            "orphan_count": 0,
+            "orphan_bytes": 0,
+            "ignored_regular_files": 0,
+        }
+        assert report["orphans"] == []
+
+        writer = writer_connection["value"]
+        reconciliation_statements = [
+            statement for conn, statement in statements if conn is not writer
+        ]
+        assert len(reconciliation_statements) == 1
+        select_statement = reconciliation_statements[0].lstrip().upper()
+        assert select_statement.startswith("SELECT")
+        assert "FILES" in select_statement
+        assert not any(
+            word in select_statement
+            for word in ("INSERT", "UPDATE", "DELETE", "FOR UPDATE")
+        )
+        assert len(commits) == 1
+        assert len(checkouts) == 2
 
     def test_select_runs_even_with_empty_inventory(
         self, storage, engine, log_file
@@ -339,7 +476,7 @@ class TestDatabaseInteraction:
         finally:
             sa_event.remove(engine, "before_cursor_execute", before_cursor)
 
-        assert report["status"] == "ok"
+        assert report["status"] == "complete"
         assert len(statements) == 1
         assert "FROM files" in statements[0]
 
@@ -401,6 +538,186 @@ class TestDatabaseInteraction:
         assert report["error"]["stage"] == "inventory"
         assert statements == []
         assert leaked not in json.dumps(report)
+
+
+class TestFaultMatrix:
+    def test_unreadable_root_is_a_safe_failure(
+        self, storage, engine, log_file, monkeypatch
+    ):
+        storage.root_path.mkdir(parents=True)
+        root = storage.root_path
+        real_stat = local_storage.os.stat
+
+        def unreadable_root(path, *args, **kwargs):
+            if (
+                kwargs.get("follow_symlinks") is False
+                and isinstance(path, (str, os.PathLike))
+                and Path(path) == root
+            ):
+                raise PermissionError(errno.EACCES, "permission denied")
+            return real_stat(path, *args, **kwargs)
+
+        monkeypatch.setattr(local_storage.os, "stat", unreadable_root)
+        statements = self._record_statements(engine)
+        try:
+            report = run(storage, engine, log_file)
+        finally:
+            sa_event.remove(engine, "before_cursor_execute", statements.record)
+
+        assert report["status"] == "failed"
+        assert report["complete"] is False
+        assert report["summary"] is None
+        assert report["orphans"] is None
+        assert report["error"] == {
+            "code": "storage_unreadable",
+            "stage": "inventory",
+            "type": "StorageInventoryError",
+        }
+        assert statements.items == []
+
+    def test_stat_error_during_walk_is_a_safe_failure(
+        self, storage, engine, log_file, monkeypatch
+    ):
+        storage.save("documents/1/a.pdf", io_bytes(b"a"))
+        storage.save("documents/1/zzz.pdf", io_bytes(b"z"))
+        real_stat = local_storage.os.stat
+        seen = []
+        original = storage.iter_files
+
+        def tracking_iter_files(prefix):
+            for info in original(prefix):
+                seen.append(info.storage_key)
+                yield info
+
+        def failing_stat(path, *args, **kwargs):
+            if path == "zzz.pdf" and kwargs.get("dir_fd") is not None:
+                raise OSError(errno.EIO, "input/output error")
+            return real_stat(path, *args, **kwargs)
+
+        monkeypatch.setattr(storage, "iter_files", tracking_iter_files)
+        monkeypatch.setattr(local_storage.os, "stat", failing_stat)
+        statements = self._record_statements(engine)
+        try:
+            report = run(storage, engine, log_file)
+        finally:
+            sa_event.remove(engine, "before_cursor_execute", statements.record)
+
+        assert seen == ["documents/1/a.pdf"]
+        assert report["status"] == "failed"
+        assert report["complete"] is False
+        assert report["summary"] is None
+        assert report["orphans"] is None
+        assert report["error"] == {
+            "code": "storage_stat_failed",
+            "stage": "inventory",
+            "type": "StorageInventoryError",
+        }
+        assert statements.items == []
+
+    def test_directory_swapped_for_outside_symlink_has_no_partial_report(
+        self, storage, engine, log_file, tmp_path, monkeypatch
+    ):
+        if not hasattr(os, "symlink"):
+            pytest.skip("os.symlink is unavailable")
+        storage.save("documents/1/a.pdf", io_bytes(b"a"))
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        (outside / "secret.pdf").write_bytes(b"secret")
+        documents = storage.root_path / "documents"
+        moved = storage.root_path / "documents-real"
+
+        real_open = local_storage.os.open
+        real_stat = local_storage.os.stat
+        real_listdir = local_storage.os.listdir
+        real_read = local_storage.os.read
+        opened_paths = {}
+        external_access = []
+        swapped = {"value": False}
+
+        def is_within(candidate, base):
+            return candidate == base or base in candidate.parents
+
+        def record_external(kind, target):
+            if target is None or not swapped["value"]:
+                return
+            if is_within(target, documents) or is_within(target, outside):
+                external_access.append((kind, str(target)))
+
+        def injected_open(path, flags, mode=0o777, *, dir_fd=None):
+            if dir_fd is not None and path == "documents":
+                if not swapped["value"]:
+                    documents.rename(moved)
+                    os.symlink(outside, documents)
+                    swapped["value"] = True
+            if dir_fd is None:
+                target = None if isinstance(path, int) else Path(path)
+                fd = real_open(path, flags, mode)
+                opened_paths[fd] = target
+                record_external("open", target)
+            else:
+                base = opened_paths.get(dir_fd)
+                fd = real_open(path, flags, mode, dir_fd=dir_fd)
+                target = base / path if base is not None else None
+                opened_paths[fd] = target
+                record_external("open", target)
+            return fd
+
+        def injected_stat(path, *args, **kwargs):
+            dir_fd = kwargs.get("dir_fd")
+            if isinstance(path, (str, os.PathLike)) and dir_fd is not None:
+                base = opened_paths.get(dir_fd)
+                if base is not None:
+                    record_external("stat", base / path)
+            elif isinstance(path, (str, os.PathLike)):
+                record_external("stat", Path(path))
+            return real_stat(path, *args, **kwargs)
+
+        def injected_listdir(path="."):
+            if isinstance(path, int):
+                record_external("listdir", opened_paths.get(path))
+            else:
+                record_external("listdir", Path(path))
+            return real_listdir(path)
+
+        def injected_read(fd, size):
+            record_external("read", opened_paths.get(fd))
+            return real_read(fd, size)
+
+        monkeypatch.setattr(local_storage.os, "open", injected_open)
+        monkeypatch.setattr(local_storage.os, "stat", injected_stat)
+        monkeypatch.setattr(local_storage.os, "listdir", injected_listdir)
+        monkeypatch.setattr(local_storage.os, "read", injected_read)
+        statements = self._record_statements(engine)
+        try:
+            report = run(storage, engine, log_file)
+        finally:
+            sa_event.remove(engine, "before_cursor_execute", statements.record)
+
+        assert swapped["value"] is True
+        assert external_access == []
+        assert report["status"] == "failed"
+        assert report["complete"] is False
+        assert report["summary"] is None
+        assert report["orphans"] is None
+        assert report["error"] == {
+            "code": "storage_namespace_not_directory",
+            "stage": "inventory",
+            "type": "StorageInventoryError",
+        }
+        assert statements.items == []
+
+    @staticmethod
+    def _record_statements(engine):
+        class Recorder:
+            def __init__(self):
+                self.items = []
+
+            def record(self, conn, cursor, statement, params, context, executemany):
+                self.items.append(statement)
+
+        recorder = Recorder()
+        sa_event.listen(engine, "before_cursor_execute", recorder.record)
+        return recorder
 
 
 class TestReadOnlyBehaviour:
@@ -467,7 +784,11 @@ class TestReadOnlyBehaviour:
         assert report["status"] == "failed"
         assert not root.exists()
         assert not log_file.exists()
-        assert report["error"]["code"] == "storage_root_missing"
+        assert report["error"] == {
+            "code": "root_missing",
+            "stage": "inventory",
+            "type": "StorageInventoryError",
+        }
 
 
 def io_bytes(payload: bytes):

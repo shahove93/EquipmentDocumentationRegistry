@@ -1,3 +1,4 @@
+import errno
 import json
 import os
 import subprocess
@@ -7,6 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import quote
 
+from sqlalchemy import event as sa_event
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -14,6 +16,8 @@ from app.models.document import Document
 from app.models.document_type import DocumentType
 from app.models.file import File
 from app.reconcile_storage import main
+from app.services import local_storage
+from app.services.local_storage import LocalStorageBackend
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 TEST_SCHEMA = "test_file_service"
@@ -154,7 +158,7 @@ class TestSuccessfulRun:
         assert report["schema_version"] == 1
         assert report["mode"] == "report_only"
         assert report["scope"] == "documents"
-        assert report["status"] == "ok"
+        assert report["status"] == "complete"
         assert report["complete"] is True
         assert report["summary"] == {
             "scanned_blobs": 3,
@@ -185,7 +189,10 @@ class TestSuccessfulRun:
         result = _run([], env, REPO_ROOT)
 
         assert result.returncode == 0
-        assert json.loads(result.stdout)["summary"]["orphan_count"] == 1
+        report = json.loads(result.stdout)
+        assert report["status"] == "complete"
+        assert report["complete"] is True
+        assert report["summary"]["orphan_count"] == 1
 
 
 class TestFailureReports:
@@ -210,11 +217,11 @@ class TestFailureReports:
         assert report["summary"] is None
         assert report["orphans"] is None
         assert report["error"] == {
-            "code": "storage_root_missing",
+            "code": "root_missing",
             "stage": "inventory",
             "type": "StorageInventoryError",
         }
-        assert "storage_root_missing" in result.stderr
+        assert "root_missing" in result.stderr
         assert str(missing_root) not in result.stdout + result.stderr
         assert not missing_root.exists()
         assert not log_file.exists()
@@ -282,6 +289,121 @@ class TestFailureReports:
         assert report["error"]["stage"] == "inventory"
         assert str(tmp_path) not in result.stdout + result.stderr
         assert not (tmp_path / "logs" / "app.log").exists()
+
+
+class _EngineProxy:
+    def __init__(self, engine):
+        self._engine = engine
+
+    def connect(self):
+        return self._engine.connect()
+
+    def dispose(self):
+        pass
+
+
+class TestInjectedFailuresCLI:
+    def _prepare(self, monkeypatch, engine, tmp_path):
+        storage_root = tmp_path / "storage"
+        log_file = tmp_path / "logs" / "app.log"
+        monkeypatch.setenv("DATABASE_URL", _database_url_with_schema(engine))
+        monkeypatch.setenv("STORAGE_ROOT", str(storage_root))
+        monkeypatch.setenv("LOG_FILE", str(log_file))
+        monkeypatch.setattr(
+            "app.reconcile_storage.create_engine",
+            lambda *args, **kwargs: _EngineProxy(engine),
+        )
+        return storage_root, log_file
+
+    @staticmethod
+    def _statements(engine):
+        items = []
+
+        def before_cursor(conn, cursor, statement, params, context, executemany):
+            items.append(statement)
+
+        sa_event.listen(engine, "before_cursor_execute", before_cursor)
+        return items, before_cursor
+
+    def test_unreadable_root_exits_one_without_querying_the_database(
+        self, engine, tmp_path, monkeypatch, capsys
+    ):
+        storage_root, log_file = self._prepare(monkeypatch, engine, tmp_path)
+        storage_root.mkdir(parents=True)
+        resolved_root = storage_root.resolve()
+        real_stat = local_storage.os.stat
+
+        def unreadable_root(path, *args, **kwargs):
+            if (
+                kwargs.get("follow_symlinks") is False
+                and isinstance(path, (str, os.PathLike))
+                and Path(path) == resolved_root
+            ):
+                raise PermissionError(errno.EACCES, "permission denied")
+            return real_stat(path, *args, **kwargs)
+
+        monkeypatch.setattr(local_storage.os, "stat", unreadable_root)
+        statements, listener = self._statements(engine)
+        try:
+            exit_code = main([])
+        finally:
+            sa_event.remove(engine, "before_cursor_execute", listener)
+
+        captured = capsys.readouterr()
+        report = json.loads(captured.out)
+        assert exit_code == 1
+        assert report["status"] == "failed"
+        assert report["complete"] is False
+        assert report["summary"] is None
+        assert report["orphans"] is None
+        assert report["error"] == {
+            "code": "storage_unreadable",
+            "stage": "inventory",
+            "type": "StorageInventoryError",
+        }
+        assert "storage_unreadable" in captured.err
+        assert statements == []
+        assert str(tmp_path) not in captured.out + captured.err
+        assert storage_root.exists()
+        assert not log_file.exists()
+
+    def test_stat_error_exits_one_without_querying_the_database(
+        self, engine, tmp_path, monkeypatch, capsys
+    ):
+        storage_root, log_file = self._prepare(monkeypatch, engine, tmp_path)
+        storage = LocalStorageBackend(root_path=storage_root)
+        storage.save("documents/1/a.pdf", io_bytes(b"a"))
+        storage.save("documents/1/zzz.pdf", io_bytes(b"z"))
+        real_stat = local_storage.os.stat
+
+        def failing_stat(path, *args, **kwargs):
+            if path == "zzz.pdf" and kwargs.get("dir_fd") is not None:
+                raise OSError(errno.EIO, "input/output error")
+            return real_stat(path, *args, **kwargs)
+
+        monkeypatch.setattr(local_storage.os, "stat", failing_stat)
+        statements, listener = self._statements(engine)
+        try:
+            exit_code = main([])
+        finally:
+            sa_event.remove(engine, "before_cursor_execute", listener)
+
+        captured = capsys.readouterr()
+        report = json.loads(captured.out)
+        assert exit_code == 1
+        assert report["status"] == "failed"
+        assert report["complete"] is False
+        assert report["summary"] is None
+        assert report["orphans"] is None
+        assert report["error"] == {
+            "code": "storage_stat_failed",
+            "stage": "inventory",
+            "type": "StorageInventoryError",
+        }
+        assert "storage_stat_failed" in captured.err
+        assert statements == []
+        assert str(tmp_path) not in captured.out + captured.err
+        assert not log_file.exists()
 
 
 def io_bytes(payload: bytes):

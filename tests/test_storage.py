@@ -1,6 +1,7 @@
 import io
 import os
 import stat
+from pathlib import Path
 
 import pytest
 
@@ -471,6 +472,87 @@ class TestIterFiles:
             list(backend.iter_files("documents"))
 
         assert info.value.code == "storage_entry_vanished"
+
+    def test_directory_swapped_for_outside_symlink_is_not_followed(
+        self, backend, tmp_path, monkeypatch
+    ):
+        if not hasattr(os, "symlink"):
+            pytest.skip("os.symlink is unavailable")
+        backend.save("documents/1/a.pdf", io.BytesIO(b"a"))
+        outside = tmp_path / "outside"
+        outside.mkdir()
+        (outside / "secret.pdf").write_bytes(b"secret")
+        documents = backend.root_path / "documents"
+        moved = backend.root_path / "documents-real"
+
+        real_open = local_storage.os.open
+        real_stat = local_storage.os.stat
+        real_listdir = local_storage.os.listdir
+        real_read = local_storage.os.read
+        opened_paths = {}
+        external_access = []
+        swapped = {"value": False}
+
+        def is_within(candidate, base):
+            return candidate == base or base in candidate.parents
+
+        def record_external(kind, target):
+            if target is None or not swapped["value"]:
+                return
+            if is_within(target, documents) or is_within(target, outside):
+                external_access.append((kind, str(target)))
+
+        def injected_open(path, flags, mode=0o777, *, dir_fd=None):
+            if dir_fd is not None and path == "documents":
+                if not swapped["value"]:
+                    documents.rename(moved)
+                    os.symlink(outside, documents)
+                    swapped["value"] = True
+            if dir_fd is None:
+                target = None if isinstance(path, int) else Path(path)
+                fd = real_open(path, flags, mode)
+                opened_paths[fd] = target
+                record_external("open", target)
+            else:
+                base = opened_paths.get(dir_fd)
+                fd = real_open(path, flags, mode, dir_fd=dir_fd)
+                target = base / path if base is not None else None
+                opened_paths[fd] = target
+                record_external("open", target)
+            return fd
+
+        def injected_stat(path, *args, **kwargs):
+            dir_fd = kwargs.get("dir_fd")
+            if isinstance(path, (str, os.PathLike)) and dir_fd is not None:
+                base = opened_paths.get(dir_fd)
+                if base is not None:
+                    record_external("stat", base / path)
+            elif isinstance(path, (str, os.PathLike)):
+                record_external("stat", Path(path))
+            return real_stat(path, *args, **kwargs)
+
+        def injected_listdir(path="."):
+            if isinstance(path, int):
+                record_external("listdir", opened_paths.get(path))
+            else:
+                record_external("listdir", Path(path))
+            return real_listdir(path)
+
+        def injected_read(fd, size):
+            record_external("read", opened_paths.get(fd))
+            return real_read(fd, size)
+
+        monkeypatch.setattr(local_storage.os, "open", injected_open)
+        monkeypatch.setattr(local_storage.os, "stat", injected_stat)
+        monkeypatch.setattr(local_storage.os, "listdir", injected_listdir)
+        monkeypatch.setattr(local_storage.os, "read", injected_read)
+
+        with pytest.raises(StorageInventoryError) as info:
+            list(backend.iter_files("documents"))
+
+        assert swapped["value"] is True
+        assert external_access == []
+        assert info.value.code == "storage_namespace_not_directory"
 
     def test_nothing_outside_root_is_read(self, tmp_path):
         root = tmp_path / "storage"
