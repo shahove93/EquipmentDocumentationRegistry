@@ -148,7 +148,10 @@ C1: **FAIL** (6 MAJOR). Автор решения: Codex-ревьюер (R2), `t
 `ignored_regular_files`; код `root_missing`; детерминированный тест подмены
 каталога; межсоединительный Event/barrier-тест порядка инвентаря и SELECT;
 матрица ошибок root/stat. Подробности: `../workflow/reviews/TASK-MVP-02.md`.
-C2: correction in progress; зарезервировано полное ревью 2 / 2.
+C2: реализован `fde5406`; evidence `../workflow/evidence/TASK-MVP-02-C2.md`.
+Ожидает повторного полного ревью 2 / 2. `MVP02-R2-001…006` закрыты
+исполнителем, но PASS не присвоен.
 Сводка/счётчики: ../workflow/STATE.md. История: ../workflow/HISTORY.md.
-Пакет доказательств C1: ../workflow/evidence/TASK-MVP-02-C1.md.
+Пакеты доказательств: C1 `../workflow/evidence/TASK-MVP-02-C1.md`;
+C2 `../workflow/evidence/TASK-MVP-02-C2.md`.
 Следующий TASK: TASK-MVP-03 — только после PASS.
