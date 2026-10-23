@@ -10,6 +10,7 @@
 | 2026-10-22 | TASK-MVP-00 | PASS / независимый OpenCode (R1) | нет | A1/C1; 1 полное ревью; FAIL 0 | baseline `3529aa1`; принято `ee4e699` | TASK-MVP-01 |
 | 2026-10-22 | TASK-MVP-01 | PASS / независимый OpenCode (R1) | TASK-MVP-00 PASS | A1/C1; 1 полное ревью; FAIL 0 | baseline `5e9e626`; принято `5b9d916` | TASK-MVP-02 |
 | 2026-10-22 | TASK-MVP-02 | IN_PROGRESS / C1 реализован, вердикта нет | TASK-MVP-01 PASS | R2; Codex design завершён; A1/C1 реализован; Codex 1/4 | baseline `7b785f4`; C1 `a2b52a8` | R2-ревью Codex |
+| 2026-10-23 | TASK-MVP-02 | IN_PROGRESS / C2 NOT_REVIEWED; replacement R2 2/2 зарезервировано | TASK-MVP-01 PASS | R2; A1/C2; C1 FAIL 6 MAJOR; C2 `fde5406`; Codex calls 2/4 | C2 `fde5406`; HEAD `3c0c4be` | Диспатч `task_f5a7cda011c4` |
 
 ## Подходы и первопричины
 
@@ -58,6 +59,7 @@
 | 2026-10-22 | TASK-MVP-02/A1/C1 review | `run_68046cea3eb4` / `task_4ac8b4f9eb5e` / `ctx_51b60231d76c` | Ревью `a2b52a8`; startup-сбои `ctx_f4757f0bcbf3`, `ctx_8cfb23da9905` — agent_readiness (Codex MCP warnings), не ревью; отчёт `docs/workflow/reviews/TASK-MVP-02.md`; release — terminal stale/closed | Полное ревью 1/2; Codex calls 2/4; input C1 review не раскрыт | **FAIL**, 6 MAJOR (`MVP02-R2-001…006`) | C2 correction + повторное ревью 2/2 |
 | 2026-10-23 | TASK-MVP-02/A1/C2 | `run_68046cea3eb4` / `task_b456188d963d` / `ctx_43c38bcb89c3` | Реализация C2: коммит `fde5406`, 4 файла; evidence `docs/workflow/evidence/TASK-MVP-02-C2.md`; focused 386 passed, full 3483 passed / 1 warning / 0 failed; release — released | Повторное полное ревью 2/2 зарезервировано; Codex calls 2/4, review не потреблён | worker_done succeeded; C2 не PASS | Повторное R2-ревью Codex |
 | 2026-10-23 | TASK-MVP-02/A1/C2 review | `run_68046cea3eb4` / `task_947e474bc156`, `task_350c1332b0c3`, `task_af3f1c99b21e` / dispatches `ctx_f4481cb5eb4d`, `ctx_9daa30ee732e`, `ctx_5e49a3ea18bd`, `ctx_d219aae5e636`, `ctx_b5432406ad6d`, `ctx_adf362014e31` | Повторное ревью не начато: Codex `worker-start` — 6 failed на `agent_readiness`; warning `codex_worktrees` MCP HTTP 502; `task_af3f1c99b21e` circuit-broken; все терминалы released; C1/C2 evidence сохранены | Полное ревью 2/2 не проведено; Codex calls 2/4; input не раскрыт | **BLOCKED**; C2 не PASS | Решение пользователя: Codex/Orca startup + replacement review Task |
+| 2026-10-23 | TASK-MVP-02/A1/C2 review | `run_68046cea3eb4` / `task_f5a7cda011c4` / dispatch pending | Codex startup fix: Hiddify system proxy `127.0.0.1:12334` возвращал HTTP 502 для localhost; добавлен `ProxyOverride=localhost;127.0.0.1;::1;<local>`; Codex TUI smoke без warning; ревью не потреблено | Полное ревью 2/2 reserved; Codex call 3/4 reserved; input 0/3M | NOT_REVIEWED | Диспатч Codex-ревьюера и ожидание `worker_done` |
 
 ## Восстановление и лимиты
 
