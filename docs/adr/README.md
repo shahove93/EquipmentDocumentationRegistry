@@ -25,7 +25,7 @@
 | [ADR-006](ADR-006-unique-size-within-product.md) | Уникальность типоразмера внутри изделия | ✅ Принято | [ADR-006](ADR-006-unique-size-within-product.md) | `ProductVariant` уникален в пределах одного `Product` по паре `(product_id, size_text)`; нарушение возвращает HTTP 409 |
 | [ADR-007](ADR-007-editable-document-type-reference.md) | Редактируемый справочник типов документов | ✅ Принято | [ADR-007](ADR-007-editable-document-type-reference.md) | `DocumentType` — справочник, который пользователь наполняет и переименовывает сам; начального наполнения в базе нет |
 | [ADR-008](ADR-008-document-verification-lifecycle.md) | Жизненный цикл проверки документа и история верификации | ✅ Принято | [ADR-008](ADR-008-document-verification-lifecycle.md) | Правила перехода между `pending` / `verified` / `rejected`, состав значимых реквизитов и атомарная запись перехода в `document_verification_events`. **Сервисный и HTTP-слой реализованы**: шесть документных операций, включая `POST .../verification` и `GET .../verification-history` |
-| [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисный и HTTP-слой реализованы**: пять операций, DI, `FileOut` / `FileListOut`, потоковая передача; **постоянный журнал и report-only сверка осиротевших файлов реализованы**; не выполнены сверка SHA-256, индекс и аутентификация |
+| [ADR-009](ADR-009-document-attachments.md) | Архитектура вложений документа | ✅ Принято | [ADR-009](ADR-009-document-attachments.md) | Жизненный цикл файлов документа, общий механизм `reopened` с кодом причины, транзакции и HTTP-контракт File API. **Сервисный и HTTP-слой реализованы**: пять операций, DI, `FileOut` / `FileListOut`, потоковая передача; **постоянный журнал, report-only сверка осиротевших файлов, сверка SHA-256 при скачивании и индекс `ix_files_document_id_id` реализованы** (`e4b8c2d16a70`); не выполнены аутентификация и авторизация |
 | [ADR-010](ADR-010-document-variant-links-and-search.md) | Привязка документов к типоразмерам и материальный поиск | ✅ Принято | [ADR-010](ADR-010-document-variant-links-and-search.md) | Базовая привязка MVP — `Document ↔ ProductVariant` через `document_variants`; `GET` / `PUT /documents/{id}/variants` (полная замена, идемпотентна, статус не меняет); расширенный `GET /documents` с материальными фильтрами. **Сервисный и HTTP-слой реализованы** |
 | — | Связь сертификатов с типоразмерами | 🕓 Черновик, поглощён ADR-010 | [DOCUMENT-VARIANT-RELATIONSHIP.md](DOCUMENT-VARIANT-RELATIONSHIP.md) | Историческая справка: подтверждённое требование many-to-many и структура `document_variants`. Принятое решение — [ADR-010](ADR-010-document-variant-links-and-search.md) |
 
@@ -67,7 +67,10 @@
 Lines-журнал (TASK-MVP-01) и **report-only сверка осиротевших файлов**
 (TASK-MVP-02): `LocalStorageBackend.iter_files()`,
 `app/services/storage_reconciliation.py` и CLI `python -m app.reconcile_storage`
-без удаления, DML и расписания.
+без удаления, DML и расписания. **Сверка SHA-256 при скачивании и индекс
+`ix_files_document_id_id` реализованы** (TASK-MVP-03): проверенная копия blob
+отдаётся только после сравнения с `File.sha256`, миграция `e4b8c2d16a70`
+создаёт non-unique btree `(document_id, id)`.
 
 У [ADR-008](ADR-008-document-verification-lifecycle.md) **сервисный и HTTP-слой
 также реализованы**: шесть документных операций (`POST` / `GET` коллекции,
@@ -83,9 +86,9 @@ HTTP-слой также реализованы**: `DocumentVariantService` (`li
 индексы под `LIKE '%…%'`, привязка к `Product` / `Batch` и семантика каскадного
 удаления `ProductVariant`.
 
-**Не реализовано то, что осталось:** сверка SHA-256; миграция индекса
-`ix_files_document_id_id`; аутентификация и авторизация. Постоянный журнал
-(TASK-MVP-01) и **report-only** сверка осиротевших файлов (TASK-MVP-02)
+**Не реализовано то, что осталось:** аутентификация и авторизация. Постоянный
+журнал (TASK-MVP-01), **report-only** сверка осиротевших файлов (TASK-MVP-02),
+сверка SHA-256 при скачивании и индекс `ix_files_document_id_id` (TASK-MVP-03)
 реализованы; удаление кандидатов и автоматическое расписание в объём сверки
 не входят. Таблицы «Статус реализации» в обоих ADR перечисляют всё построчно.
 

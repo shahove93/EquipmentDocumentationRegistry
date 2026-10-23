@@ -154,6 +154,30 @@ class TestFileChecks:
         assert all("sha256" not in (name or "") for name in check_names)
 
 
+class TestFileIndexes:
+    def test_document_id_id_index_is_declared_in_metadata(self):
+        indexes = {index.name: index for index in File.__table__.indexes}
+        index = indexes["ix_files_document_id_id"]
+        assert [column.name for column in index.columns] == ["document_id", "id"]
+
+    def test_the_index_is_not_unique(self):
+        indexes = {index.name: index for index in File.__table__.indexes}
+        assert indexes["ix_files_document_id_id"].unique is False
+
+    def test_the_index_is_a_plain_index_without_dialect_options(self):
+        indexes = {index.name: index for index in File.__table__.indexes}
+        index = indexes["ix_files_document_id_id"]
+        assert dict(index.dialect_kwargs) == {}
+        assert len(index.expressions) == 2
+        for expression in index.expressions:
+            assert type(expression).__name__ == "Column"
+
+    def test_no_other_index_is_declared(self):
+        assert sorted(index.name for index in File.__table__.indexes) == [
+            "ix_files_document_id_id"
+        ]
+
+
 class TestFileRelationships:
     def test_file_to_document(self):
         relationship = File.__mapper__.relationships["document"]

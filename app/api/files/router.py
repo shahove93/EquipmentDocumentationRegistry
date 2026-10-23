@@ -14,7 +14,12 @@ from fastapi import (
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.api.files.download import ClosingStreamingResponse, content_disposition
+from app.api.files.download import (
+    ClosingStreamingResponse,
+    DownloadIntegrityError,
+    content_disposition,
+    prepare_verified_download,
+)
 from app.api.files.schemas import FileListOut, FileOut
 from app.database.connection import get_db
 from app.dependencies import get_file_service, get_storage
@@ -257,20 +262,29 @@ def download_document_file(
     status, writes no history and touches no other row, so there is nothing to
     serialise against and a row lock would only make concurrent downloads wait.
 
-    **The blob is opened before the response starts.** `storage.open` raises
-    `StoredFileNotFoundError` when the row has outlived its content, and that
-    error is answered here, while a status code can still be chosen. If the
-    open were deferred into the stream, the headers would already have gone out
-    and a broken store would look like a successful, empty download.
+    **The blob is opened and verified before the response starts.** The opened
+    stream is copied into a private temporary snapshot while SHA-256 is counted
+    over the same chunks, and the digest is compared with the row's `sha256`
+    before `ClosingStreamingResponse` is built. Only the verified snapshot is
+    streamed, so a blob that is replaced after the check cannot change the bytes
+    a client receives. `storage.open` raises `StoredFileNotFoundError` when the
+    row has outlived its content; a mismatch or any read, copy, flush or rewind
+    failure is caught in the same place. All of them are answered while a status
+    code can still be chosen; if the check were deferred into the stream, the
+    headers would already have gone out and a broken store would look like a
+    successful, empty download.
 
-    A row without content is answered `500`, not `404`, and logged. The record
-    exists; what is missing is the store's half of it, which is an integrity
-    failure rather than an absent resource, and calling it `404` would blame the
-    caller for a server fault. ADR-009 states the same rule: an absent row or a
-    row belonging to another document is `404`, while a row whose blob is
-    missing is a safe `500` with diagnostics. The message is fixed and says
-    nothing about the storage key or the path, which is also why the storage
-    error is not echoed.
+    A row without content or with content that does not match its digest is
+    answered `500`, not `404`, and logged. The record exists; what is missing or
+    wrong is the store's half of it, which is an integrity failure rather than an
+    absent resource, and calling it `404` would blame the caller for a server
+    fault. ADR-009 states the same rule: an absent row or a row belonging to
+    another document is `404`, while a row whose blob is missing is a safe `500`
+    with diagnostics. The message is fixed and says nothing about the storage
+    key, the path or the digest, which is why none of the caught errors is
+    echoed; each failure produces exactly one safe log record with a
+    `failure_category` of `content_open_failed`, `sha256_mismatch` or
+    `content_prepare_failed`.
 
     `Content-Type` is the MIME type recorded at upload, which `FileService`
     derived from the file's signature rather than from the client's claim.
@@ -283,10 +297,11 @@ def download_document_file(
 
     The metadata is copied out of the row before the response is returned, and
     the stream never touches `db`, so the session may close while the body is
-    still being sent. Nothing is committed or rolled back here, and the
-    descriptor is closed by `ClosingStreamingResponse` on every exit — a
-    finished body, a failed `send` or a cancelled request — rather than only by
-    `iter_blob` when the generator is exhausted.
+    still being sent. Nothing is committed or rolled back here. The storage
+    descriptor is closed by `prepare_verified_download` before the response
+    starts, and the snapshot descriptor is closed by `ClosingStreamingResponse`
+    on every exit — a finished body, a failed `send` or a cancelled request —
+    rather than only by `iter_blob` when the generator is exhausted.
     """
     file = db.scalar(
         select(File).where(File.id == file_id, File.document_id == document_id)
@@ -300,6 +315,7 @@ def download_document_file(
     mime_type = file.mime_type
     original_filename = file.original_filename
     storage_key = file.storage_key
+    expected_sha256 = file.sha256
 
     try:
         source = storage.open(storage_key)
@@ -311,6 +327,42 @@ def download_document_file(
                 "operation": "file.download",
                 "document_id": document_id,
                 "file_id": file_id,
+                "failure_category": "content_open_failed",
+                "error_type": type(error).__name__,
+            },
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Stored file content is unavailable",
+        ) from error
+
+    try:
+        verified = prepare_verified_download(source, expected_sha256)
+    except DownloadIntegrityError as error:
+        logger.error(
+            "a file row exists but its content does not match its recorded "
+            "digest",
+            extra={
+                "operation": "file.download",
+                "document_id": document_id,
+                "file_id": file_id,
+                "failure_category": "sha256_mismatch",
+                "error_type": type(error).__name__,
+            },
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Stored file content is unavailable",
+        ) from error
+    except Exception as error:
+        logger.error(
+            "a file row exists but its content could not be prepared for "
+            "download",
+            extra={
+                "operation": "file.download",
+                "document_id": document_id,
+                "file_id": file_id,
+                "failure_category": "content_prepare_failed",
                 "error_type": type(error).__name__,
             },
         )
@@ -320,7 +372,7 @@ def download_document_file(
         ) from error
 
     return ClosingStreamingResponse(
-        source,
+        verified,
         media_type=mime_type,
         headers={"Content-Disposition": content_disposition(original_filename)},
     )

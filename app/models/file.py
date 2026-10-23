@@ -1,6 +1,13 @@
 from datetime import datetime
 
-from sqlalchemy import BigInteger, CheckConstraint, DateTime, ForeignKey, String
+from sqlalchemy import (
+    BigInteger,
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base import Base
@@ -31,4 +38,5 @@ class File(Base):
 
     __table_args__ = (
         CheckConstraint("size_bytes >= 0", name="ck_files_size_bytes_non_negative"),
+        Index("ix_files_document_id_id", "document_id", "id", unique=False),
     )

@@ -1,17 +1,23 @@
 """Helpers for streaming a stored attachment to the client.
 
-Two concerns belong here rather than in the router: turning a filename the
+Three concerns belong here rather than in the router: turning a filename the
 client chose at upload time into a header value that cannot break the response,
-and walking a stored blob in bounded chunks so the body never has to be held in
+copying a blob into a verified snapshot before any status code is committed to,
+and walking that snapshot in bounded chunks so the body never has to be held in
 memory.
 """
 
+import hashlib
+import logging
+import tempfile
 from collections.abc import Iterator, Mapping
 from typing import BinaryIO
 from urllib.parse import quote
 
 from starlette.responses import StreamingResponse
 from starlette.types import Receive, Scope, Send
+
+logger = logging.getLogger(__name__)
 
 # What the client sees when nothing usable is left of the stored name. Uploads
 # refuse empty names, so this only covers a row written by something other than
@@ -21,6 +27,62 @@ DEFAULT_FILENAME = "download"
 # The same chunk size the upload path uses, so a download moves a comparable
 # amount of data per read.
 CHUNK_SIZE = 64 * 1024
+
+# Fixed text: the message describes the category of failure and nothing about
+# the row, the digest or the storage key, so it is safe as an error `__cause__`
+# and as the logger's fixed message.
+DOWNLOAD_INTEGRITY_MESSAGE = "stored file content does not match its recorded digest"
+
+
+class DownloadIntegrityError(Exception):
+    """A blob's bytes do not match the SHA-256 recorded for its row.
+
+    The failure is a server-side integrity problem, not a client error. It is
+    raised before the response is constructed, while a status code can still be
+    chosen, so the router can answer with the same safe `500` it uses for an
+    unavailable store.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(DOWNLOAD_INTEGRITY_MESSAGE)
+
+
+def prepare_verified_download(source: BinaryIO, expected_sha256: str) -> BinaryIO:
+    """Copy `source` to a temporary file and return the verified copy.
+
+    The helper takes ownership of `source` immediately: it closes the stream on
+    success and on every failure, so the caller must not use it afterwards.
+
+    The copy is made in `CHUNK_SIZE` pieces while the same pieces are fed to a
+    SHA-256 digest. The digest is compared with `expected_sha256` after the
+    whole stream has been read and before the copy is rewound for sending. A
+    mismatch raises `DownloadIntegrityError`; any other read, write, flush or
+    rewind failure propagates unchanged. In every failure case the temporary
+    file is closed as well, and on success ownership of the copy passes to the
+    caller.
+
+    Copying first is what makes the served bytes the checked bytes: the inode
+    may be replaced or truncated after the check, but the response reads the
+    private snapshot rather than the storage file.
+    """
+    snapshot: BinaryIO | None = None
+    try:
+        digest = hashlib.sha256()
+        snapshot = tempfile.TemporaryFile(mode="w+b")
+        while chunk := source.read(CHUNK_SIZE):
+            digest.update(chunk)
+            snapshot.write(chunk)
+        snapshot.flush()
+        if digest.hexdigest() != expected_sha256:
+            raise DownloadIntegrityError()
+        snapshot.seek(0)
+        return snapshot
+    except BaseException:
+        if snapshot is not None:
+            snapshot.close()
+        raise
+    finally:
+        source.close()
 
 
 def content_disposition(filename: str) -> str:
@@ -109,12 +171,20 @@ class ClosingStreamingResponse(StreamingResponse):
         # not declare one. Omitting it makes that introspection fail with an
         # unbound name rather than defaulting to 200.
         self._source = source
-        super().__init__(
-            iter_blob(source),
-            status_code=status_code,
-            media_type=media_type,
-            headers=headers,
-        )
+        try:
+            super().__init__(
+                iter_blob(source),
+                status_code=status_code,
+                media_type=media_type,
+                headers=headers,
+            )
+        except BaseException:
+            # Starlette encodes the headers inside `__init__`, so a value it
+            # cannot encode fails before the response exists. The router has
+            # already handed the verified snapshot over; closing it here keeps
+            # the failed construction from leaking the descriptor.
+            source.close()
+            raise
 
     async def __call__(
         self, scope: Scope, receive: Receive, send: Send
@@ -133,6 +203,11 @@ def iter_blob(source: BinaryIO, chunk_size: int = CHUNK_SIZE) -> Iterator[bytes]
     ends and when `read` raises, so a caller cannot leak it by exhausting the
     generator or by hitting a read error.
 
+    A read failure after the response has started can no longer become a status
+    code or a JSON body, so it is logged once in a fixed, safe form and
+    re-raised. Only the error type is recorded; the message may contain paths
+    and is deliberately not written.
+
     A disconnect abandons the generator instead of exhausting it, and this block
     is not reached until the abandoned generator is collected. That case is
     covered in front of the iterator: `ClosingStreamingResponse` closes the same
@@ -142,5 +217,15 @@ def iter_blob(source: BinaryIO, chunk_size: int = CHUNK_SIZE) -> Iterator[bytes]
     try:
         while chunk := source.read(chunk_size):
             yield chunk
+    except Exception as error:
+        logger.error(
+            "a verified download could not be streamed to the client",
+            extra={
+                "operation": "file.download",
+                "failure_category": "content_stream_failed",
+                "error_type": type(error).__name__,
+            },
+        )
+        raise
     finally:
         source.close()

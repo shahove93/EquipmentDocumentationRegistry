@@ -6,7 +6,7 @@
 | **Статус** | ✅ Принято; сервисный и HTTP-слой реализованы — см. «Статус реализации» |
 | **Дата принятия** | 2026-10-13 |
 | **Затрагивает** | `FileService`, `app/services/transaction.py`, `files`, `app/api/files/`, `Settings.STORAGE_ROOT`, `Settings.MAX_UPLOAD_SIZE_BYTES`, `document_verification_events` |
-| **Миграция** | **не требуется для правил этого ADR.** Требуется отдельная миграция `ix_files_document_id_id`, отложенная на будущее задание |
+| **Миграция** | **для правил этого ADR не требуется.** Индекс `ix_files_document_id_id` реализован отдельной ревизией `e4b8c2d16a70` (TASK-MVP-03) |
 | **Отменяет** | «Нерешённый вопрос 1» из [ADR-008](ADR-008-document-verification-lifecycle.md) |
 | **Ссылки в коде** | `app/api/files/router.py`, `app/api/files/schemas.py`, `app/api/files/download.py`, `app/api/router.py`, `app/dependencies.py`, `app/services/transaction.py`, `app/services/file_service.py`, `app/services/verification_history.py`, `app/services/document_service.py`, `tests/test_files_api.py`, `tests/test_files_upload_api.py`, `tests/test_files_download_api.py`, `tests/test_files_delete_api.py`, `tests/test_files_integration_api.py`, `tests/test_dependencies.py`, `tests/test_file_schemas.py`, `tests/test_file_service.py`, `tests/test_file_service_concurrency.py`, `tests/test_transaction.py`, `tests/test_verification_history.py`, `tests/test_document_service_concurrency.py` |
 | **Актуализировано** | 2026-10-14 — таблица «Статус реализации»: блокировка, освобождение блокировки и обработка отказов в `DocumentService` переведены в «реализовано». **Ни одно утверждённое правило файловых операций не менялось** |
@@ -15,6 +15,7 @@
 | **Принято решение** | 2026-10-14 — транзакционный контракт `attach` / `detach` по результатам аудита: владение транзакцией, охранник `TransactionAlreadyOpenError`, порядок блокировок, три состояния исхода транзакции, запрет безусловной компенсации при неизвестном исходе, журналирование и сверка. **Правила жизненного цикла вложений не менялись** |
 | **Актуализировано** | 2026-10-22 — **журнал стал постоянным** (TASK-MVP-01): `app/logging_config.py` дописывает записи `app.*` уровня INFO и выше в `Settings.LOG_FILE` (по умолчанию `storage/logs/app.log`) в формате JSON Lines, UTF-8; настройка выполняется в lifespan `app/main.py`. **Правила жизненного цикла вложений не менялись** |
 | **Актуализировано** | 2026-10-22 — **report-only сверка осиротевших файлов реализована** (TASK-MVP-02): `app/services/storage_reconciliation.py` и CLI `python -m app.reconcile_storage` сравнивают канонические ключи blob с `files.storage_key` и печатают JSON-отчёт. Удаление, изменение БД/журнала и расписание **не входят**. **Правила жизненного цикла вложений не менялись** |
+| **Актуализировано** | 2026-10-23 — **сверка SHA-256 при скачивании и индекс `ix_files_document_id_id` реализованы** (TASK-MVP-03): blob копируется в приватный `TemporaryFile` с подсчётом SHA-256 теми же чанками, сверяется с `File.sha256` до `response.start`, и только проверенная копия отдаётся потоком; несовпадение или сбой подготовки — безопасный `500`. Миграция `e4b8c2d16a70` создаёт non-unique btree `(document_id, id)`. **Правила жизненного цикла вложений не менялись** |
 
 
 > **Разделение утверждённого и сделанного.** Решения этого ADR **приняты** и
@@ -34,8 +35,11 @@
 > безопасный `Content-Disposition`, `ClosingStreamingResponse` с закрытием
 > потока при обрыве и отмене; `python-multipart==0.0.32` установлен.
 >
-> **Не выполнены** миграция индекса `ix_files_document_id_id`, сверка SHA-256,
-> аутентификация и авторизация. **Сверка осиротевших файлов реализована**
+> **Сверка SHA-256 при скачивании и миграция индекса `ix_files_document_id_id`
+> реализованы** (TASK-MVP-03): проверенная копия blob отдаётся только после
+> сравнения с `File.sha256`, а ревизия `e4b8c2d16a70` создаёт non-unique btree
+> `(document_id, id)`. **Не выполнены** аутентификация и авторизация. **Сверка
+> осиротевших файлов реализована**
 > (TASK-MVP-02) как **report-only** CLI: она только сообщает кандидатов,
 > ничего не удаляет и не запускается по расписанию. **Постоянный журнал
 > реализован** (TASK-MVP-01): журнал `app.*` пишется в
@@ -446,6 +450,13 @@ ORM-объекта** — неверная причина не может ост�
   ASCII-варианте с удалением управляющих символов и в варианте `filename*=UTF-8''`
   по RFC 5987 с процентным кодированием. Управляющие символы в заголовок не
   попадают ни в одной форме.
+- **SHA-256 сверяется до ответа.** Открытый blob копируется в приватный
+  дисковый `TemporaryFile` чанками по 64 КиБ, и те же чанки подаются в
+  SHA-256. Полученный digest сравнивается с `File.sha256`, копия перематывается
+  на начало, и клиенту отдаётся **только проверенная копия**; исходный поток
+  закрывается до возврата helper. Изменение исходного inode после проверки не
+  меняет выдаваемые байты. Несовпадение — `DownloadIntegrityError` и безопасный
+  `500` до `response.start`, без байтов blob.
 - **`Content-Length` из метаданных базы не подставляется.** Значение
   `size_bytes` записано при загрузке и может разойтись с фактическим содержимым.
   В MVP заголовок не проставляется; ответ уходит чанками. Если он появится в
@@ -453,13 +464,17 @@ ORM-объекта** — неверная причина не может ост�
 - **Отдельный `HEAD` в MVP не вводится.**
 - **Физически отсутствующий файл при существующей строке базы — `500`** с
   обязательной диагностикой: состояние означает нарушение целостности
-  хранилища, а не отсутствующий ресурс. Ответ безопасен
-  (`Stored file content is unavailable`) и не раскрывает `storage_key` или
-  путь; запись `logger.error` с `operation="file.download"` фиксирует нарушение.
-  `404` остаётся для отсутствующей строки и для несоответствия `document_id`.
+  хранилища, а не отсутствующий ресурс. Тот же безопасный `500`
+  (`Stored file content is unavailable`) отвечает на несовпадение SHA-256 и на
+  сбой подготовки копии; ответ не раскрывает `storage_key`, путь или digest, а
+  одна запись `logger.error` с `operation="file.download"` и
+  `failure_category` (`content_open_failed`, `sha256_mismatch`,
+  `content_prepare_failed`) фиксирует нарушение. `404` остаётся для
+  отсутствующей строки и для несоответствия `document_id`.
 - **Поток закрывается на любом выходе.** `ClosingStreamingResponse` освобождает
-  дескриптор при завершении, ошибке `send` и отмене запроса, а не только при
-  исчерпании генератора.
+  копию при завершении, ошибке `send` и отмене запроса, а не только при
+  исчерпании генератора; поздняя ошибка чтения копии прерывает поток и
+  пишется в журнал как `content_stream_failed` без второго статуса или JSON.
 
 ## Миграции и конфигурация
 
@@ -480,8 +495,11 @@ ORM-объекта** — неверная причина не может ост�
 
 Имя соответствует конвенции `ix_<table>_<столбцы>`.
 
-**Эта миграция не создаётся в рамках принятия решения** и выполняется отдельным
-заданием. Правила настоящего ADR от неё не зависят.
+**Миграция реализована** в отдельной ревизии `e4b8c2d16a70` (TASK-MVP-03):
+только `op.create_index("ix_files_document_id_id", "files",
+["document_id", "id"], unique=False)` в `upgrade` и соответствующий
+`op.drop_index` в `downgrade`; FK, `CHECK`-ограничения и строки не меняются.
+Правила настоящего ADR от неё не зависят.
 
 ### Обязательная зависимость
 
@@ -508,7 +526,7 @@ ORM-объекта** — неверная причина не может ост�
 | Защита от обхода путей | `LocalStorageBackend._resolve()` — относительность, запрет NUL, POSIX-разделители, запрет сегмента `..`, проверка результата `resolve()` на принадлежность корню |
 | Имя в HTTP-заголовках | экранирование при формировании `Content-Disposition` |
 | Передача | потоковая, без чтения тела в память |
-| Целостность содержимого | SHA-256 **вычисляется и хранится**, но **не сверяется**. Проверка при чтении или в сверке — **будущее задание** |
+| Целостность содержимого | SHA-256 **вычисляется и хранится**, а при каждом скачивании **сверяется до начала ответа**; проверенная копия отдаётся из `TemporaryFile`, при несовпадении — безопасный `500` (TASK-MVP-03) |
 
 ### Граница безопасности
 
@@ -566,7 +584,9 @@ ORM-объекта** — неверная причина не может ост�
 | Схемы `FileOut` / `FileListOut` | ✅ **реализованы** в `app/api/files/schemas.py`; `storage_key` отсутствует; список — голый массив |
 | `python-multipart` | ✅ **установлен** — `0.0.32` в `requirements.txt` |
 | Потоковая загрузка | ✅ **реализована** — `UploadFile.file` передаётся в `attach()`; сигнатура, лимит и SHA-256 считаются на лету |
-| Потоковое скачивание | ✅ **реализовано** — blob открывается до ответа, `iter_blob()` отдаёт чанки по 64 КиБ |
+| Потоковое скачивание | ✅ **реализовано** — blob открывается и копируется в проверенный `TemporaryFile` до ответа, `iter_blob()` отдаёт чанки по 64 КиБ |
+| Сверка SHA-256 при скачивании | ✅ **реализована** (TASK-MVP-03) — `prepare_verified_download()` копирует blob чанками 64 КиБ, считает SHA-256 и сравнивает с `File.sha256`; при несовпадении `DownloadIntegrityError` и безопасный `500` до `response.start`; отдаётся только проверенная копия |
+| Индекс `ix_files_document_id_id` | ✅ **создан** (TASK-MVP-03) — non-unique btree `(document_id, id)`, ревизия `e4b8c2d16a70`; объявлен в `File.__table_args__` |
 | Безопасный `Content-Disposition` | ✅ **реализован** — RFC 6266/5987, ASCII-fallback и `filename*`, удаление управляющих символов, только basename |
 | `ClosingStreamingResponse` | ✅ **реализован** — закрывает поток при нормальном завершении, ошибке `send` и отмене задачи |
 | Отсутствующий blob | ✅ **решено** — `500` с безопасным сообщением и записью в журнал; `404` — только для отсутствующей строки или чужого документа |
@@ -578,9 +598,7 @@ ORM-объекта** — неверная причина не может ост�
 | Элемент | Состояние |
 | --- | --- |
 | Сверка осиротевших файлов | ✅ **реализована как report-only** (TASK-MVP-02) — `LocalStorageBackend.iter_files()`, `reconcile_storage()` и CLI `python -m app.reconcile_storage`; удаление, DML, запись в журнал и расписание отсутствуют |
-| Индекс `ix_files_document_id_id` | ❌ **не создан** — отложенная миграция |
 | Аутентификация и авторизация | ❌ **не существуют** — анонимные маршруты; публичное развёртывание запрещено |
-| Сверка SHA-256 | ❌ **не реализована** — будущее задание |
 | Транзакционные ограничения `DocumentService` | ⚠️ **зафиксированы как ограничения** в [ADR-008](ADR-008-document-verification-lifecycle.md), раздел «Транзакционные ограничения» |
 
 ## Последствия
@@ -627,8 +645,10 @@ ORM-объекта** — неверная причина не может ост�
 - Решение **не вводит** фоновый обработчик очистки и не создаёт миграций.
 - Решение **не вводит** диапазонные запросы (`Range`), ETag и `HEAD`: поток
   возвращается целиком.
-- Решение **не утверждает** сверку SHA-256 при чтении: значение хранится, но
-  сравнение — будущее задание.
+- **Сверка SHA-256 при чтении реализована** (TASK-MVP-03): значение
+  сравнивается при каждом скачивании до `response.start`, а не в рамках
+  report-only сверки осиротевших файлов. Сама сверка кандидатов digest не
+  сравнивает.
 - Решение **не утверждает** автоматическую сверку или удаление осиротевших
   файлов: реализованный запуск (TASK-MVP-02) — **report-only**, без расписания,
   DML и очистки.
@@ -662,14 +682,14 @@ ORM-объекта** — неверная причина не может ост�
 | `tests/test_verification_history.py` | 60 тестов: переходы, закрытое множество причин, отсутствие транзакционных вызовов и блокировки, откат вызывающим |
 | `tests/test_document_service_concurrency.py` | 52 теста на реальной PostgreSQL: сериализация над одним документом, отсутствие повторных событий, освобождение блокировки, сохранность транзакции вызывающего |
 | `app/services/local_storage.py` | `_resolve()` — семь проверок пути; `save()` через `"xb"`, без перезаписи; `delete()` с `missing_ok=True` |
-| `app/models/file.py` | восемь столбцов; `document_id` `NOT NULL` с `ON DELETE CASCADE`; `storage_key` `UNIQUE`; `ck_files_size_bytes_non_negative`; связи `File.document` без `passive_deletes` |
+| `app/models/file.py` | восемь столбцов; `document_id` `NOT NULL` с `ON DELETE CASCADE`; `storage_key` `UNIQUE`; `ck_files_size_bytes_non_negative`; `Index("ix_files_document_id_id", "document_id", "id", unique=False)`; связи `File.document` без `passive_deletes` |
 | `app/models/document.py` | `verification_status` — `default="pending"` и `server_default="pending"` |
 | `app/models/document_verification_event.py` | семь столбцов; `reason` без ограничения на `NULL` |
 | Рабочая БД | `document_verification_events`: **7** `CHECK`, ни одного вида `reason IS NULL`; `ck_document_verification_events_rejected_reason` обращается к `reason` только при `event_type = 'rejected'` — **код причины для `reopened` допустим без миграции** |
-| Рабочая БД | `files`: индексы только `files_pkey` и `files_storage_key_key` — индекса по `document_id` нет, **строк: 0** |
+| Рабочая БД | `files`: `files_pkey`, `files_storage_key_key` и non-unique btree `ix_files_document_id_id (document_id, id)` — ревизия `e4b8c2d16a70` применена; **строк: 0** |
 | `app/api/files/router.py` | пять операций; маппинг доменных ошибок; `Location`; SQL до `attach()` / `detach()` не выполняется; `500` для отсутствующего blob |
 | `app/api/files/schemas.py` | `FileOut` — семь полей, без `storage_key`; `FileListOut` — `RootModel[list[FileOut]]` |
-| `app/api/files/download.py` | `content_disposition()`, `_safe_basename()`, `iter_blob()` с `CHUNK_SIZE = 64 КиБ`, `ClosingStreamingResponse` |
+| `app/api/files/download.py` | `content_disposition()`, `_safe_basename()`, `DownloadIntegrityError`, `prepare_verified_download()` (проверенная копия в `TemporaryFile`), `iter_blob()` с `CHUNK_SIZE = 64 КиБ`, `ClosingStreamingResponse` |
 | `app/dependencies.py` | `get_file_service`, `get_storage`; чтение `STORAGE_ROOT` и `MAX_UPLOAD_SIZE_BYTES`; SQL не выполняют |
 | `tests/test_files_api.py` | **43** теста: список, метаданные, `404`, отсутствие SQL в роутере |
 | `tests/test_files_upload_api.py` | **58** тестов: `201` / `Location`, `409` / `413` / `422`, сигнатуры, потоковость |
@@ -683,7 +703,10 @@ ORM-объекта** — неверная причина не может ост�
 
 ## Нерешённые вопросы
 
-1. **Сверка SHA-256** — при чтении, в сверке или не выполнять вовсе.
+1. **Сверка SHA-256** — решена в TASK-MVP-03: выполняется при каждом
+   скачивании до `response.start`, клиенту отдаётся проверенная копия; при
+   несовпадении — безопасный `500`. Report-only сверка осиротевших файлов
+   digest по-прежнему не сравнивает.
 2. **Сверка осиротевших файлов** — реализована в TASK-MVP-02 как report-only
    CLI с JSON-отчётом. Автоматическое расписание, удаление кандидатов и
    эксплуатация отчёта не входят и остаются открытыми.

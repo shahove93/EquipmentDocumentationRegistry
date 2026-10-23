@@ -678,7 +678,7 @@ class TestMigrationScript:
             p.name
             for p in pathlib.Path("alembic/versions").glob("*.py")
         )
-        assert len(revisions) == 12
+        assert len(revisions) == 13
         assert revisions[0] == (
             "056121f44e99_create_document_link_tables.py"
         )
@@ -689,5 +689,5 @@ class TestMigrationScript:
 
         config = Config("alembic.ini")
         script = ScriptDirectory.from_config(config)
-        assert script.get_heads() == ["a3f1c72d5b90"]
-        assert len(list(script.walk_revisions())) == 12
+        assert script.get_heads() == ["e4b8c2d16a70"]
+        assert len(list(script.walk_revisions())) == 13

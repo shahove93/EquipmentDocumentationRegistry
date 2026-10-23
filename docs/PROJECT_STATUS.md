@@ -4,7 +4,7 @@
 Цель — чтобы новая сессия работы могла восстановить контекст без опоры на
 переписку.
 
-Дата фиксации: **2026-10-22**.
+Дата фиксации: **2026-10-23**.
 
 > **О прогонах тестов.** Приведённая контрольная точка — последнее
 > подтверждённое значение полного прогона `pytest`. Проверки frontend
@@ -16,9 +16,9 @@
 
 | Показатель | Значение | Когда подтверждено |
 | --- | --- | --- |
-| Тесты | **3400 passed, 1 warning** | подтверждено полным прогоном после реализации постоянного журнала (TASK-MVP-01) |
-| Alembic head | **`a3f1c72d5b90`** | подтверждено чтением `alembic_version` в рабочей базе; миграция применена |
-| Число миграций | **12** | подтверждено подсчётом файлов в `alembic/versions/` |
+| Тесты | **3523 passed, 1 warning** | подтверждено полным прогоном после реализации сверки SHA-256 и индекса (TASK-MVP-03) |
+| Alembic head | **`e4b8c2d16a70`** | подтверждено чтением `alembic_version` в рабочей базе; миграция применена |
+| Число миграций | **13** | подтверждено подсчётом файлов в `alembic/versions/` |
 | HTTP-операций | **34** (19 путей) | подтверждено генерацией OpenAPI после добавления двух операций привязки (`GET`/`PUT /documents/{id}/variants`) |
 | Frontend typecheck | **успешно** (`tsc --noEmit`, exit 0) | подтверждено в WSL, Node.js v24.22.0, 2026-10-22 |
 | Frontend production build | **успешно** (`vite build`, exit 0, `frontend/dist/index.html` создан) | подтверждено в WSL, Node.js v24.22.0, 2026-10-22 |
@@ -90,9 +90,10 @@ API для разработки: маршруты анонимны, публич
 появления аутентификации.
 
 **Файловый HTTP API вложений** — пять операций: `POST` и `GET` коллекции,
-`GET` метаданных, `GET .../content`, `DELETE`. Реализован в `app/api/files/`,
-подключён в `app/api/router.py`. Локальный API для разработки: маршруты
-анонимны, публичное развёртывание запрещено до появления аутентификации.
+`GET` метаданных, `GET .../content` со сверкой SHA-256 до ответа, `DELETE`.
+Реализован в `app/api/files/`, подключён в `app/api/router.py`. Локальный API
+для разработки: маршруты анонимны, публичное развёртывание запрещено до
+появления аутентификации.
 
 **HTTP-операции привязки к типоразмерам** — две: `GET` и `PUT
 /documents/{document_id}/variants`. Реализованы в `app/api/document_variants/`,
@@ -128,7 +129,7 @@ React Router. Экраны: реестр документов с фильтра�
 
 | Компонент | Что готово | Чего не хватает |
 | --- | --- | --- |
-| **FileService** | `attach()` — добавление вложения одной транзакцией: блокировка документа через общий модуль, валидация сигнатуры (PDF/JPEG/PNG), потоковая запись файла и SHA-256 на лету, строка `File`, возврат в `pending` с событием `reopened` (`file_added`); `detach()` — удаление вложения одной транзакцией с блокировкой строки файла, событием `reopened` (`file_deleted`) и удалением файла с диска **только после подтверждённого `commit`**; `upload()` — тонкая обёртка над `attach()`; `list_for_document()`; охранник `TransactionAlreadyOpenError`; компенсация добавления (`_settle` / `_compensate`); журналирование через `logging`; доменные ошибки `AttachmentNotFoundError`, `PendingDocumentChangesError` | HTTP-слой реализован: `app/api/files/` (пять операций) и `app/dependencies.py`; сверка осиротевших файлов реализована как report-only CLI (TASK-MVP-02); остаётся индекс `ix_files_document_id_id` |
+| **FileService** | `attach()` — добавление вложения одной транзакцией: блокировка документа через общий модуль, валидация сигнатуры (PDF/JPEG/PNG), потоковая запись файла и SHA-256 на лету, строка `File`, возврат в `pending` с событием `reopened` (`file_added`); `detach()` — удаление вложения одной транзакцией с блокировкой строки файла, событием `reopened` (`file_deleted`) и удалением файла с диска **только после подтверждённого `commit`**; `upload()` — тонкая обёртка над `attach()`; `list_for_document()`; охранник `TransactionAlreadyOpenError`; компенсация добавления (`_settle` / `_compensate`); журналирование через `logging`; доменные ошибки `AttachmentNotFoundError`, `PendingDocumentChangesError` | HTTP-слой реализован: `app/api/files/` (пять операций) и `app/dependencies.py`; сверка осиротевших файлов реализована как report-only CLI (TASK-MVP-02); индекс `ix_files_document_id_id` создан миграцией `e4b8c2d16a70` (TASK-MVP-03) |
 | **`app/services/transaction.py`** | Общий механизм владения транзакцией и блокировки: `locked_document()` (`SELECT ... FOR UPDATE` + `populate_existing=True` + проверка `inspect(document).modified`), `release()`, `transaction_existed_on_entry()`, `UncommittedChangesInSession`. Используется и `DocumentService`, и `FileService`; 35 тестов | Транзакционные ограничения вызывающего сохраняются — [ADR-008](adr/ADR-008-document-verification-lifecycle.md), раздел «Транзакционные ограничения» |
 | **LocalStorageBackend** | Реализация `StorageBackend`: `save` (атомарно, через `"xb"`), `open`, `exists`, `delete`; защита от выхода за пределы корня, от абсолютных путей, от Windows-путей и от `..`; запрет NUL в ключе | Инстанцируется в `app/dependencies.py` (`get_file_service`, `get_storage`); `Settings.STORAGE_ROOT` и `Settings.MAX_UPLOAD_SIZE_BYTES` читаются там же |
 | **Модели `Document`, `Batch` и таблицы связей** | ORM-модели с CHECK-ограничениями и внешними ключами, миграции, навигационные свойства | У `Document` есть Pydantic-схемы, `DocumentService` и HTTP-маршруты (`app/api/documents/`). У `Batch` по-прежнему нет ни схем, ни сервиса |
@@ -194,6 +195,19 @@ JSON Lines-журнал `app.*`; доменные ошибки
 (`status`, `summary`, `orphans`) и использует exit 0/1/2. Это **report-only**:
 удаления, DML, записи в журнал и расписания нет.
 
+**Сверка SHA-256 при скачивании и индекс вложений** (TASK-MVP-03):
+`prepare_verified_download()` копирует открытый blob в приватный
+`TemporaryFile` чанками по 64 КиБ, считает SHA-256 теми же чанками и
+сравнивает с `File.sha256` **до** `response.start`; клиенту отдаётся только
+проверенная копия. Несовпадение, ошибка чтения/копирования или сбой
+`open` — безопасный `500` (`Stored file content is unavailable`) без байтов
+blob, ключа, пути и digest; в журнал пишется одна запись `operation="file.download"`
+с `failure_category` (`content_open_failed`, `sha256_mismatch`,
+`content_prepare_failed`). Поздняя ошибка чтения копии логируется как
+`content_stream_failed`. Ревизия `e4b8c2d16a70` создаёт non-unique btree
+`ix_files_document_id_id (document_id, id)`; индекс объявлен в
+`File.__table_args__` и обслуживает FK/каскад и сортировку списка.
+
 **Постоянный журнал** (TASK-MVP-01): `app/logging_config.py` дописывает записи
 `app.*` уровня INFO и выше в `Settings.LOG_FILE` (по умолчанию
 `storage/logs/app.log`) в формате JSON Lines, UTF-8. Каждая запись содержит
@@ -210,16 +224,17 @@ JSON Lines-журнал `app.*`; доменные ошибки
 публичное развёртывание запрещено.
 
 **Решения приняты, но не выполнены** (обязательны к исполнению, доказательства в
-коде отсутствуют): сверка SHA-256; миграция `ix_files_document_id_id`;
-аутентификация и авторизация. Сверка осиротевших файлов реализована как
-report-only (TASK-MVP-02). Построчный перечень — в разделах «Статус реализации»
+коде отсутствуют): аутентификация и авторизация. Сверка SHA-256 при скачивании
+и миграция `ix_files_document_id_id` реализованы (TASK-MVP-03); сверка
+осиротевших файлов реализована как report-only (TASK-MVP-02). Построчный
+перечень — в разделах «Статус реализации»
 [ADR-009](adr/ADR-009-document-attachments.md) и «Ограничения» ниже.
 
 ---
 
 ## Схема данных
 
-12 миграций, линейная цепочка без ветвлений, head — `a3f1c72d5b90`:
+13 миграций, линейная цепочка без ветвлений, head — `e4b8c2d16a70`:
 
 | Ревизия | Содержание |
 | --- | --- |
@@ -235,6 +250,7 @@ report-only (TASK-MVP-02). Построчный перечень — в разд
 | `4a43cb5a19ea` | create files |
 | `9e6a954d41be` | add unique constraint product_variants (product_id, size_text) — вручную, см. [ADR-006](adr/ADR-006-unique-size-within-product.md) |
 | `a3f1c72d5b90` | create document_verification_events — история проверок, см. [ADR-008](adr/ADR-008-document-verification-lifecycle.md) |
+| `e4b8c2d16a70` | add `ix_files_document_id_id` — non-unique btree `files(document_id, id)`, см. [ADR-009](adr/ADR-009-document-attachments.md) |
 
 **Состояние рабочей базы:** 13 таблиц в схеме `public`, все справочники и
 фактические таблицы **пусты** — в том числе `document_types` и
@@ -262,8 +278,8 @@ report-only (TASK-MVP-02). Построчный перечень — в разд
 | 13 | **Снято.** Реализованы оба HTTP-слоя: File API — пять операций (`FileOut` / `FileListOut`, DI, `python-multipart==0.0.32`), Document API — шесть операций, включая `verification` и `verification-history`. Подтверждение и отклонение достижимы по HTTP |
 | 14 | У связи `File.document` нет `passive_deletes=True`, поэтому `db.delete(document)` для документа с вложениями падает по `NOT NULL` на `files.document_id`, хотя в базе объявлен `ON DELETE CASCADE`. Обнаружено тестом; на историю проверок не влияет |
 | 15 | Поведение подтверждённого документа при **замене или удалении файла** определено в [ADR-009](adr/ADR-009-document-attachments.md) и **реализовано**: добавление или удаление вложения у `verified` / `rejected` возвращает документ в `pending` и создаёт ровно одно событие `reopened` (`file_added` / `file_deleted`). Изменение состава вложений у `pending` события не создаёт |
-| 16 | Индекса по `files.document_id` нет, хотя у всех трёх таблиц связей индексы на внешнем ключе есть — конвенция проекта не соблюдена. `ON DELETE CASCADE` выполняет полное сканирование на каждый документ. Индекс `ix_files_document_id_id` принят в [ADR-009](adr/ADR-009-document-attachments.md), миграция отложена на отдельное задание |
-| 17 | `sha256` файла вычисляется и хранится, но **нигде не сверяется** — ни при чтении, ни при сверке |
+| 16 | **Снято (TASK-MVP-03).** Индекс `ix_files_document_id_id` — non-unique btree `(document_id, id)` — создан миграцией `e4b8c2d16a70` и объявлен в metadata модели. Он обслуживает FK/`ON DELETE CASCADE` и сортировку списка вложений. [ADR-009](adr/ADR-009-document-attachments.md) |
+| 17 | **Снято (TASK-MVP-03).** `sha256` файла теперь сверяется при каждом скачивании: blob копируется в `TemporaryFile` с параллельным подсчётом SHA-256, сравнение выполняется до `response.start`; несовпадение — безопасный `500`, отдаётся только проверенная копия. Report-only сверка осиротевших файлов digest не сравнивает |
 | 18 | **Успешный `_commit` сервиса фиксирует все незавершённые изменения в своей сессии**, включая правки чужих объектов. На пути успеха чужая работа не защищена — в отличие от пути отказа |
 | 19 | `db.in_transaction()` показывает наличие транзакции, но **не является универсальным доказательством владения**. Правило трактует его консервативно: чужая транзакция не откатывается |
 | 20 | При транзакции, существовавшей на входе в `DocumentService`, **блокировка после отказа может удерживаться до действий вызывающего кода**. В HTTP-запросе это снимает `get_db`, закрывая сессию |
@@ -295,9 +311,9 @@ report-only (TASK-MVP-02). Построчный перечень — в разд
 frontend зафиксирован baseline-коммитом на `main`. Push не выполнялся. Дальше
 работа идёт по ROADMAP v1.0: постоянный журнал компенсаций реализован в
 TASK-MVP-01; report-only сверка осиротевших файлов реализована в TASK-MVP-02;
-далее сверка SHA-256 и миграция индекса (TASK-MVP-03), `BatchService` и Batch
-API (TASK-MVP-04), завершение frontend (TASK-MVP-05) и финальная приёмка этапа
-(TASK-MVP-06).
+сверка SHA-256 при скачивании и миграция индекса реализованы в TASK-MVP-03;
+далее `BatchService` и Batch API (TASK-MVP-04), завершение frontend
+(TASK-MVP-05) и финальная приёмка этапа (TASK-MVP-06).
 
 **2. Оставшиеся задачи, не входящие в Document API.**
 
@@ -306,8 +322,10 @@ API (TASK-MVP-04), завершение frontend (TASK-MVP-05) и финальн
 2. **Сверка осиротевших файлов** реализована report-only (TASK-MVP-02);
    удаление кандидатов и автоматическое расписание остаются отдельной задачей
    (ограничения 27, 28).
-3. **Сверка SHA-256** при чтении вложения (ограничение 17).
-4. **Миграция индекса `ix_files_document_id_id`** (ограничение 16).
+3. ~~**Сверка SHA-256** при чтении вложения~~ — реализована в TASK-MVP-03
+   (ограничение 17 снято).
+4. ~~**Миграция индекса `ix_files_document_id_id`**~~ — реализована в
+   TASK-MVP-03 (ограничение 16 снято).
 5. **Привязка документов к изделиям и партиям** — привязка к типоразмерам уже
    реализована ([ADR-010](adr/ADR-010-document-variant-links-and-search.md));
    семантика связей с `Product` и `Batch` ещё не утверждена.
@@ -351,7 +369,7 @@ app/
                             + file_service.py
                             + document_variant_service.py  привязка документ ↔ типоразмер
                             + storage.py (ABC) + local_storage.py
-alembic/versions/           12 ревизий
+alembic/versions/           13 ревизий
 tests/                      56 файлов тестов + conftest.py
 frontend/                   React 19 + Vite + TypeScript
 ├── src/                    App, pages, components, hooks, api, utils
