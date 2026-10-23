@@ -56,6 +56,7 @@
 | 2026-10-22 | TASK-MVP-02 design | `run_68046cea3eb4` / `task_2d70042ef4d9` / `ctx_acbb6b3c25e6` | R2 design по ADR-009; baseline `7b785f4`; design memo `msg_2a59e2195e94`; release — released | Codex calls 1/4; input design не раскрыт worker / 3M; reserve 0 | worker_done succeeded; проект NOT_REVIEWED | Реализация |
 | 2026-10-22 | TASK-MVP-02/A1/C1 | `run_68046cea3eb4` / `task_508a5a075dd1` / `ctx_f615074805a8` | Реализация: коммит `a2b52a8`, evidence `docs/workflow/evidence/TASK-MVP-02-C1.md` (untracked); release — released | Codex calls 1/4; input design не раскрыт / 3M; полное ревью зарезервировано 1/2 | worker_done succeeded; проект NOT_REVIEWED | R2-ревью Codex |
 | 2026-10-22 | TASK-MVP-02/A1/C1 review | `run_68046cea3eb4` / `task_4ac8b4f9eb5e` / `ctx_51b60231d76c` | Ревью `a2b52a8`; startup-сбои `ctx_f4757f0bcbf3`, `ctx_8cfb23da9905` — agent_readiness (Codex MCP warnings), не ревью; отчёт `docs/workflow/reviews/TASK-MVP-02.md`; release — terminal stale/closed | Полное ревью 1/2; Codex calls 2/4; input C1 review не раскрыт | **FAIL**, 6 MAJOR (`MVP02-R2-001…006`) | C2 correction + повторное ревью 2/2 |
+| 2026-10-22 | TASK-MVP-02/A1/C2 | `run_68046cea3eb4` / `task_b456188d963d` / `ctx_43c38bcb89c3` | C2 correction после FAIL; baseline `7b84f2a`; evidence `docs/workflow/evidence/TASK-MVP-02-C2.md` — будет создан; release — active | Повторное полное ревью 2/2 зарезервировано; Codex calls 3/4 после dispatch review | Ожидает результата исполнителя | Ждать `worker_done` OpenCode |
 
 ## Восстановление и лимиты
 
