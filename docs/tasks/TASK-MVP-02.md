@@ -1,6 +1,6 @@
 # TASK-MVP-02 — Сверка осиротевших файлов
 
-Статус: IN_PROGRESS. Требования: VISION.md, ARCHITECTURE.md, ROADMAP.md,
+Статус: PASS (2026-10-23). Требования: VISION.md, ARCHITECTURE.md, ROADMAP.md,
 ADR-005…010. Этап ROADMAP: 3.
 Предшественники с обязательным PASS: TASK-MVP-01 PASS.
 Класс риска: R2 (обход хранилища, сверка с PostgreSQL и отчётность;
@@ -148,12 +148,12 @@ C1: **FAIL** (6 MAJOR). Автор решения: Codex-ревьюер (R2), `t
 `ignored_regular_files`; код `root_missing`; детерминированный тест подмены
 каталога; межсоединительный Event/barrier-тест порядка инвентаря и SELECT;
 матрица ошибок root/stat. Подробности: `../workflow/reviews/TASK-MVP-02.md`.
-C2: реализован `fde5406`; evidence `../workflow/evidence/TASK-MVP-02-C2.md`.
-Повторное полное ревью 2 / 2 не начато: Codex `worker-start` падает на
-`agent_readiness` (MCP warning `codex_worktrees`, HTTP 502), review Task
-circuit-broken. `MVP02-R2-001…006` закрыты исполнителем, но PASS не присвоен;
-TASK BLOCKED до решения по запуску Codex/replacement review Task.
+C2: **PASS**. Автор решения: Codex-ревьюер (R2), `task_f5a7cda011c4` /
+`ctx_f8b4e389182a`. Повторное полное ревью 2 / 2 ревизии `fde5406`:
+AC-001…AC-010 PASS; `MVP02-R2-001…006` закрыты; новых findings 0. Отчёт:
+`../workflow/reviews/TASK-MVP-02-C2.md`; evidence переиспользовано,
+reviewer reruns 0. Codex calls 3 / 4; проектный PASS не присвоен.
 Сводка/счётчики: ../workflow/STATE.md. История: ../workflow/HISTORY.md.
 Пакеты доказательств: C1 `../workflow/evidence/TASK-MVP-02-C1.md`;
 C2 `../workflow/evidence/TASK-MVP-02-C2.md`.
-Следующий TASK: TASK-MVP-03 — только после PASS.
+Следующий TASK: TASK-MVP-03.
