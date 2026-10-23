@@ -12,6 +12,7 @@
 | 2026-10-22 | TASK-MVP-02 | IN_PROGRESS / C1 реализован, вердикта нет | TASK-MVP-01 PASS | R2; Codex design завершён; A1/C1 реализован; Codex 1/4 | baseline `7b785f4`; C1 `a2b52a8` | R2-ревью Codex |
 | 2026-10-23 | TASK-MVP-02 | IN_PROGRESS / C2 NOT_REVIEWED; replacement R2 2/2 зарезервировано | TASK-MVP-01 PASS | R2; A1/C2; C1 FAIL 6 MAJOR; C2 `fde5406`; Codex calls 2/4 | C2 `fde5406`; HEAD `3c0c4be` | Диспатч `task_f5a7cda011c4` |
 | 2026-10-23 | TASK-MVP-02 | PASS / Codex-ревьюер (R2) | TASK-MVP-01 PASS | R2; A1/C2; полное ревью 2/2; C1 findings 6 → 0; новые findings 0; Codex calls 3/4 | C2 `fde5406`; review `docs/workflow/reviews/TASK-MVP-02-C2.md` | TASK-MVP-03 |
+| 2026-10-23 | TASK-MVP-03 | DESIGN complete / Codex (R2) | TASK-MVP-02 PASS | R2; A1/C1; design 1/4; TASK/AC заморожены; review 0/2 | design `task_6f36396f2464` / `ctx_9b0738b3df2d`; baseline `f0727e6` | Реализация OpenCode |
 
 ## Подходы и первопричины
 
@@ -39,6 +40,7 @@
 | 2026-10-22 | TASK-MVP-02/A1/C1 | OpenCode-исполнитель | `a2b52a8` | полный `pytest -q`; реальный CLI `python -m app.reconcile_storage`, WSL, корень | 0 / `3474 passed, 1 warning`; CLI 3/3/0 | полный backend и запуск зелёные | `evidence/TASK-MVP-02-C1.md` |
 | 2026-10-23 | TASK-MVP-02/A1/C2 | OpenCode-исполнитель | `fde5406` | focused: storage/reconciliation/CLI + file_service/concurrency, WSL, корень | 0 / `386 passed` | focused-набор с новыми C2-тестами зелёный | `evidence/TASK-MVP-02-C2.md` |
 | 2026-10-23 | TASK-MVP-02/A1/C2 | OpenCode-исполнитель | `fde5406` | полный `pytest -q`; реальный CLI; миграции, WSL, корень | 0 / `3483 passed, 1 warning`; CLI complete; 12 миграций | полный backend и запуск зелёные | `evidence/TASK-MVP-02-C2.md` |
+| 2026-10-23 | TASK-MVP-03 design | Codex | `f0727e6` | read-only `wsl.exe ... .venv/bin/python -B -m alembic heads` | 0 / `a3f1c72d5b90 (head)`; 12 revisions | baseline миграций подтверждён | design memo / HISTORY |
 
 ## Критерии приёмки и бэклог
 
@@ -66,6 +68,7 @@
 | 2026-10-23 | TASK-MVP-02/A1/C2 review | `run_68046cea3eb4` / `task_f5a7cda011c4` / dispatch pending | Codex startup fix: Hiddify system proxy `127.0.0.1:12334` возвращал HTTP 502 для localhost; добавлен `ProxyOverride=localhost;127.0.0.1;::1;<local>`; Codex TUI smoke без warning; ревью не потреблено | Полное ревью 2/2 reserved; Codex call 3/4 reserved; input 0/3M | NOT_REVIEWED | Диспатч Codex-ревьюера и ожидание `worker_done` |
 | 2026-10-23 | TASK-MVP-02/A1/C2 review | `run_68046cea3eb4` / `task_f5a7cda011c4` / `ctx_f8b4e389182a` | Повторное полное R2 2/2: PASS; AC-001…AC-010 PASS; `MVP02-R2-001…006` закрыты; новых findings 0; отчёт `docs/workflow/reviews/TASK-MVP-02-C2.md`; evidence переиспользовано, rerun 0. Supervised `worker-start` вновь не прошёл `agent_readiness` (Orca ждёт `›`, Codex TUI рисует `»`); ревью выполнено через `dispatch --inject` в `term_27b46876-e608-426e-bd29-128220d4981e`, затем Task completed, терминал закрыт | Полное ревью 2/2; Codex calls 3/4; input 0/3M | **PASS**; TASK-MVP-02 PASS; проектный PASS не присвоен | TASK-MVP-03 |
 | 2026-10-23 | TASK-MVP-03 design | `run_68046cea3eb4` / `task_6f36396f2464` / dispatch pending | R2 design: SHA-256 при скачивании + миграция `ix_files_document_id_id`; README/TASK-MVP-02 PASS; design Task создан | Codex calls 1/4 reserved; полное ревью 0/2 | NOT_REVIEWED | Диспатч Codex design |
+| 2026-10-23 | TASK-MVP-03 design | `run_68046cea3eb4` / `task_6f36396f2464` / `ctx_9b0738b3df2d` | Design memo `msg_026fcb9a8ffb`: TemporaryFile-снимок с SHA-256 до 200, safe 500, `DownloadIntegrityError`, миграция `e4b8c2d16a70` от `a3f1c72d5b90`, AC-001…AC-010; найдены 3 устаревших baseline 12-миграционных теста; TASK `docs/tasks/TASK-MVP-03.md` создан; файлы/Git не менялись | Codex calls 1/4; полное ревью 0/2; input 0/3M | DESIGN complete; не TASK PASS | Реализация OpenCode |
 
 ## Восстановление и лимиты
 
