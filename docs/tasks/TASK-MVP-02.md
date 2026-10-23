@@ -113,11 +113,42 @@ JSON-отчёт о кандидатах, для которых строки не
   ограничения и реальный `worker_done` по preamble Orca; проект PASS не
   присваивать.
 
+## C2 — ограниченная коррекция после C1 FAIL
+
+Baseline: review C1 на `a2b52a8`; новый commit — только в allowlist ниже.
+Закрыть только `MVP02-R2-001…006`:
+
+- `_success_report`: точный `status="complete"`; обновить тесты/CLI.
+- `ignored_regular_files`: обычный файл, исключённый как точный `LOG_FILE`,
+  учитывать один раз; он не входит в `scanned_blobs`. Симлинки, каталоги,
+  нерегулярные файлы и файлы вне `documents` не учитывать. Проверить оба имени:
+  каноническое и неканоническое.
+- `StorageInventoryError`: отсутствующий root → внешний `error.code="root_missing"`;
+  прочие безопасные коды/stage сохранить.
+- Добавить детерминированный тест подмены проверенного каталога на symlink вне
+  root для фактического scanner; при выявлении дефекта исправить в пределах AC-004.
+- Добавить интеграционный тест AC-005: реальная PostgreSQL, отдельные соединения,
+  Event/barrier; инвентарь удерживается, другое соединение вставляет/коммитит
+  `files.storage_key`, затем SELECT после инвентаря видит подтверждённый ключ;
+  ровно один SELECT, без DML/блокировок со стороны сверки.
+- Добавить fault injection для нечитаемого root и ошибки stat через фактический
+  scanner/reconciliation/CLI: `failed`, `complete=false`, `summary/orphans=null`,
+  безопасный фиксированный код/stage, exit 1; после частичного инвентаря БД не
+  опрашивается.
+
+Остальные AC, allowlist, запреты и команды проверок не меняются. Evidence:
+`../workflow/evidence/TASK-MVP-02-C2.md` (не коммитить до PASS). C1 evidence и
+review сохраняются.
+
 ## Приёмка
 
-Решение: NOT_REVIEWED. Автор решения: Codex-ревьюер (R2).
-Проверенная ревизия: не назначена.
+C1: **FAIL** (6 MAJOR). Автор решения: Codex-ревьюер (R2), `task_4ac8b4f9eb5e` /
+`ctx_51b60231d76c`. Проверенная ревизия: `a2b52a8`.
+Находки `MVP02-R2-001…006`: `status=complete`; учёт `LOG_FILE` в
+`ignored_regular_files`; код `root_missing`; детерминированный тест подмены
+каталога; межсоединительный Event/barrier-тест порядка инвентаря и SELECT;
+матрица ошибок root/stat. Подробности: `../workflow/reviews/TASK-MVP-02.md`.
+C2: correction in progress; зарезервировано полное ревью 2 / 2.
 Сводка/счётчики: ../workflow/STATE.md. История: ../workflow/HISTORY.md.
-Подробный отчёт: ../workflow/reviews/TASK-MVP-02.md (будет создан).
-Пакет доказательств: ../workflow/evidence/TASK-MVP-02-C1.md.
-Следующий TASK: TASK-MVP-03.
+Пакет доказательств C1: ../workflow/evidence/TASK-MVP-02-C1.md.
+Следующий TASK: TASK-MVP-03 — только после PASS.
