@@ -1,6 +1,7 @@
 # TASK-MVP-03 — Сверка SHA-256 при скачивании и индекс вложений
 
-Статус: READY (design complete; implementation pending). Требования: VISION.md,
+Статус: IMPLEMENTATION_COMPLETE / NOT_REVIEWED (design complete; implementation
+`40c6343`; evidence untracked; R2 review pending). Требования: VISION.md,
 ARCHITECTURE.md, ROADMAP.md, ADR-009. Этап ROADMAP: 4.
 Предшественники с обязательным PASS: TASK-MVP-02 PASS.
 Класс риска: R2 (целостность содержимого, потоковая выдача, публичный HTTP-контракт,
@@ -155,8 +156,11 @@ HEAD, ETag, Last-Modified и новый download/verify CLI не вводятс�
 
 ## Приёмка по выбранному маршруту
 
-Решение: NOT_REVIEWED. Автор решения: Codex-ревьюер (R2). Ревизия/diff: не
-проверены. Design: `task_6f36396f2464` / `ctx_9b0738b3df2d`, memo
-`msg_026fcb9a8ffb`. Сводка/счётчики: ../workflow/STATE.md. История:
-../workflow/HISTORY.md. Подробный отчёт: `../workflow/reviews/TASK-MVP-03.md`
-после ревью. Codex calls: design 1 / 4; полное ревью 0 / 2.
+Решение: NOT_REVIEWED. Автор решения: Codex-ревьюер (R2). Ревизия/diff:
+`40c6343`; evidence `../workflow/evidence/TASK-MVP-03-C1.md` (untracked);
+независимая проверка evidence выполнена, проектный PASS не присвоен. Design:
+`task_6f36396f2464` / `ctx_9b0738b3df2d`, memo `msg_026fcb9a8ffb`;
+implementation `task_f53910e0735d` / `ctx_331ce3d2a440`. Сводка/счётчики:
+../workflow/STATE.md. История: ../workflow/HISTORY.md. Подробный отчёт:
+`../workflow/reviews/TASK-MVP-03.md` после ревью. Codex calls: design 1 / 4;
+полное ревью 1 / 2 reserved.

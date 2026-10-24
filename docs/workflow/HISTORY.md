@@ -13,6 +13,7 @@
 | 2026-10-23 | TASK-MVP-02 | IN_PROGRESS / C2 NOT_REVIEWED; replacement R2 2/2 зарезервировано | TASK-MVP-01 PASS | R2; A1/C2; C1 FAIL 6 MAJOR; C2 `fde5406`; Codex calls 2/4 | C2 `fde5406`; HEAD `3c0c4be` | Диспатч `task_f5a7cda011c4` |
 | 2026-10-23 | TASK-MVP-02 | PASS / Codex-ревьюер (R2) | TASK-MVP-01 PASS | R2; A1/C2; полное ревью 2/2; C1 findings 6 → 0; новые findings 0; Codex calls 3/4 | C2 `fde5406`; review `docs/workflow/reviews/TASK-MVP-02-C2.md` | TASK-MVP-03 |
 | 2026-10-23 | TASK-MVP-03 | DESIGN complete / Codex (R2) | TASK-MVP-02 PASS | R2; A1/C1; design 1/4; TASK/AC заморожены; review 0/2 | design `task_6f36396f2464` / `ctx_9b0738b3df2d`; baseline `f0727e6` | Реализация OpenCode |
+| 2026-10-24 | TASK-MVP-03 | IMPLEMENTATION_COMPLETE / NOT_REVIEWED | TASK-MVP-02 PASS | R2; A1/C1; design 1/4; реализация `40c6343`; full review 0/2; evidence untracked | baseline `db96b7a`; product `fde5406`; implementation `40c6343` | Codex R2 review |
 
 ## Подходы и первопричины
 
@@ -41,6 +42,9 @@
 | 2026-10-23 | TASK-MVP-02/A1/C2 | OpenCode-исполнитель | `fde5406` | focused: storage/reconciliation/CLI + file_service/concurrency, WSL, корень | 0 / `386 passed` | focused-набор с новыми C2-тестами зелёный | `evidence/TASK-MVP-02-C2.md` |
 | 2026-10-23 | TASK-MVP-02/A1/C2 | OpenCode-исполнитель | `fde5406` | полный `pytest -q`; реальный CLI; миграции, WSL, корень | 0 / `3483 passed, 1 warning`; CLI complete; 12 миграций | полный backend и запуск зелёные | `evidence/TASK-MVP-02-C2.md` |
 | 2026-10-23 | TASK-MVP-03 design | Codex | `f0727e6` | read-only `wsl.exe ... .venv/bin/python -B -m alembic heads` | 0 / `a3f1c72d5b90 (head)`; 12 revisions | baseline миграций подтверждён | design memo / HISTORY |
+| 2026-10-24 | TASK-MVP-03/A1/C1 | OpenCode-исполнитель | `40c6343` | focused: download/integration/file/index-migration/storage/events/variants, WSL, корень | 0 / `365 passed, 1 warning in 62.25s` | focused-набор с integrity/index-тестами зелёный | `evidence/TASK-MVP-03-C1.md` |
+| 2026-10-24 | TASK-MVP-03/A1/C1 | OpenCode-исполнитель | `40c6343` | полный `pytest -q`, WSL, корень | 0 / `3523 passed, 1 warning in 518.03s`; 0 failed | полный backend зелёный | `evidence/TASK-MVP-03-C1.md` |
+| 2026-10-24 | TASK-MVP-03/A1/C1 | OpenCode-исполнитель | `40c6343` | `alembic heads/current`; `ls alembic/versions/*.py \| wc -l`; targeted 19 tests | 0 / `e4b8c2d16a70 (head)`; 13 миграций; `19 passed` | миграция и targeted-доказательства зелёные | `evidence/TASK-MVP-03-C1.md` |
 
 ## Критерии приёмки и бэклог
 
@@ -70,6 +74,8 @@
 | 2026-10-23 | TASK-MVP-03 design | `run_68046cea3eb4` / `task_6f36396f2464` / dispatch pending | R2 design: SHA-256 при скачивании + миграция `ix_files_document_id_id`; README/TASK-MVP-02 PASS; design Task создан | Codex calls 1/4 reserved; полное ревью 0/2 | NOT_REVIEWED | Диспатч Codex design |
 | 2026-10-23 | TASK-MVP-03 design | `run_68046cea3eb4` / `task_6f36396f2464` / `ctx_9b0738b3df2d` | Design memo `msg_026fcb9a8ffb`: TemporaryFile-снимок с SHA-256 до 200, safe 500, `DownloadIntegrityError`, миграция `e4b8c2d16a70` от `a3f1c72d5b90`, AC-001…AC-010; найдены 3 устаревших baseline 12-миграционных теста; TASK `docs/tasks/TASK-MVP-03.md` создан; файлы/Git не менялись | Codex calls 1/4; полное ревью 0/2; input 0/3M | DESIGN complete; не TASK PASS | Реализация OpenCode |
 | 2026-10-23 | TASK-MVP-03/A1/C1 | `run_68046cea3eb4` / `task_164ca46a0ba5` / dispatch pending | Implementation Task создан по TASK; baseline `0f57362`, продукт `fde5406`; старт A1/C1 | Codex calls 1/4; полное ревью 0/2 | NOT_REVIEWED | Запуск OpenCode-исполнителя |
+| 2026-10-24 | TASK-MVP-03/A1/C1 | `run_68046cea3eb4` / `task_164ca46a0ba5` / `ctx_6fbe343526ae` | Supervised worker сделал коммит `40c6343`, но был abandoned до evidence и `worker_done`; Task помечен failed, работа продолжена отдельным Task | Codex calls 1/4; полное ревью 0/2 | worker outcome unknown; проектный PASS не присвоен | Recovery: новый Task верификации и evidence |
+| 2026-10-24 | TASK-MVP-03/A1/C1 | `run_68046cea3eb4` / `task_f53910e0735d` / `ctx_331ce3d2a440` | Независимая проверка `40c6343`: focused 365 passed, full 3523 passed / 1 warning, 19 targeted, alembic `e4b8c2d16a70` / 13, diff только 12 allowlist-файлов; evidence `docs/workflow/evidence/TASK-MVP-03-C1.md` (untracked); Task completed | Codex calls 1/4; полное ревью 1/2 reserved | worker_done succeeded; проект NOT_REVIEWED | Codex R2 review |
 
 ## Восстановление и лимиты
 
