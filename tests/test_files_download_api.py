@@ -484,6 +484,93 @@ def headers_of(message: dict) -> dict[bytes, bytes]:
     return dict(message["headers"])
 
 
+class AsgiObserver:
+    """An ASGI `send` sink that measures a body without keeping it.
+
+    A response is allowed to be a hundred megabytes, so a test that joins every
+    body message in a list is not a test of streaming. This sink records only
+    what the contract asks about: how many `response.start` messages appeared,
+    the length of each body chunk, the total length and a digest updated as the
+    bytes pass. No chunk is retained, so the observer itself cannot mask a
+    memory problem.
+    """
+
+    def __init__(self) -> None:
+        self.start_count = 0
+        self.start: dict | None = None
+        self.chunk_lengths: list[int] = []
+        self.total_length = 0
+        self.digest = hashlib.sha256()
+        self.json_after_start = False
+
+    def record(self, message: dict) -> None:
+        if message["type"] == "http.response.start":
+            self.start_count += 1
+            self.start = message
+            return
+        if message["type"] != "http.response.body":
+            return
+        body = message.get("body", b"")
+        if self.start_count and b'"detail"' in body:
+            self.json_after_start = True
+        self.chunk_lengths.append(len(body))
+        self.total_length += len(body)
+        self.digest.update(body)
+
+    async def __call__(self, message: dict) -> None:
+        """Be the ASGI `send` callable itself; `send` must be awaitable."""
+        self.record(message)
+
+    @property
+    def status(self) -> int:
+        assert self.start is not None
+        return self.start["status"]
+
+    @property
+    def headers(self) -> dict[bytes, bytes]:
+        assert self.start is not None
+        return headers_of(self.start)
+
+
+class FailingSnapshotStream:
+    """A real disk snapshot whose reads fail after a chosen number of calls."""
+
+    def __init__(self, snapshot, *, fail_after: int = 1) -> None:
+        self._snapshot = snapshot
+        self._fail_after = fail_after
+        self.calls = 0
+        self.closed = False
+
+    def read(self, size: int = -1) -> bytes:
+        self.calls += 1
+        if self.calls > self._fail_after:
+            raise OSError("cannot read /srv/secret/snapshot")
+        return self._snapshot.read(size)
+
+    def close(self) -> None:
+        self.closed = True
+        self._snapshot.close()
+
+
+def verified_disk_snapshot(tmp_path: Path, data: bytes):
+    """Run the real helper over a real file and return the path and snapshot."""
+    path = tmp_path / f"verified-{uuid.uuid4().hex}.bin"
+    path.write_bytes(data)
+    source = path.open("rb")
+    snapshot = prepare_verified_download(source, hashlib.sha256(data).hexdigest())
+    assert source.closed is True
+    return path, snapshot
+
+
+def run_app_observed(scope: dict, observer: AsgiObserver) -> None:
+    """Drive the real app through ASGI straight into a measuring sink."""
+
+    async def receive():
+        return {"type": "http.request", "body": b"", "more_body": False}
+
+    asyncio.run(app(scope, receive, observer))
+
+
 # --------------------------------------------------------------------------- #
 # 1-6: the bytes, the type, the name, the length
 # --------------------------------------------------------------------------- #
@@ -735,26 +822,69 @@ class TestBrokenStorage:
         ]
 
     def test_a_blob_vanishing_between_the_check_and_the_open_is_a_safe_500(
-        self, make_document, db, storage, download, override_storage, caplog
+        self, make_document, db, storage, download, caplog, monkeypatch
     ):
-        class VanishingStorage(LocalStorageBackend):
-            def open(self, storage_key: str):
-                self._resolve(storage_key).unlink(missing_ok=True)
-                return super().open(storage_key)
+        """Delete the blob after `is_file()` succeeds and before `Path.open`.
 
+        A backend subclass that unlinks at the top of `open()` fails in
+        `is_file()` and repeats the missing-blob case instead of hitting the
+        race. The injection here is at the filesystem boundary of the real
+        `LocalStorageBackend.open`: `Path.is_file` records its answer, and the
+        physical `Path.open("rb")` unlinks the target immediately before it
+        opens. The backend method itself stays the production one, so the only
+        call that can reach the open is the one whose `is_file()` just passed.
+        """
         document_id = make_document()
-        file_id = seed_file(db, storage, document_id)
-        override_storage(VanishingStorage(storage.root_path))
+        file_id = seed_file(db, storage, document_id, filename="scan.pdf")
+        row = db.get(File, file_id)
+        storage_key = row.storage_key
+        digest = row.sha256
+        db.rollback()
+        target = blob_path(storage, storage_key).resolve()
+        assert target.is_file() is True
 
+        real_is_file = Path.is_file
+        real_open = Path.open
+        checks: list[bool] = []
+        removed_before_open: list[bool] = []
+
+        def record_is_file(path_self, *args, **kwargs):
+            result = real_is_file(path_self, *args, **kwargs)
+            if path_self == target:
+                checks.append(result)
+            return result
+
+        def remove_before_physical_open(path_self, mode="r", *args, **kwargs):
+            if path_self == target and mode == "rb":
+                target.unlink()
+                removed_before_open.append(not target.exists())
+            return real_open(path_self, mode, *args, **kwargs)
+
+        monkeypatch.setattr(Path, "is_file", record_is_file)
+        monkeypatch.setattr(Path, "open", remove_before_physical_open)
         caplog.set_level(logging.ERROR, logger="app.api.files.router")
+
         response = download(document_id, file_id)
 
         assert response.status_code == 500
         assert response.json() == {"detail": "Stored file content is unavailable"}
+        assert checks == [True]
+        assert removed_before_open == [True]
+        assert target.exists() is False
+        assert "content-disposition" not in response.headers
+        assert PDF_BYTES not in response.content
+        assert storage_key not in response.text
+        assert str(storage.root_path) not in response.text
+        assert digest not in response.text
         records = records_for(caplog)
         assert len(records) == 1
+        assert records[0].levelno == logging.ERROR
         assert records[0].failure_category == "content_open_failed"
-        assert records[0].error_type == "StoredFileNotFoundError"
+        assert records[0].error_type == "FileNotFoundError"
+        assert storage_key not in caplog.text
+        assert str(storage.root_path) not in caplog.text
+        assert digest not in caplog.text
+        assert "scan.pdf" not in caplog.text
 
 
 # --------------------------------------------------------------------------- #
@@ -1717,6 +1847,213 @@ class TestStreamRelease:
         assert source.closed is True
 
 
+class TestDiskSnapshotAsgiRelease:
+    """Every ASGI exit releases the real verified disk copy.
+
+    `TestStreamRelease` drives in-memory stand-ins, which is enough to choose a
+    path but not to prove the descriptor that the route actually serves is
+    closed. Each test here first passes real bytes through
+    `prepare_verified_download`, then abandons or completes the response in one
+    of the ways the contract names. The assertion is on the real temporary
+    file, and the sink is `AsgiObserver`, which measures the body without
+    retaining it.
+    """
+
+    def test_the_real_snapshot_is_closed_and_hashed_at_eof(self, tmp_path):
+        data = PDF_BYTES + b"e" * (3 * CHUNK_SIZE + 5)
+        path, snapshot = verified_disk_snapshot(tmp_path, data)
+        observer = AsgiObserver()
+        response = ClosingStreamingResponse(snapshot, media_type="application/pdf")
+
+        async def receive():
+            await asyncio.sleep(60)
+
+        asyncio.run(response(http_scope("2.4"), receive, observer))
+
+        assert snapshot.closed is True
+        assert observer.start_count == 1
+        assert observer.status == 200
+        assert observer.headers[b"content-type"] == b"application/pdf"
+        assert b"content-length" not in observer.headers
+        assert [length for length in observer.chunk_lengths if length] == [
+            CHUNK_SIZE,
+            CHUNK_SIZE,
+            CHUNK_SIZE,
+            len(data) - 3 * CHUNK_SIZE,
+        ]
+        assert max(observer.chunk_lengths) <= CHUNK_SIZE
+        assert observer.total_length == len(data)
+        assert observer.digest.hexdigest() == hashlib.sha256(data).hexdigest()
+        assert observer.json_after_start is False
+        assert path.read_bytes() == data
+
+    def test_a_read_failure_closes_the_real_snapshot(self, tmp_path, caplog):
+        data = PDF_BYTES + b"r" * (3 * CHUNK_SIZE)
+        path, snapshot = verified_disk_snapshot(tmp_path, data)
+        failing = FailingSnapshotStream(snapshot, fail_after=1)
+        observer = AsgiObserver()
+        response = ClosingStreamingResponse(
+            failing, media_type="application/pdf"
+        )
+
+        async def receive():
+            await asyncio.sleep(60)
+
+        caplog.set_level(logging.ERROR, logger="app.api.files.download")
+        with pytest.raises(ClientDisconnect):
+            asyncio.run(response(http_scope("2.4"), receive, observer))
+
+        assert snapshot.closed is True
+        assert failing.closed is True
+        assert path.read_bytes() == data
+        assert observer.start_count == 1
+        assert observer.status == 200
+        assert [length for length in observer.chunk_lengths if length] == [
+            CHUNK_SIZE
+        ]
+        assert observer.total_length == CHUNK_SIZE
+        assert observer.json_after_start is False
+        assert observer.headers[b"content-type"] == b"application/pdf"
+        records = records_for(caplog)
+        assert len(records) == 1
+        assert records[0].levelno == logging.ERROR
+        assert records[0].failure_category == "content_stream_failed"
+        assert records[0].error_type == "OSError"
+        assert "/srv" not in caplog.text
+        assert "secret" not in caplog.text
+
+    def test_a_send_failure_closes_the_real_snapshot(self, tmp_path):
+        data = PDF_BYTES + b"s" * (2 * CHUNK_SIZE)
+        path, snapshot = verified_disk_snapshot(tmp_path, data)
+        observer = AsgiObserver()
+        response = ClosingStreamingResponse(snapshot, media_type="application/pdf")
+
+        async def send(message):
+            observer.record(message)
+            if message["type"] == "http.response.body" and message.get("body"):
+                raise RuntimeError("the server could not send")
+
+        async def receive():
+            await asyncio.sleep(60)
+
+        with pytest.raises(RuntimeError):
+            asyncio.run(response(http_scope("2.4"), receive, send))
+
+        assert snapshot.closed is True
+        assert path.read_bytes() == data
+        assert observer.start_count == 1
+        assert observer.status == 200
+        assert [length for length in observer.chunk_lengths if length] == [
+            CHUNK_SIZE
+        ]
+        assert observer.total_length == CHUNK_SIZE
+        assert observer.json_after_start is False
+
+    def test_an_asgi_2_4_disconnect_closes_the_real_snapshot(self, tmp_path):
+        data = PDF_BYTES + b"d" * (4 * CHUNK_SIZE)
+        path, snapshot = verified_disk_snapshot(tmp_path, data)
+        observer = AsgiObserver()
+        response = ClosingStreamingResponse(snapshot, media_type="application/pdf")
+
+        async def send(message):
+            observer.record(message)
+            if message["type"] == "http.response.body" and message.get("body"):
+                raise OSError("client went away")
+
+        async def receive():
+            await asyncio.sleep(60)
+
+        with pytest.raises(ClientDisconnect):
+            asyncio.run(response(http_scope("2.4"), receive, send))
+
+        assert snapshot.closed is True
+        assert path.read_bytes() == data
+        assert observer.start_count == 1
+        assert observer.status == 200
+        assert [length for length in observer.chunk_lengths if length] == [
+            CHUNK_SIZE
+        ]
+        assert observer.json_after_start is False
+
+    def test_an_observed_asgi_2_0_disconnect_closes_the_real_snapshot(
+        self, tmp_path
+    ):
+        data = PDF_BYTES + b"g" * (5 * CHUNK_SIZE)
+        path, snapshot = verified_disk_snapshot(tmp_path, data)
+        observer = AsgiObserver()
+
+        async def scenario() -> None:
+            first_chunk = asyncio.Event()
+
+            async def send(message):
+                observer.record(message)
+                if message["type"] == "http.response.body" and message.get(
+                    "body"
+                ):
+                    first_chunk.set()
+                    await asyncio.sleep(0.05)
+
+            async def receive():
+                await first_chunk.wait()
+                return {"type": "http.disconnect"}
+
+            response = ClosingStreamingResponse(
+                snapshot, media_type="application/pdf"
+            )
+            await response(http_scope("2.0"), receive, send)
+
+        asyncio.run(scenario())
+
+        assert snapshot.closed is True
+        assert path.read_bytes() == data
+        assert observer.start_count == 1
+        assert observer.status == 200
+        assert observer.headers[b"content-type"] == b"application/pdf"
+        assert 0 < observer.total_length < len(data)
+        assert observer.json_after_start is False
+
+    def test_a_cancelled_request_closes_the_real_snapshot(self, tmp_path):
+        data = PDF_BYTES + b"c" * (2 * CHUNK_SIZE)
+        path, snapshot = verified_disk_snapshot(tmp_path, data)
+        observer = AsgiObserver()
+
+        async def scenario() -> None:
+            started = asyncio.Event()
+
+            async def send(message):
+                observer.record(message)
+                if message["type"] == "http.response.body" and message.get(
+                    "body"
+                ):
+                    started.set()
+                    await asyncio.sleep(60)
+
+            async def receive():
+                await asyncio.sleep(60)
+
+            response = ClosingStreamingResponse(
+                snapshot, media_type="application/pdf"
+            )
+            task = asyncio.create_task(
+                response(http_scope("2.4"), receive, send)
+            )
+            await asyncio.wait_for(started.wait(), timeout=5)
+            task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await task
+
+        asyncio.run(scenario())
+
+        assert snapshot.closed is True
+        assert path.read_bytes() == data
+        assert observer.start_count == 1
+        assert observer.status == 200
+        assert [length for length in observer.chunk_lengths if length] == [
+            CHUNK_SIZE
+        ]
+        assert observer.json_after_start is False
+
+
 class TestAsgiContract:
     def test_a_verified_download_starts_after_the_original_is_closed(
         self, app_overrides, db, storage, make_document, override_storage
@@ -1828,6 +2165,57 @@ class TestAsgiContract:
             asyncio.run(response(http_scope("2.4"), receive, send))
 
         assert snapshot.closed is True
+
+    def test_the_route_streams_a_real_disk_snapshot_without_buffering(
+        self, app_overrides, db, storage, make_document, monkeypatch
+    ):
+        """Observe the route's body chunk by chunk, never keeping it.
+
+        The real route is driven through ASGI so the snapshot comes from the
+        production `prepare_verified_download` over the real local backend. The
+        temporary file is captured only to assert that it is closed when the
+        body ends; the observer keeps lengths and a running digest, not bytes.
+        """
+        document_id = make_document()
+        data = PDF_BYTES + b"o" * (4 * CHUNK_SIZE + 11)
+        file_id = seed_file(db, storage, document_id, data=data)
+        db.rollback()
+        created = []
+        real_tempfile = tempfile.TemporaryFile
+
+        def factory(*args, **kwargs):
+            handle = real_tempfile(*args, **kwargs)
+            created.append(handle)
+            return handle
+
+        monkeypatch.setattr(
+            download_module,
+            "tempfile",
+            SimpleNamespace(TemporaryFile=factory),
+        )
+        observer = AsgiObserver()
+
+        run_app_observed(content_scope(document_id, file_id), observer)
+
+        assert observer.start_count == 1
+        assert observer.status == 200
+        headers = observer.headers
+        assert headers[b"content-type"] == b"application/pdf"
+        assert b"content-disposition" in headers
+        assert b"content-length" not in headers
+        assert [length for length in observer.chunk_lengths if length] == [
+            CHUNK_SIZE,
+            CHUNK_SIZE,
+            CHUNK_SIZE,
+            CHUNK_SIZE,
+            len(data) - 4 * CHUNK_SIZE,
+        ]
+        assert max(observer.chunk_lengths) <= CHUNK_SIZE
+        assert observer.total_length == len(data)
+        assert observer.digest.hexdigest() == hashlib.sha256(data).hexdigest()
+        assert observer.json_after_start is False
+        assert len(created) == 1
+        assert created[0].closed is True
 
 
 # --------------------------------------------------------------------------- #
