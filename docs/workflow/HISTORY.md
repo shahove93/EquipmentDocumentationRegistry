@@ -14,6 +14,9 @@
 | 2026-10-23 | TASK-MVP-02 | PASS / Codex-ревьюер (R2) | TASK-MVP-01 PASS | R2; A1/C2; полное ревью 2/2; C1 findings 6 → 0; новые findings 0; Codex calls 3/4 | C2 `fde5406`; review `docs/workflow/reviews/TASK-MVP-02-C2.md` | TASK-MVP-03 |
 | 2026-10-23 | TASK-MVP-03 | DESIGN complete / Codex (R2) | TASK-MVP-02 PASS | R2; A1/C1; design 1/4; TASK/AC заморожены; review 0/2 | design `task_6f36396f2464` / `ctx_9b0738b3df2d`; baseline `f0727e6` | Реализация OpenCode |
 | 2026-10-24 | TASK-MVP-03 | IMPLEMENTATION_COMPLETE / NOT_REVIEWED | TASK-MVP-02 PASS | R2; A1/C1; design 1/4; реализация `40c6343`; full review 0/2; evidence untracked | baseline `db96b7a`; product `fde5406`; implementation `40c6343` | Codex R2 review |
+| 2026-10-25 | TASK-MVP-03 | C1 FAIL / C2_IN_PROGRESS | TASK-MVP-02 PASS | R2; A1/C1; полное ревью 1/2 — FAIL, 2 MAJOR; Codex calls 2/4 | review `task_93712a9c9442` / `ctx_3f22c5d23a39`; `40c6343` | C2 correction OpenCode |
+| 2026-10-25 | TASK-MVP-03 | C2_REVIEW_PENDING / NOT_REVIEWED | TASK-MVP-02 PASS | R2; A1/C2; оба MAJOR исправлены только тестами; focused 372, full 3530; C2 review 2/2 reserved; Codex calls 3/4 | C2 `6827ed3` (`task_a39b81e726c5` / `ctx_6e41326def5e`); review `task_b03f28ce101c` / `ctx_894373b5df1a`; evidence C2 untracked | Codex R2 review 2/2 |
+| 2026-10-25 | TASK-MVP-03 | PASS / Codex-ревьюер (R2) | TASK-MVP-02 PASS | R2; A1/C2; findings `MVP03-R2-001…002` закрыты; новых 0; полное ревью 2/2; Codex calls 3/4 | C2 `6827ed3`; review `docs/workflow/reviews/TASK-MVP-03-C2.md` | TASK-WF-01 (Nemotron-координатор), затем TASK-MVP-04 |
 
 ## Подходы и первопричины
 
@@ -27,6 +30,8 @@
 | ID | TASK/подход/цикл | Критерий/место | Факт/воспроизведение | Ожидание/severity | Задание | Исправление/ревизия | Доказательство закрытия/статус |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `MVP02-R2-001…006` | TASK-MVP-02/A1/C1 | AC-003, AC-004, AC-005, AC-007, AC-008 | 6 MAJOR: `status=complete`; учёт `LOG_FILE`; `root_missing`; детерминированный swap-тест; межсоединительный Event/barrier-тест; fault matrix root/stat | Требовалось bounded-исправление и повторное полное ревью 2/2 | C2 correction | `fde5406`; C2 evidence | **CLOSED**; C2 review PASS, новых findings 0 |
+| `MVP03-R2-001` | TASK-MVP-03/A1/C1 | AC-003 | `VanishingStorage.open()` удаляет blob до `is_file`, поэтому граница `is_file`/`open` реального `LocalStorageBackend` не достигается; MAJOR | Нужна инъекция после успешного `is_file` и до `Path.open`, безопасный 500 и ровно одна `content_open_failed` запись | C2 correction | ожидается | **OPEN** |
+| `MVP03-R2-002` | TASK-MVP-03/A1/C1 | AC-006, AC-007 | Disk snapshot не проверяется для EOF/read failure/ASGI 2.0/cancellation; send-наблюдатель накапливает body; MAJOR | Нужны disk-backed ASGI closure assertions для всех выходов и потоковый send-наблюдатель без накопления | C2 correction | ожидается | **OPEN** |
 
 ## Фактически выполненные проверки
 
@@ -76,6 +81,8 @@
 | 2026-10-23 | TASK-MVP-03/A1/C1 | `run_68046cea3eb4` / `task_164ca46a0ba5` / dispatch pending | Implementation Task создан по TASK; baseline `0f57362`, продукт `fde5406`; старт A1/C1 | Codex calls 1/4; полное ревью 0/2 | NOT_REVIEWED | Запуск OpenCode-исполнителя |
 | 2026-10-24 | TASK-MVP-03/A1/C1 | `run_68046cea3eb4` / `task_164ca46a0ba5` / `ctx_6fbe343526ae` | Supervised worker сделал коммит `40c6343`, но был abandoned до evidence и `worker_done`; Task помечен failed, работа продолжена отдельным Task | Codex calls 1/4; полное ревью 0/2 | worker outcome unknown; проектный PASS не присвоен | Recovery: новый Task верификации и evidence |
 | 2026-10-24 | TASK-MVP-03/A1/C1 | `run_68046cea3eb4` / `task_f53910e0735d` / `ctx_331ce3d2a440` | Независимая проверка `40c6343`: focused 365 passed, full 3523 passed / 1 warning, 19 targeted, alembic `e4b8c2d16a70` / 13, diff только 12 allowlist-файлов; evidence `docs/workflow/evidence/TASK-MVP-03-C1.md` (untracked); Task completed | Codex calls 1/4; полное ревью 1/2 reserved | worker_done succeeded; проект NOT_REVIEWED | Codex R2 review |
+| 2026-10-25 | approval | — | Пользователь подтвердил ADR-011 и ROADMAP v1.1: локальный Nemotron только координатор после PASS TASK-MVP-03; TASK-WF-01 до TASK-MVP-04; остальные роли без изменений | — | APPROVED; хеши `6F07E935…5716` / `EF04E4D4…1B10` | Записано в APPROVALS; TASK-WF-01 после PASS TASK-MVP-03 |
+| 2026-10-25 | TASK-MVP-03/A1/C1 review | `run_68046cea3eb4` / `task_93712a9c9442` / `ctx_3f22c5d23a39` | Полное R2-ревью `40c6343`: FAIL, 2 MAJOR (`MVP03-R2-001` AC-003; `MVP03-R2-002` AC-006/AC-007); evidence переиспользовано, rerun 0; отчёт `docs/workflow/reviews/TASK-MVP-03.md`; Codex TUI `»` — `dispatch --inject` в `term_5de79d4e-cbc7-4fd8-a73e-782a9b95fc51`, терминал retained для C2 | Полное ревью 1/2; Codex calls 2/4; C2 review reserved 3/4 и 2/2; input не раскрыт | **FAIL**; C2 correction | C2 correction OpenCode, затем повторное ревью 2/2 |
 
 ## Восстановление и лимиты
 

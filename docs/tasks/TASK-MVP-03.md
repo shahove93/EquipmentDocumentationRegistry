@@ -1,7 +1,7 @@
 # TASK-MVP-03 — Сверка SHA-256 при скачивании и индекс вложений
 
-Статус: IMPLEMENTATION_COMPLETE / NOT_REVIEWED (design complete; implementation
-`40c6343`; evidence untracked; R2 review pending). Требования: VISION.md,
+Статус: PASS (A1/C2; implementation `40c6343`; C2 `6827ed3`; C1 review 1/2 —
+FAIL, 2 MAJOR; C2 review 2/2 — PASS; открытых findings 0). Требования: VISION.md,
 ARCHITECTURE.md, ROADMAP.md, ADR-009. Этап ROADMAP: 4.
 Предшественники с обязательным PASS: TASK-MVP-02 PASS.
 Класс риска: R2 (целостность содержимого, потоковая выдача, публичный HTTP-контракт,
@@ -134,33 +134,54 @@ HEAD, ETag, Last-Modified и новый download/verify CLI не вводятс�
 | `wsl.exe -d Ubuntu -- bash -lc 'cd /mnt/d/Antigravity/EquipmentDocumentationRegistry && ls alembic/versions/*.py \| wc -l'` | корень | `13` |
 | `git diff --name-only <baseline>..HEAD`; `git show --stat --oneline HEAD` | корень | только allowlist; evidence не в коммите |
 
-## Текущее задание OpenCode
+## C2 correction (выполнено; PASS 2/2)
 
 - Рабочая ветка/worktree: `main`, текущий workspace.
-- Baseline: `f0727e6` (workflow-резерв design); продуктовое состояние `fde5406`;
-  точный HEAD и diff фиксируются в evidence.
-- Подход / цикл: A1 / C1 (новый TASK, design выполнен Codex).
-- Реализовать design выше, обновить статусные документы, добавить тесты и
-  миграцию, выполнить проверки, применить миграцию к локальной рабочей БД,
-  закоммитить разрешённые файлы в `main`; evidence-файл не коммитить.
-- Не менять запрещённые пути; не исправлять ORM cascade/`passive_deletes`; не
-  добавлять Range/HEAD/ETag, download/verify CLI, лимиты и квоты.
-- Пакет доказательств: создать
-  `docs/workflow/evidence/TASK-MVP-03-C1.md` по шаблону `EVIDENCE.md`; приложить
-  diff, execution HEAD, результаты focused/full, migration up/down/up в test
-  schema, SQL trace, ASGI start/body/closure, bounded-memory наблюдения и
-  `EXPLAIN JSON`.
+- Baseline C2: `0587ccc`; продуктовое состояние `40c6343`; точный HEAD и diff
+  фиксируются в evidence C2.
+- Подход / цикл: A1 / C2; исправить только пробелы, указанные в
+  `reviews/TASK-MVP-03.md`; замороженный checklist AC-001…AC-011 не меняется.
+- MVP03-R2-001 (AC-003): добавить контролируемую инъекцию на границе
+  `is_file`/`open` реального `LocalStorageBackend`: `is_file()` должен успешно
+  пройти, tmp blob удаляется непосредственно перед физическим `Path.open`, затем
+  безопасный `500`, отсутствие байтов/секретов и ровно одна запись
+  `content_open_failed`. Не заменять сценарий удалением до `is_file`.
+- MVP03-R2-002 (AC-006, AC-007): добавить disk-backed ASGI-проверки с реальным
+  результатом `prepare_verified_download` для EOF, read failure, send failure,
+  disconnect ASGI 2.0 и 2.4, cancellation: проверять закрытие реального снимка и
+  единственный `response.start`/отсутствие JSON после start. Для AC-006 добавить
+  ASGI-наблюдатель, который считает длины чанков/общую длину и потоковый hash,
+  не накапливая body.
+- Разрешённые изменения C2: `tests/test_files_download_api.py` и новый
+  `docs/workflow/evidence/TASK-MVP-03-C2.md`; при доказанной необходимости —
+  только тестовые файлы из allowlist TASK. Продуктовый код, миграция,
+  `app/services/**`, `alembic/env.py`, `tests/conftest.py`, frontend,
+  зависимости, `.env`, `.venv/`, реальный `storage/` и workflow-документы
+  координатора не менять.
+- Выполнить focused и полный `pytest`, подтвердить 13 миграций и неизменность
+  `e4b8c2d16a70`; закоммитить только тестовые изменения в `main`, evidence C2 не
+  коммитить.
+- Пакет доказательств: `docs/workflow/evidence/TASK-MVP-03-C2.md` по шаблону
+  `EVIDENCE.md`: diff, execution HEAD, новые тесты с фактическими именами,
+  команды/CWD/exit/результаты, ASGI/closure-наблюдения и честное описание
+  сценариев.
 - Формат результата: изменения, команды/CWD/exit/результаты, commit hash,
   ограничения и реальный `worker_done` по preamble Orca; проектный PASS не
   присваивать.
 
 ## Приёмка по выбранному маршруту
 
-Решение: NOT_REVIEWED. Автор решения: Codex-ревьюер (R2). Ревизия/diff:
-`40c6343`; evidence `../workflow/evidence/TASK-MVP-03-C1.md` (untracked);
-независимая проверка evidence выполнена, проектный PASS не присвоен. Design:
+Решение C1: FAIL (2 MAJOR); решение C2: PASS. Автор решений: Codex-ревьюер
+(R2). Findings `MVP03-R2-001`, `MVP03-R2-002` (MAJOR) закрыты на `6827ed3`;
+новых findings 0. Отчёты: `../workflow/reviews/TASK-MVP-03.md` (C1 FAIL) и
+`TASK-MVP-03-C2.md` (C2 PASS). Ревизия/diff C1: `40c6343`, C2: `6827ed3`;
+evidence C1/C2: `../workflow/evidence/TASK-MVP-03-C1.md`,
+`TASK-MVP-03-C2.md`. Design:
 `task_6f36396f2464` / `ctx_9b0738b3df2d`, memo `msg_026fcb9a8ffb`;
-implementation `task_f53910e0735d` / `ctx_331ce3d2a440`. Сводка/счётчики:
-../workflow/STATE.md. История: ../workflow/HISTORY.md. Подробный отчёт:
-`../workflow/reviews/TASK-MVP-03.md` после ревью. Codex calls: design 1 / 4;
-полное ревью 1 / 2 reserved.
+implementation `task_f53910e0735d` / `ctx_331ce3d2a440`; C1 review
+`task_93712a9c9442` / `ctx_3f22c5d23a39`; C2 `6827ed3` (`task_a39b81e726c5` /
+`ctx_6e41326def5e`); C2 review `task_b03f28ce101c` / `ctx_894373b5df1a`.
+Сводка/счётчики: ../workflow/STATE.md. История: ../workflow/HISTORY.md.
+Codex calls: design 1 / 4; C1 review 2 / 4; C2 review 3 / 4; полные ревью
+2 / 2 использовано. Следующий TASK — TASK-WF-01 (Nemotron-координатор) до
+TASK-MVP-04.
