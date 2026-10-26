@@ -1,0 +1,86 @@
+{
+  "id": "ec61df74-6232-4734-8a37-7690ccf9dc49",
+  "ok": true,
+  "result": {
+    "runId": "run_68046cea3eb4",
+    "taskId": "task_efc8f84abfbc",
+    "dispatchId": "ctx_7ff92b6ea59a",
+    "state": "ready",
+    "stage": "input_accepted",
+    "turnStart": "observed",
+    "setup": {
+      "requested": "not_applicable",
+      "effective": "not_applicable",
+      "source": "existing_worktree",
+      "hookFound": false,
+      "startupPolicy": "start-immediately",
+      "state": "not_applicable"
+    },
+    "launch": {
+      "requested": {
+        "agent": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      },
+      "effective": {
+        "agent": "codex",
+        "model": "gpt-6.1-sol",
+        "effort": "medium"
+      }
+    },
+    "mode": {
+      "mode": "terminal",
+      "preferred": "terminal",
+      "reason": "user_default",
+      "detail": "Started a terminal agent worker, the default for new agent tabs in your settings."
+    },
+    "timeoutMs": 60000,
+    "effects": [
+      {
+        "kind": "worktree",
+        "action": "reused",
+        "id": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry"
+      },
+      {
+        "kind": "setup",
+        "action": "not_applicable",
+        "state": "not_applicable"
+      },
+      {
+        "kind": "terminal",
+        "role": "agent",
+        "action": "created",
+        "id": "term_5f031575-a841-4358-823e-e79c8304c53c",
+        "surface": "visible"
+      },
+      {
+        "kind": "dispatch_input",
+        "role": "agent",
+        "id": "term_5f031575-a841-4358-823e-e79c8304c53c",
+        "state": "accepted"
+      }
+    ],
+    "prompt": {
+      "requestId": "ef543bfd-43b8-42a8-92c1-d6f08c215877",
+      "stages": [
+        "input_accepted",
+        "turn_started"
+      ],
+      "provider": "codex",
+      "observation": "supported",
+      "processIncarnation": "48fbd0f4-c936-4b4b-82e0-2520a7dc9dcb",
+      "generation": 38,
+      "baselineWorkingSequence": 1,
+      "baselineExplicitWorkingStartedAt": null,
+      "baselinePermissionSequence": 0
+    },
+    "residualResources": [],
+    "mutation": {
+      "requestId": "ef543bfd-43b8-42a8-92c1-d6f08c215877",
+      "replayed": false
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+  }
+}

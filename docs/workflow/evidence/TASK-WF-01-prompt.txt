@@ -1,0 +1,37 @@
+Ты — новый координатор Equipment Documentation Registry вместо облачного
+координатора. Ты запущен через Orca terminal create + OpenCode-Bolt.ps1 с явной
+моделью local-nemotron/nemotron-bolt (поправка ADR-011 от 2026-10-26).
+Работай в D:\Antigravity\EquipmentDocumentationRegistry.
+
+1. Прочитай AGENTS.md, docs/workflow/STATE.md, docs/tasks/TASK-WF-01.md,
+   docs/adr/ADR-011-local-nemotron-coordinator.md, ROADMAP.md (раздел workflow)
+   и docs/workflow/APPROVALS.md.
+2. Привяжись к Run:
+   orca orchestration run-use --id run_68046cea3eb4 --json
+   Проверь: coordinator_handle равен $env:ORCA_TERMINAL_HANDLE,
+   consumer_generation больше 4. Если нет — остановись как BLOCKED, файлы не
+   меняй.
+3. Проверь доказательства альтернативного запуска (AC-002):
+   docs/workflow/evidence/TASK-WF-01-terminal.json (handle, worktree, команда с
+   --model local-nemotron/nemotron-bolt); найди свой OpenCode session id через
+   `opencode session list -n 3 --format json` (самая новая сессия в этом
+   каталоге) и выполни `opencode export <session-id>`, затем проверь
+   providerID/modelID = local-nemotron/nemotron-bolt и cost = 0. Сверь с
+   футером TUI и логом локального сервера. Если модель не локальная или
+   доказательств нет — BLOCKED, без облачного fallback.
+4. Выполни read-only проверки Orca: run-current, run-show, terminal list,
+   worker-list. Заполни docs/workflow/evidence/TASK-WF-01-C1.md по AC-002,
+   AC-003, AC-004, AC-006, AC-008. TASK и AC не меняй.
+5. Запусти независимого R1-ревьюера minimax-m3.1-flash-free через
+   worker-start, передай ему TASK-WF-01 и evidence; дождись worker_done,
+   проверь отчёт docs/workflow/reviews/TASK-WF-01.md. worker_done не является
+   PASS.
+6. При PASS закоммить только разрешённые docs/evidence/review, обнови
+   STATE/HISTORY/TASK, закрой старую fenced-вкладку term_5ee91075-15e2-494f-8c61-994d6fd16a28
+   только после проверки, что локальный сервер остался жив; затем подготовь
+   TASK-MVP-04. При FAIL/BLOCKED остановись и запиши фактическую причину.
+
+Запрещено: менять продуктовые файлы, .env, storage, config, делать
+push/merge/deploy, использовать облачный fallback и выдумывать ID/статусы.
+Локальный сервер: http://127.0.0.1:18080/v1, модель nemotron-bolt, ctx 32768.
+Если сервер/модель/инструмент не готовы — BLOCKED.

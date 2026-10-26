@@ -1,0 +1,41 @@
+{
+  "id": "77b7ebe2-a011-4fd0-b436-f97431a6d7b5",
+  "ok": false,
+  "error": {
+    "code": "task_not_startable",
+    "message": "Task task_efc8f84abfbc cannot retry from Dispatch ctx_c254370b2df1. Orchestration mutation request ID: dfdb6116-e488-40b4-80f8-e79226098909.",
+    "data": {
+      "taskId": "task_efc8f84abfbc",
+      "status": "ready",
+      "unmetDependencies": [],
+      "retryOf": "ctx_c254370b2df1",
+      "nextSteps": [
+        "--retry-of must name the latest settled Dispatch of a failed or blocked Task; check orca orchestration dispatch-show --task task_efc8f84abfbc --json and orca orchestration worker-show --dispatch ctx_c254370b2df1 --json."
+      ],
+      "orchestrationRequestId": "dfdb6116-e488-40b4-80f8-e79226098909",
+      "originalCommand": [
+        "orca",
+        "orchestration",
+        "worker-start",
+        "--task",
+        "task_efc8f84abfbc",
+        "--retry-of",
+        "ctx_c254370b2df1",
+        "--worktree",
+        "current",
+        "--agent",
+        "codex",
+        "--model",
+        "gpt-6.1-sol",
+        "--effort",
+        "medium",
+        "--timeout-ms",
+        "60000",
+        "--json"
+      ]
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+  }
+}

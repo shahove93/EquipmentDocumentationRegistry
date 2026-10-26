@@ -1,0 +1,156 @@
+........................................................................ [  1%]
+........................................................................ [  3%]
+........................................................................ [  5%]
+........................................................................ [  7%]
+........................................................................ [  9%]
+........................................................................ [ 11%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 17%]
+........................................................................ [ 19%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+........................................................................ [ 24%]
+........................................................................ [ 26%]
+........................................................................ [ 28%]
+.......................................................F................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 34%]
+...........................................F............................ [ 36%]
+....................F................................................... [ 38%]
+........................................................................ [ 40%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 45%]
+........................................................................ [ 47%]
+......................................................................F. [ 49%]
+.........................F.............................................. [ 51%]
+........................................................................ [ 53%]
+F......................................................................F [ 55%]
+........................................................................ [ 57%]
+........................................................................ [ 59%]
+........................................................................ [ 61%]
+........................................................................ [ 63%]
+........................................................................ [ 64%]
+........................................................................ [ 66%]
+........................................................................ [ 68%]
+........................................................................ [ 70%]
+........................................................................ [ 72%]
+........................................................................ [ 74%]
+........................................................................ [ 76%]
+........................................................................ [ 78%]
+........................................................................ [ 80%]
+........................................................................ [ 82%]
+........................................................................ [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 87%]
+........................................................................ [ 89%]
+........................................................................ [ 91%]
+........................................................................ [ 93%]
+........................................................................ [ 95%]
+........................................................................ [ 97%]
+........................................................................ [ 99%]
+...........................                                              [100%]
+=================================== FAILURES ===================================
+_ TestContracts.test_totals_grew_to_nineteen_paths_and_thirty_four_operations __
+
+self = <test_document_variants_api.TestContracts object at 0x76740fecc2b0>
+
+    def test_totals_grew_to_nineteen_paths_and_thirty_four_operations(self):
+        paths = app.openapi()["paths"]
+>       assert len(paths) == 19
+E       AssertionError: assert 21 == 19
+E        +  where 21 = len({'/health': {'get': {'summary': 'Health', 'operationId': 'health_health_get', 'responses': {'200': {'description': 'Su...ath segment and cannot be captured by the parameterised one.', 'operationId': 'list_products_products_get', ...}}, ...})
+
+tests/test_document_variants_api.py:698: AssertionError
+___ TestContracts.test_totals_are_nineteen_paths_and_thirty_four_operations ____
+
+self = <test_documents_integration_api.TestContracts object at 0x76740fc09810>
+
+    def test_totals_are_nineteen_paths_and_thirty_four_operations(self):
+        paths = app.openapi()["paths"]
+>       assert len(paths) == 19
+E       AssertionError: assert 21 == 19
+E        +  where 21 = len({'/health': {'get': {'summary': 'Health', 'operationId': 'health_health_get', 'responses': {'200': {'description': 'Su...ath segment and cannot be captured by the parameterised one.', 'operationId': 'list_products_products_get', ...}}, ...})
+
+tests/test_documents_integration_api.py:520: AssertionError
+_ TestRouterAndSurface.test_openapi_keeps_the_operation_count_and_shows_the_filters _
+
+self = <test_documents_search_api.TestRouterAndSurface object at 0x76740fc0ab10>
+
+    def test_openapi_keeps_the_operation_count_and_shows_the_filters(self):
+        schema = app.openapi()
+        paths = schema["paths"]
+>       assert len(paths) == 19
+E       AssertionError: assert 21 == 19
+E        +  where 21 = len({'/health': {'get': {'summary': 'Health', 'operationId': 'health_health_get', 'responses': {'200': {'description': 'Su...ath segment and cannot be captured by the parameterised one.', 'operationId': 'list_products_products_get', ...}}, ...})
+
+tests/test_documents_search_api.py:527: AssertionError
+_ TestExistingApisStillWork.test_operation_count_includes_upload_download_and_delete _
+
+self = <test_files_api.TestExistingApisStillWork object at 0x76740f832650>
+client = <starlette.testclient.TestClient object at 0x767406d6d040>
+
+    def test_operation_count_includes_upload_download_and_delete(self, client):
+        paths = app.openapi()["paths"]
+        operations = sum(
+            len([m for m in v if m in ("get", "post", "put", "patch", "delete")])
+            for v in paths.values()
+        )
+>       assert operations == 34
+E       assert 38 == 34
+
+tests/test_files_api.py:498: AssertionError
+__ TestOpenApiAndNeighbours.test_the_documented_surface_grew_by_one_operation __
+
+self = <test_files_delete_api.TestOpenApiAndNeighbours object at 0x76740f8d1450>
+
+    def test_the_documented_surface_grew_by_one_operation(self):
+        schema = app.openapi()
+    
+>       assert len(schema["paths"]) == 19
+E       AssertionError: assert 21 == 19
+E        +  where 21 = len({'/health': {'get': {'summary': 'Health', 'operationId': 'health_health_get', 'responses': {'200': {'description': 'Su...ath segment and cannot be captured by the parameterised one.', 'operationId': 'list_products_products_get', ...}}, ...})
+
+tests/test_files_delete_api.py:691: AssertionError
+_ TestOpenApiAndNeighbours.test_the_documented_surface_grew_by_one_route_and_one_operation _
+
+self = <test_files_download_api.TestOpenApiAndNeighbours object at 0x76740f78e490>
+
+    def test_the_documented_surface_grew_by_one_route_and_one_operation(self):
+        schema = app.openapi()
+    
+>       assert len(schema["paths"]) == 19
+E       AssertionError: assert 21 == 19
+E        +  where 21 = len({'/health': {'get': {'summary': 'Health', 'operationId': 'health_health_get', 'responses': {'200': {'description': 'Su...ath segment and cannot be captured by the parameterised one.', 'operationId': 'list_products_products_get', ...}}, ...})
+
+tests/test_files_download_api.py:2244: AssertionError
+________ TestOpenApi.test_operation_count_includes_download_and_delete _________
+
+self = <test_files_upload_api.TestOpenApi object at 0x76740f612190>
+
+    def test_operation_count_includes_download_and_delete(self):
+        paths = app.openapi()["paths"]
+        operations = sum(
+            len([m for m in item if m in ("get", "post", "put", "patch", "delete")])
+            for item in paths.values()
+        )
+>       assert operations == 34
+E       assert 38 == 34
+
+tests/test_files_upload_api.py:923: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.14/site-packages/fastapi/testclient.py:1
+  /mnt/d/Antigravity/EquipmentDocumentationRegistry/.venv/lib/python3.14/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_document_variants_api.py::TestContracts::test_totals_grew_to_nineteen_paths_and_thirty_four_operations
+FAILED tests/test_documents_integration_api.py::TestContracts::test_totals_are_nineteen_paths_and_thirty_four_operations
+FAILED tests/test_documents_search_api.py::TestRouterAndSurface::test_openapi_keeps_the_operation_count_and_shows_the_filters
+FAILED tests/test_files_api.py::TestExistingApisStillWork::test_operation_count_includes_upload_download_and_delete
+FAILED tests/test_files_delete_api.py::TestOpenApiAndNeighbours::test_the_documented_surface_grew_by_one_operation
+FAILED tests/test_files_download_api.py::TestOpenApiAndNeighbours::test_the_documented_surface_grew_by_one_route_and_one_operation
+FAILED tests/test_files_upload_api.py::TestOpenApi::test_operation_count_includes_download_and_delete
+7 failed, 3764 passed, 1 warning in 463.24s (0:07:43)

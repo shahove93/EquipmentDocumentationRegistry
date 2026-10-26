@@ -1,0 +1,25 @@
+COMMIT: 0db1f9ede4b4e4b462ded4ce49a2b45967712732
+DIFF_CHECK_EXIT: 0
+warning: in the working copy of 'AGENTS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'ROADMAP.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/adr/ADR-011-local-nemotron-coordinator.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/workflow/APPROVALS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/workflow/HISTORY.md', CRLF will be replaced by LF the next time Git touches it
+COMMITTED_PATHS:
+app/api/batches/__init__.py
+app/api/batches/router.py
+app/api/batches/schemas.py
+app/api/router.py
+app/services/batch_service.py
+docs/PROJECT_STATUS.md
+tests/test_batch_schemas.py
+tests/test_batch_service.py
+tests/test_batches_api.py
+tests/test_batches_openapi.py
+tests/test_document_variants_api.py
+tests/test_documents_integration_api.py
+tests/test_documents_search_api.py
+tests/test_files_api.py
+tests/test_files_delete_api.py
+tests/test_files_download_api.py
+tests/test_files_upload_api.py

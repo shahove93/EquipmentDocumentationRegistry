@@ -1,0 +1,11 @@
+{
+  "id": "9ad0dfb1-dcb3-457e-a428-1086a1372dc0",
+  "ok": false,
+  "error": {
+    "code": "capability_unsupported",
+    "message": "The execution host cannot verify this OpenCode model launch."
+  },
+  "_meta": {
+    "runtimeId": "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+  }
+}

@@ -1,0 +1,8 @@
+COMMAND: git diff --check
+CWD: D:/Antigravity/EquipmentDocumentationRegistry
+EXIT: 0
+warning: in the working copy of 'AGENTS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'ROADMAP.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/adr/ADR-011-local-nemotron-coordinator.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/workflow/APPROVALS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/workflow/HISTORY.md', CRLF will be replaced by LF the next time Git touches it

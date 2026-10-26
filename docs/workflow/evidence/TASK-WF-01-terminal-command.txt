@@ -1,0 +1,1 @@
+orca terminal create --worktree current --title "OC | Nemotron coordinator" --command "powershell.exe -NoProfile -ExecutionPolicy RemoteSigned -File D:\AI\NemotronBoltE4B\OpenCode-Bolt.ps1" --json

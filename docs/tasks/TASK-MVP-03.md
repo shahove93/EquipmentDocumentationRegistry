@@ -182,6 +182,7 @@ implementation `task_f53910e0735d` / `ctx_331ce3d2a440`; C1 review
 `task_93712a9c9442` / `ctx_3f22c5d23a39`; C2 `6827ed3` (`task_a39b81e726c5` /
 `ctx_6e41326def5e`); C2 review `task_b03f28ce101c` / `ctx_894373b5df1a`.
 Сводка/счётчики: ../workflow/STATE.md. История: ../workflow/HISTORY.md.
-Codex calls: design 1 / 4; C1 review 2 / 4; C2 review 3 / 4; полные ревью
-2 / 2 использовано. Следующий TASK — TASK-WF-01 (Nemotron-координатор) до
-TASK-MVP-04.
+Codex calls на момент приёмки: design 1 / 4; C1 review 2 / 4; C2 review
+3 / 4; полные ревью 2 / 2 использовано. В первоначальной версии следующим
+значился TASK-WF-01; пользователь отозвал это направление 2026-10-26, и
+TASK-WF-01 прекращён. Фактический следующий продуктовый TASK — MVP-04, PASS.

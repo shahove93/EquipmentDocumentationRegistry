@@ -1,0 +1,20 @@
+ M AGENTS.md
+ M ROADMAP.md
+ M docs/adr/ADR-011-local-nemotron-coordinator.md
+ M docs/workflow/APPROVALS.md
+ M docs/workflow/HISTORY.md
+ M docs/workflow/STATE.md
+?? docs/tasks/TASK-MVP-04.md
+?? docs/tasks/TASK-WF-01.md
+?? docs/workflow/MODEL-ROUTING.md
+?? docs/workflow/evidence/CODEX-COORD-20261026-inbox.json
+?? docs/workflow/evidence/TASK-MVP-04-design-spec.txt
+?? docs/workflow/evidence/TASK-WF-01-C1.md
+?? docs/workflow/evidence/TASK-WF-01-C2-correction.md
+?? docs/workflow/evidence/TASK-WF-01-C2.md
+?? docs/workflow/evidence/TASK-WF-01-launch.json
+?? docs/workflow/evidence/TASK-WF-01-local-failure.md
+?? docs/workflow/evidence/TASK-WF-01-prompt.txt
+?? docs/workflow/evidence/TASK-WF-01-terminal-command.txt
+?? docs/workflow/evidence/TASK-WF-01-terminal.json
+?? docs/workflow/reviews/TASK-WF-01.md

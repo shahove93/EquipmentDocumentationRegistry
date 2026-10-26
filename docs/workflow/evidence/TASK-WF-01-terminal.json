@@ -1,0 +1,21 @@
+{
+  "id": "164a40ae-c8ba-4577-a319-c5655f8786da",
+  "ok": true,
+  "result": {
+    "terminal": {
+      "handle": "term_356c9014-e142-4bcf-98a5-6a42769ee524",
+      "tabId": "5fe82507-7657-429c-a638-a66c272d2fda",
+      "paneKey": "5fe82507-7657-429c-a638-a66c272d2fda:61f9b08d-0c52-430a-ab7d-c74ea91e967c",
+      "ptyId": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@fcccd92d",
+      "worktreeId": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+      "title": "OC | Nemotron coordinator",
+      "executionHostId": "local",
+      "incarnationId": "6ccb7d57-3348-4de1-873c-687c33c1d3a5",
+      "hostPlatform": "win32",
+      "surface": "visible"
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+  }
+}

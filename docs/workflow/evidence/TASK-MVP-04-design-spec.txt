@@ -1,0 +1,43 @@
+Design task: TASK-MVP-04 — BatchService + Batch API.
+
+Repository: D:\Antigravity\EquipmentDocumentationRegistry. Read AGENTS.md,
+ARCHITECTURE.md (vertical slice; service owns transaction), ROADMAP.md item 5,
+ADR-005/006/010, app/models/batch.py, app/api/issuers/*, app/api/variants/*,
+app/services/issuer_service.py, app/services/variant_service.py, and the
+issuer/variant test files. Do not modify files and do not commit.
+
+Existing Batch model/table already exists: id PK; variant_id NOT NULL FK to
+product_variants.id; batch_number String(100) nullable; manufacture_date Date
+nullable; quantity Numeric(10,2) nullable; quantity_unit String(30) nullable.
+No unique/index constraints. The table migration already exists; TASK-MVP-04
+adds no migration. Frontend and document-batch linking are out of scope.
+
+Produce a design memo in Russian with concrete decisions for:
+1. Pydantic schemas: BatchCreate, BatchUpdate, BatchRead. Field validation and
+   normalization; variant_id required on create and must not be null on update;
+   nullable fields and explicit-null semantics; quantity rules (Decimal scale,
+   positivity, bounds) consistent with existing measurement validation; date
+   rules; extra fields; response model.
+2. BatchService: create/get_by_id/list/update; no delete. Unknown variant and
+   unknown batch behavior; transaction policy (exactly one commit per write,
+   reads do not commit, empty PATCH no commit); list ordering and limit/offset;
+   no uniqueness/409 because no DB constraint.
+3. Router: /batches with POST 201 + Location, GET /{id}, GET list, PATCH;
+   no DELETE (405); error mapping; OpenAPI tags/summaries; include in
+   app/api/router.py.
+4. Tests: new schema/service/API/OpenAPI test files and key cases; existing
+   test_batch.py reuse; real PostgreSQL and temp fixtures; no migration test;
+   focused and full-suite commands.
+5. Risks/edge cases and explicit non-goals.
+6. Draft frozen AC-001..AC-010 with observable checks and exact commands.
+7. Allowed-file allowlist for implementation, including docs/PROJECT_STATUS.md
+   status/limitations only. No ADR unless a genuinely new architectural decision
+   is required; in that case stop and report instead of assuming.
+
+Baseline: full pytest 3530 passed, 1 warning; Alembic head e4b8c2d16a70;
+13 migrations. Route: R2; this design call is Codex 1/4, input limit 3M.
+Ownership: design only; no code, no repo edits, no commits. Return the memo in
+your final message and send worker_done with a concise summary. Observable
+acceptance: memo names files/classes/functions, validation and error behavior,
+test cases and commands, allows implementation without further design, and
+git status shows no new changes from you.
