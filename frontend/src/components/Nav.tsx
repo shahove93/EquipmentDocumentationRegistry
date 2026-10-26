@@ -15,6 +15,7 @@ export default function Nav() {
   const documentsActive =
     pathname === '/' || pathname === '/documents' || pathname.startsWith('/documents/')
   const materialsActive = pathname === '/materials' || pathname.startsWith('/materials/')
+  const batchesActive = pathname === '/batches' || pathname.startsWith('/batches/')
 
   const linkClass = (active: boolean) =>
     active ? 'nav__link nav__link--active' : 'nav__link'
@@ -31,6 +32,7 @@ export default function Nav() {
           >
             Документы
           </Link>
+          <Link className={linkClass(batchesActive)} to="/batches" aria-current={batchesActive ? 'page' : undefined}>Партии</Link>
           <Link
             className={linkClass(materialsActive)}
             to="/materials"

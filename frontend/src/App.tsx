@@ -4,6 +4,7 @@ import Nav from './components/Nav'
 import DocumentCardPage from './pages/DocumentCardPage'
 import DocumentCreatePage from './pages/DocumentCreatePage'
 import MaterialsPage from './pages/MaterialsPage'
+import BatchesPage from './pages/BatchesPage'
 import RegistryPage from './pages/RegistryPage'
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/documents/new" element={<DocumentCreatePage />} />
         <Route path="/documents/:id" element={<DocumentCardPage />} />
         <Route path="/materials" element={<MaterialsPage />} />
+        <Route path="/batches" element={<BatchesPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

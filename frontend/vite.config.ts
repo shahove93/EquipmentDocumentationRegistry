@@ -32,6 +32,7 @@ const proxyTarget = { target: API_TARGET, changeOrigin: true }
  * left alone.
  */
 const DOCUMENT_CARD_ROUTE = /^\/documents\/[^/]+\/?$/
+const BATCH_DETAIL_ROUTE = /^\/batches\/\d+\/?$/
 
 /** The small slice of a Node request this rule reads; avoids a @types/node import. */
 interface ProxyRequest {
@@ -48,7 +49,7 @@ const serveSpaForCardNavigation = (req: ProxyRequest): string | undefined => {
     return undefined
   }
   const path = (req.url ?? '').split('?')[0]
-  return DOCUMENT_CARD_ROUTE.test(path) ? '/index.html' : undefined
+  return path === '/batches' || DOCUMENT_CARD_ROUTE.test(path) || BATCH_DETAIL_ROUTE.test(path) ? '/index.html' : undefined
 }
 
 // Ordered specific-first; `http-proxy` matches a prefix, and a prefix declared
@@ -56,6 +57,7 @@ const serveSpaForCardNavigation = (req: ProxyRequest): string | undefined => {
 const proxy = {
   '/document-types': proxyTarget,
   '/documents': { ...proxyTarget, bypass: serveSpaForCardNavigation },
+  '/batches': { ...proxyTarget, bypass: serveSpaForCardNavigation },
   '/manufacturers': proxyTarget,
   '/products': proxyTarget,
   '/variants': proxyTarget,

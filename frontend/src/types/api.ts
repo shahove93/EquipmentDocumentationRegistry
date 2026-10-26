@@ -61,6 +61,30 @@ export interface ProductVariantRead {
   wall_thickness: string | null
 }
 
+/** BatchRead and the existing create/patch request contracts. */
+export interface BatchRead {
+  id: number
+  variant_id: number
+  batch_number: string | null
+  manufacture_date: string | null
+  quantity: string | null
+  quantity_unit: string | null
+}
+export interface BatchCreateBody {
+  variant_id: number
+  batch_number: string | null
+  manufacture_date: string | null
+  quantity: string | null
+  quantity_unit: string | null
+}
+export interface BatchUpdateBody {
+  variant_id?: number
+  batch_number?: string | null
+  manufacture_date?: string | null
+  quantity?: string | null
+  quantity_unit?: string | null
+}
+
 /**
  * `FileOut` — attachment metadata. The bytes are not part of this shape; they
  * come from a separate route that returns the stored content.
