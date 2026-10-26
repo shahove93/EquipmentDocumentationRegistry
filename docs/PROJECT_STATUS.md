@@ -4,7 +4,7 @@
 Цель — чтобы новая сессия работы могла восстановить контекст без опоры на
 переписку.
 
-Дата фиксации: **2026-10-23**.
+Дата фиксации: **2026-10-26**.
 
 > **О прогонах тестов.** Приведённая контрольная точка — последнее
 > подтверждённое значение полного прогона `pytest`. Проверки frontend
@@ -16,10 +16,10 @@
 
 | Показатель | Значение | Когда подтверждено |
 | --- | --- | --- |
-| Тесты | **3523 passed, 1 warning** | подтверждено полным прогоном после реализации сверки SHA-256 и индекса (TASK-MVP-03) |
+| Тесты | **3771 passed, 1 warning** | полный ALL после реализации Batch и разрешённого обновления семи OpenAPI-счётчиков (TASK-MVP-04), exit 0; F: 1094 passed, 1 warning, exit 0. Независимая R2 приёмка PASS (2026-10-26); исходный ALL (7 failed / 3764 passed) сохранён в evidence |
 | Alembic head | **`e4b8c2d16a70`** | подтверждено чтением `alembic_version` в рабочей базе; миграция применена |
 | Число миграций | **13** | подтверждено подсчётом файлов в `alembic/versions/` |
-| HTTP-операций | **34** (19 путей) | подтверждено генерацией OpenAPI после добавления двух операций привязки (`GET`/`PUT /documents/{id}/variants`) |
+| HTTP-операций | **38** (21 путь) | подтверждено OpenAPI-тестами после добавления четырёх операций Batch (TASK-MVP-04) |
 | Frontend typecheck | **успешно** (`tsc --noEmit`, exit 0) | подтверждено в WSL, Node.js v24.22.0, 2026-10-22 |
 | Frontend production build | **успешно** (`vite build`, exit 0, `frontend/dist/index.html` создан) | подтверждено в WSL, Node.js v24.22.0, 2026-10-22 |
 | Ветка Git | `main` | подтверждено |
@@ -62,7 +62,7 @@ PostgreSQL 18 онлайн; frontend — Node.js v24.22.0 из nvm. Windows-nati
 
 ## Готовые компоненты
 
-Каждая из шести сущностей ниже имеет полный набор: ORM-модель, Pydantic-схемы
+Каждая из семи сущностей ниже имеет полный набор: ORM-модель, Pydantic-схемы
 (`Create` / `Update` / `Read`), сервис, HTTP-маршруты и тесты.
 
 | Сущность | Маршруты | Статус |
@@ -72,13 +72,14 @@ PostgreSQL 18 онлайн; frontend — Node.js v24.22.0 из nvm. Windows-nati
 | **ProductVariant** | `POST /products/{id}/variants`, `GET /products/{id}/variants`, `GET /variants/{id}`, `PATCH /variants/{id}` | ✅ готов |
 | **DocumentType** | `POST /document-types`, `GET /document-types`, `GET /document-types/{id}`, `PATCH /document-types/{id}` | ✅ готов |
 | **Issuer** | `POST /issuers`, `GET /issuers`, `GET /issuers/{id}`, `PATCH /issuers/{id}` | ✅ готов |
+| **Batch** | `POST /batches`, `GET /batches`, `GET /batches/{id}`, `PATCH /batches/{id}` | реализовано; независимая R2 приёмка TASK-MVP-04 PASS (2026-10-26) |
 | **Document** | `POST /documents`, `GET /documents`, `GET /documents/{id}`, `PATCH /documents/{id}`, `POST /documents/{id}/verification`, `GET /documents/{id}/verification-history` | ✅ готов |
 
 Дополнительно: `GET /health`, файловые маршруты вложений (пять операций,
 см. [ADR-009](adr/ADR-009-document-attachments.md)) и маршруты привязки документа
 к типоразмерам (две операции, см.
-[ADR-010](adr/ADR-010-document-variant-links-and-search.md)). Всего **19 путей и
-34 HTTP-операции**; `DELETE` ровно один — удаление вложения; удаление документов
+[ADR-010](adr/ADR-010-document-variant-links-and-search.md)). Всего **21 путь и
+38 HTTP-операций**; `DELETE` ровно один — удаление вложения; удаление документов
 и справочников по-прежнему не реализовано сознательно.
 
 **Document HTTP API** — шесть операций: `POST` и `GET` коллекции, `GET` и
@@ -132,7 +133,7 @@ React Router. Экраны: реестр документов с фильтра�
 | **FileService** | `attach()` — добавление вложения одной транзакцией: блокировка документа через общий модуль, валидация сигнатуры (PDF/JPEG/PNG), потоковая запись файла и SHA-256 на лету, строка `File`, возврат в `pending` с событием `reopened` (`file_added`); `detach()` — удаление вложения одной транзакцией с блокировкой строки файла, событием `reopened` (`file_deleted`) и удалением файла с диска **только после подтверждённого `commit`**; `upload()` — тонкая обёртка над `attach()`; `list_for_document()`; охранник `TransactionAlreadyOpenError`; компенсация добавления (`_settle` / `_compensate`); журналирование через `logging`; доменные ошибки `AttachmentNotFoundError`, `PendingDocumentChangesError` | HTTP-слой реализован: `app/api/files/` (пять операций) и `app/dependencies.py`; сверка осиротевших файлов реализована как report-only CLI (TASK-MVP-02); индекс `ix_files_document_id_id` создан миграцией `e4b8c2d16a70` (TASK-MVP-03) |
 | **`app/services/transaction.py`** | Общий механизм владения транзакцией и блокировки: `locked_document()` (`SELECT ... FOR UPDATE` + `populate_existing=True` + проверка `inspect(document).modified`), `release()`, `transaction_existed_on_entry()`, `UncommittedChangesInSession`. Используется и `DocumentService`, и `FileService`; 35 тестов | Транзакционные ограничения вызывающего сохраняются — [ADR-008](adr/ADR-008-document-verification-lifecycle.md), раздел «Транзакционные ограничения» |
 | **LocalStorageBackend** | Реализация `StorageBackend`: `save` (атомарно, через `"xb"`), `open`, `exists`, `delete`; защита от выхода за пределы корня, от абсолютных путей, от Windows-путей и от `..`; запрет NUL в ключе | Инстанцируется в `app/dependencies.py` (`get_file_service`, `get_storage`); `Settings.STORAGE_ROOT` и `Settings.MAX_UPLOAD_SIZE_BYTES` читаются там же |
-| **Модели `Document`, `Batch` и таблицы связей** | ORM-модели с CHECK-ограничениями и внешними ключами, миграции, навигационные свойства | У `Document` есть Pydantic-схемы, `DocumentService` и HTTP-маршруты (`app/api/documents/`). У `Batch` по-прежнему нет ни схем, ни сервиса |
+| **Модели `Document`, `Batch` и таблицы связей** | ORM-модели, ограничения и навигационные свойства | У `Document` и `Batch` есть схемы, сервисы и HTTP-маршруты; API привязки документа к партии не утверждён и не реализован |
 | **`DocumentService`** | `create`, `get`, `list`, `update`; верификация — `verify` и `reject`; чтение истории — `history` (сортировка `created_at ASC, id ASC`, только чтение); переходы `verified`/`rejected` → `pending` при изменении значимых реквизитов; каждый переход атомарно пишется в `document_verification_events`. **Конкурентная безопасность:** `update`, `verify` и `reject` берут блокировку строки **через общий модуль** `app/services/transaction.py` — сам `SELECT ... FOR UPDATE` с `populate_existing=True` живёт там, — проверяют незавершённые изменения вызывающего и освобождают блокировку на путях отказа и no-op; `_locked_document` делегирует в `transaction.locked_document`, `_release` — в `transaction.release` | HTTP-слой документов реализован: `app/api/documents/` (шесть операций), подключён в `app/api/router.py`. Транзакционные ограничения — [ADR-008](adr/ADR-008-document-verification-lifecycle.md), раздел «Транзакционные ограничения» |
 | **`verification_history`** | Единственное место, создающее событие `reopened`: проверяет причину по закрытому множеству `significant_fields_changed` / `file_added` / `file_deleted`, проверяет статус, не коммитит и не блокирует. Вызывается из `DocumentService` (`significant_fields_changed`) и из `FileService.attach()` / `detach()` (`file_added` / `file_deleted`); 60 тестов | Все три причины передаются; сам модуль не изменялся |
 
@@ -142,7 +143,7 @@ React Router. Экраны: реестр документов с фильтра�
 
 | Что | Комментарий |
 | --- | --- |
-| **BatchService и Batch API** | Модель `Batch` есть, сервиса и маршрутов нет |
+| **Batch frontend** | Backend Batch реализован; экран партий остаётся TASK-MVP-05 |
 | **Привязка к `Product` и `Batch`** | Привязка к **типоразмерам** реализована (`GET` / `PUT /documents/{id}/variants`), но связь документа с изделием и партией на уровне API не утверждена и не реализована — [ADR-010](adr/ADR-010-document-variant-links-and-search.md) |
 | **Каскадное удаление `ProductVariant`** | `ON DELETE CASCADE` унесёт привязки; семантика требует отдельного решения — [ADR-010](adr/ADR-010-document-variant-links-and-search.md) |
 | **Журнал изменений привязок** | Изменение набора привязок не пишет событие истории — [ADR-010](adr/ADR-010-document-variant-links-and-search.md) |
@@ -155,8 +156,8 @@ React Router. Экраны: реестр документов с фильтра�
 цикл проверки, зафиксированный в
 [ADR-008](adr/ADR-008-document-verification-lifecycle.md), и материальная привязка
 [ADR-010](adr/ADR-010-document-variant-links-and-search.md) теперь достижимы для
-пользователя, а не только из Python. Не реализованы: `Batch` (модель есть,
-сервиса и маршрутов нет), привязка документов к изделиям и партиям, каскадное
+пользователя, а не только из Python. Batch доступен через четыре HTTP-операции.
+Не реализованы: frontend партий, привязка документов к изделиям и партиям, каскадное
 удаление связанных типоразмеров и удаление документов.
 
 ---
@@ -263,7 +264,7 @@ blob, ключа, пути и digest; в журнал пишется одна з
 
 | # | Ограничение |
 | --- | --- |
-| 1 | `Batch` существует только на уровне ORM — основной функциональный пробел. `Document` закрыта сквозным срезом: модель, схемы, сервис и шесть HTTP-операций |
+| 1 | **Backend Batch реализован (TASK-MVP-04), R2 приёмка PASS (2026-10-26).** Четыре операции без DELETE/PUT; дубли разрешены, uniqueness/409 нет. Нет Batch frontend, поиска/фильтров, bulk/import/export, справочника/конверсии единиц и API документ-партия. Валидация quantity выполняется API, новых CHECK/индексов/миграций нет; для точного Decimal вводить строку. Сервис требует чистую Session; PATCH без версий/optimistic locking, offset pagination не является snapshot |
 | 2 | **Снято.** `Settings.STORAGE_ROOT` и `MAX_UPLOAD_SIZE_BYTES` читаются в `app/dependencies.py` (`get_file_service`, `get_storage`) |
 | 3 | Лимит размера загрузки продублирован: константа определена и в `app/config.py`, и в `app/services/file_service.py` |
 | 4 | Нет CI-конфигурации и pytest-конфига; нет lock-файла зависимостей |
@@ -312,7 +313,8 @@ frontend зафиксирован baseline-коммитом на `main`. Push н
 работа идёт по ROADMAP v1.0: постоянный журнал компенсаций реализован в
 TASK-MVP-01; report-only сверка осиротевших файлов реализована в TASK-MVP-02;
 сверка SHA-256 при скачивании и миграция индекса реализованы в TASK-MVP-03;
-далее `BatchService` и Batch API (TASK-MVP-04), завершение frontend
+`BatchService` и Batch API реализованы (TASK-MVP-04; независимая R2 приёмка PASS (2026-10-26));
+далее завершение frontend
 (TASK-MVP-05) и финальная приёмка этапа (TASK-MVP-06).
 
 **2. Оставшиеся задачи, не входящие в Document API.**
@@ -329,7 +331,7 @@ TASK-MVP-01; report-only сверка осиротевших файлов реа
 5. **Привязка документов к изделиям и партиям** — привязка к типоразмерам уже
    реализована ([ADR-010](adr/ADR-010-document-variant-links-and-search.md));
    семантика связей с `Product` и `Batch` ещё не утверждена.
-6. **BatchService и Batch API** (ограничение 1).
+6. **Batch frontend** (TASK-MVP-05); backend реализован, независимая R2 приёмка TASK-MVP-04 PASS (2026-10-26) (ограничение 1).
 7. **Индексы под материальный поиск** (`pg_trgm`/GIN) и **журналирование
    изменений привязок** — открытые пункты
    [ADR-010](adr/ADR-010-document-variant-links-and-search.md).
@@ -352,7 +354,8 @@ app/
 ├── logging_config.py       постоянный JSON Lines-журнал logger app
 ├── dependencies.py         get_file_service, get_storage
 ├── api/
-│   ├── router.py           /health + подключение восьми роутеров
+│   ├── router.py           /health + подключение девяти роутеров
+│   ├── batches/            router.py + schemas.py (TASK-MVP-04)
 │   ├── manufacturers/      router.py + schemas.py
 │   ├── products/           router.py + schemas.py
 │   ├── variants/           router.py + schemas.py (без prefix)
@@ -363,14 +366,14 @@ app/
 │   └── files/              router.py + schemas.py + download.py
 ├── database/connection.py  engine, SessionLocal, get_db
 ├── models/                 11 модулей + __init__.py с реэкспортом
-└── services/               7 сервисов сущностей
+└── services/               8 сервисов сущностей (включая batch_service.py)
                             + transaction.py  общий механизм блокировки и транзакции
                             + verification_history.py  общий механизм reopened
                             + file_service.py
                             + document_variant_service.py  привязка документ ↔ типоразмер
                             + storage.py (ABC) + local_storage.py
 alembic/versions/           13 ревизий
-tests/                      56 файлов тестов + conftest.py
+tests/                      прежние тесты + четыре Batch-модуля (TASK-MVP-04), conftest.py
 frontend/                   React 19 + Vite + TypeScript
 ├── src/                    App, pages, components, hooks, api, utils
 ├── index.html

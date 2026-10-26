@@ -693,10 +693,10 @@ class TestContracts:
             if path in paths:
                 assert "delete" not in paths[path]
 
-    def test_totals_grew_to_nineteen_paths_and_thirty_four_operations(self):
+    def test_totals_grew_to_twenty_one_paths_and_thirty_eight_operations(self):
         paths = app.openapi()["paths"]
-        assert len(paths) == 19
-        assert sum(len(item) for item in paths.values()) == 34
+        assert len(paths) == 21
+        assert sum(len(item) for item in paths.values()) == 38
 
     def test_put_body_requires_variant_ids(self):
         schema = app.openapi()

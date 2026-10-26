@@ -515,10 +515,10 @@ class TestContracts:
         for path, methods in FILE_PATHS.items():
             assert set(paths[path]) == methods, path
 
-    def test_totals_are_nineteen_paths_and_thirty_four_operations(self):
+    def test_totals_are_twenty_one_paths_and_thirty_eight_operations(self):
         paths = app.openapi()["paths"]
-        assert len(paths) == 19
-        assert sum(len(item) for item in paths.values()) == 34
+        assert len(paths) == 21
+        assert sum(len(item) for item in paths.values()) == 38
 
     def test_no_document_deletion_or_product_level_linking_is_declared(self):
         paths = app.openapi()["paths"]

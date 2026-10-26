@@ -524,8 +524,8 @@ class TestRouterAndSurface:
     def test_openapi_keeps_the_operation_count_and_shows_the_filters(self):
         schema = app.openapi()
         paths = schema["paths"]
-        assert len(paths) == 19
-        assert sum(len(item) for item in paths.values()) == 34
+        assert len(paths) == 21
+        assert sum(len(item) for item in paths.values()) == 38
 
         parameters = paths["/documents"]["get"]["parameters"]
         names = {parameter["name"] for parameter in parameters}

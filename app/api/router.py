@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from app.api.batches.router import batch_router
 from app.api.document_types.router import document_type_router
 from app.api.document_variants.router import document_variant_router
 from app.api.documents.router import document_router
@@ -25,3 +26,4 @@ api_router.include_router(document_router)
 api_router.include_router(document_variant_router)
 api_router.include_router(issuer_router)
 api_router.include_router(files_router)
+api_router.include_router(batch_router)
