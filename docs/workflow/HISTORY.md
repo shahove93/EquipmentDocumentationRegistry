@@ -446,3 +446,9 @@ push текущей `main` в `origin/main` без force/merge/deploy. На мо
 `main` имела 30 локальных коммитов сверх `origin/main`, включая MVP-00…04;
 текущие workflow/task/evidence документы подготовлены к отдельному коммиту.
 Ограничения и точная текущая область — в APPROVALS.md.
+
+Публикация подтверждена: `git push origin main` выполнился fast-forward
+`ba6c06e..96e81dc`; `main` и `origin/main` совпадают на `96e81dc`, ahead/behind
+0/0. Force-push, merge и deployment не выполнялись. Проверки продукта не
+запускались повторно: публикация содержит принятый продуктовый коммит и
+документацию/evidence.
