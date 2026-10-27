@@ -1,8 +1,8 @@
-﻿# ROADMAP — Equipment Documentation Registry
+# ROADMAP — Equipment Documentation Registry
 
-Версия согласуемого объёма: 1.2. Продуктовый объём MVP + Batch не меняется;
-изменено только управление workflow по решению пользователя от 2026-10-26.
-Общее состояние: COMPLETE (утверждённый локальный MVP + Batch).
+Версия согласуемого объёма: 1.3. MVP + Batch завершён; добавлен утверждённый
+пользователем этап устанавливаемой локальной поставки Windows.
+Общее состояние: утверждённые TASK выполнены локально; TASK-WINDOWS-LOCAL-01 принят по C1 и дополнению G01/G02 PASS. Внешняя публикация не выполнялась.
 
 ## Последовательность
 
@@ -15,6 +15,7 @@
 | 5 | [TASK-MVP-04](docs/tasks/TASK-MVP-04.md) | BatchService и Batch API без удаления | MVP-03 | CRUD без DELETE/PUT, схемы, тесты, OpenAPI | R2 | PASS (2026-10-26, `0db1f9e`) |
 | 6 | TASK-MVP-05 | Интерфейс партий и сквозной сценарий | MVP-04 | `typecheck`/`build`; создать партию, приложить документ, привязать, проверить, открыть историю | R1 | PASS A2/C1 Sol medium; A1 FAIL/FAIL preserved |
 | 7 | TASK-MVP-06 | Финальная приёмка этапа | MVP-05 | Полный `pytest`, frontend `typecheck`/`build`, Codex stage acceptance, `FINAL-REPORT` | Stage | PASS / COMPLETE; FINAL-REPORT,2026-10-27 |
+| 8 | [TASK-WINDOWS-LOCAL-01](docs/tasks/TASK-WINDOWS-LOCAL-01.md) | Устанавливаемый локальный режим Windows x64 с базой и файлами на одном компьютере | MVP-06 | Чистая установка, запуск через ярлык, локальный доступ, сохранность, backup/restore, обновление и удаление без потери данных | R2 | PASS C1 + G01/G02 supplement (2026-10-27); clean Win11, Win10 NOT_RUN |
 
 ## Рабочий процесс
 

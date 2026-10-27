@@ -1,7 +1,7 @@
 # ARCHITECTURE — Equipment Documentation Registry
 
-Версия: 1.0 (утверждена 2026-10-22).
-Базовые решения: ADR-005…ADR-010 в [docs/adr/](docs/adr/README.md).
+Версия: 1.1 (Windows local delivery approved 2026-10-27).
+Базовые решения: ADR-005…ADR-012 в [docs/adr/](docs/adr/README.md).
 Фактическое состояние: [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md).
 
 ## Стек
@@ -68,3 +68,17 @@ PostgreSQL 18 (кластер `18/main`), Node.js через nvm. Windows-native
   отдельному разрешению.
 - Принятые ADR не переписываются; новое архитектурное решение оформляется
   отдельным ADR и требует согласования.
+
+## Поставка для Windows
+
+Для первого клиентского режима приложение, production frontend и PostgreSQL
+устанавливаются на один Windows x64 компьютер. Интерфейс открывается в браузере;
+API слушает только `127.0.0.1`. PostgreSQL data directory и файловые вложения
+хранятся отдельно от каталога приложения. Backup/restore охватывают БД и
+вложения как согласованный набор. Удаление приложения по умолчанию сохраняет
+данные. Состав поставки и поведение описаны в
+[ADR-012](docs/adr/ADR-012-windows-local-installation.md).
+
+Сетевой доступ и несколько рабочих мест остаются отключёнными, пока не появятся
+аутентификация и авторизация. Технология Windows-пакетирования уточняется в
+[TASK-WINDOWS-LOCAL-01](docs/tasks/TASK-WINDOWS-LOCAL-01.md).
