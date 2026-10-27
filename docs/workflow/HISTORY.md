@@ -1066,3 +1066,73 @@ Staged check10 новых workflow records выявил5 Markdown hard-break tra
 вердикты, критерии и текст фактов сохранены. Публикуемые records приведены к LF;
 исходные TEMP отчёты и полный raw пакет остаются без изменений. Первоначальные
 отказы Git/guard/whitespace проверки не скрыты; продуктовые tests повторно не запускались.
+
+## 2026-10-27 — публикация33 файлов завершена; новый CI portability scope
+
+Push3коммитов выполнен обычным fast-forward до9792688d3230c101323106517c824ea08657cb12;
+remote проверен,33-file allowlist совпал, tracked tree чистый. CI40543432652:
+frontend success, backend3798passed/5failed/1warning/279.44s. Observer
+task_b74e99cecd3c/ctx_8441b2d65f3c завершён/освобождён; initial диагноз про
+constraint был неверным, coordinator прочитал окончательную pytest summary:
+ровно5 TestNoImportCycle FileNotFoundError по hardcoded WSL cwd. Доказательства
+и corrected diagnosis в `%TEMP%/EDR-github-publication-result-20261027.json`.
+Observer native input826,069 incl cached754,688, output2,749; publication audit
+336,958 +observer826,069 =1,163,027input/2calls, отдельно от Windows20,170,051/4.
+
+Пользователь явно разрешил минимальный test-only патч и затем сделать repository
+public. Новый [TASK-CI-PORTABILITY-01](../tasks/TASK-CI-PORTABILITY-01.md), R1 A1/C1,
+ровно1 code file,5 targeted tests, независимый Sol/medium local review перед
+commit/push, затем actual hosted CI. Прежние scope/counters/PASS/FAIL не сбрасываются.
+Параллельно read-only audit48 reachable commits/current tracked tree перед
+visibility change; без удаления истории/данных и без вывода secret values.
+
+Writer task_fbe548560df4/ctx_889fd51d82c9/term_5b56b4c9-be82-461a-a277-829e1bff40f6:
+requested/effective Luna/medium, turn_started observed, только test file.
+Параллельный history auditor task_d997fbaec622/ctx_e456830dfab4/
+term_bf7a7490-a1fc-462a-9f62-930708d9b87a: Luna/medium, read-only48commits,
+никаких Git/visibility mutations. Новый R1 fullreview1/2 зарезервирован отдельно;
+исторические CI40543432652/Windows/GitHub reviews и фактический расход сохраняются.
+GitHub connector не предоставляет visibility mutation; установленный gh2.102.0
+поддерживает repo edit. Preflight через существующий Git credential (только
+процесс env, без вывода/сохранения token) подтвердил admin/private того же repo.
+Visibility ещё не менялась; сначала фактический audit outcome.
+
+Writer C1 task_fbe548560df4/ctx_889fd51d82c9 завершён succeeded
+msg_0f01fa3c4ecc17:44:58Z. Архивный фактический stdout: PostgreSQL accepting
+connections,5passed in6.67s; git diff --check exit0. Изменены только Path import
+и2cwd,3 additions/2deletions. Matching settlement принят, worker released с
+transcript capture, delivery_f8718e1c7f2b ACKed; local acceptance ещё NOT_REVIEWED.
+
+Независимый R1 local review запущен: task_18c2fae2f0f2/ctx_868bb502c577/
+term_440cd77c-8cd3-4c03-bf56-b321c932b1ff; requested/effective Sol/medium,
+turn_started observed. Проверяет AC1–3 и реальный archived stdout без повторных
+test runs. Local review1/2, failed0, hosted CI delivery ещё впереди.
+Writer final native session01a17e75-bf4e-7471-a3a7-6398c6094d6d:
+input346,586 incl cached314,368, output1,414; exact Dispatch/model/effort совпали.
+
+## 2026-10-27T17:50Z — LOCAL PASS минимального патча; repository PUBLIC
+
+Sol/medium reviewer task_18c2fae2f0f2/ctx_868bb502c577: LOCAL PASS AC1–3,
+msg_f2a8df78ea58. Подтверждены точный3-line change, сохранённые assertions и
+реальный archived stdout5passed/6.67s; без повторных tests или source edits.
+Report: [C1](reviews/TASK-CI-PORTABILITY-01-C1.md), local review1/2/failed0.
+Worker released/transcript captured, delivery_3e5d0f8e038c ACKed.
+Reviewer native input300,555 incl cached259,584, output1,245; patch subtotal
+647,141input/2calls, старые CI/GitHub/Windows counters не сброшены.
+
+Disclosure auditor ctx_e456830dfab4 succeeded msg_426f542da20e:48reachable commits,
+704blobs (669UTF8/35binary),7,977,814bytes и filenames проверены.9 широких
+assignment-pattern кандидатов классифицированы как generated-per-install
+password code, synthetic fixtures/path variables;3скриншота — synthetic batches.
+Достоверных live credentials/private keys/customer documents/runtime DB нет.
+Это ограниченный pattern audit, не обещание абсолютного обнаружения. Worker
+released/transcript captured, delivery_a190026122e4 ACKed; native input795,834
+incl cached712,704, output6,699 — отдельно от code TASK.
+
+По прямому user approval выполнен gh repo edit --visibility public с необходимым
+CLI acknowledgement. Gh API вернул private=false/visibility=public; GitHub
+connector независимо подтвердил public того же repository. Существующий Git
+credential использован только в памяти процесса для GitHub API; token не
+выводился/не сохранялся, login/account/scopes не менялись. Другие settings,
+release/deployment/history не затрагивались. Фактический receipt —
+`%TEMP%/EDR-github-publication-result-20261027.json`.

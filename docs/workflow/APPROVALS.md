@@ -371,3 +371,16 @@ revision `1c362598e67f9a7645de2416e79c2bb8ca3f3dc4`. Никакого LAN/VPN,
 который запускается push в main. Сырые Sandbox artifacts, runtime data,
 EXE/ZIP/dumps/logs и секреты исключены. Release/tag, force push, изменение
 visibility/settings и deployment этим решением не разрешены.
+
+## CI_PORTABILITY_AND_PUBLIC_REPO_20261027
+
+Пользователь явно: «Да, сделай минимальный патч» — одобряет предложенный
+Path-import +2 cwd change в tests/test_transaction.py, отдельный commit/push и
+повторную проверку CI. Baseline9792688d3230c101323106517c824ea08657cb12;
+точный scope/проверки в [TASK-CI-PORTABILITY-01](../tasks/TASK-CI-PORTABILITY-01.md).
+Позднейшее прямое сообщение «И сделай этот репозиторий открытый» отдельно
+разрешает сменить visibility `shahove93/EquipmentDocumentationRegistry` с private
+на public. Перед действием проверяются tracked tree и полная достижимая история
+на реальные секреты/данные; при конкретной находке публикация останавливается
+для решения, история и важные данные не удаляются. Release/deployment/force push
+и прочие настройки не разрешены. Предыдущие scopes/FAIL/usage сохраняются.

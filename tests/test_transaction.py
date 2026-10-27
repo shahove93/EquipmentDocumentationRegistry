@@ -17,6 +17,7 @@ import subprocess
 import sys
 import textwrap
 from contextlib import contextmanager
+from pathlib import Path
 
 import pytest
 from sqlalchemy import event as sa_event
@@ -398,7 +399,7 @@ class TestNoImportCycle:
             ],
             capture_output=True,
             text=True,
-            cwd="/mnt/d/Antigravity/EquipmentDocumentationRegistry",
+            cwd=Path(__file__).resolve().parents[1],
         )
         assert result.returncode == 0, result.stderr
         assert result.stdout.strip() == "ok"
@@ -417,6 +418,6 @@ class TestNoImportCycle:
             [sys.executable, "-c", f"import {module}; print('ok')"],
             capture_output=True,
             text=True,
-            cwd="/mnt/d/Antigravity/EquipmentDocumentationRegistry",
+            cwd=Path(__file__).resolve().parents[1],
         )
         assert result.returncode == 0, result.stderr
