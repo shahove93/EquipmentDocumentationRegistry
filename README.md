@@ -1,70 +1,37 @@
 # Equipment Documentation Registry
 
-Локальное приложение для ведения реестра документов на материалы и оборудование: паспортов, сертификатов и сопроводительных документов.
+Локальный реестр паспортов, сертификатов и сопроводительных документов на материалы и оборудование. Храните документы и сведения о партиях на своём Windows компьютере.
 
-## Возможности MVP
+[![Последний выпуск](https://img.shields.io/github/v/release/shahove93/EquipmentDocumentationRegistry?label=Последний%20выпуск)](https://github.com/shahove93/EquipmentDocumentationRegistry/releases/latest)
+[![CI](https://github.com/shahove93/EquipmentDocumentationRegistry/actions/workflows/ci.yml/badge.svg)](https://github.com/shahove93/EquipmentDocumentationRegistry/actions/workflows/ci.yml)
+
+**[Скачать для Windows](https://github.com/shahove93/EquipmentDocumentationRegistry/releases/latest)** · [Инструкция по установке](docs/installation/windows.md)
+
+## Возможности
 
 - Реестр производителей, изделий и типоразмеров, типов документов и выдавших их организаций.
-- Карточки документов с реквизитами, вложениями PDF/JPEG/PNG, статусом проверки и историей.
-- Поиск документов по материалу, стандарту, размеру, производителю, номеру и статусу; привязка документа к типоразмерам.
-- Учёт партий: backend API и экран списка, просмотра, создания и редактирования.
+- Карточки документов с реквизитами, PDF/JPEG/PNG вложениями, статусом проверки и историей.
+- Поиск по материалу, стандарту, размеру, производителю, номеру и статусу; привязка документов к типоразмерам.
+- Учёт партий: просмотр, создание и редактирование.
 
-Связь документа с партией или изделием не реализована. Приложение предназначено для локального однопользовательского использования: аутентификации и авторизации нет. Не публикуйте API или пользовательские данные в интернете.
+Приложение работает локально для одного пользователя на одном компьютере. Учётных записей, аутентификации и облачной синхронизации нет; доступ к Windows-профилю означает доступ к данным. Не публикуйте API в интернете или локальной сети. Связь документов с изделиями и партиями пока не реализована.
 
-## Локальная разработка (WSL2)
+## Интерфейс
 
-Нужны Ubuntu в WSL2, Python 3.14, Node.js 24.22.0 (через nvm) и работающий PostgreSQL 18. В WSL откройте консоль PostgreSQL командой `sudo -u postgres psql` и создайте локальную роль и базу (задайте собственный пароль):
+Снимок списка документов показывает пустой тестовый реестр; реальные документы не использовались. На снимке партий — одна демонстрационная запись LOT-FINAL с синтетическими данными.
 
-```sql
-CREATE ROLE edr LOGIN PASSWORD 'YOUR_LOCAL_PASSWORD';
-CREATE DATABASE equipment_docs OWNER edr;
-CREATE DATABASE equipment_docs_test OWNER edr;
-\q
-```
+| Документы | Партии |
+| --- | --- |
+| ![Пустой тестовый реестр документов; записей и реальных документов на снимке нет](docs/images/readme-documents.png) | ![Список партий с одной демонстрационной записью LOT-FINAL на синтетических данных](docs/images/readme-batches.png) |
 
-Задайте строку подключения в окружении WSL (подставьте пароль, не сохраняйте его в Git):
+## Технологии
 
-```bash
-export PGPASSWORD='YOUR_LOCAL_PASSWORD'
-export DATABASE_URL='postgresql+psycopg://edr:YOUR_LOCAL_PASSWORD@127.0.0.1:5432/equipment_docs'
-```
+FastAPI, SQLAlchemy, Alembic и PostgreSQL; React, TypeScript и Vite. Установщик Windows включает локальные компоненты приложения и базу данных.
 
-После этого установите зависимости:
+## Документация
 
-```bash
-python3.14 -m venv .venv
-.venv/bin/python -m pip install -r requirements.txt
-cd frontend && npm ci && cd ..
-```
-
-Задайте `DATABASE_URL` для локальной базы приложения в окружении WSL или в локальном `.env` (не добавляйте этот файл в Git). Примените миграции и запустите приложение:
-
-```bash
-.venv/bin/python -m alembic upgrade head
-.venv/bin/python -m uvicorn app.main:app --reload
-```
-
-В отдельном терминале WSL запустите интерфейс:
-
-```bash
-cd frontend && npm run dev
-```
-
-Тесты используют отдельную disposable базу `equipment_docs_test`; не направляйте их на базу приложения или базу с нужными данными. Подготовьте её и выполните миграции именно в ней (переменные заданы только в текущем shell):
-
-```bash
-export EDR_TEST_DATABASE_URL='postgresql+psycopg://edr:YOUR_LOCAL_PASSWORD@127.0.0.1:5432/equipment_docs_test'
-export DATABASE_URL="$EDR_TEST_DATABASE_URL"
-.venv/bin/python -m alembic upgrade head
-```
-
-Здесь `DATABASE_URL` временно указывает на тестовую базу, потому что `alembic/env.py` и часть тестов читают эту переменную. Это отдельная команда подготовки тестов: не запускайте её с `DATABASE_URL`, указывающим на `equipment_docs`. PostgreSQL применяет `PGPASSWORD` к существующим тестовым подключениям без пароля, включая DSN `edr@127.0.0.1:5432/postgres`; workflow поэтому также создаёт базу `postgres` для этих тестов. Перед запуском приложения задайте `DATABASE_URL` обратно на `equipment_docs`.
-
-## Проверки
-
-```bash
-DATABASE_URL="$EDR_TEST_DATABASE_URL" .venv/bin/python -m pytest -q
-cd frontend && npm run typecheck && npm run build
-```
-
-Архитектурные решения: [индекс ADR](docs/adr/README.md), [жизненный цикл проверки документа](docs/adr/ADR-008-document-verification-lifecycle.md), [вложения](docs/adr/ADR-009-document-attachments.md) и [связи с типоразмерами и поиск](docs/adr/ADR-010-document-variant-links-and-search.md). Правила разработки см. в [CONTRIBUTING.md](CONTRIBUTING.md).
+- [Установка и работа в Windows](docs/installation/windows.md)
+- [Разработка и проверки в WSL2](docs/development.md)
+- [Индекс архитектурных решений (ADR)](docs/adr/README.md)
+- [Состояние и проверенные сведения о проекте](docs/PROJECT_STATUS.md)
+- [Участие в разработке](CONTRIBUTING.md)
