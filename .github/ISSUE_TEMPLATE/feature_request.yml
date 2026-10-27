@@ -1,0 +1,28 @@
+name: Предложить улучшение
+description: Опишите желаемое изменение и решаемую задачу.
+title: "feat: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Не добавляйте реальные документы, персональные или коммерческие данные, секреты и содержимое `.env`.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Какую задачу нужно решить?
+      description: Опишите контекст без чувствительных данных.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Какое изменение предлагаете?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Как понять, что задача решена?
+      description: Опишите ожидаемый результат или пример использования.
+    validations:
+      required: true
