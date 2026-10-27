@@ -1,0 +1,11 @@
+﻿{
+  "id": "7bafcf0a-9550-4db8-8a7f-c0ad5b42c730",
+  "ok": true,
+  "result": {
+    "result": "{\"clickedId32\":true}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

@@ -1,0 +1,11 @@
+﻿{
+  "id": "f04191ca-2bf7-4c93-9716-8a014024b280",
+  "ok": true,
+  "result": {
+    "result": "{\"url\":\"http://localhost:5175/batches\",\"contentType\":\"text/html\",\"navigation\":[{\"type\":\"reload\",\"status\":200}],\"rows\":[\"1\\t7\\tDELAY-PATCH-SELECT-C2\\t01.01.2026\\t1.00\\tkg\",\"2\\t7\\tSELECT-B\\t—\\t2.00\\tkg\",\"3\\t7\\tPAGE-03\\t—\\t3.00\\tkg\"]}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

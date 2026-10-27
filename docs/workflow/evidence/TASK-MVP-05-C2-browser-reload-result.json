@@ -1,0 +1,11 @@
+﻿{
+  "id": "c63cea1d-40e4-4f51-8b08-91137246935c",
+  "ok": true,
+  "result": {
+    "result": "{\"url\":\"http://localhost:5175/batches\",\"contentType\":\"text/html\",\"navigation\":[{\"type\":\"reload\",\"status\":200}],\"title\":\"EDR — Реестр сертификатов и паспортов\"}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

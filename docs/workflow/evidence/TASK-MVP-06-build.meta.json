@@ -1,0 +1,11 @@
+﻿{
+    "check":  "ST-003 build",
+    "command":  "wsl.exe -d Ubuntu -- bash -lc \u0027source /home/djeka/.nvm/nvm.sh; cd /mnt/d/Antigravity/EquipmentDocumentationRegistry/frontend \u0026\u0026 npm run build\u0027",
+    "launcher_cwd":  "D:\\Antigravity\\EquipmentDocumentationRegistry",
+    "actual_cwd":  "/mnt/d/Antigravity/EquipmentDocumentationRegistry/frontend",
+    "started_utc":  "2026-10-26T19:03:41.7191660Z",
+    "ended_utc":  "2026-10-26T19:03:45.7713916Z",
+    "native_exit_code":  0,
+    "stdout_log":  "TASK-MVP-06-build.stdout.log",
+    "stderr_log":  "TASK-MVP-06-build.stderr.log"
+}

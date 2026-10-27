@@ -1,0 +1,298 @@
+﻿{
+  "id": "9dc08332-3144-452c-8316-181d8ba1e66f",
+  "ok": true,
+  "result": {
+    "origin": "http://localhost:5175/batches",
+    "refs": {
+      "e1": {
+        "name": "",
+        "role": "generic"
+      },
+      "e10": {
+        "name": "26",
+        "role": "cell"
+      },
+      "e11": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e12": {
+        "name": "PAGE-26",
+        "role": "cell"
+      },
+      "e13": {
+        "name": "—",
+        "role": "cell"
+      },
+      "e14": {
+        "name": "3.00",
+        "role": "cell"
+      },
+      "e15": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e16": {
+        "name": "27",
+        "role": "cell"
+      },
+      "e17": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e18": {
+        "name": "PAGE-27",
+        "role": "cell"
+      },
+      "e19": {
+        "name": "—",
+        "role": "cell"
+      },
+      "e2": {
+        "name": "Разделы",
+        "role": "navigation"
+      },
+      "e20": {
+        "name": "3.00",
+        "role": "cell"
+      },
+      "e21": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e22": {
+        "name": "28",
+        "role": "cell"
+      },
+      "e23": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e24": {
+        "name": "PAGE-28",
+        "role": "cell"
+      },
+      "e25": {
+        "name": "—",
+        "role": "cell"
+      },
+      "e26": {
+        "name": "3.00",
+        "role": "cell"
+      },
+      "e27": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e28": {
+        "name": "29",
+        "role": "cell"
+      },
+      "e29": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e3": {
+        "name": "Документы",
+        "role": "link"
+      },
+      "e30": {
+        "name": "C2-BROWSER-001-EDITED",
+        "role": "cell"
+      },
+      "e31": {
+        "name": "—",
+        "role": "cell"
+      },
+      "e32": {
+        "name": "1234567890.123456",
+        "role": "cell"
+      },
+      "e33": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e34": {
+        "name": "30",
+        "role": "cell"
+      },
+      "e35": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e36": {
+        "name": "DELAY-POST",
+        "role": "cell"
+      },
+      "e37": {
+        "name": "04.01.2027",
+        "role": "cell"
+      },
+      "e38": {
+        "name": "9.75",
+        "role": "cell"
+      },
+      "e39": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e4": {
+        "name": "Партии",
+        "role": "link"
+      },
+      "e40": {
+        "name": "31",
+        "role": "cell"
+      },
+      "e41": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e42": {
+        "name": "DELAY-POST-C2",
+        "role": "cell"
+      },
+      "e43": {
+        "name": "05.01.2027",
+        "role": "cell"
+      },
+      "e44": {
+        "name": "9.75",
+        "role": "cell"
+      },
+      "e45": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e46": {
+        "name": "32",
+        "role": "cell"
+      },
+      "e47": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e48": {
+        "name": "C2-BROWSER-002-EDITED",
+        "role": "cell"
+      },
+      "e49": {
+        "name": "—",
+        "role": "cell"
+      },
+      "e5": {
+        "name": "Материалы и оборудование",
+        "role": "link"
+      },
+      "e50": {
+        "name": "12345678901234567890.001",
+        "role": "cell"
+      },
+      "e51": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e52": {
+        "name": "33",
+        "role": "cell"
+      },
+      "e53": {
+        "name": "7",
+        "role": "cell"
+      },
+      "e54": {
+        "name": "DELAY-POST-EVIDENCE",
+        "role": "cell"
+      },
+      "e55": {
+        "name": "01.03.2027",
+        "role": "cell"
+      },
+      "e56": {
+        "name": "5.25",
+        "role": "cell"
+      },
+      "e57": {
+        "name": "kg",
+        "role": "cell"
+      },
+      "e58": {
+        "name": "ID",
+        "role": "columnheader"
+      },
+      "e59": {
+        "name": "Типоразмер",
+        "role": "columnheader"
+      },
+      "e6": {
+        "name": "← Назад",
+        "role": "button"
+      },
+      "e60": {
+        "name": "Номер партии",
+        "role": "columnheader"
+      },
+      "e61": {
+        "name": "Дата изготовления",
+        "role": "columnheader"
+      },
+      "e62": {
+        "name": "Количество",
+        "role": "columnheader"
+      },
+      "e63": {
+        "name": "Единица",
+        "role": "columnheader"
+      },
+      "e64": {
+        "name": "26",
+        "role": "button"
+      },
+      "e65": {
+        "name": "27",
+        "role": "button"
+      },
+      "e66": {
+        "name": "28",
+        "role": "button"
+      },
+      "e67": {
+        "name": "29",
+        "role": "button"
+      },
+      "e68": {
+        "name": "30",
+        "role": "button"
+      },
+      "e69": {
+        "name": "31",
+        "role": "button"
+      },
+      "e7": {
+        "name": "Вперёд →",
+        "role": "button"
+      },
+      "e70": {
+        "name": "32",
+        "role": "button"
+      },
+      "e71": {
+        "name": "33",
+        "role": "button"
+      },
+      "e8": {
+        "name": "Партии",
+        "role": "heading"
+      },
+      "e9": {
+        "name": "Новая партия",
+        "role": "button"
+      }
+    },
+    "snapshot": "- generic [ref=e1] clickable [onclick]\n  - navigation \"Разделы\" [ref=e2]\n    - StaticText \"EQUIPMENT DOCUMENTATION REGISTRY\"\n    - link \"Документы\" [ref=e3]\n    - link \"Партии\" [ref=e4]\n    - link \"Материалы и оборудование\" [ref=e5]\n  - main\n    - sectionheader\n      - heading \"Партии\" [level=1, ref=e8]\n      - paragraph\n        - StaticText \"Список и реквизиты партий продукции\"\n      - button \"Новая партия\" [ref=e9]\n    - table\n      - rowgroup\n        - row\n          - columnheader \"ID\" [ref=e58]\n          - columnheader \"Типоразмер\" [ref=e59]\n          - columnheader \"Номер партии\" [ref=e60]\n          - columnheader \"Дата изготовления\" [ref=e61]\n          - columnheader \"Количество\" [ref=e62]\n          - columnheader \"Единица\" [ref=e63]\n      - row\n        - cell \"26\" [ref=e10]\n          - button \"26\" [ref=e64]\n        - cell \"7\" [ref=e11]\n        - cell \"PAGE-26\" [ref=e12]\n        - cell \"—\" [ref=e13]\n        - cell \"3.00\" [ref=e14]\n        - cell \"kg\" [ref=e15]\n      - row\n        - cell \"27\" [ref=e16]\n          - button \"27\" [ref=e65]\n        - cell \"7\" [ref=e17]\n        - cell \"PAGE-27\" [ref=e18]\n        - cell \"—\" [ref=e19]\n        - cell \"3.00\" [ref=e20]\n        - cell \"kg\" [ref=e21]\n      - row\n        - cell \"28\" [ref=e22]\n          - button \"28\" [ref=e66]\n        - cell \"7\" [ref=e23]\n        - cell \"PAGE-28\" [ref=e24]\n        - cell \"—\" [ref=e25]\n        - cell \"3.00\" [ref=e26]\n        - cell \"kg\" [ref=e27]\n      - row\n        - cell \"29\" [ref=e28]\n          - button \"29\" [ref=e67]\n        - cell \"7\" [ref=e29]\n        - cell \"C2-BROWSER-001-EDITED\" [ref=e30]\n        - cell \"—\" [ref=e31]\n        - cell \"1234567890.123456\" [ref=e32]\n        - cell \"kg\" [ref=e33]\n      - row\n        - cell \"30\" [ref=e34]\n          - button \"30\" [ref=e68]\n        - cell \"7\" [ref=e35]\n        - cell \"DELAY-POST\" [ref=e36]\n        - cell \"04.01.2027\" [ref=e37]\n        - cell \"9.75\" [ref=e38]\n        - cell \"kg\" [ref=e39]\n      - row\n        - cell \"31\" [ref=e40]\n          - button \"31\" [ref=e69]\n        - cell \"7\" [ref=e41]\n        - cell \"DELAY-POST-C2\" [ref=e42]\n        - cell \"05.01.2027\" [ref=e43]\n        - cell \"9.75\" [ref=e44]\n        - cell \"kg\" [ref=e45]\n      - row\n        - cell \"32\" [ref=e46]\n          - button \"32\" [ref=e70]\n        - cell \"7\" [ref=e47]\n        - cell \"C2-BROWSER-002-EDITED\" [ref=e48]\n        - cell \"—\" [ref=e49]\n        - cell \"12345678901234567890.001\" [ref=e50]\n        - cell \"kg\" [ref=e51]\n      - row\n        - cell \"33\" [ref=e52]\n          - button \"33\" [ref=e71]\n        - cell \"7\" [ref=e53]\n        - cell \"DELAY-POST-EVIDENCE\" [ref=e54]\n        - cell \"01.03.2027\" [ref=e55]\n        - cell \"5.25\" [ref=e56]\n        - cell \"kg\" [ref=e57]\n    - StaticText \"Страница \"\n    - StaticText \"2\"\n    - StaticText \" · записи \"\n    - StaticText \"26\"\n    - StaticText \"–\"\n    - StaticText \"33\"\n    - button \"← Назад\" [ref=e6]\n    - button \"Вперёд →\" [disabled, ref=e7]",
+    "browserPageId": "a5a98608-453d-4c3c-b8be-5effd41ecae6"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

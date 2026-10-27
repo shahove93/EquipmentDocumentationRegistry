@@ -1,0 +1,11 @@
+﻿{
+  "id": "9e6b5b05-6a54-467e-a47e-05e94c96b03d",
+  "ok": true,
+  "result": {
+    "result": "{\"formCount\":1,\"values\":[\"DELAY-FORMCHANGE-EVIDENCE\",\"2026-01-01\",\"88.25\",\"kg\"],\"heading\":\"Партия #1\"}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

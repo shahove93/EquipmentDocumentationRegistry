@@ -1,8 +1,8 @@
-# ROADMAP — Equipment Documentation Registry
+﻿# ROADMAP — Equipment Documentation Registry
 
 Версия согласуемого объёма: 1.2. Продуктовый объём MVP + Batch не меняется;
 изменено только управление workflow по решению пользователя от 2026-10-26.
-Общее состояние: RUNNING.
+Общее состояние: COMPLETE (утверждённый локальный MVP + Batch).
 
 ## Последовательность
 
@@ -13,8 +13,8 @@
 | 3 | [TASK-MVP-02](docs/tasks/TASK-MVP-02.md) | Report-only сверка осиротевших файлов (ADR-009) | MVP-01 | Отчёт о blob без строки `files`; тесты | R2 | PASS (2026-10-23, `fde5406`) |
 | 4 | [TASK-MVP-03](docs/tasks/TASK-MVP-03.md) | SHA-256 при скачивании и индекс `ix_files_document_id_id` | MVP-02 | Сверка данных и миграция | R2 | PASS (2026-10-25, `6827ed3`) |
 | 5 | [TASK-MVP-04](docs/tasks/TASK-MVP-04.md) | BatchService и Batch API без удаления | MVP-03 | CRUD без DELETE/PUT, схемы, тесты, OpenAPI | R2 | PASS (2026-10-26, `0db1f9e`) |
-| 6 | TASK-MVP-05 | Интерфейс партий и сквозной сценарий | MVP-04 | `typecheck`/`build`; создать партию, приложить документ, привязать, проверить, открыть историю | R1 | PLANNED; ещё не начат |
-| 7 | TASK-MVP-06 | Финальная приёмка этапа | MVP-05 | Полный `pytest`, frontend `typecheck`/`build`, Codex stage acceptance, `FINAL-REPORT` | Stage | PLANNED |
+| 6 | TASK-MVP-05 | Интерфейс партий и сквозной сценарий | MVP-04 | `typecheck`/`build`; создать партию, приложить документ, привязать, проверить, открыть историю | R1 | PASS A2/C1 Sol medium; A1 FAIL/FAIL preserved |
+| 7 | TASK-MVP-06 | Финальная приёмка этапа | MVP-05 | Полный `pytest`, frontend `typecheck`/`build`, Codex stage acceptance, `FINAL-REPORT` | Stage | PASS / COMPLETE; FINAL-REPORT,2026-10-27 |
 
 ## Рабочий процесс
 
@@ -58,3 +58,20 @@ BLOCKED/FAIL evidence не удалены: см. [ADR-011](docs/adr/ADR-011-loca
 
 Текущий статус, разрешения и evidence: [docs/workflow/STATE.md](docs/workflow/STATE.md),
 [docs/workflow/APPROVALS.md](docs/workflow/APPROVALS.md), [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md).
+
+
+2026-10-26 C2 final settlement: TASK-MVP-05 FAIL, F-01 MAJOR remains (API-invalid positive CRUD quantities and mutable historical mock responses); F02-F04 closed. Full reviews2/2 exhausted for A1; TASK-MVP-06 not started. Cumulative actual28965861 input, calls8 settled, accounting-only authority unchanged. See docs/workflow/reviews/TASK-MVP-05-C2.md and STATE/HISTORY. Stop without further fixes/review/commit/push.
+
+2026-10-26 MVP05_C3_A2_AUTHORIZED_20261026: C3 read-only RCA complete; A2 contract-enforcing immutable-wire evidence approach, same frozen scope. Luna medium then Sol medium review1/2; FAIL stops, no automatic C2/A3. Historical28965861 input/calls8 preserved, accounting-only. See docs/tasks/TASK-MVP-05-A2-C1.md. No push/deploy.
+
+2026-10-26 A2/C1 routed PASS by independent Sol medium: all AC/F closed,46 A2+139 inherited hashes matched. Historical A1 failures preserved; cumulative42659624 input/calls10. MVP-06/stage acceptance not started. Local scoped product commit permitted, no push/deploy.
+MVP-05 local delivery commit: 06f58065022db9c58524909027ddc2d454f7071f (eight reviewed frontend files); no push/deploy.
+
+MVP-06 Stage execution under existing v1.2 approval: frozen docs/tasks/TASK-MVP-06.md; baseline06f58065022db9c58524909027ddc2d454f7071f unpushed. Luna medium checks-only, separate Codex acceptance after evidence, FINAL-REPORT only after PASS. No new scope/approval/product edits/commit/push/deploy.
+
+
+MVP-06 checks completed19:05Z: pytest3771passed/1warning; Node24.22.0 typecheck/build0; Alembic e4b8c2d16a70(head),13 migrations. Source190 unchanged at06f58065022db9c58524909027ddc2d454f7071f. ST006 separate acceptance pending; no stage PASS/FINAL-REPORT. Stage actual2625483, retained ledger45285107input/calls11.
+
+
+
+2026-10-27 Stage Astra high PASS ST001..006; FINAL-REPORT closes ST007. Approved local MVP+Batch COMPLETE at06f58065022db9c58524909027ddc2d454f7071f; MINOR MVP06-ST-001 documentation drift retained, MOCK limitation explicit. See docs/workflow/FINAL-REPORT.md. Retained ledger48229838input/12calls, historical failures preserved. No new commit/push/merge/deploy.

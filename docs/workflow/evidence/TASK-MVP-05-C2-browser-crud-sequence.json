@@ -1,0 +1,358 @@
+﻿{
+    "source":  "actual in-memory C2 MOCK fixture request log; not product DB",
+    "scenario":  "list \u003e detail \u003e create \u003e detail GET \u003e edit PATCH \u003e clear PATCH(null) \u003e explicit detail GET after clear",
+    "records":  [
+                    {
+                        "ordinal":  3,
+                        "record":  {
+                                       "method":  "GET",
+                                       "path":  "/batches?limit=26\u0026offset=0",
+                                       "request_body":  null,
+                                       "status":  200,
+                                       "response_body":  [
+                                                             {
+                                                                 "id":  1,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "DELAY-FORMCHANGE-EVIDENCE",
+                                                                 "manufacture_date":  "2026-01-01",
+                                                                 "quantity":  "1.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  2,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "SELECT-B",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "2.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  3,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-03",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  4,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-04",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  5,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-05",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  6,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-06",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  7,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-07",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  8,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-08",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  9,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-09",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  10,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-10",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  11,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-11",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  12,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-12",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  13,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-13",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  14,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-14",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  15,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-15",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  16,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-16",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  17,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-17",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  18,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-18",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  19,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-19",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  20,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-20",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  21,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-21",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  22,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-22",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  23,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-23",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  24,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-24",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  25,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-25",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             },
+                                                             {
+                                                                 "id":  26,
+                                                                 "variant_id":  7,
+                                                                 "batch_number":  "PAGE-26",
+                                                                 "manufacture_date":  null,
+                                                                 "quantity":  "3.00",
+                                                                 "quantity_unit":  "kg"
+                                                             }
+                                                         ],
+                                       "response_headers":  {
+                                                                "Content-Type":  "application/json"
+                                                            }
+                                   }
+                    },
+                    {
+                        "ordinal":  4,
+                        "record":  {
+                                       "method":  "GET",
+                                       "path":  "/batches/1",
+                                       "request_body":  null,
+                                       "status":  200,
+                                       "response_body":  {
+                                                             "id":  1,
+                                                             "variant_id":  7,
+                                                             "batch_number":  "DELAY-FORMCHANGE-EVIDENCE",
+                                                             "manufacture_date":  "2026-01-01",
+                                                             "quantity":  "1.00",
+                                                             "quantity_unit":  "kg"
+                                                         },
+                                       "response_headers":  {
+                                                                "Content-Type":  "application/json"
+                                                            }
+                                   }
+                    },
+                    {
+                        "ordinal":  63,
+                        "record":  {
+                                       "method":  "POST",
+                                       "path":  "/batches",
+                                       "request_body":  {
+                                                            "variant_id":  7,
+                                                            "batch_number":  "C2-BROWSER-002",
+                                                            "manufacture_date":  "2027-02-03",
+                                                            "quantity":  "12345678901234567890.001",
+                                                            "quantity_unit":  "kg"
+                                                        },
+                                       "status":  201,
+                                       "response_body":  {
+                                                             "id":  32,
+                                                             "variant_id":  7,
+                                                             "batch_number":  "C2-BROWSER-002-EDITED",
+                                                             "manufacture_date":  null,
+                                                             "quantity":  "12345678901234567890.001",
+                                                             "quantity_unit":  "kg"
+                                                         },
+                                       "response_headers":  {
+                                                                "Content-Type":  "application/json"
+                                                            }
+                                   }
+                    },
+                    {
+                        "ordinal":  64,
+                        "record":  {
+                                       "method":  "GET",
+                                       "path":  "/batches/32",
+                                       "request_body":  null,
+                                       "status":  200,
+                                       "response_body":  {
+                                                             "id":  32,
+                                                             "variant_id":  7,
+                                                             "batch_number":  "C2-BROWSER-002-EDITED",
+                                                             "manufacture_date":  null,
+                                                             "quantity":  "12345678901234567890.001",
+                                                             "quantity_unit":  "kg"
+                                                         },
+                                       "response_headers":  {
+                                                                "Content-Type":  "application/json"
+                                                            }
+                                   }
+                    },
+                    {
+                        "ordinal":  68,
+                        "record":  {
+                                       "method":  "PATCH",
+                                       "path":  "/batches/32",
+                                       "request_body":  {
+                                                            "batch_number":  "C2-BROWSER-002-EDITED"
+                                                        },
+                                       "status":  200,
+                                       "response_body":  {
+                                                             "id":  32,
+                                                             "variant_id":  7,
+                                                             "batch_number":  "C2-BROWSER-002-EDITED",
+                                                             "manufacture_date":  null,
+                                                             "quantity":  "12345678901234567890.001",
+                                                             "quantity_unit":  "kg"
+                                                         },
+                                       "response_headers":  {
+                                                                "Content-Type":  "application/json"
+                                                            }
+                                   }
+                    },
+                    {
+                        "ordinal":  72,
+                        "record":  {
+                                       "method":  "PATCH",
+                                       "path":  "/batches/32",
+                                       "request_body":  {
+                                                            "manufacture_date":  null
+                                                        },
+                                       "status":  200,
+                                       "response_body":  {
+                                                             "id":  32,
+                                                             "variant_id":  7,
+                                                             "batch_number":  "C2-BROWSER-002-EDITED",
+                                                             "manufacture_date":  null,
+                                                             "quantity":  "12345678901234567890.001",
+                                                             "quantity_unit":  "kg"
+                                                         },
+                                       "response_headers":  {
+                                                                "Content-Type":  "application/json"
+                                                            }
+                                   }
+                    },
+                    {
+                        "ordinal":  94,
+                        "record":  {
+                                       "method":  "GET",
+                                       "path":  "/batches/32",
+                                       "request_body":  null,
+                                       "status":  200,
+                                       "response_body":  {
+                                                             "id":  32,
+                                                             "variant_id":  7,
+                                                             "batch_number":  "C2-BROWSER-002-EDITED",
+                                                             "manufacture_date":  null,
+                                                             "quantity":  "12345678901234567890.001",
+                                                             "quantity_unit":  "kg"
+                                                         },
+                                       "response_headers":  {
+                                                                "Content-Type":  "application/json"
+                                                            }
+                                   }
+                    }
+                ]
+}

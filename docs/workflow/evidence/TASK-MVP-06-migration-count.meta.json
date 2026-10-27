@@ -1,0 +1,11 @@
+﻿{
+    "check":  "ST-004 migration count",
+    "command":  "wsl.exe -d Ubuntu -- bash -lc \u0027cd /mnt/d/Antigravity/EquipmentDocumentationRegistry \u0026\u0026 ls alembic/versions/*.py | wc -l\u0027",
+    "launcher_cwd":  "D:\\Antigravity\\EquipmentDocumentationRegistry",
+    "actual_cwd":  "/mnt/d/Antigravity/EquipmentDocumentationRegistry",
+    "started_utc":  "2026-10-26T19:04:08.7794322Z",
+    "ended_utc":  "2026-10-26T19:04:09.9349413Z",
+    "native_exit_code":  0,
+    "stdout_log":  "TASK-MVP-06-migration-count.stdout.log",
+    "stderr_log":  "TASK-MVP-06-migration-count.stderr.log"
+}

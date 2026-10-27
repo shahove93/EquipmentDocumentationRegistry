@@ -1,0 +1,11 @@
+﻿{
+  "id": "bcd5c08a-884a-4d30-a735-e7daf90ebd18",
+  "ok": true,
+  "result": {
+    "result": "{\"detail\":\"ID\\n32\\nID типоразмера\\n7\\nНомер партии\\nC2-BROWSER-002-EDITED\\nДата изготовления\\n—\\nКоличество\\n12345678901234567890.001\\nЕдиница измерения\\nkg\"}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

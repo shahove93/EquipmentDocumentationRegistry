@@ -1,0 +1,11 @@
+﻿{
+  "id": "42a8f91d-150e-45bc-a2fa-25a91530d1bf",
+  "ok": true,
+  "result": {
+    "result": "{\"patchSubmitted\":true,\"quantityChangedAfterSubmit\":\"88.25\"}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

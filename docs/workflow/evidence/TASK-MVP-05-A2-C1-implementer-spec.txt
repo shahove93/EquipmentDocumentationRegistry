@@ -1,0 +1,35 @@
+﻿# TASK-MVP-05 A2/C1 — frozen approach addendum
+
+Authority MVP05_C3_A2_AUTHORIZED_20261026. R1, same Run run_68046cea3eb4, main/current D:/Antigravity/EquipmentDocumentationRegistry, HEAD/baseline318e6336737ee635abf593c2643f26daba273f86. C3 RCA docs/workflow/evidence/TASK-MVP-05-A1-C3-RCA.md completed read-only. A1 FAIL/FAIL/review2/2 unchanged, no third review.
+Actual baseline28965861 input/calls8; next Luna accounting call9, Sol call10. Usage accounting only: NO caps/reserves/checkpoint asks/pauses. Stop actual provider refusal/limit or explicit user stop; no reset-credit/account/plan/session bypass.
+
+## Ownership and scope
+One Codex gpt-6-luna medium implementer; coordinator workflow-only. After matching worker_done and evidence separate gpt-6.1-sol medium reviewer A2 review1/2. A2/C1 FAIL=>STOP, no automatic C2/A3/fixes/diagnosis. No next TASK/stage acceptance. Worker no commit; coordinator local commit only routed PASS. No push/merge/deploy.
+Frozen original TASK-MVP-05.md AC001..007 and TASK-MVP-05-C2.md F01..F04 unchanged. Read original scope/allowlist/AC and C1/C2 findings only, ignore obsolete caps/history holds. Preserve all current partial product code/old artifacts; no broad repo reads/redesign.
+Product allowlist: frontend/src/api/batches.ts, pages/BatchesPage.tsx, components/BatchForm.tsx, optional hooks/useBatches.ts; Batch-only types/api.ts, App.tsx, components/Nav.tsx, styles.css, vite.config.ts; optional frontend/README.md/docs/PROJECT_STATUS.md. No app/tests/alembic/API/DB/deps/env/storage/auth/Document links changes.
+New harness/logs/screenshots/reports docs/workflow/evidence/TASK-MVP-05-A2-* only. Do not edit old C1/C2 fixtures/evidence/hashes. Preserve unrelated work/user-owned listeners/terminals; use fresh unused isolated ports, don't kill them.
+
+## Materially distinct evidence method
+Replace permissive mock/alias recorder with contract-enforcing isolated fixture, immutable serialized wire oracle separate from mutable store, and one verified coherent browser CRUD trace. Prefer actual BatchCreate/BatchUpdate validators in WSL .venv without DB access; otherwise exact bounded validator implementation with source provenance. Quantity finite positive Decimal<=99999999.99, scale<=2, null allowed; preserve exact strings without float. POST/PATCH invalid Quantity rejected without mutation.
+Record actual request and response serialized snapshots/status at send time. Decoded snapshots must not alias mutable rows. Show initial snapshots stay identical after edit/clear. This is the repaired evidence method, not new product AC.
+
+## Frozen observable checklist carry-forward
+- AC001: Batch navigation/direct URL/reload and actual SPA HTML/API JSON URL/status/content-type.
+- AC002: all6 fields/null/date/quantity, list/detail, limit/offset/end, loading/empty/error/retry.
+- AC003: existing variant POST201 with nonnull future ISO date and valid exact Decimal string e.g.12345.67; subsequent GET same record; invalid input not success, pending guard.
+- AC004: separate PATCH requisite change, then separate nullable null clear; omitted fields preserved, variant required; no uniqueness/PUT/DELETE.
+- AC005: no float, independent quantity/unit/futuredate, safe404/422/network, delayed POST/PATCH/unmount/selection/form no stale overwrite.
+- AC006/F01: real browser list→detail→create→detail GET→separate edit→clear null→explicit detail GET AFTER clear, SAME created ID. Full immutable request/response/status each step, valid quantity/date and preserved other fields after clear. Don't stitch different records. Actual browser actions through installed Orca browser help; MOCK labelled, no DB writes.
+- F02/F03 closed A1/C2: reuse relevant original bounded evidence when affected product files unchanged and hashes match. If changed, collect only necessary relevant new evidence. Keep delayed callback, refresh/html/error/retry/pagination proof.
+- AC007/F04: final scope diff and identities; reuse complete C2 typecheck/build0 when product code unchanged with hash proof. If changed run final WSL typecheck/build once. One new relevant targeted mock/browser smoke for replacement harness/full trace; no backend tests/deps.
+- Bounded invalid Quantity rejection and immutable snapshot assertions prove repaired oracle, not new backend tests/features. Log actual failures honestly.
+- Report/logs FIRST, final A2 hash manifest LAST; exclude manifest itself and never change hashed files afterward.
+
+## Commands, outputs and lifecycle
+Windows repo CWD; if product changed final checks:
+wsl.exe -d Ubuntu -- bash -lc 'source /home/djeka/.nvm/nvm.sh; cd /mnt/d/Antigravity/EquipmentDocumentationRegistry/frontend && npm run typecheck'
+wsl.exe -d Ubuntu -- bash -lc 'source /home/djeka/.nvm/nvm.sh; cd /mnt/d/Antigravity/EquipmentDocumentationRegistry/frontend && npm run build'
+Use WSL .venv/bin/python for schema-based fixture if practical, no installs. git diff/check/status scope evidence, no backend pytest. Reuse complete checks, no unnecessary reruns.
+Report docs/workflow/evidence/TASK-MVP-05-A2-C1-evidence.md: actual identity/task/dispatch/model, commands/CWD/exits/logs, AC/F mapping, inherited/current hashes, complete trace index, failed attempts/limitations. Final TASK-MVP-05-A2-C1-hashes.json covers product/harness/evidence/report, excludes itself. No project PASS claim.
+Use live Orca preamble and real CLI. No upfront blocking asks: work starts now; ask only actual blockers, never token checkpoints. Read mailbox naturally and before worker_done; emit matching worker_done and end. No other workers/reviewer launches by implementer.
+Direct user authorizes start now. C3 already completed by coordinator, do not redo diagnosis/design. Codex-only route overrides historical OpenCode/Nemotron role holds. Real CLI C:/Users/user/AppData/Local/Programs/orca/resources/bin/orca.exe.

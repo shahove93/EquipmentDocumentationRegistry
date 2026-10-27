@@ -1,0 +1,11 @@
+﻿{
+  "id": "68d470f1-d3b6-4a3d-89e1-252e2e70896b",
+  "ok": true,
+  "result": {
+    "result": "{\"patchField\":\"manufacture_date\",\"value\":null,\"otherFields\":{\"batch_number\":\"C2-BROWSER-002-EDITED\",\"quantity\":\"12345678901234567890.001\",\"quantity_unit\":\"kg\"}}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

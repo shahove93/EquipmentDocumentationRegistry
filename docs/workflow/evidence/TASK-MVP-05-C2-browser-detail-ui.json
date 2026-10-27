@@ -1,0 +1,11 @@
+﻿{
+  "id": "d021ac9e-249c-4f57-8d98-bcdecc558ccb",
+  "ok": true,
+  "result": {
+    "result": "{\"url\":\"http://localhost:5175/batches\",\"detail\":\"ID\\n1\\nID типоразмера\\n7\\nНомер партии\\nDELAY-PATCH-SELECT-C2\\nДата изготовления\\n01.01.2026\\nКоличество\\n1.00\\nЕдиница измерения\\nkg\"}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

@@ -1,0 +1,216 @@
+﻿{
+    "id":  "49c264d2-adb4-42ec-9757-204228971916",
+    "ok":  true,
+    "result":  {
+                   "dispatch":  {
+                                    "id":  "ctx_5be9101c483f",
+                                    "runId":  "run_68046cea3eb4",
+                                    "taskId":  "task_85f835b6b49a",
+                                    "task_id":  "task_85f835b6b49a",
+                                    "contractVersion":  1,
+                                    "assigneeHandle":  "term_9ddc1f24-6136-45b5-bec3-89f5d56434a0",
+                                    "assigneePaneKey":  "df6a0d2d-31c9-4d8e-8fab-576fd968afca:598c3ba4-35c7-4d6c-800e-d85dde037966",
+                                    "processIncarnation":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@145a7051:8a26bcfe-9287-4884-8f0f-ea249f4bd291",
+                                    "capabilityRevokedAt":  null,
+                                    "retryOfDispatchId":  null,
+                                    "creatorDispatchId":  null,
+                                    "hostScope":  {
+                                                      "kind":  "local",
+                                                      "hostId":  "local"
+                                                  },
+                                    "status":  "dispatched",
+                                    "failureCount":  0,
+                                    "lastFailure":  null,
+                                    "terminationReason":  null,
+                                    "depth":  1,
+                                    "dispatchedAt":  "2026-10-26 14:07:43",
+                                    "completedAt":  null,
+                                    "createdAt":  "2026-10-26 14:07:43",
+                                    "lastHeartbeatAt":  null
+                                },
+                   "worker":  {
+                                  "dispatchId":  "ctx_5be9101c483f",
+                                  "runtimeEpoch":  "bb188a0d-615c-4bb3-af01-79b07f0a3260",
+                                  "state":  "ready",
+                                  "stage":  "input_accepted",
+                                  "worktreeId":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+                                  "agentTerminalHandle":  "term_9ddc1f24-6136-45b5-bec3-89f5d56434a0",
+                                  "setupState":  "not_applicable",
+                                  "effects":  [
+                                                  {
+                                                      "kind":  "worktree",
+                                                      "action":  "reused",
+                                                      "id":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry"
+                                                  },
+                                                  {
+                                                      "kind":  "setup",
+                                                      "action":  "not_applicable",
+                                                      "state":  "not_applicable"
+                                                  },
+                                                  {
+                                                      "kind":  "terminal",
+                                                      "role":  "agent",
+                                                      "action":  "created",
+                                                      "id":  "term_9ddc1f24-6136-45b5-bec3-89f5d56434a0",
+                                                      "surface":  "visible"
+                                                  },
+                                                  {
+                                                      "kind":  "dispatch_input",
+                                                      "role":  "agent",
+                                                      "id":  "term_9ddc1f24-6136-45b5-bec3-89f5d56434a0",
+                                                      "state":  "accepted"
+                                                  }
+                                              ],
+                                  "residualResources":  [
+                                                            {
+                                                                "kind":  "terminal",
+                                                                "role":  "agent",
+                                                                "action":  "created",
+                                                                "id":  "term_9ddc1f24-6136-45b5-bec3-89f5d56434a0",
+                                                                "surface":  "visible"
+                                                            }
+                                                        ],
+                                  "startOptions":  {
+                                                       "worktree":  "current",
+                                                       "mode":  {
+                                                                    "mode":  "terminal",
+                                                                    "preferred":  "terminal",
+                                                                    "reason":  "user_default",
+                                                                    "detail":  "Started a terminal agent worker, the default for new agent tabs in your settings."
+                                                                },
+                                                       "resolvedWorktreeId":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+                                                       "name":  null,
+                                                       "repo":  null,
+                                                       "baseBranch":  null,
+                                                       "terminal":  null,
+                                                       "agent":  "codex",
+                                                       "launch":  {
+                                                                      "requested":  {
+                                                                                        "agent":  "codex",
+                                                                                        "model":  "gpt-6-luna",
+                                                                                        "effort":  "medium"
+                                                                                    },
+                                                                      "effective":  {
+                                                                                        "agent":  "codex",
+                                                                                        "model":  "gpt-6-luna",
+                                                                                        "effort":  "medium"
+                                                                                    }
+                                                                  },
+                                                       "timeoutMs":  60000,
+                                                       "setup":  "not_applicable",
+                                                       "setupSource":  "existing_worktree"
+                                                   },
+                                  "lastError":  null,
+                                  "createdAt":  "2026-10-26 14:07:43",
+                                  "updatedAt":  "2026-10-26 14:07:53"
+                              },
+                   "projection":  {
+                                      "id":  "ctx_5be9101c483f",
+                                      "dispatchId":  "ctx_5be9101c483f",
+                                      "taskId":  "task_85f835b6b49a",
+                                      "runId":  "run_68046cea3eb4",
+                                      "role":  "worker",
+                                      "parent":  {
+                                                     "taskId":  "task_1f8ceba36e9e"
+                                                 },
+                                      "provider":  {
+                                                       "id":  "codex",
+                                                       "model":  "gpt-6-luna"
+                                                   },
+                                      "host":  {
+                                                   "kind":  "local",
+                                                   "id":  "local"
+                                               },
+                                      "workspace":  {
+                                                        "id":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+                                                        "kind":  "folder_or_worktree"
+                                                    },
+                                      "stage":  {
+                                                    "worker":  "ready",
+                                                    "dispatch":  "dispatched",
+                                                    "detail":  "input_accepted",
+                                                    "activity":  "working"
+                                                },
+                                      "outcome":  "in_progress",
+                                      "liveness":  {
+                                                       "verdict":  "live",
+                                                       "observedAt":  1793023712224,
+                                                       "source":  "agent_status"
+                                                   },
+                                      "evidence":  {
+                                                       "durable":  true,
+                                                       "liveStatus":  "fresh",
+                                                       "lastObservedAt":  1793023712224
+                                                   },
+                                      "resource":  {
+                                                       "state":  "owned",
+                                                       "id":  "wtr_4129f4a661c3",
+                                                       "ownerDispatchId":  "ctx_5be9101c483f",
+                                                       "releaseState":  "not_requested",
+                                                       "terminalState":  "active"
+                                                   },
+                                      "nextAction":  {
+                                                         "kind":  "none",
+                                                         "argv":  [
+
+                                                                  ]
+                                                     },
+                                      "attention":  {
+                                                        "categories":  [
+
+                                                                       ],
+                                                        "requiresAction":  false
+                                                    }
+                                  },
+                   "terminal":  {
+                                    "handle":  "term_9ddc1f24-6136-45b5-bec3-89f5d56434a0",
+                                    "ptyId":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@145a7051",
+                                    "incarnationId":  "8a26bcfe-9287-4884-8f0f-ea249f4bd291",
+                                    "orphaned":  false,
+                                    "worktreeId":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+                                    "worktreePath":  "D:/Antigravity/EquipmentDocumentationRegistry",
+                                    "branch":  "refs/heads/main",
+                                    "tabId":  "df6a0d2d-31c9-4d8e-8fab-576fd968afca",
+                                    "leafId":  "598c3ba4-35c7-4d6c-800e-d85dde037966",
+                                    "title":  "⠏ Report task outcome | EquipmentDocumentatio...",
+                                    "connected":  true,
+                                    "writable":  true,
+                                    "lastOutputAt":  1793023722089,
+                                    "preview":  "upt)\n⚠ 5h limit: 33% left · resets at 19:35 · /status\n› Ask Codex to do anything\nGPT-6-Luna medium · D:\\Antigravity\\EquipmentDocumentationRegistry · Report task outcome\n? for shortcuts                                                                                           ⚠ 2 warnings · f2 to view",
+                                    "executionHostId":  "local",
+                                    "agentIdentity":  "codex",
+                                    "paneRuntimeId":  1,
+                                    "rendererGraphEpoch":  0,
+                                    "agentWait":  null
+                                },
+                   "observation":  {
+                                       "status":  "live",
+                                       "exactWorker":  true,
+                                       "agentWait":  null
+                                   },
+                   "terminalResource":  {
+                                            "id":  "wtr_4129f4a661c3",
+                                            "ownershipState":  "owned",
+                                            "releaseState":  "not_requested",
+                                            "retainedReason":  null,
+                                            "terminalHandle":  "term_9ddc1f24-6136-45b5-bec3-89f5d56434a0",
+                                            "worktreeId":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+                                            "endpointId":  "bb188a0d-615c-4bb3-af01-79b07f0a3260",
+                                            "endpointIncarnation":  "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@145a7051:8a26bcfe-9287-4884-8f0f-ea249f4bd291",
+                                            "originDispatchId":  "ctx_5be9101c483f",
+                                            "ownerDispatchId":  "ctx_5be9101c483f",
+                                            "releaseRequestedAt":  null,
+                                            "releaseCompletedAt":  null,
+                                            "releaseError":  null,
+                                            "recoveryAttemptCount":  0,
+                                            "lastRecoveryAt":  null,
+                                            "archive":  {
+                                                            "source":  null,
+                                                            "status":  null
+                                                        }
+                                        }
+               },
+    "_meta":  {
+                  "runtimeId":  "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+              }
+}

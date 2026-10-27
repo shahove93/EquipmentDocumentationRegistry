@@ -1,0 +1,11 @@
+﻿{
+  "id": "3486417a-d7fc-4d21-9257-99559c85f891",
+  "ok": true,
+  "result": {
+    "result": "{\"alert\":\"Не удалось загрузить партии. Сервер недоступен. Убедитесь, что backend запущен на 127.0.0.1:8000.\\n\\nПовторить\",\"retryVisible\":true}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

@@ -1,0 +1,18 @@
+﻿{
+  "id": "6733ab49-a27c-4341-ba8d-59c8593e6a15",
+  "ok": true,
+  "result": {
+    "dispatchId": "ctx_97a10d402fdd",
+    "state": "retained",
+    "reason": "user_takeover",
+    "processAction": "none",
+    "archive": null,
+    "mutation": {
+      "requestId": "1b5d27e7-be00-4c1d-89a9-552f68981846",
+      "replayed": false
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

@@ -1,0 +1,209 @@
+﻿{
+  "id": "750477d6-f211-4c98-a675-06fe2fb4ed10",
+  "ok": true,
+  "result": {
+    "dispatch": {
+      "id": "ctx_20bcbbca831b",
+      "runId": "run_68046cea3eb4",
+      "taskId": "task_c90a6464b95b",
+      "task_id": "task_c90a6464b95b",
+      "contractVersion": 1,
+      "assigneeHandle": "term_b7bd634c-cc80-4830-a358-e1c649029854",
+      "assigneePaneKey": "12c4e1c2-4944-45e5-b707-c85771a2f718:312b185d-78f6-413a-9bb0-0b85b31b7373",
+      "processIncarnation": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@aa2c7372:a3a82adc-13ba-4285-a54d-e5c7ad46c290",
+      "capabilityRevokedAt": "2026-10-26T17:26:02.064Z",
+      "retryOfDispatchId": null,
+      "creatorDispatchId": null,
+      "hostScope": {
+        "kind": "local",
+        "hostId": "local"
+      },
+      "status": "completed",
+      "failureCount": 0,
+      "lastFailure": null,
+      "terminationReason": null,
+      "depth": 1,
+      "dispatchedAt": "2026-10-26 17:20:04",
+      "completedAt": "2026-10-26T17:26:02.064Z",
+      "createdAt": "2026-10-26 17:20:04",
+      "lastHeartbeatAt": "2026-10-26T17:21:58Z"
+    },
+    "worker": {
+      "dispatchId": "ctx_20bcbbca831b",
+      "runtimeEpoch": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e",
+      "state": "succeeded",
+      "stage": "settled",
+      "worktreeId": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+      "agentTerminalHandle": "term_b7bd634c-cc80-4830-a358-e1c649029854",
+      "setupState": "not_applicable",
+      "effects": [
+        {
+          "kind": "worktree",
+          "action": "reused",
+          "id": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry"
+        },
+        {
+          "kind": "setup",
+          "action": "not_applicable",
+          "state": "not_applicable"
+        },
+        {
+          "kind": "terminal",
+          "role": "agent",
+          "action": "created",
+          "id": "term_b7bd634c-cc80-4830-a358-e1c649029854",
+          "surface": "visible"
+        },
+        {
+          "kind": "dispatch_input",
+          "role": "agent",
+          "id": "term_b7bd634c-cc80-4830-a358-e1c649029854",
+          "state": "accepted"
+        }
+      ],
+      "residualResources": [
+        {
+          "kind": "terminal",
+          "role": "agent",
+          "action": "created",
+          "id": "term_b7bd634c-cc80-4830-a358-e1c649029854",
+          "surface": "visible"
+        }
+      ],
+      "startOptions": {
+        "worktree": "current",
+        "mode": {
+          "mode": "terminal",
+          "preferred": "terminal",
+          "reason": "user_default",
+          "detail": "Started a terminal agent worker, the default for new agent tabs in your settings."
+        },
+        "resolvedWorktreeId": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+        "name": null,
+        "repo": null,
+        "baseBranch": null,
+        "terminal": null,
+        "agent": "codex",
+        "launch": {
+          "requested": {
+            "agent": "codex",
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          },
+          "effective": {
+            "agent": "codex",
+            "model": "gpt-6.1-sol",
+            "effort": "medium"
+          }
+        },
+        "timeoutMs": 60000,
+        "setup": "not_applicable",
+        "setupSource": "existing_worktree"
+      },
+      "lastError": null,
+      "createdAt": "2026-10-26 17:20:04",
+      "updatedAt": "2026-10-26T17:26:02.064Z"
+    },
+    "projection": {
+      "id": "ctx_20bcbbca831b",
+      "dispatchId": "ctx_20bcbbca831b",
+      "taskId": "task_c90a6464b95b",
+      "runId": "run_68046cea3eb4",
+      "role": "worker",
+      "parent": {
+        "taskId": "task_1f8ceba36e9e"
+      },
+      "provider": null,
+      "host": {
+        "kind": "local",
+        "id": "local"
+      },
+      "workspace": {
+        "id": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+        "kind": "folder_or_worktree"
+      },
+      "stage": {
+        "worker": "succeeded",
+        "dispatch": "completed",
+        "detail": "settled",
+        "activity": "unknown"
+      },
+      "outcome": "succeeded",
+      "liveness": {
+        "verdict": "exited",
+        "source": "resource_release"
+      },
+      "evidence": {
+        "durable": true,
+        "liveStatus": "unavailable",
+        "lastObservedAt": null
+      },
+      "resource": {
+        "state": "released",
+        "id": "wtr_99874f89358b",
+        "ownerDispatchId": "ctx_20bcbbca831b",
+        "releaseState": "released",
+        "terminalState": "released"
+      },
+      "nextAction": {
+        "kind": "none",
+        "argv": []
+      },
+      "attention": {
+        "categories": [],
+        "requiresAction": false
+      }
+    },
+    "terminal": {
+      "handle": "term_b7bd634c-cc80-4830-a358-e1c649029854",
+      "ptyId": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@aa2c7372",
+      "incarnationId": "a3a82adc-13ba-4285-a54d-e5c7ad46c290",
+      "orphaned": true,
+      "recordedPaneKey": "12c4e1c2-4944-45e5-b707-c85771a2f718:312b185d-78f6-413a-9bb0-0b85b31b7373",
+      "worktreeId": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+      "worktreePath": "D:/Antigravity/EquipmentDocumentationRegistry",
+      "branch": "refs/heads/main",
+      "tabId": "12c4e1c2-4944-45e5-b707-c85771a2f718",
+      "leafId": "312b185d-78f6-413a-9bb0-0b85b31b7373",
+      "title": "Execute Orca task | EquipmentDocumentatio...",
+      "connected": false,
+      "writable": false,
+      "lastOutputAt": 1793035568282,
+      "preview": "    •Review completed: FAIL. F-01 remains MAJOR: the full CRUD scenarios use API-invalid quantities, and the fixture mutates historicalresponsebodies.F-02–F-04areclosed. Rview reprt (docs/workflow/reviews/TASK-MVP-05-C2.md).Coordinatornotified;nofixesortestrerunsperformed.  Worked for 5m 46s • 20:26",
+      "exitCause": {
+        "kind": "operator_close"
+      },
+      "executionHostId": "local",
+      "paneRuntimeId": -1,
+      "rendererGraphEpoch": 0
+    },
+    "observation": {
+      "status": "exited",
+      "exactWorker": true
+    },
+    "terminalResource": {
+      "id": "wtr_99874f89358b",
+      "ownershipState": "released",
+      "releaseState": "released",
+      "retainedReason": null,
+      "terminalHandle": "term_b7bd634c-cc80-4830-a358-e1c649029854",
+      "worktreeId": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry",
+      "endpointId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e",
+      "endpointIncarnation": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@aa2c7372:a3a82adc-13ba-4285-a54d-e5c7ad46c290",
+      "originDispatchId": "ctx_20bcbbca831b",
+      "ownerDispatchId": "ctx_20bcbbca831b",
+      "releaseRequestedAt": "2026-10-26 17:26:12",
+      "releaseCompletedAt": "2026-10-26 17:26:12",
+      "releaseError": null,
+      "recoveryAttemptCount": 0,
+      "lastRecoveryAt": null,
+      "archive": {
+        "source": "transcript",
+        "status": "captured"
+      }
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

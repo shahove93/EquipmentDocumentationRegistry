@@ -1,0 +1,17 @@
+﻿{
+    "revision":  "06f58065022db9c58524909027ddc2d454f7071f",
+    "stage_verdict":  "PASS",
+    "completion":  "COMPLETE; ST007 FINAL-REPORT written after stage PASS",
+    "reviewer_dispatch":  "ctx_97a10d402fdd",
+    "worker_done":  "msg_2b4be7038149",
+    "final_report_sha256":  "7BEB0B852E0FBABB9ECBAA8CCDCF98243DA1F749EC5B8867FCBB3C1231B24012",
+    "stage_review_sha256":  "C032A3D56F3EF829F889237760B3F5E31AA3DF3B0715FE181E43F25BEDC0E8D1",
+    "retained_input":  48229838,
+    "retained_calls":  12,
+    "stage_input":  5570214,
+    "resource_receipt":  "TASK-MVP-06-resources-final.json",
+    "user_owned_reviewer_retained":  true,
+    "new_commit":  false,
+    "pushed":  false,
+    "deployed":  false
+}

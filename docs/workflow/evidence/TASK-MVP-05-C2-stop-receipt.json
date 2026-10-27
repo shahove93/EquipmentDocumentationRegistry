@@ -1,0 +1,22 @@
+﻿{
+    "id":  "771cdd31-a30e-43bc-a9aa-06dde5976d7e",
+    "ok":  true,
+    "result":  {
+                   "dispatchId":  "ctx_00fa3aee8c79",
+                   "state":  "stopped",
+                   "alreadySettled":  false,
+                   "processAction":  "closed_agent_terminal",
+                   "close":  {
+                                 "handle":  "term_ea1c0a6d-b1bc-4bc1-99fc-7d90085b8afb",
+                                 "tabId":  "7d00d090-fd64-4895-aa3a-da054d54719a",
+                                 "ptyKilled":  true
+                             },
+                   "mutation":  {
+                                    "requestId":  "8174a6a6-e538-4bcc-8032-6446bef2f182",
+                                    "replayed":  false
+                                }
+               },
+    "_meta":  {
+                  "runtimeId":  "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+              }
+}

@@ -1,0 +1,11 @@
+﻿{
+  "id": "af4c0c50-1e71-4ea4-85b9-4703e8ee73de",
+  "ok": true,
+  "result": {
+    "result": "{\"submittedPatchA\":true,\"selectedB\":true}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

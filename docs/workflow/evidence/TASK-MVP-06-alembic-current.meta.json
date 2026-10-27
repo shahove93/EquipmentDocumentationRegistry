@@ -1,0 +1,11 @@
+﻿{
+    "check":  "ST-004 alembic current",
+    "command":  "wsl.exe -d Ubuntu -- bash -lc \u0027cd /mnt/d/Antigravity/EquipmentDocumentationRegistry \u0026\u0026 .venv/bin/alembic current\u0027",
+    "launcher_cwd":  "D:\\Antigravity\\EquipmentDocumentationRegistry",
+    "actual_cwd":  "/mnt/d/Antigravity/EquipmentDocumentationRegistry",
+    "started_utc":  "2026-10-26T19:03:57.5503279Z",
+    "ended_utc":  "2026-10-26T19:04:02.2823428Z",
+    "native_exit_code":  0,
+    "stdout_log":  "TASK-MVP-06-alembic-current.stdout.log",
+    "stderr_log":  "TASK-MVP-06-alembic-current.stderr.log"
+}

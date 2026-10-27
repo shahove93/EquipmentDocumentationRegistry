@@ -1,0 +1,11 @@
+﻿{
+  "id": "4544035c-38e1-4526-ba9d-358d99170bc1",
+  "ok": true,
+  "result": {
+    "result": "{\"detail\":\"ID\\n2\\nID типоразмера\\n7\\nНомер партии\\nSELECT-B\\nДата изготовления\\n—\\nКоличество\\n2.00\\nЕдиница измерения\\nkg\",\"formCount\":1,\"formHeading\":\"Создание партии\"}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

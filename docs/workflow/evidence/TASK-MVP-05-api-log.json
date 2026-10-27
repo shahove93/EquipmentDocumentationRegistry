@@ -1,0 +1,86 @@
+﻿{
+    "value":  [
+                  {
+                      "method":  "GET",
+                      "path":  "/batches?limit=26\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/products?limit=100\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/products/1/variants?limit=100\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "POST",
+                      "path":  "/batches",
+                      "payload":  {
+                                      "variant_id":  7,
+                                      "batch_number":  "LOT-FINAL",
+                                      "manufacture_date":  null,
+                                      "quantity":  "99.25",
+                                      "quantity_unit":  "kg"
+                                  },
+                      "status":  201
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/batches/1",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/batches?limit=26\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/batches/1",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/products?limit=100\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/products/1/variants?limit=100\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/batches?limit=26\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/products?limit=100\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/products/1/variants?limit=100\u0026offset=0",
+                      "status":  200
+                  },
+                  {
+                      "method":  "PATCH",
+                      "path":  "/batches/1",
+                      "payload":  {
+                                      "quantity":  null,
+                                      "quantity_unit":  null
+                                  },
+                      "status":  200
+                  },
+                  {
+                      "method":  "GET",
+                      "path":  "/batches?limit=26\u0026offset=0",
+                      "status":  200
+                  }
+              ],
+    "Count":  14
+}

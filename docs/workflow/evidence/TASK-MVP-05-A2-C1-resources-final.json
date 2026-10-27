@@ -1,0 +1,24 @@
+﻿{
+  "id": "f9e7ea5e-95cb-4ead-9456-8e72546913f7",
+  "ok": true,
+  "result": {
+    "workers": [],
+    "counts": {
+      "retained": 15,
+      "released": 29
+    },
+    "page": {
+      "limit": 100,
+      "total": 0,
+      "hasMore": false,
+      "nextCursor": null
+    },
+    "scope": {
+      "run": "run_68046cea3eb4",
+      "source": "flag"
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

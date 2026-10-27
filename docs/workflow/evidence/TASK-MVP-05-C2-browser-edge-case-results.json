@@ -1,0 +1,11 @@
+﻿{
+  "id": "2b11f21f-8a2c-4044-b658-bce4e78d13e4",
+  "ok": true,
+  "result": {
+    "result": "[{\"case\":\"detail-404\",\"url\":\"/batches/999999\",\"status\":404,\"contentType\":\"application/json\",\"body\":{\"detail\":\"mock missing\"}},{\"case\":\"create-422\",\"url\":\"/batches\",\"method\":\"POST\",\"request\":{\"variant_id\":0,\"batch_number\":\"INVALID-422\"},\"status\":422,\"contentType\":\"application/json\",\"body\":{\"detail\":\"invalid mock payload\"}},{\"case\":\"patch-422\",\"url\":\"/batches/2\",\"method\":\"PATCH\",\"request\":{\"batch_number\":\"MOCK-422\"},\"status\":422,\"contentType\":\"application/json\",\"body\":{\"detail\":\"bounded mock validation error\"}},{\"case\":\"network-error\",\"requested\":\"http://127.0.0.1:8999/unavailable\",\"error\":\"TypeError: Failed to fetch\"}]",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

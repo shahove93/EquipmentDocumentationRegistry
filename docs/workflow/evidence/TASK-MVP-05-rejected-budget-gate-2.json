@@ -1,0 +1,38 @@
+﻿{
+    "id":  "d54b2612-c75b-44dd-896f-1397dba4b96f",
+    "ok":  true,
+    "result":  {
+                   "runId":  "run_68046cea3eb4",
+                   "deliveryId":  "delivery_27fd00080bd4",
+                   "messages":  [
+                                    {
+                                        "id":  "msg_58033adda1da",
+                                        "run_id":  "run_68046cea3eb4",
+                                        "delivery_contract":  "current_delivery",
+                                        "from_handle":  "term_2d4e5739-0030-47c9-974b-dc80be833487",
+                                        "to_handle":  "run:run_68046cea3eb4",
+                                        "subject":  "Rejected decision_gate: USER DECISION: remove planned token caps; continue MVP-05 C2 with Codex-only",
+                                        "body":  "Orca rejected this decision_gate: No active Dispatch belongs to this message sender.\n\nOriginal body:\nUser decision from active Codex conversation: project work must not use OpenCode or Nemotron; Codex coordinates through Orca and Codex model workers only. User approved removing hard per-call and per-TASK input-token ceilings and blocking token checkpoint pauses. Keep actual usage accounting; stop for a real provider limit/refusal or explicit user stop only; never evade provider limits. Continue the existing MVP-05 C2 with preserved partial changes/evidence, same logical task and frozen F01-F04 + AC001..007 scope; retain prior actual usage 12,318,058 at call6 stop, including 1,155,000 on call6 vs former 900,000 (no refund/reset). Continue implementation and then the previously required final independent Codex review; remove obsolete token cap/reserve gates from project TASK/STATE/APPROVALS as appropriate, preserving review-cycle limits and all history. User authorization is current; no extra permission gate for this continuation. No push/deploy. Local commit only after routed PASS per existing permission. I previously attempted a decision_gate with stale dispatch ID and Orca rejected worker_identity_changed; this message intentionally has no worker/task dispatch identity and is addressed only to the owning Run coordinator.",
+                                        "type":  "status",
+                                        "priority":  "high",
+                                        "thread_id":  null,
+                                        "payload":  "{\"_orcaLifecycleRejection\":{\"code\":\"sender_not_assignee\",\"reason\":\"No active Dispatch belongs to this message sender.\"}}",
+                                        "created_at":  "2026-10-26T15:13:31Z",
+                                        "delivered_at":  "2026-10-26T15:13:32Z"
+                                    }
+                                ],
+                   "count":  1,
+                   "replayed":  true,
+                   "acknowledged":  null,
+                   "timedOut":  false,
+                   "cancelled":  false,
+                   "connectionLost":  false,
+                   "mutation":  {
+                                    "requestId":  "4fcc9250-75af-4154-992f-b30dfd5e586e",
+                                    "replayed":  false
+                                }
+               },
+    "_meta":  {
+                  "runtimeId":  "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+              }
+}

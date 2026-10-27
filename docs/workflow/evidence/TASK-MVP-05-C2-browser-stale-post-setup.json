@@ -1,0 +1,11 @@
+﻿{
+  "id": "c1ebd1bf-b986-4d27-ae8d-9a4bbc9aa867",
+  "ok": true,
+  "result": {
+    "result": "{\"delayMs\":2500,\"clickedNew\":true}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

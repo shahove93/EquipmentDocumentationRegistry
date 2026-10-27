@@ -1,0 +1,137 @@
+﻿{
+    "generated_utc":  "2026-10-26T19:05:22.2145167Z",
+    "algorithm":  "SHA-256",
+    "manifest_excludes":  "TASK-MVP-06-hashes.json (self)",
+    "artifacts":  [
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-alembic-current.meta.json",
+                          "sha256":  "c6788ab09ace29946c55fa9264064df223ec4bbfdec4079e85ad59b2b5901cf8",
+                          "bytes":  606
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-alembic-current.stderr.log",
+                          "sha256":  "a66ebc70951064050c7362bf122367498e9143f83f04832ed25096dbf992a7e2",
+                          "bytes":  958
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-alembic-current.stdout.log",
+                          "sha256":  "fa9bafce78ca5058ab4a61c5e0106545bcb893b33b59ed3d6efe3c446c463782",
+                          "bytes":  44
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-build.meta.json",
+                          "sha256":  "c5e73198d3beb71b3bfd1d5138bf65c4f49ced94c33a099af1f293f3622f120d",
+                          "bytes":  614
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-build.stderr.log",
+                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                          "bytes":  0
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-build.stdout.log",
+                          "sha256":  "eab80a89132067e24d0fc5f4d10eeeafaa685cdc44a723709c2500bff31673a6",
+                          "bytes":  828
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-evidence.md",
+                          "sha256":  "58b9625f6e75fc5dd57748d714ecda4454d70d0116cbbac922daebfa60a8a2e3",
+                          "bytes":  5305
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-executor-launch.json",
+                          "sha256":  "51088246a73c017df305e378fb5477a41b6cf0b82b88662d127ce114f764156f",
+                          "bytes":  2381
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-executor-spec.txt",
+                          "sha256":  "eff411f26d59b20fe2245be8e61697729b25f8793262a1feb1d76d2d5c343c38",
+                          "bytes":  6560
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-migration-count.meta.json",
+                          "sha256":  "f2f768d8abe5e6d692e49a22492174e0d9d34452718315dc572e6e04af1069aa",
+                          "bytes":  613
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-migration-count.stderr.log",
+                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                          "bytes":  0
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-migration-count.stdout.log",
+                          "sha256":  "0e408e29ef3eb783f03a8ba83d695cff9f3938ad0bfb3ce87a2028244b4ff7c4",
+                          "bytes":  10
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-migration-source.json",
+                          "sha256":  "9c6f235e3eec58db22a4cb85893848780f4242416293f7bec888850e13eeef6a",
+                          "bytes":  2167
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-node.meta.json",
+                          "sha256":  "825942e2c873fef8a3744cb27a1982ed6a40d5d06bb47a5eb244ac1db2f98d9f",
+                          "bytes":  644
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-node.stderr.log",
+                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                          "bytes":  0
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-node.stdout.log",
+                          "sha256":  "b9a9a5e5eaa354c2048511ed419d54316089016038697cc41fa1dc63a91d3553",
+                          "bytes":  22
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-post.json",
+                          "sha256":  "dbd18fde24d5c147817c08453c1cb38d50717433472810ba5408034ae75b4eea",
+                          "bytes":  76126
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-pre.json",
+                          "sha256":  "866e33455af4fd8cb56e8afafe52073475757050a5e08a6910ba5caf13699515",
+                          "bytes":  75412
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-product-diff-post.txt",
+                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                          "bytes":  0
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-product-diff-pre.txt",
+                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                          "bytes":  0
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-pytest.meta.json",
+                          "sha256":  "28555bf068f433f5caf20bf7fd504adba8d80d740b71c94bf494690cde983875",
+                          "bytes":  576
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-pytest.stderr.log",
+                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                          "bytes":  0
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-pytest.stdout.log",
+                          "sha256":  "6b06eeb9bbb8fee5d59c550d338bcfd0de8583fcdec03ed6b646b4ea5c129cec",
+                          "bytes":  9704
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-typecheck.meta.json",
+                          "sha256":  "8e4826aa9900a8045d3982755042657b2f9ae56f4342977db9ecd73235194d95",
+                          "bytes":  630
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-typecheck.stderr.log",
+                          "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                          "bytes":  0
+                      },
+                      {
+                          "path":  "docs/workflow/evidence/TASK-MVP-06-typecheck.stdout.log",
+                          "sha256":  "1edeb800d2789eaf88dc1f6d2d0dabcbcdf15a1e437e5316ef6d1309ded09720",
+                          "bytes":  106
+                      }
+                  ]
+}

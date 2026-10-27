@@ -171,3 +171,177 @@ MVP04-R2-001, переиспользует завершённую статиче
 Hard reserve300000 input (включая финализацию), 83320 остаётся страховочным
 остатком родительского cap. Других вызовов/следующих MVP, code changes,
 повторных тестов/reset/account changes/push/merge/deploy не разрешено.
+
+## MVP05_START_20261026
+
+Текущее прямое поручение пользователя: «создай замороженный
+docs/tasks/TASK-MVP-05.md и запиши scope, AC и лимиты в STATE+HISTORY; затем
+через существующий Run создай и запусти TASK исполнителя по утверждённой
+матрице Luna medium».
+Scope Batch list/detail/create/edit и Vite/batches; без backend/API/DB,
+Document→Batch/Product/auth/migrations. Main baseline318e6336737ee635abf593c2643f26daba273f86.
+Один writer, R1, frozen AC001..007. Резерв implementation600000 input,
+общий ceiling1000000/calls2, возможный R1 review250000 отдельно после
+completion и сверки актуальной policy. Никакого экспертного/приёмочного
+вызова это стартовое действие не выполняет. Push запрещён, reviewer до
+завершения исполнителя запрещён. Новый Run/Nemotron не используются.
+
+## MVP05_REVIEW_ONLY_9300000_20261026 — исключительное решение пользователя
+
+Точное текущее поручение пользователя:
+«Пользователь явно разрешил дополнительный бюджет только на независимое ревью Sol.
+Продолжай тот же TASK-MVP-05 без сброса счётчиков: фактические 8,812,350 input
+сохраняются; новый потолок всего TASK 9,300,000 input; резерв на единственный
+reviewer call2/2 — максимум 250,000 input, остаток 237,650 страховочный».
+Ровно один отдельный gpt-6.1-sol/medium reviewer в существующем Run.
+Только review frozen AC/ограниченного полного diff+evidence; без нового кода,
+исправлений, повторных проверок, дополнительных задач, commit/push и stage acceptance.
+Любой verdict и фактический usage записать и остановиться; исправления требуют
+нового бюджета. Это явное пользовательское исключение для R1 Codex-review и
+input cap, приоритетное над общими ограничениями skills на рутинный R1 Codex.
+
+Baseline318e6336737ee635abf593c2643f26daba273f86, main/current,
+Run run_68046cea3eb4, logical TASK-MVP-05, A1/C1.
+Расход Luna8812350 сохранён; cap1000000 превышен7812350,
+reserve600000 превышен8212350; прежний BLOCKED и snapshot7271010 сохранены.
+Новый cap9300000; calls1/2 consumed, reserve call2/2 input250000
+(включая финализацию); safety237650 не выдаётся reviewer как доп. бюджет.
+Первый full-review slot1/2 резервируется; предыдущих acceptance review нет.
+Нет автоматического увеличения потолков при FAIL/MINOR/NIT/BLOCKED.
+
+## MVP05_C2_EXTRA_1500000_20261026 — явное исключительное разрешение C2
+
+Новое прямое поручение пользователя после C1 FAIL:
+«Разрешаю C2 до 1,5 млн input-токенов по этому плану».
+Точное уточнение: C1 settlement9210419/9300000 сохраняется без сброса;
+дополнительно ровно до1500000 input, cumulative ceiling10710419.
+Резерв C2 Luna medium implementation до900000 включая проверки/evidence;
+checkpoint600000 и остановка implementation ДО900000. Резерв второго/последнего
+Sol medium full-review до450000 НЕПРИКОСНОВЕНЕН для writer; safety150000.
+Ровно2 новых calls, cumulative4; review slot2/2 A1. Сначала actual writer
+worker_done, затем независимый reviewer. Если C2 FAIL — остановиться:
+третьего full-review нет. Это не reset расходов и не изменение подхода.
+
+Тот же Run run_68046cea3eb4, main/current baseline318e6336737ee635abf593c2643f26daba273f86.
+C2 строго F-01..F-04: полный round-trip bodies/date/Decimal/edit/clear/detail GET;
+guard stale POST/PATCH callbacks; browser URL/refresh/HTML headers и ограниченные
+404/422/network/pagination evidence; final hashes после всех правок.
+Original MVP05 allowlist, mock/browser fixture, backend/API/DB/deps unchanged.
+Только targeted browser smoke и frontend typecheck/build; не backend full tests.
+One writer, no push; commit только после C2 routed PASS. Не stage acceptance.
+Предыдущие overruns и C1 FAIL остаются в append-only history/evidence.
+
+## MVP05_C2_RESUME_CALL4_11535749_20261026 — новое прямое разрешение
+
+Пользователь ответил «Разрешаю» на явный запрос одного дополнительного
+Luna implementation call до900000 input, cumulative ceiling11535749,
+с сохранением Sol final review450000 и safety150000.
+Точное текущее поручение: продолжить C2 в прежнем Run, не сбрасывать input
+и stopped call3actual825330; call4/5 Luna medium≤900000,
+call5/5 Sol medium≤450000; C2 second/full-review slot2/2.
+C1actual9210419 + call3actual825330 = currentactual10035749.
+Новый cap11535749, рост против прежнего10710419 ровно825330.
+Aggregate remaining1500000 = writer900000 +review450000 +safety150000.
+Все исторические cap/overrun/FAIL/stopped receipts остаются append-only.
+
+Code scope и frozen checklist exactly docs/tasks/TASK-MVP-05-C2.md,
+без новых требований. Prior partialcode/evidence сохраняются, один writer.
+Старый TASK-MVP-05-C2-budget-guard.py/receipts не менять и НЕ запускать:
+его worker-stop800k был ошибкой. Новый observer только read-only/alert-only
+checkpoint600k. Координатор вручную проверяет progress/spend; writer прекращает
+substantive edits до750k, finalization до900k; safety/review не тратит.
+После actual worker_done записать settledusage ДО Sol call5.
+Scope/budget failure останавливает цепочку. Coordinator не пишет code.
+Других workers/Dispatch вне этой пары, reset/account/session обходов нет.
+Commit/push до routed C2 PASS запрещены; прежний запрет push сохраняется.
+
+## MVP05_C2_CALL5_12435749_20261026 — новое прямое разрешение
+
+Пользователь прямо ответил «Разрешаю»: один дополнительный Luna implementation
+call до900000 input; новый cumulative ceiling12435749, final Sol review≤450000.
+Current settledactual10959367 сохраняется: C1 9210419, stoppedcall3 825330,
+stoppedcall4 923618 (over own900000 by23618). Никакого reset/refund/переписывания
+истории; previous ceiling11535749 увеличен ровно900000.
+Totalcalls6: implementation call5/6 Luna medium≤900000,
+finalreview call6/6 Sol medium≤450000, A1 full-review slot2/2.
+Remaining1476382 =900000writer+450000review+126382safety; writer не тратит safety.
+
+Frozen C2 scope F01..F04 и alloriginalAC carryforward неизменны; partialcode/
+evidence uncommitted сохраняются. Same Run/workspace, ровно1 новый writer;
+старый guard/terminal не переиспользовать. На owninput450000 writer делает
+blocking ask и прекращает substantive work до ответа координатора.
+Substantive закончить≤700000, finalize≤850000, headroom до hard900000.
+Observer read-only/alert-only, никаких worker-stop/close; coordinator message450k.
+Только targeted existing MOCK browser smoke, typecheck/build один раз наfinalcode,
+без backend tests/измененийbackend/API/DB/deps. Actual worker_done обязателен.
+Settledusage перед finalSol; если C2 FAIL stop, без дополнительных fixes/reviews.
+No commit до routedPASS; push не разрешён. Это не stage acceptance.
+
+## MVP05_C2_CALL6_12639440_20261026 — новое прямое разрешение
+
+Пользователь прямо ответил «Разрешаю» на ещёодин Luna implementation call6
+до900000input, перенос finalSolreview наcall7, ceiling12639440.
+Settledactual11163058 сохраняется: C1 9210419 +call3 825330stopped
++call4 923618stopped +call5 203691failedbeforeprojectwork.
+Previousceiling12435749 увеличен203691; newremaining1476382 =
+writer900000 +review450000 +safety126382. Это явное изменение ceiling,
+не reset/refund/отмена прошлых failures/overruns.
+Totalcalls7: Luna medium call6/7 max900000 inclfinalization,
+independent Sol medium call7/7 max450000, A1 second/finalfullreview2/2.
+C1fullreview1/2,failedreview1 сохранены.
+
+Frozen scope тотже C2 F01..F04+originalAC001..007/C1findings,partialcode/evidence
+call3/4 uncommitted сохраняются; call5 no projectwork по workerreport.
+Call6 starts at owninput ZERO: никаких upfrontblockingasks или ожидания
+approval доработы. Немедленно выполнять scope, own450k=>STOPsubstantive и
+blockingask; coordinator ОБЯЗАН formal orchestration reply сactualnumbers/
+решением втотжеcall, queuedstatus не заменяетreply.
+Read-only/alert-onlyobserver450k,безworker-stop/kill/close.
+Substantivefinish≤700k,finalevidence/worker_done≤850k,hard900k.
+Only targetedexistingmockbrowser smoke,typecheck/build1раз finalcode,
+no backendtests/deps. Actualworker_done required,settledusage BEFORE finalSol,
+evidence ready/fit450k required. C2FAILstop,thirdreview/fixesнет.
+Localcommit allowed only C2PASS; no push/merge/deploy/stageacceptance.
+
+## MVP05_C2_ACCOUNTING_ONLY_20261026 — прямой authority update пользователя
+
+Текущее прямое сообщение пользователя подтверждает: проект ведут только
+Codex coordinator +Codex workers через Orca,безOpenCode/Nemotron.
+Отменены ВСЕ жёсткие input-token потолки на вызов/TASK, внутренние резервы
+и блокирующие token checkpoint паузы/replies. Фактический usage учитывать;
+не прекращать работу из-за плановогорасхода/внутреннегорезерва.
+Остановка только при реальном providerlimit/refusal или прямом userstop,
+безreset-credit/покупкикредитов/account/plan/session обходов.
+Это прямой authorityupdate в coordinatorchat, не прежние rejectedgates.
+Skill routing-and-budget.md обновлена; quality/review-policy gates сохраняются.
+
+Продолжить тотже MVP-05 R1 A1/C2,Run run_68046cea3eb4,main/current,
+frozen F01..F04+AC001..007,сохранённые partialcode/evidence и C1FAIL.
+Actual12318058 и все расходы/overruns/stopped/failedcalls сохраняются.
+Старые caps/checkpoint/informationalmessages/старые taskaddenda сbudgethold
+теперь ТОЛЬКО ИСТОРИЯ и не являются инструкциями остановки/ожидания.
+Новые разрешённые шаги: Luna medium completion C2, actualworker_done/evidence,
+затем отдельный Sol medium final independent full-review2/2.
+C2 — одна исправленнаяподача,не новыйapproach/не сбросциклов.
+Токенные observers/guards/checkpointpauses не запускать.
+No scopeexpansion,reset/обходов,push/deploy; localcommit только routedPASS.
+
+## MVP05_PROVIDER_RESET_RESUME_20261026 — прямое user resume после providerlimit
+
+Пользователь сообщил: лимиты восстановлены, время после terminalreset7:35PM,
+явно разрешил продолжить ТОТЖЕ активный task_be6fd5441e23/ctx_14c1888cf95b
+в term_5a1aaebf-3abf-4e76-b4fc-bc9a8deb0590 без новогоworker/retry.
+Native inboxпуст; worker-show dispatched,observation live/exactWorkertrue;
+terminalscreen содержит старый реальный usage-limit/tryagain7:35PM.
+После runtime restore projection restored_unconfirmed, resource user_owned/
+retained; это не proofexit. Не закрыватьuserownedterminal/не дублироватьwriter.
+Нынешнее явное resume является разрешением после providerstop;
+самreset не считался самостоятельным разрешением.
+ScopeC2F01..F04+AC001..007 unchanged,accountingonly,noinputcaps/checkpointgates.
+Новый actualproviderrefusal=>stop до нового решения; безлимитных обходов нет.
+Actualworker_done/evidence перед remainingSolmediumfullreview2/2.
+No push/deploy,localcommitonlyroutedPASS.
+
+## MVP05_C3_A2_AUTHORIZED_20261026
+Пользователь «Ну делай что нужно)» прямо разрешил C3 read-only RCA и A2/C1 в прежнем frozen F01..F04+AC001..007 (TASK-MVP-05.md/TASK-MVP-05-C2.md; baseline318e6336737ee635abf593c2643f26daba273f86). Codex coordinator, один gpt-6-luna/medium writer, затем отдельный gpt-6.1-sol/medium reviewer после worker_done/evidence. A1 FAIL/FAIL и review2/2 сохранены, третьего A1 review нет.
+A2 materially distinct contract-enforcing immutable-wire evidence approach по C3 RCA. A2/C1 review1/2 зарезервирован; на FAIL STOP, автоматический C2/A3 не разрешён. Actual baseline28965861 input/calls8, все попытки/overruns сохраняются. Accounting-only без input/call caps и checkpoint gates. Stop real provider refusal/limit or explicit user stop, без обходов. No push/deploy/merge; local commit только routed PASS. Scope/backend/API/DB/deps unchanged, stage acceptance/следующий TASK не разрешены этим поручением.

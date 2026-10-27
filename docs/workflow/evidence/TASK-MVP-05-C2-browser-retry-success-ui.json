@@ -1,0 +1,11 @@
+﻿{
+  "id": "ed61a961-574b-4629-9278-499226bd48e9",
+  "ok": true,
+  "result": {
+    "result": "{\"rows\":[\"26\\t7\\tPAGE-26\\t—\\t3.00\\tkg\",\"27\\t7\\tPAGE-27\\t—\\t3.00\\tkg\",\"28\\t7\\tPAGE-28\\t—\\t3.00\\tkg\",\"29\\t7\\tC2-BROWSER-001-EDITED\\t—\\t1234567890.123456\\tkg\",\"30\\t7\\tDELAY-POST\\t04.01.2027\\t9.75\\tkg\",\"31\\t7\\tDELAY-POST-C2\\t05.01.2027\\t9.75\\tkg\",\"32\\t7\\tC2-BROWSER-002-EDITED\\t—\\t12345678901234567890.001\\tkg\"],\"controls\":[{\"text\":\"← Назад\",\"disabled\":false},{\"text\":\"Вперёд →\",\"disabled\":true}],\"hasError\":false}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

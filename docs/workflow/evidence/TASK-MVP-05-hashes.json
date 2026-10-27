@@ -1,0 +1,62 @@
+﻿{
+    "head":  "318e6336737ee635abf593c2643f26daba273f86",
+    "baseline":  "318e6336737ee635abf593c2643f26daba273f86",
+    "files":  [
+                  {
+                      "path":  "frontend/src/App.tsx",
+                      "sha256":  "A976B0C2C1FCCD761EF02045B6B4766150787F58F2D87AA1F5545740820C7007"
+                  },
+                  {
+                      "path":  "frontend/src/components/Nav.tsx",
+                      "sha256":  "DAC1865B5C5E7B9C44CFB428BC5ED9E9B3DB5549EC8DEF71C06139A3F2870B3D"
+                  },
+                  {
+                      "path":  "frontend/src/styles.css",
+                      "sha256":  "703FD5520180F2080557219397B2A8CECCC55B51BCB8267C976926CDF49D37A4"
+                  },
+                  {
+                      "path":  "frontend/src/types/api.ts",
+                      "sha256":  "C68B2D4CE4EF043E0311351C9FDE8D3EF53A650FD642DC414A5E7B07AF80F0ED"
+                  },
+                  {
+                      "path":  "frontend/vite.config.ts",
+                      "sha256":  "C4570324C7E92FC25D16B425E75019C8A2598BA643E1FC72EB4D0AFE622B5BD0"
+                  },
+                  {
+                      "path":  "frontend/src/api/batches.ts",
+                      "sha256":  "8F893B995F19672F659D3F02108D647C2A9867BBAE810AD55266A2C7C071044A"
+                  },
+                  {
+                      "path":  "frontend/src/components/BatchForm.tsx",
+                      "sha256":  "D220BE867B841531815E429207401B1FD858DF1959669373288E836A1ACA3786"
+                  },
+                  {
+                      "path":  "frontend/src/pages/BatchesPage.tsx",
+                      "sha256":  "CD46DB26321D99FB217B1F80D2A4223DED82D7BEB6BE54BB0EAF7E551C693CB7"
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C1.md",
+                      "sha256":  "72C684D6DEE0CD65FD772CDD1C2ADEF9D8CEDD9B7C6F34748470175B16212B04"
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-api-log.json",
+                      "sha256":  "AE9A4DF684DE105D8291A63318518FD9BF5F4184A3378A0A2C23E68BB94220AB"
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-browser.png",
+                      "sha256":  "15B3D88A5E4056F50130D4CE0B3331ECC26ADAADDD9F69F7C39F0325B9092911"
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-fixture.py",
+                      "sha256":  "363FD768E9FFEE81C1CA0B6F9D20999F52E6A0C6314E3AAE9360F0F03AFFBABA"
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-typecheck.log",
+                      "sha256":  "24D51E2B37EA9F26B1E82E97E440F31507494931031C4BDEBCC2333A3DDA45F6"
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-build.log",
+                      "sha256":  "9E7B3427479CB6C68D9A921F3CA1DCAE6A5428178060C0D2C4A7FA9908F1FBC5"
+                  }
+              ]
+}

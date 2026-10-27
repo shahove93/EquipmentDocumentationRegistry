@@ -1,0 +1,707 @@
+{
+    "task":  "TASK-MVP-05",
+    "cycle":  "C2",
+    "generated_last":  true,
+    "workspace":  "D:\\Antigravity\\EquipmentDocumentationRegistry",
+    "baseline":  "318e6336737ee635abf593c2643f26daba273f86",
+    "head":  "318e6336737ee635abf593c2643f26daba273f86",
+    "hash_scope":  "MVP-05 frontend product files plus all docs/workflow/evidence/TASK-MVP-05-C2-* files, excluding this manifest",
+    "file_count":  139,
+    "files":  [
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser.png",
+                      "sha256":  "66cbba6e1f009cc38b116c4365490e6b3d2f9f6b3f183d4ccc1d71d3f7cb3a39",
+                      "bytes":  43497
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-26.json",
+                      "sha256":  "117df4980dc72e226d302c56c068cd111d0fffd8bb7c7fa8abb85b37aeae0312",
+                      "bytes":  441
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-32.json",
+                      "sha256":  "4c330880d5f210f041b09cad5b4976ed362444681a25bdb1b0d9878330ad8e7a",
+                      "bytes":  517
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-action.json",
+                      "sha256":  "69701548954577a3e77d7e1f3ed228b28a3b270bd106cd99f8b5e1ff98455b75",
+                      "bytes":  258
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-ui.json",
+                      "sha256":  "84dd0e806719e9d6cf7d212f82133fb74e104b2afeb0b7140adc939a77d54cf2",
+                      "bytes":  591
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-page2-action.json",
+                      "sha256":  "55c10a01a92ab4ba110b3411c88093fce0f4b678267ef3084012fe0a1cf2cc92",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-select-26.json",
+                      "sha256":  "6c791e8c659a6d6ebcff9d5397fcf919f91a99e9f652e1ace96daeda48a021b9",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-select-32.json",
+                      "sha256":  "0bc4d051520563d97b7deb0400e7c30a1bb0205a1e0edfe51e21163b86f2702a",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-api-log-complete.json",
+                      "sha256":  "f350101d710ad2c02d116d787b938050edb3b660035153f7a696c14e49d83e22",
+                      "bytes":  98034
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-api-log-final.json",
+                      "sha256":  "fefb13aad84672ec7291a5f6a99d32aacd21d2b8c9f6bf836bd1b0403731cc63",
+                      "bytes":  58687
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-action.json",
+                      "sha256":  "e17ac3cef80d230b95ed761314cbb5c573432090040b5adab512bf3fb78e6ef1",
+                      "bytes":  416
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-open.json",
+                      "sha256":  "d0eec9f9889183bf1472fbc6f8ad9996ccfab4af906fc61172334a01e1ae18fc",
+                      "bytes":  253
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-success.json",
+                      "sha256":  "c01d060882d130f2104a3630835084a263b4f8ef790979ef82b6afef069f5b3d",
+                      "bytes":  20742
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-ui.json",
+                      "sha256":  "b01fe4ba7f83fda4cf4788776de93403b434b89b2c43e35041f8f08dd979a9ed",
+                      "bytes":  475
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-create.json",
+                      "sha256":  "346b046681e65d3640be87b131bcb756c68a87331466a373d7482eb8c7ffde3a",
+                      "bytes":  21966
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-create-action.json",
+                      "sha256":  "e3a38df4e008b66d0520885895612b9c605289e6b76402153c4c83f4d6f17afc",
+                      "bytes":  417
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-create-collision-attempt.json",
+                      "sha256":  "346b046681e65d3640be87b131bcb756c68a87331466a373d7482eb8c7ffde3a",
+                      "bytes":  21966
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-create-open.json",
+                      "sha256":  "262631ac025f36f61da466684d67bd63fd70e39dd2ac5858875684ee4c960380",
+                      "bytes":  249
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-create-success.json",
+                      "sha256":  "30065dae9c17c5b86525e2c3442c926f3dc5b6ba24e8fa6d0129c5e56557b42b",
+                      "bytes":  12031
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-create-ui.json",
+                      "sha256":  "dfe0967f10c391f4e7e44d969963f136910a01e0871310caf332b09e045bf9af",
+                      "bytes":  491
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-crud-reload.json",
+                      "sha256":  "91db4e73cdf4db1c28b5d11d0998bd96383f5c55e22b84ca4971fa86e485dbbf",
+                      "bytes":  252
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-crud-sequence.json",
+                      "sha256":  "be26134c258a025844d22189a854f0222aec1fe9e398dceb4b17955d2661c385",
+                      "bytes":  26574
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-detail-ui.json",
+                      "sha256":  "c64dc1734458f8e9b094572e3b6a8de4bdb7a7b0b2179ceb9ace86f38f90b523",
+                      "bytes":  503
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-edge-case-results.json",
+                      "sha256":  "a209ca73c589ba007df87f21a26057d7f218762b82dcf7a6d4dbcec11aa33227",
+                      "bytes":  955
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-edge-cases.json",
+                      "sha256":  "31aa2c4f696a034a1cd613de37d303bf9bd39025083d4a7b90883a595543dd74",
+                      "bytes":  40767
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-action.json",
+                      "sha256":  "de819b62998c134c9b59693069b21091d389364c18559a5a93a26636c9503c58",
+                      "bytes":  305
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-open.json",
+                      "sha256":  "3a0c6783e16a0ec9f1cf0d9c350a8c5efa1f886815f542acb1cdd53402f5e13e",
+                      "bytes":  247
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-success.json",
+                      "sha256":  "67b0816f13fc883336b2850a630136e889fb0b611de24ea8532c6b3af5821b6a",
+                      "bytes":  16417
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-ui.json",
+                      "sha256":  "bd2336177b5bdd72c9b4d3ea159523315e3d09494628139c99286421322fd287",
+                      "bytes":  498
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-final-page2-action.json",
+                      "sha256":  "79308467d66f898a4ded891f7b8ce00c40d8e50de8bfe2091f015d84bd1ab772",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-final-reload.json",
+                      "sha256":  "4b49cd952186203c6ab252d09b766f71d147ffda86bcbc20a4ef65bdab40d86b",
+                      "bytes":  252
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-final-snapshot.json",
+                      "sha256":  "cf53933d3db881a964d52512da70d9e7ab50dc43bed65763b34d7a99d0e1ec9d",
+                      "bytes":  9336
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-full-sequence.json",
+                      "sha256":  "837981691e9a38acf3462f5eba0adcc24b8f86086ccef1b78510f6a2a14216ba",
+                      "bytes":  21441
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-list-detail.json",
+                      "sha256":  "f03e809a8bfb257c9b915ee68f6fa01f90b919c175cc9c5d6e8ec037ef49642a",
+                      "bytes":  7314
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-list-detail-action.json",
+                      "sha256":  "e25bf124554cec587f9517df5e598a8dbf68a26f87c6862fe861cb1fcb684b40",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-list-ui.json",
+                      "sha256":  "5a82825ec59f9cbb0c414b323a9ccbe0be207ea1e5719da9d729b04a27cf8992",
+                      "bytes":  510
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-reload-command.json",
+                      "sha256":  "877b9752c5545244117f92bbbe4d7dcae9e61b5554c63f4c9a3a9165eb8338bd",
+                      "bytes":  252
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-reload-result.json",
+                      "sha256":  "191236076c0399c88c37f52fbc6082fa8664ce9dde45c6b0f9a1239d8d1943dd",
+                      "bytes":  445
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-requests-01.json",
+                      "sha256":  "0116c7bebfd9356b776d8c33d54e292643b6a392eb58f396fc7ee1ae808df9fd",
+                      "bytes":  7406
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-action.json",
+                      "sha256":  "e0da0e3a4c488b9d2b997360a14d067b60f21f8a8ac8b82026130213e76da08f",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-error-ui.json",
+                      "sha256":  "952dbe574580e8b8483ed66fb5838ce1af06c81789c95ccb3cd040378cf84fbd",
+                      "bytes":  456
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-pagination.json",
+                      "sha256":  "bb40472263cbc9cb4e3f0ae916e66479b6a0942dc75850fe9e0eb83afdcf3ae0",
+                      "bytes":  45166
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-reload.json",
+                      "sha256":  "ead1a23aef454e96ef5fd6abb34eb0d032294e622894f84b87e16f5856eb122d",
+                      "bytes":  252
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-success-ui.json",
+                      "sha256":  "4d6019ac8031add5c7cae3edf92ce7d7848195ad06407b4f7b9bffb30cebfb4a",
+                      "bytes":  738
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-trigger.json",
+                      "sha256":  "86355468d86dbd7c93655665b8c842a72ea6e3cb517f118a82a182f2d495d934",
+                      "bytes":  294
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange.json",
+                      "sha256":  "51e218116593b047270abfa8ad4b8f47885d1535b6e24bd302643ddeb2683edd",
+                      "bytes":  49881
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-action.json",
+                      "sha256":  "c68f96f2ad9ba1044722a1166068ed04a9b8bc9e23e0f8c6edcdf4ecba0e4080",
+                      "bytes":  302
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-open.json",
+                      "sha256":  "287c2d6767bbbcd9128acf7990c837c3b8ac8d153d45fee8b4bfd42611846fb2",
+                      "bytes":  247
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-result.json",
+                      "sha256":  "eddb7ef00a8a9931b6aa92f146723d937c9c71f18fa0ba465b6c55b62fcae901",
+                      "bytes":  360
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-select-a.json",
+                      "sha256":  "fe09877ff1bd6f783e6256732a61510c2f2a7f1a09f0b92203ba146935df3302",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-action.json",
+                      "sha256":  "7a57b5f3d28a46a1394f10bd443dd31c364331e4f3c15772be7b7b597f93c1bf",
+                      "bytes":  281
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-edit-open.json",
+                      "sha256":  "13bba9a2941f3fabd8a68ee1aa3cc0b30c98090ac777b593a1680e44176e3bf1",
+                      "bytes":  247
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-result.json",
+                      "sha256":  "36db8d51035454c44376d0810b3fc5aee66a7927b87a8119a182edcbea95e914",
+                      "bytes":  457
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-select-a.json",
+                      "sha256":  "b3948ba8f9d5eca680297b8594689a671081a54c64e151d24c24a86bf27ad75f",
+                      "bytes":  240
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-selection-setup.json",
+                      "sha256":  "ecfabfd45dfe045583971ff4750bb3dfdce13b49b28ff60e95e50d9b098d1c12",
+                      "bytes":  252
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post.json",
+                      "sha256":  "89a76c066c39585293375d98f5bff24d7eeb5d96122c9e966a6dd243049ba657",
+                      "bytes":  40125
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-action.json",
+                      "sha256":  "391d9a0a4f691432e27de8ddba1419178bb1c60bd1bd3399b26f95007d31340f",
+                      "bytes":  291
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-reload.json",
+                      "sha256":  "410da3546c512afc32b19be16b404dd6e8fa240caf1bc38187523c5430aadd0f",
+                      "bytes":  252
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-result.json",
+                      "sha256":  "029e4a4caa7608b02b114e5858fef1e1e2a28da9f4577cd53541a1e4e7810dd4",
+                      "bytes":  507
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-setup.json",
+                      "sha256":  "5e5cc38605559511680ad9f423925f98f0e0cdc99ccfe35954945f3c231b24ae",
+                      "bytes":  274
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-selection.json",
+                      "sha256":  "9ae7601cb4ac987dda80810f822e6cde7de8b59a5860e9b502ec34bc90f67384",
+                      "bytes":  51175
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-budget-guard.json",
+                      "sha256":  "fb824aebca369fd20d568c82a2ee2bcf7d2777d5e0469830bcfcd0367c5a8699",
+                      "bytes":  958
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-budget-guard.py",
+                      "sha256":  "daba805d6ea833308af4c837b6f7d24b88c9cf2a057d86c7a35aa5f28797651e",
+                      "bytes":  2642
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-build.log",
+                      "sha256":  "560e102651142bfd121d1ac34bd23f145e0efc61ec1ac52e86341118d70bf873",
+                      "bytes":  682
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-launch.json",
+                      "sha256":  "96c64a04188feac8ab6f6cf533894484080b5c2e59d3f9d339e5e363ed84e880",
+                      "bytes":  2381
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-observer.json",
+                      "sha256":  "7f748622dba69c62e7edd1416771365c2ab09cb8d0d1fdae1b421bb3f345054a",
+                      "bytes":  301
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-observer.py",
+                      "sha256":  "98707551982b575d3c789f46d0b6ec77f6122844d078aedab183fc55c855d00f",
+                      "bytes":  1428
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-observer.stop",
+                      "sha256":  "72803ec0a8e2205218ba3cce20ad61c950240a9122e9a3938ac382515be03381",
+                      "bytes":  46
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-provider.json",
+                      "sha256":  "770cb4af64b01aca585289418d0b16a4ac05f4953a99ca2410d597c55052b297",
+                      "bytes":  174
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-settlement.json",
+                      "sha256":  "6c3ba4108e740acf8693bb32ef35ebe5eb1b5dbdc82698eee20215e0914b1b6b",
+                      "bytes":  8338
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-spec.txt",
+                      "sha256":  "57d35068208caf0346966ae3e66cc29382b775280dfd45c34cd7ec4c06f6a4b3",
+                      "bytes":  2223
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-start-metadata.json",
+                      "sha256":  "f55e4b1cdb121c237e686832eff7f901e7ed4f0ec94118af12de3a5322a0c8c9",
+                      "bytes":  15893
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call5-usage-final.json",
+                      "sha256":  "baa5f1ba3de593bf796cfa6421eb351b6a07af93fc65f762a1346af68913a4ab",
+                      "bytes":  1274
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-accounting.json",
+                      "sha256":  "1b8ffebb4775c3fc2b05eb92b9b60bd98d3a6d6efafa6a81438592cb0140c133",
+                      "bytes":  204
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-launch.json",
+                      "sha256":  "2e8eb00511f8c0e0903f7bc48932cacd394a205c4f68ddc11abb34ee3b6d2871",
+                      "bytes":  2381
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-manual-budget-stop.json",
+                      "sha256":  "bcdd14fd4334b29afbc42ae8369b00dbd108840dab9323b80de35bd6168a8fdb",
+                      "bytes":  589
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-observer.json",
+                      "sha256":  "f50eb89a17da0a970c29bf5aaff4a50793b759d5621997c116047ee21726c5a9",
+                      "bytes":  302
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-observer.py",
+                      "sha256":  "f7aeb0b7a5392090ed2780957e2f228dc86a31e91c839356e80e236729d7bb82",
+                      "bytes":  1428
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-observer.stop",
+                      "sha256":  "6add8c0c536d7cbb9b1f6ac7c1401aa6c595b2ccc1a7094586ea5f150582a33c",
+                      "bytes":  32
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-provider.json",
+                      "sha256":  "ddb900dedf7218cf45ae8a425c63f861e278dd2d71bacd3352d0b28c0efe2c07",
+                      "bytes":  174
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-resource-release.json",
+                      "sha256":  "684ec1198a9c34a8911f5f46ee76c5ef36ad5560da516d2439c653ef65c0a469",
+                      "bytes":  456
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-spec.txt",
+                      "sha256":  "5c4ad7ecc3ad5eeb98f66689abda0c960e74574442de779a79705c3cff254485",
+                      "bytes":  2225
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-start-metadata.json",
+                      "sha256":  "194ebd25f6e6739dd90f23146c6da1d0f145444de38b8361215016a615589e13",
+                      "bytes":  15889
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-call6-usage-final.json",
+                      "sha256":  "d6e21cc49aef8630d94861fae0354dda2cdf9c7acf694039300b08dd137e93d4",
+                      "bytes":  1280
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-completion-launch.json",
+                      "sha256":  "5c402cc53853d5e15b72d3e541014086ed3275201d1c1718f19599036da944cb",
+                      "bytes":  2381
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-completion-provider.json",
+                      "sha256":  "af226ce8f1b4101a5f4e39fdf93b8ea009cc73c6fa48b70ec20daef32538e7b3",
+                      "bytes":  344
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-completion-spec.txt",
+                      "sha256":  "82a15bbb8baac8d33c8fe446307c5393edc8790731951844ca21c71caf0e2a0f",
+                      "bytes":  2516
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-completion-start-metadata.json",
+                      "sha256":  "8c0cd52aaeb89d242d080a41d3a347ccd11639cdcbd5352fc0ce6e4293d8f9a1",
+                      "bytes":  15889
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-completion-usage-resume.json",
+                      "sha256":  "f34926755208da977039332a9718eedfec435b1de75254a6ba2112a1359a942b",
+                      "bytes":  1280
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-completion-usage-start.json",
+                      "sha256":  "ff3f66a70aa84c3872ecc92116721043d0e461b8b994301ae55e46dd9cd98eaa",
+                      "bytes":  1274
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-diff-check.log",
+                      "sha256":  "459fc474d000520adbdb397e4154a1de66804018da74c3b35721637724f6bcad",
+                      "bytes":  527
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-evidence.md",
+                      "sha256":  "2f24974518580ba4cd030a42e5d917b25f9d9e40209d543e1340d0f4becf7531",
+                      "bytes":  6308
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-final-review-spec-base.txt",
+                      "sha256":  "950bcd4ae0c4ad21fe4cbf8de51532b11a1854b79c31b9199796042300df3175",
+                      "bytes":  3665
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture.log",
+                      "sha256":  "37b29eba90ef08f3d8a11d9ba94c659bde314ef372b90fdd24f916c624e25200",
+                      "bytes":  90
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture.py",
+                      "sha256":  "f00b6164dcc87346711d968cb957c66a9d2db7d33c66a7e544a9622ea331138f",
+                      "bytes":  3986
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture-8001.py",
+                      "sha256":  "5d05517a11c14471885c516a2fd71fd350e8c26d214e56b28a139486311c67f8",
+                      "bytes":  3986
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture-error.log",
+                      "sha256":  "3de09170a2ccb5baa64a1fe2bcd5cf0c2bdc006da1fe0d1d7204221ecf7783ac",
+                      "bytes":  1730
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture-process-owner.json",
+                      "sha256":  "6857bb032674c7c9462ba3bfb899980c88b2609f89cf06d25f5013949720992c",
+                      "bytes":  388
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture-restart.log",
+                      "sha256":  "dd0b99bb6e9c79d7e5f08c99c965b7d048a355bcce63f28a4dc1eafd989fa5e3",
+                      "bytes":  91
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture-restart-error.log",
+                      "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                      "bytes":  0
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-fixture-run.log",
+                      "sha256":  "dd0b99bb6e9c79d7e5f08c99c965b7d048a355bcce63f28a4dc1eafd989fa5e3",
+                      "bytes":  91
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-html-response.json",
+                      "sha256":  "6303647dc8ddb0dbe7726bb38841fde382127a3cf9ea1cf8d81b1cf4a9855062",
+                      "bytes":  91
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-http-api-body.json",
+                      "sha256":  "717cf0617b47353e35c00b3cec1e8e4ad6701e10e875fa2a68d2bc48c1ca3635",
+                      "bytes":  3264
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-http-api-check.log",
+                      "sha256":  "98a70a5905261db91a784f4b7882fa8ec6194f8891ae953fde4c01f4f30f176d",
+                      "bytes":  376
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-http-api-headers.txt",
+                      "sha256":  "d70c842fc93004f7151be5dbac52749bd283ec06924dc8c22f3afda1ff5fe3b4",
+                      "bytes":  184
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-http-html-check.log",
+                      "sha256":  "75abe3e68f92ab34a1414fa745dbea66d8a878f806aef1b25e7158f2574dfb99",
+                      "bytes":  396
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-http-html-headers.txt",
+                      "sha256":  "df1c67a1f9410c8e8a39895da0ccb9e245106586228c637090e3031140955ba3",
+                      "bytes":  234
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-implementation-launch.json",
+                      "sha256":  "19a11b17909b93efb6fd60dc660d470d5cd6e92656c5eeca7c72d78326fd1944",
+                      "bytes":  2381
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-implementation-spec.txt",
+                      "sha256":  "e919e106b9b54df3a7749d6c7aed9dc5845e7d227efa8f3ae1483eb6c5369ab8",
+                      "bytes":  2404
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-provider.json",
+                      "sha256":  "d6dc592bd5b04468a773c32fa60f47e8728cb6f9cf6413d8fe8751c248b293c8",
+                      "bytes":  344
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-provider-reset-same-session-resume.json",
+                      "sha256":  "a4b226826e49e2d884f6f147edd538b80d4e7ed6c0b884c7bd03d303eca757be",
+                      "bytes":  892
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resource-release.json",
+                      "sha256":  "0cd10e0dc1b7052abc9eb80e384b4b429a3fc4a60a74a149d36bd476d30af57d",
+                      "bytes":  456
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-implementation-spec.txt",
+                      "sha256":  "c14b85e865319220c3d185c332e2a8bf40d3c0f4738ddc5bb861cd3c230e02c8",
+                      "bytes":  2757
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-launch.json",
+                      "sha256":  "d8720ab9069d76f5eb4b63bcc9613dfa8c80e09db8cc190f2b2496c4ad84224b",
+                      "bytes":  2381
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-manual-budget-stop.json",
+                      "sha256":  "b666c4059fdccb2dbab9c7a0b29b04509117dd46635077185b82cec1ba14bbb4",
+                      "bytes":  589
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-observer.json",
+                      "sha256":  "be441fb33551dfecc6d4f156ee7b1df2d0ec041f6b32da12eee22efb8af1db7f",
+                      "bytes":  300
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-observer.py",
+                      "sha256":  "cf4c43ea8b2d869e2ba908095a24e92b47248f43c2639a0da96d66f3b13dd50a",
+                      "bytes":  1430
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-observer.stop",
+                      "sha256":  "841169c89fac2347fddffb52765677adf7111372dba9495ff3ede1f0a25fe3f1",
+                      "bytes":  78
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-provider.json",
+                      "sha256":  "26e3595baa1f3e7c36fa1f6b5e902baa70fa7182115e96b23c9ad4ade586546a",
+                      "bytes":  174
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-resource-release.json",
+                      "sha256":  "09655a2f11747df8bf3a718bb88d5cb9eda37dda1552d70372d72be552fa8628",
+                      "bytes":  456
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-start-files.json",
+                      "sha256":  "e883efd8738c0b06177a63d11204a479bbd30bdfb6c6ec7631184cd506994c16",
+                      "bytes":  1144
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-start-metadata.json",
+                      "sha256":  "be7fefad4d9db8ab13ceacdb61cfe76c6d387d9ac08d9e5a0fc089787799af2c",
+                      "bytes":  15889
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-resume-usage-final.json",
+                      "sha256":  "13ee7acccfba4f8e6e78cefb8058fe727fa011ebc55b8e32ae6669673b990c7b",
+                      "bytes":  1274
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-scope.log",
+                      "sha256":  "547e04f9d534569f83a4939b1668ffedc5b7db03dcc53d8a35b96d9a14dc6300",
+                      "bytes":  609
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-start-metadata.json",
+                      "sha256":  "c671e23ba7d3d7c3daed56369fbf34aa79619439f01a045a83a51c519d15db0c",
+                      "bytes":  15893
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-stopped-resource.json",
+                      "sha256":  "25533cc8bcdca86d236b202a832eb8c22ddc6458cd9f484eea57ea5255136f78",
+                      "bytes":  16258
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-stop-receipt.json",
+                      "sha256":  "4e9d55d1a0250e8e6f47b2d0f4eb91d8919bf8b7418a38b24c8d88c1e5ce6efc",
+                      "bytes":  936
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-typecheck.log",
+                      "sha256":  "6bf161e6f0870f4a6b87033284d668bb1750abd1d402ae824a89a8d2e5135623",
+                      "bytes":  315
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-usage-final.json",
+                      "sha256":  "81a090bfd67c797fabb486b1f77117f8957494e196527173d2563aec67529256",
+                      "bytes":  1274
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-usage-start.json",
+                      "sha256":  "0638e5277503f3a9f2ce87dce098b4aaf45afd72a2664955a3c090c6aba02472",
+                      "bytes":  1274
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-C2-vite.config.ts",
+                      "sha256":  "015667f5dca5756a408e6e373c6c0b272c00905f6d13b99e76f7768c1d1182ae",
+                      "bytes":  663
+                  },
+                  {
+                      "path":  "frontend/src/api/batches.ts",
+                      "sha256":  "8f893b995f19672f659d3f02108d647c2a9867bbae810ad55266a2c7c071044a",
+                      "bytes":  700
+                  },
+                  {
+                      "path":  "frontend/src/App.tsx",
+                      "sha256":  "a976b0c2c1fccd761ef02045b6b4766150787f58f2d87aa1f5545740820c7007",
+                      "bytes":  1156
+                  },
+                  {
+                      "path":  "frontend/src/components/BatchForm.tsx",
+                      "sha256":  "e9dbff269fe9f95b1e96ca593c8e8255e0554dd715ebecd20e86f6cb8fe40050",
+                      "bytes":  5874
+                  },
+                  {
+                      "path":  "frontend/src/components/Nav.tsx",
+                      "sha256":  "dac1865b5c5e7b9c44cfb428bc5ed9e9b3db5549ec8def71c06139a3f2870b3d",
+                      "bytes":  1742
+                  },
+                  {
+                      "path":  "frontend/src/pages/BatchesPage.tsx",
+                      "sha256":  "e6391b27026ac5fb1c8dcc50d2f597a929fb499cb90a39948a4678a850ffa11f",
+                      "bytes":  5697
+                  },
+                  {
+                      "path":  "frontend/src/styles.css",
+                      "sha256":  "703fd5520180f2080557219397b2a8ceccc55b51bcb8267c976926cdf49d37a4",
+                      "bytes":  18294
+                  },
+                  {
+                      "path":  "frontend/src/types/api.ts",
+                      "sha256":  "c68b2d4ce4ef043e0311351c9fde8d3ef53a650fd642dc414a5e7b07af80f0ed",
+                      "bytes":  7839
+                  },
+                  {
+                      "path":  "frontend/vite.config.ts",
+                      "sha256":  "c4570324c7e92fc25d16b425e75019c8a2598ba643e1fc72eb4d0afe622b5bd0",
+                      "bytes":  2974
+                  }
+              ]
+}

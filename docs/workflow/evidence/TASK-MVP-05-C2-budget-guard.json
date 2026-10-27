@@ -1,0 +1,11 @@
+{
+  "source": "C:\\Users\\user\\.codex\\sessions\\2026\\10\\26\\rollout-2026-10-26T16-54-35-01a1787d-d5be-78b0-9142-9dc30a8311a0.jsonl",
+  "observed_at": "2026-10-26T13:58:03.919Z",
+  "input": 825330,
+  "cached_included": 774528,
+  "checkpoint_sent": true,
+  "budget_stop": {
+    "exit": 0,
+    "receipt": "{\n  \"id\": \"771cdd31-a30e-43bc-a9aa-06dde5976d7e\",\n  \"ok\": true,\n  \"result\": {\n    \"dispatchId\": \"ctx_00fa3aee8c79\",\n    \"state\": \"stopped\",\n    \"alreadySettled\": false,\n    \"processAction\": \"closed_agent_terminal\",\n    \"close\": {\n      \"handle\": \"term_ea1c0a6d-b1bc-4bc1-99fc-7d90085b8afb\",\n      \"tabId\": \"7d00d090-fd64-4895-aa3a-da054d54719a\",\n      \"ptyKilled\": true\n    },\n    \"mutation\": {\n      \"requestId\": \"8174a6a6-e538-4bcc-8032-6446bef2f182\",\n      \"replayed\": false\n    }\n  },\n  \"_meta\": {\n    \"runtimeId\": \"bb188a0d-615c-4bb3-af01-79b07f0a3260\"\n  }\n}\n"
+  }
+}

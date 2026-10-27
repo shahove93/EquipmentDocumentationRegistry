@@ -1,0 +1,1184 @@
+﻿{
+    "captured_utc":  "2026-10-26T19:04:25.2638208Z",
+    "head":  "06f58065022db9c58524909027ddc2d454f7071f",
+    "branch":  "main",
+    "status":  [
+                   " M ROADMAP.md",
+                   " M docs/workflow/APPROVALS.md",
+                   " M docs/workflow/HISTORY.md",
+                   " M docs/workflow/STATE.md",
+                   "?? docs/tasks/TASK-MVP-05-A2-C1-review-spec.txt",
+                   "?? docs/tasks/TASK-MVP-05-A2-C1.md",
+                   "?? docs/tasks/TASK-MVP-05-C2-call5.md",
+                   "?? docs/tasks/TASK-MVP-05-C2-call6.md",
+                   "?? docs/tasks/TASK-MVP-05-C2-completion.md",
+                   "?? docs/tasks/TASK-MVP-05-C2-resume.md",
+                   "?? docs/tasks/TASK-MVP-05-C2.md",
+                   "?? docs/tasks/TASK-MVP-05.md",
+                   "?? docs/tasks/TASK-MVP-06.md",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A1-C3-RCA.md",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-evidence.md",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-hashes.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-implementer-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-implementer-release.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-implementer-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-implementer-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-local-commit.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-resources-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-reviewer-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-reviewer-release.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-C1-reviewer-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-api-body.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-api-headers.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-api-log.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-after-clear-other.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-clear-form.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-cleared-ui.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-create-form.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-create-ready.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-create-selected.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-create-variant-menu.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-created.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-edit-form.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-edited.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-final-detail.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-initial-detail.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-list.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-page2.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-reload.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser-reload.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-browser.png",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-crud-trace.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-fixture.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-git-status.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-html-body.html",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-html-headers.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-identity.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-inherited-hash-check.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-validation-probe.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-validation.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-verify-trace.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-A2-vite.config.ts",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C1.md",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-26.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-32.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-detail-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-page2-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-select-26.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-after-clear-select-32.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-api-log-complete.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-api-log-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-open.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-success.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-clear-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-create-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-create-collision-attempt.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-create-open.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-create-success.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-create-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-create.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-crud-reload.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-crud-sequence.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-detail-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-edge-case-results.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-edge-cases.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-open.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-success.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-edit-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-final-page2-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-final-reload.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-final-snapshot.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-full-sequence.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-list-detail-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-list-detail.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-list-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-reload-command.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-reload-result.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-requests-01.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-error-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-pagination.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-reload.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-success-ui.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-retry-trigger.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-open.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-result.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange-select-a.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-formchange.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-edit-open.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-result.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-select-a.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-patch-selection-setup.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-action.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-reload.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-result.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post-setup.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-post.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser-stale-selection.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-browser.png",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-budget-guard.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-budget-guard.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-observer.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-observer.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-observer.stop",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-provider.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-settlement.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-start-metadata.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call5-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-accounting.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-manual-budget-stop.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-observer.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-observer.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-observer.stop",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-provider.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-resource-release.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-start-metadata.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-call6-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-provider.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-resource-decision.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-start-metadata.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-usage-resume.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-completion-usage-start.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-evidence.md",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-final-review-fleet-check.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-final-review-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-final-review-settled.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-final-review-spec-base.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-final-review-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-final-review-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-fixture-8001.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-fixture-process-owner.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-fixture.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-hashes.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-html-response.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-http-api-body.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-http-api-headers.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-http-html-headers.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-implementation-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-implementation-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-provider-reset-same-session-resume.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-provider.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resource-release.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-implementation-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-manual-budget-stop.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-observer.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-observer.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-observer.stop",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-provider.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-resource-release.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-start-files.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-start-metadata.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-resume-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-start-metadata.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-stop-receipt.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-stopped-resource.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-usage-start.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-C2-vite.config.ts",
+                   "?? docs/workflow/evidence/TASK-MVP-05-api-log.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-browser-provision.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-browser.png",
+                   "?? docs/workflow/evidence/TASK-MVP-05-fixture.py",
+                   "?? docs/workflow/evidence/TASK-MVP-05-hashes.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-implementation-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-implementation-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-provider-checkpoint.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-rejected-budget-gate-2.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-rejected-budget-gate.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-review-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-review-provider.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-review-result.md",
+                   "?? docs/workflow/evidence/TASK-MVP-05-review-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-05-review-start-metadata.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-review-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-review-usage-start.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-start-metadata.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-task-create.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-usage-checkpoint.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-usage-final.json",
+                   "?? docs/workflow/evidence/TASK-MVP-05-worker-metadata-checkpoint.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-alembic-current.meta.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-build.meta.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-executor-launch.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-executor-spec.txt",
+                   "?? docs/workflow/evidence/TASK-MVP-06-migration-count.meta.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-node.meta.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-pre.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-pytest.meta.json",
+                   "?? docs/workflow/evidence/TASK-MVP-06-typecheck.meta.json",
+                   "?? docs/workflow/reviews/TASK-MVP-05-A2-C1.md",
+                   "?? docs/workflow/reviews/TASK-MVP-05-C1.md",
+                   "?? docs/workflow/reviews/TASK-MVP-05-C2.md"
+               ],
+    "source_manifest":  [
+                            {
+                                "path":  "alembic.ini",
+                                "sha256":  "601c011c280a625da1de37de891a1a7dca97263c67461167ce63676a195ef52e",
+                                "bytes":  5218
+                            },
+                            {
+                                "path":  "alembic/versions/056121f44e99_create_document_link_tables.py",
+                                "sha256":  "fa5d6d0c54c83e8f9f7f1be1455b8dc014710aeae53b71dcb0f006ce9f5d0174",
+                                "bytes":  2641
+                            },
+                            {
+                                "path":  "alembic/versions/4a43cb5a19ea_create_files.py",
+                                "sha256":  "c8168b868fbbcf58c421c9e0c7968d0bc39271f2545c20742afb8f1a8b2749f9",
+                                "bytes":  1569
+                            },
+                            {
+                                "path":  "alembic/versions/4d64e9e30df5_create_products.py",
+                                "sha256":  "1875c16fdd0e8400edbb075e10c0d27cb5c2d6c8f8f6fc2cc13b39f267d47714",
+                                "bytes":  1302
+                            },
+                            {
+                                "path":  "alembic/versions/6984fcc861e6_create_batches.py",
+                                "sha256":  "8de39b9683fb3c9c510bc32b64a840b4b7fa4f5bb2ccddfe7de0768d6f264c05",
+                                "bytes":  1304
+                            },
+                            {
+                                "path":  "alembic/versions/6a736cbf733b_create_document_types.py",
+                                "sha256":  "8ffe5f5931b019b0c522231cab0212262287dd1a8440c049c28c333232c30826",
+                                "bytes":  1013
+                            },
+                            {
+                                "path":  "alembic/versions/6fdaae2f21ea_create_issuers.py",
+                                "sha256":  "bd3836f1aab5e72b028e3d5d3f8e67b59930668648f56f54c50e7f87ea1db0a3",
+                                "bytes":  992
+                            },
+                            {
+                                "path":  "alembic/versions/844b25c35c4b_create_documents.py",
+                                "sha256":  "5e926953a6fbcdff5392560100d5d72d16ae60260cf66aa842341add0846e96f",
+                                "bytes":  1794
+                            },
+                            {
+                                "path":  "alembic/versions/9e6a954d41be_add_unique_constraint_product_variants_.py",
+                                "sha256":  "f086fcf07a28312484b51a62c4c21b4f7dfb46083bdc0c82f20669fe74956d0e",
+                                "bytes":  1021
+                            },
+                            {
+                                "path":  "alembic/versions/a3f1c72d5b90_create_document_verification_events.py",
+                                "sha256":  "7a24f7a05b18c075a2d127f8a27fb0efe7996a82eca50c63a8e24a9f0e786776",
+                                "bytes":  3479
+                            },
+                            {
+                                "path":  "alembic/versions/b0c2277bc034_create_manufacturers.py",
+                                "sha256":  "caaac1233cbacbebeb785b289fa6be6375d9613877fbd81be381ddfdda3c9823",
+                                "bytes":  955
+                            },
+                            {
+                                "path":  "alembic/versions/c3bb6dcf63cf_create_product_variants.py",
+                                "sha256":  "51c4b4902ab6d7d19ad70ee9309c6e8d69e0cce0fe0d29e504588edc49f45d12",
+                                "bytes":  1359
+                            },
+                            {
+                                "path":  "alembic/versions/dc9ec9cdbb30_make_products_standard_not_null.py",
+                                "sha256":  "13a479eed8c0bd48ac2faae2a6993e97aa550358a3323308e5154f56d4a7ba47",
+                                "bytes":  1018
+                            },
+                            {
+                                "path":  "alembic/versions/e4b8c2d16a70_add_ix_files_document_id_id.py",
+                                "sha256":  "20552f44ab6f284a151afe69555008085de66fa573dc2cc76f45c25d553d25e4",
+                                "bytes":  1001
+                            },
+                            {
+                                "path":  "app/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/batches/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/batches/router.py",
+                                "sha256":  "0c4b63db13fe2f5eddc7aadd1d2602346a2f58237c27cdc23f9be3a6aa2cc506",
+                                "bytes":  2283
+                            },
+                            {
+                                "path":  "app/api/batches/schemas.py",
+                                "sha256":  "46a12b11360f9a4e94c4b11e150eb93522890f26343fc2db12f1e14b9db5ceda",
+                                "bytes":  1748
+                            },
+                            {
+                                "path":  "app/api/document_types/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/document_types/router.py",
+                                "sha256":  "5a4c56c8876be702f5368d8f2f2db77d3c7d8f54a5323ae6bd2b1d8250f953ec",
+                                "bytes":  4661
+                            },
+                            {
+                                "path":  "app/api/document_types/schemas.py",
+                                "sha256":  "65edd643107c67f8c5a7bdc56f1d134719d1cf4330a2dca62921d13e4ad435a8",
+                                "bytes":  1612
+                            },
+                            {
+                                "path":  "app/api/document_variants/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/document_variants/router.py",
+                                "sha256":  "2152919ee1959aab18c01856421ffe94fb695bb80da755e929b39287adba829b",
+                                "bytes":  5589
+                            },
+                            {
+                                "path":  "app/api/document_variants/schemas.py",
+                                "sha256":  "8648ff403a546f8382cd4f6ce4b05000a590c805ba2df43f9cf8a67860dd8335",
+                                "bytes":  2941
+                            },
+                            {
+                                "path":  "app/api/documents/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/documents/router.py",
+                                "sha256":  "ed07238bfdf481ad3c7ecfa67e9fb33a90e48fbb19cd2ee08310c30a0033859f",
+                                "bytes":  17228
+                            },
+                            {
+                                "path":  "app/api/documents/schemas.py",
+                                "sha256":  "be02c1f31ca8c1ed66249cc70ff04fd1da30e6ea895477b7a2df2ea6430061e9",
+                                "bytes":  10121
+                            },
+                            {
+                                "path":  "app/api/files/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/files/download.py",
+                                "sha256":  "c978a2e7c2078b448cab4eee5fb2e241aa772634ffa9eb0d90c2ec94e520b2ce",
+                                "bytes":  9753
+                            },
+                            {
+                                "path":  "app/api/files/router.py",
+                                "sha256":  "b6293286cf77624a7624615da7ff6f19f535997bb57e785a5326b429a47c2b77",
+                                "bytes":  19071
+                            },
+                            {
+                                "path":  "app/api/files/schemas.py",
+                                "sha256":  "b5650765f31decb49f0424512c0b1448da66ff6c764fcf477f884b0c6c9dfef6",
+                                "bytes":  1249
+                            },
+                            {
+                                "path":  "app/api/issuers/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/issuers/router.py",
+                                "sha256":  "4c4c8cd4ca5b3726564c2fcc279d89cb783afb3c3de6ef5bbd29297afe48ffb7",
+                                "bytes":  4184
+                            },
+                            {
+                                "path":  "app/api/issuers/schemas.py",
+                                "sha256":  "7dbc4e8697a07526bd0547bb8a8d609de072a472d5365f8935c24010a3d43bcd",
+                                "bytes":  1757
+                            },
+                            {
+                                "path":  "app/api/manufacturers/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/manufacturers/router.py",
+                                "sha256":  "45d9fae38500b292e39bc786ffe6c157886e738145d1909bf32b43b772b63ae0",
+                                "bytes":  3291
+                            },
+                            {
+                                "path":  "app/api/manufacturers/schemas.py",
+                                "sha256":  "371d130f3d900b5785322fe534997a8573fdd5d49a5067a1ae6a3160c19252c2",
+                                "bytes":  1243
+                            },
+                            {
+                                "path":  "app/api/products/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/products/router.py",
+                                "sha256":  "446c452ae32116f9cde010f33a2a7d2c7d880526448dcd7d1cf2ea61da25f35c",
+                                "bytes":  3757
+                            },
+                            {
+                                "path":  "app/api/products/schemas.py",
+                                "sha256":  "0141faaefc000d8b353e007b9e8f86e6bdb27204b5c58802686792ef4b295b58",
+                                "bytes":  3017
+                            },
+                            {
+                                "path":  "app/api/router.py",
+                                "sha256":  "180748dc982159984106ca8a41afce40d6ed1f99565321887bbb7ba64a523421",
+                                "bytes":  1033
+                            },
+                            {
+                                "path":  "app/api/variants/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/api/variants/router.py",
+                                "sha256":  "873e095f99272be6a85331154b29a2bbd5111e090839f223585e513c3655f237",
+                                "bytes":  5003
+                            },
+                            {
+                                "path":  "app/api/variants/schemas.py",
+                                "sha256":  "d79058889002a962c5c2031416fd96de6c6c1c09cc6ceb92d9d3de77d7446f36",
+                                "bytes":  4613
+                            },
+                            {
+                                "path":  "app/config.py",
+                                "sha256":  "e980e86f108c6d797d9b98279eb5f258a16811338825a30b6713b03c7eed22ea",
+                                "bytes":  2864
+                            },
+                            {
+                                "path":  "app/database/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/database/connection.py",
+                                "sha256":  "cc3b287d8ae93a5b9e371af2c0abb9504be46fb463f79043cacfe9a852fd0e8f",
+                                "bytes":  781
+                            },
+                            {
+                                "path":  "app/dependencies.py",
+                                "sha256":  "0be388eaab4eb2783190bc7c2a2b7675297046882d64f39d16279372c413e470",
+                                "bytes":  3323
+                            },
+                            {
+                                "path":  "app/logging_config.py",
+                                "sha256":  "da695b3565a8420430d9e44b7de90c9efc684af5e08c6e3ce4ae228f1c3017f6",
+                                "bytes":  3853
+                            },
+                            {
+                                "path":  "app/main.py",
+                                "sha256":  "22066841585d13afe92354fe6626ccd4ef4bdfe9bc0e3b8e746a13d349b8c7a9",
+                                "bytes":  567
+                            },
+                            {
+                                "path":  "app/models/__init__.py",
+                                "sha256":  "a4b37223ede5e2057899f450d1fb5f2fe207b539e68110de0ab59daa04464a3b",
+                                "bytes":  784
+                            },
+                            {
+                                "path":  "app/models/base.py",
+                                "sha256":  "987edfd9dfe38b2c49492c7d1a4e774015d16b72e2281b018e4160be6b47d560",
+                                "bytes":  83
+                            },
+                            {
+                                "path":  "app/models/batch.py",
+                                "sha256":  "ca408bba2ecc595d79381adbf04e76c23b30cea4b57bf842b22c39f60aa5d2a0",
+                                "bytes":  1005
+                            },
+                            {
+                                "path":  "app/models/document.py",
+                                "sha256":  "39a6de324b8ff38e3a7fc53bcda2d17884ac398b77bd3bcb0e5eb8c6e2479bf9",
+                                "bytes":  2125
+                            },
+                            {
+                                "path":  "app/models/document_links.py",
+                                "sha256":  "98ff564bd72aaeef91dc26bf83ce99a6f4b36ff2fc4d72135c1ce329d5c6a080",
+                                "bytes":  1165
+                            },
+                            {
+                                "path":  "app/models/document_type.py",
+                                "sha256":  "1df9af5adb29990a8acc98a446268727b7f60f7a2d7a8befbe120f6999604bfb",
+                                "bytes":  312
+                            },
+                            {
+                                "path":  "app/models/document_verification_event.py",
+                                "sha256":  "46a78bc6aba98387552767cd19a8daad42ff4c65f3de49ca08ef243e2ffa888b",
+                                "bytes":  4904
+                            },
+                            {
+                                "path":  "app/models/file.py",
+                                "sha256":  "e64c27470f4adde499a882435e343390749cbe06a8569cc718fff9a83ccd6f27",
+                                "bytes":  1279
+                            },
+                            {
+                                "path":  "app/models/issuer.py",
+                                "sha256":  "250e59fe8382137e177bb6051b8cbdd0a0c67d6622378b70adc8741bdce5a720",
+                                "bytes":  299
+                            },
+                            {
+                                "path":  "app/models/manufacturer.py",
+                                "sha256":  "532b490eaffb130106550efef9802d792c4c5059c434e186b7dc33ee98517c4d",
+                                "bytes":  299
+                            },
+                            {
+                                "path":  "app/models/product.py",
+                                "sha256":  "98afbc7c0a2f7141176a7bb13fe3da1d3815a6e65d765bbaf4517c8f23f0a127",
+                                "bytes":  909
+                            },
+                            {
+                                "path":  "app/models/variant.py",
+                                "sha256":  "b2dd41ecf1728f314ad675ab5f6c6768c9ccc917b5e4dc0b563ae5603f95c003",
+                                "bytes":  1210
+                            },
+                            {
+                                "path":  "app/reconcile_storage.py",
+                                "sha256":  "9596e4ea6f84a78489083b58148d32024e01d6454fd72b7f477b8ffc4e0ecff8",
+                                "bytes":  2673
+                            },
+                            {
+                                "path":  "app/services/__init__.py",
+                                "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                                "bytes":  0
+                            },
+                            {
+                                "path":  "app/services/batch_service.py",
+                                "sha256":  "54d41d2f152203b74df8c6fb09981e886eaabb834a425c8f3b4452ea9d0fabda",
+                                "bytes":  2983
+                            },
+                            {
+                                "path":  "app/services/document_service.py",
+                                "sha256":  "a0d9ad6df587379ae794cf403e1624bf958855ad6e292c4903bdd3c9e852d521",
+                                "bytes":  30755
+                            },
+                            {
+                                "path":  "app/services/document_type_service.py",
+                                "sha256":  "34f10fb56e6ecca1efbb58a23feb431b76f7cf0c29cb95342580471dba76b5b4",
+                                "bytes":  4691
+                            },
+                            {
+                                "path":  "app/services/document_variant_service.py",
+                                "sha256":  "ad0b628a4c1401a0e702fb355a19d4a7d994bf51624cd4b12c6fa5226a0be7b9",
+                                "bytes":  13161
+                            },
+                            {
+                                "path":  "app/services/file_service.py",
+                                "sha256":  "996566e06f5a2cc5dec81bcf31360430ad88e51c4f52726b118b13c4af856c35",
+                                "bytes":  28917
+                            },
+                            {
+                                "path":  "app/services/issuer_service.py",
+                                "sha256":  "b62639218101b33c5643deab7a9102aca2c7326820822a70461508031e034a56",
+                                "bytes":  4422
+                            },
+                            {
+                                "path":  "app/services/local_storage.py",
+                                "sha256":  "605a971bae3753cc3d2e86c6b824ad55278a6669290439349842095a1c58e0d0",
+                                "bytes":  12531
+                            },
+                            {
+                                "path":  "app/services/manufacturer_service.py",
+                                "sha256":  "30ed0fbf14a964354954dd985d20da4376a48f57bfe2ce7db496d2930f0d455e",
+                                "bytes":  2412
+                            },
+                            {
+                                "path":  "app/services/product_service.py",
+                                "sha256":  "7a158bb182989e556cf998d00e23bb6b47d8f1fc1b96db8834c8f268db837f3b",
+                                "bytes":  3372
+                            },
+                            {
+                                "path":  "app/services/storage.py",
+                                "sha256":  "2632b699fcd0c6e2f04622acb602b12cfdcb4a0893f4498c29020bb3ed314dfa",
+                                "bytes":  1424
+                            },
+                            {
+                                "path":  "app/services/storage_reconciliation.py",
+                                "sha256":  "4a2d43cdc6a95ad45317e7dd1d49ebf420cd4cee9288d2878ffd87ae4747c07b",
+                                "bytes":  5675
+                            },
+                            {
+                                "path":  "app/services/transaction.py",
+                                "sha256":  "c7abc190d192cbb15974d83d0ed369ba2973e179b36eb4a5899a4f8ced3516a4",
+                                "bytes":  5099
+                            },
+                            {
+                                "path":  "app/services/variant_service.py",
+                                "sha256":  "84128f00df1e406c5b334d51ed1687068f8e9e98ebd28b79d1bfaefe0447e8eb",
+                                "bytes":  5335
+                            },
+                            {
+                                "path":  "app/services/verification_history.py",
+                                "sha256":  "d5ca1eb9796b3f6a241e7d23efa9920706735a7c3ae36cd4b2c822cbb82aabf9",
+                                "bytes":  5321
+                            },
+                            {
+                                "path":  "frontend/package.json",
+                                "sha256":  "b9eb0e3da5ec7c699c7ffd45569d3947fb15065679dbc7205b3a650b7bbd5bae",
+                                "bytes":  527
+                            },
+                            {
+                                "path":  "frontend/package-lock.json",
+                                "sha256":  "f16538644be03bf4916f50e73d34da3b1d1277d58136085cc2618573b98676bd",
+                                "bytes":  42855
+                            },
+                            {
+                                "path":  "frontend/src/api/batches.ts",
+                                "sha256":  "8f893b995f19672f659d3f02108d647c2a9867bbae810ad55266a2c7c071044a",
+                                "bytes":  700
+                            },
+                            {
+                                "path":  "frontend/src/api/client.ts",
+                                "sha256":  "9e2c4981341b0c859c40b8d09b161e876d9a07c781de181dcd2a4f2f67bf4f76",
+                                "bytes":  5340
+                            },
+                            {
+                                "path":  "frontend/src/api/documents.ts",
+                                "sha256":  "5687abded77d4f40d28efa45351cd675dda5c9864af1a5819c7a1e91a7371121",
+                                "bytes":  7666
+                            },
+                            {
+                                "path":  "frontend/src/api/references.ts",
+                                "sha256":  "afa2ee7d24199b1f71f7daf814f2565944cf64ed011d91ad2cc8bf5c1ef15b6c",
+                                "bytes":  8694
+                            },
+                            {
+                                "path":  "frontend/src/App.tsx",
+                                "sha256":  "a976b0c2c1fccd761ef02045b6b4766150787f58f2d87aa1f5545740820c7007",
+                                "bytes":  1156
+                            },
+                            {
+                                "path":  "frontend/src/components/AsyncBlock.tsx",
+                                "sha256":  "e119b55c4c860a99f99cb10f78ba652126e172893c7045452d6c438877ba386a",
+                                "bytes":  1933
+                            },
+                            {
+                                "path":  "frontend/src/components/BatchForm.tsx",
+                                "sha256":  "e9dbff269fe9f95b1e96ca593c8e8255e0554dd715ebecd20e86f6cb8fe40050",
+                                "bytes":  5874
+                            },
+                            {
+                                "path":  "frontend/src/components/ConfirmDecision.tsx",
+                                "sha256":  "2000b8509f14b548e93e638913faec2cbee86838506a440a386481f99d7a9066",
+                                "bytes":  3779
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentAttachments.tsx",
+                                "sha256":  "4df1577e427b2ee3b503918043b6565abb6ec6b852fd20bbb069b750fc3ad185",
+                                "bytes":  10589
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentDetails.tsx",
+                                "sha256":  "299959f402462916cba1648724c8ce283a3959ef85a4700cd1f50106d53c1d1e",
+                                "bytes":  3201
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentEditForm.tsx",
+                                "sha256":  "f08c3b8554a5bf1323b403ae69323f7841154445ac4a48957b2c24ad2fc0bd8f",
+                                "bytes":  5750
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentFilters.tsx",
+                                "sha256":  "26d0d0c0167d4d5165a181948136056df35fa35db72e30ecac192e86cb91fc0c",
+                                "bytes":  4875
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentRequisitesForm.tsx",
+                                "sha256":  "9b44bff2fb769f7b5e97a69d5aa52b773f3360f06e5a895f5f2032a44ff1d55c",
+                                "bytes":  9656
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentTable.tsx",
+                                "sha256":  "95364a970ecdd9e7302880324ad27ce89226a6634a68aaddf6b6ab60227a00ba",
+                                "bytes":  2266
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentVariants.tsx",
+                                "sha256":  "d0c0e9bcc9791da8f135465f060d27a5f4b25f5d9633fbff3289de49e94d8647",
+                                "bytes":  8055
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentVariantsEditor.tsx",
+                                "sha256":  "70b643046173bddf653ed3ac226b0bbed3c412f90c9c5c8b2774eab279dfe75f",
+                                "bytes":  19903
+                            },
+                            {
+                                "path":  "frontend/src/components/DocumentVerdictPanel.tsx",
+                                "sha256":  "a425239ed9ab1c1d0645c162c2b87853739a72a1610ffb82f3473a44a63b457c",
+                                "bytes":  5112
+                            },
+                            {
+                                "path":  "frontend/src/components/Nav.tsx",
+                                "sha256":  "dac1865b5c5e7b9c44cfb428bc5ed9e9b3db5549ec8def71c06139a3f2870b3d",
+                                "bytes":  1742
+                            },
+                            {
+                                "path":  "frontend/src/components/Notice.tsx",
+                                "sha256":  "c44b522d449e8804509b51717a1f7f86288b1e967f40371d9acf8fa33a05dafe",
+                                "bytes":  622
+                            },
+                            {
+                                "path":  "frontend/src/components/Pagination.tsx",
+                                "sha256":  "207ce491828784f4da1fb40203a44a806505ef62adce4f499e2aa9801ee5fce7",
+                                "bytes":  1182
+                            },
+                            {
+                                "path":  "frontend/src/components/ProductForm.tsx",
+                                "sha256":  "37a720bdbfc7f31234bc85a42a8bd5b2294418ff54e8f6774746d5149d4b82ba",
+                                "bytes":  10276
+                            },
+                            {
+                                "path":  "frontend/src/components/ReferenceCreator.tsx",
+                                "sha256":  "86a34a3efa09585ca778354f91edf29302640ff2574beac512c52c086a01a815",
+                                "bytes":  3715
+                            },
+                            {
+                                "path":  "frontend/src/components/StatusBadge.tsx",
+                                "sha256":  "5554e6ea6a6858fd38db795dcc0ec95d91ce4e665955a8a18375c750de225724",
+                                "bytes":  818
+                            },
+                            {
+                                "path":  "frontend/src/components/VariantForm.tsx",
+                                "sha256":  "c315dafc82e6556bf9a78e0f1b4ec4f37fb85b13703fad06a9bc652155c631c9",
+                                "bytes":  8302
+                            },
+                            {
+                                "path":  "frontend/src/components/VerificationHistory.tsx",
+                                "sha256":  "0bdab7101d51c0164d479a99fe5695b0b58f65b0800e0a4f8a6e18b4f1693d84",
+                                "bytes":  2544
+                            },
+                            {
+                                "path":  "frontend/src/hooks/useManufacturers.ts",
+                                "sha256":  "55e7e33ba804f80afe9faf99cad7910a888e28145fda7c8c1bfc0a43cba28217",
+                                "bytes":  2799
+                            },
+                            {
+                                "path":  "frontend/src/hooks/useReferences.ts",
+                                "sha256":  "0b1125f4bb8a036982592963f2cc6100b298fbb495fd52e27f3ff9b4ebc4fece",
+                                "bytes":  3432
+                            },
+                            {
+                                "path":  "frontend/src/hooks/useRequisites.ts",
+                                "sha256":  "ee80c35f4ce2741fc86c708b390b21c68c9019066c1b31e89ff72e0cc56ea46d",
+                                "bytes":  1929
+                            },
+                            {
+                                "path":  "frontend/src/hooks/useSection.ts",
+                                "sha256":  "ee00790e614a51a541d37590f947735ccbc95296d1b71a9f36c48fbade0f0daf",
+                                "bytes":  3309
+                            },
+                            {
+                                "path":  "frontend/src/hooks/useSubmit.ts",
+                                "sha256":  "1cd0df694775d3cb9e9bcdf0dbcc28895b84d981445035cc8ebc4ef23ccd8f33",
+                                "bytes":  2071
+                            },
+                            {
+                                "path":  "frontend/src/hooks/useVerificationDecision.ts",
+                                "sha256":  "7e0784dcadccd75e8851a4d294cfa0e6ee6d9a8438dfeaf9aa3ace38fc2eab1e",
+                                "bytes":  3442
+                            },
+                            {
+                                "path":  "frontend/src/main.tsx",
+                                "sha256":  "8e92d5328c983c2269c6fc6b1cc2b8330be730adae0713c52075b00ae4f72630",
+                                "bytes":  445
+                            },
+                            {
+                                "path":  "frontend/src/pages/BatchesPage.tsx",
+                                "sha256":  "e6391b27026ac5fb1c8dcc50d2f597a929fb499cb90a39948a4678a850ffa11f",
+                                "bytes":  5697
+                            },
+                            {
+                                "path":  "frontend/src/pages/DocumentCardPage.tsx",
+                                "sha256":  "5c297f12724dc47ebc63f78133ded3b3bc03d235bd0097f6c04e1f398d9140a2",
+                                "bytes":  15952
+                            },
+                            {
+                                "path":  "frontend/src/pages/DocumentCreatePage.tsx",
+                                "sha256":  "f26a5bc3d34cda5871a093c17bf017c97203d730f9c0848cec90eb054c430418",
+                                "bytes":  11953
+                            },
+                            {
+                                "path":  "frontend/src/pages/MaterialsPage.tsx",
+                                "sha256":  "ecd8f2427d1612ba3967e5f03ab780df0eb741a2a957aa2b1ace4f685f58ebbd",
+                                "bytes":  19890
+                            },
+                            {
+                                "path":  "frontend/src/pages/RegistryPage.tsx",
+                                "sha256":  "ab560ecfae99a70c4b4c9917c78acba16054b868b85b524c60cb7488805bae6a",
+                                "bytes":  6831
+                            },
+                            {
+                                "path":  "frontend/src/styles.css",
+                                "sha256":  "703fd5520180f2080557219397b2a8ceccc55b51bcb8267c976926cdf49d37a4",
+                                "bytes":  18294
+                            },
+                            {
+                                "path":  "frontend/src/types/api.ts",
+                                "sha256":  "c68b2d4ce4ef043e0311351c9fde8d3ef53a650fd642dc414a5e7b07af80f0ed",
+                                "bytes":  7839
+                            },
+                            {
+                                "path":  "frontend/src/utils/catalog.ts",
+                                "sha256":  "e39c1223a447f947c2fa444b00ffd92809067fb4a1a6ff52cf46f8f73cc0d9d7",
+                                "bytes":  8549
+                            },
+                            {
+                                "path":  "frontend/src/utils/format.ts",
+                                "sha256":  "b47cf1245e61352cd342e9aa840f503874cebffa773ba782866ad1a6e070fe51",
+                                "bytes":  2227
+                            },
+                            {
+                                "path":  "frontend/src/utils/forms.ts",
+                                "sha256":  "ca086b71ba7d245007a2f648711575afb05cb538cdf3ad3fdc6f24d8d070679d",
+                                "bytes":  8553
+                            },
+                            {
+                                "path":  "frontend/src/utils/labels.ts",
+                                "sha256":  "772e8d5411abf8afc490f7a7c8d9a5882cb0689c7fa91f0276320a49ca229b40",
+                                "bytes":  2380
+                            },
+                            {
+                                "path":  "frontend/tsconfig.json",
+                                "sha256":  "3616fc26f7a6738e623203b2bfc6847b0512124c5ff83b1c589820a616ed321f",
+                                "bytes":  588
+                            },
+                            {
+                                "path":  "requirements.txt",
+                                "sha256":  "9f310422bb54d7c83a9503d52fe5bb74e6eaddc4937b5f0158cb63f582701577",
+                                "bytes":  251
+                            },
+                            {
+                                "path":  "tests/conftest.py",
+                                "sha256":  "137105ed1f816ed02cc89625234fd16456484cfd0eb64cbf12e9c60eba6e650c",
+                                "bytes":  2100
+                            },
+                            {
+                                "path":  "tests/test_batch.py",
+                                "sha256":  "127e7ee8a9127c26b0da8c42a3a585d9287f980f3b87594b5040531a0c5b6c89",
+                                "bytes":  4769
+                            },
+                            {
+                                "path":  "tests/test_batch_schemas.py",
+                                "sha256":  "f906c39cb25e2257fe0364510089bd84eb40d661d86dfc0daf1819a90980469c",
+                                "bytes":  5530
+                            },
+                            {
+                                "path":  "tests/test_batch_service.py",
+                                "sha256":  "da94b569d8ffc008f414619c3fc09bfe97ce93417ae71133295aac689d784eed",
+                                "bytes":  12674
+                            },
+                            {
+                                "path":  "tests/test_batches_api.py",
+                                "sha256":  "2a9038382c179ec8faf9d52ec004cae3a8abd6865f5a2d2bf0f5cbc20c2c53e8",
+                                "bytes":  13091
+                            },
+                            {
+                                "path":  "tests/test_batches_openapi.py",
+                                "sha256":  "301076c878d02569b175e81a89841311e6a7b9d3b455805ff2bc6bbf38a027b4",
+                                "bytes":  4605
+                            },
+                            {
+                                "path":  "tests/test_config.py",
+                                "sha256":  "7d3880653e1b805ca2d120b20fdfc334087c9d2ea6df0079ad8ac71bdfe32248",
+                                "bytes":  5522
+                            },
+                            {
+                                "path":  "tests/test_database.py",
+                                "sha256":  "69ebf4cbb788b13341fd8af6a6509b626323fcf1737f38cc5acc00bb62bb2e53",
+                                "bytes":  5425
+                            },
+                            {
+                                "path":  "tests/test_dependencies.py",
+                                "sha256":  "52eb90d540ca233e8fc75d67485a389e5046d5ce81c3f16e0e877873d9ac70b0",
+                                "bytes":  6776
+                            },
+                            {
+                                "path":  "tests/test_document.py",
+                                "sha256":  "b866d9b66d198e4b9a92c030f9105d3cfff44921bbc606e57029241df3104e1c",
+                                "bytes":  6897
+                            },
+                            {
+                                "path":  "tests/test_document_links.py",
+                                "sha256":  "f72bb4b4b54b945f6f6d0dd4b13b1a1623639d6db98d5d827e28339639e742a4",
+                                "bytes":  9184
+                            },
+                            {
+                                "path":  "tests/test_document_schemas.py",
+                                "sha256":  "ea14ab7015212c516ba342bae4bc9578b465e0386e2db481d6b0a92836537be8",
+                                "bytes":  23790
+                            },
+                            {
+                                "path":  "tests/test_document_service.py",
+                                "sha256":  "c3cb53811436d304c338e0a31e90d8f114631317330ec447d84b7b9f5fa97c7b",
+                                "bytes":  36202
+                            },
+                            {
+                                "path":  "tests/test_document_service_concurrency.py",
+                                "sha256":  "2f4b063299fc28543bef366e0ee0d6111789cb98c33755e80c83db9388f5e48a",
+                                "bytes":  38921
+                            },
+                            {
+                                "path":  "tests/test_document_service_search.py",
+                                "sha256":  "909aa54feb99e1f7ec46771abd346169efe0f0ddb28030658ad9e1ca51ae4fa7",
+                                "bytes":  12083
+                            },
+                            {
+                                "path":  "tests/test_document_service_verification.py",
+                                "sha256":  "c6d4eb4b2efdb139658d0b21e726d1e0f3450ad21a364227cf6eadac911429b7",
+                                "bytes":  21478
+                            },
+                            {
+                                "path":  "tests/test_document_type.py",
+                                "sha256":  "0f0a6b15b27f0baecafd321facb63913656c9166d985acb6a9d82ae6e86e8473",
+                                "bytes":  2515
+                            },
+                            {
+                                "path":  "tests/test_document_type_schemas.py",
+                                "sha256":  "4f198453ed9b52ba60521f6b5c1a7de2db686ca843c4989682b6ac6fa7d235fe",
+                                "bytes":  10036
+                            },
+                            {
+                                "path":  "tests/test_document_type_service.py",
+                                "sha256":  "804cac8942774ab600e99a5d5178538a20c230d717fdc01681b85dd37fefb32d",
+                                "bytes":  21285
+                            },
+                            {
+                                "path":  "tests/test_document_types_api.py",
+                                "sha256":  "d2e928775295d55383d86029af6e1148fc3cf3165d2f6cb3065dd518eb4fa6d3",
+                                "bytes":  44673
+                            },
+                            {
+                                "path":  "tests/test_document_variant_service.py",
+                                "sha256":  "873be103b6398ec01b1ec8f8b9e947d73b48eacdf2d8defdac05900a868e03b4",
+                                "bytes":  23355
+                            },
+                            {
+                                "path":  "tests/test_document_variant_service_concurrency.py",
+                                "sha256":  "8b01154a7bb4e3741fc9736e1f513c89955cd81ea0a62afd1c4c53c7a3ec2eac",
+                                "bytes":  9115
+                            },
+                            {
+                                "path":  "tests/test_document_variants_api.py",
+                                "sha256":  "ef1127238ca3967a4617524fbe402744883eb1fe1f20c2eb1f74e1bce9f1a0d9",
+                                "bytes":  28877
+                            },
+                            {
+                                "path":  "tests/test_document_verification_event.py",
+                                "sha256":  "8890000be146c0a5ac3254777757d67590ef68d17743109817b59ff535d7f134",
+                                "bytes":  24671
+                            },
+                            {
+                                "path":  "tests/test_documents_api.py",
+                                "sha256":  "77477508ee88f58d50c177183293e64c54f2a091b25ee41e8341ad29b93d60cf",
+                                "bytes":  20981
+                            },
+                            {
+                                "path":  "tests/test_documents_history_api.py",
+                                "sha256":  "a53300b7f48fc4777484362381c0db4f3ac6052ee056c133dde4b3c02193b29e",
+                                "bytes":  21754
+                            },
+                            {
+                                "path":  "tests/test_documents_integration_api.py",
+                                "sha256":  "6ada0f5fa5cb44a6d3de09420c9bc069219859ab807a0e2d0a935b5c3efa82c6",
+                                "bytes":  22714
+                            },
+                            {
+                                "path":  "tests/test_documents_search_api.py",
+                                "sha256":  "2bb7cf38a2808dabb4e19004ed3671ba6e780da1afa075eed44bba128034c1bc",
+                                "bytes":  22686
+                            },
+                            {
+                                "path":  "tests/test_documents_update_api.py",
+                                "sha256":  "3d3244ae9c3cc4ff66b4512db2af0bfa46b6a1db180f54640d9e9cd59b0700d0",
+                                "bytes":  29133
+                            },
+                            {
+                                "path":  "tests/test_documents_variant_search_integration_api.py",
+                                "sha256":  "21fb04bfb923187aa2d5a49ca51d98d346ed1752c30aa56c6d04116f5a085e29",
+                                "bytes":  21510
+                            },
+                            {
+                                "path":  "tests/test_documents_verification_api.py",
+                                "sha256":  "a29b73bd2bd7674e0d1ae2fc29237cfb3c448417e3d6873388e9112f20ee59f4",
+                                "bytes":  25341
+                            },
+                            {
+                                "path":  "tests/test_file.py",
+                                "sha256":  "64e581265b9ff5ab6216d3468a5af2b2eb634ba06d2a9d49564ea5b1dd95b19f",
+                                "bytes":  8714
+                            },
+                            {
+                                "path":  "tests/test_file_schemas.py",
+                                "sha256":  "0c635bd4eb2b242189334d0c696fa3ca1b25fb1fda2ebdee943d26f58f6c5bfd",
+                                "bytes":  6082
+                            },
+                            {
+                                "path":  "tests/test_file_service.py",
+                                "sha256":  "e9a18c1653ee26add209190f477fb83555eae11f3cf229289a1d3df519fa2a6e",
+                                "bytes":  112443
+                            },
+                            {
+                                "path":  "tests/test_file_service_concurrency.py",
+                                "sha256":  "084dc7b251bdc037bd4274095943a1be7337551d942557340a27a573bc5bab5c",
+                                "bytes":  50505
+                            },
+                            {
+                                "path":  "tests/test_files_api.py",
+                                "sha256":  "0631aec95e435e11f2f1d99e2e525fc06c0b75ee5cfecd9f70b84402bdcbf296",
+                                "bytes":  19440
+                            },
+                            {
+                                "path":  "tests/test_files_delete_api.py",
+                                "sha256":  "c4e77884ef383b6005d3eb3d3e6b753772bfae6dcf7001e17f78511beaa30797",
+                                "bytes":  27245
+                            },
+                            {
+                                "path":  "tests/test_files_download_api.py",
+                                "sha256":  "a1c675c0ccb56b8a8e0457cf17657780147529303c955b76b59cedd987366fdf",
+                                "bytes":  81986
+                            },
+                            {
+                                "path":  "tests/test_files_index_migration.py",
+                                "sha256":  "c70076676f426ca1a1547460f44c3ce96d35ece46290bc9453ee76a5a48bafb0",
+                                "bytes":  13981
+                            },
+                            {
+                                "path":  "tests/test_files_integration_api.py",
+                                "sha256":  "aaa2705b2f005426853a4c4505650dd8d736b4c85028f7a4b05736c7c39d306a",
+                                "bytes":  15150
+                            },
+                            {
+                                "path":  "tests/test_files_upload_api.py",
+                                "sha256":  "eb3734b1d480f0deb5968e904d3bf5eae046a5882e8577bd14418d8a40eb259e",
+                                "bytes":  31086
+                            },
+                            {
+                                "path":  "tests/test_issuer.py",
+                                "sha256":  "07311ed1bc79c92d68eac649be2a039483a13aa600776ce010e44bed8385e0e5",
+                                "bytes":  1889
+                            },
+                            {
+                                "path":  "tests/test_issuer_schemas.py",
+                                "sha256":  "0701e7e82816917a5eccca5fb388ddbc68d1bd9bde47f3b5f00e285afb66728c",
+                                "bytes":  12694
+                            },
+                            {
+                                "path":  "tests/test_issuer_service.py",
+                                "sha256":  "6da7455d493c0e5a8e89a1ad433179ba8e07066eb3f729aa5aa1fb5529133041",
+                                "bytes":  26385
+                            },
+                            {
+                                "path":  "tests/test_issuers_api.py",
+                                "sha256":  "d2b7dab5eb81643ec7073d8d07b0fab5c5bc67d91460b17c29adabed765b39e9",
+                                "bytes":  53213
+                            },
+                            {
+                                "path":  "tests/test_logging_config.py",
+                                "sha256":  "65208de5c8ace669d2b48068fb7c3701193a2587ae4466e9c0f9633425c4a483",
+                                "bytes":  11745
+                            },
+                            {
+                                "path":  "tests/test_main.py",
+                                "sha256":  "19ba36542a35575a7d18a47dbb22b442bce854a1a4db18f45ea5cadc4c2e5022",
+                                "bytes":  923
+                            },
+                            {
+                                "path":  "tests/test_manufacturer.py",
+                                "sha256":  "df655f445e33eec1cbdeebd440975d4ee856075d32d724ccc01902112df95505",
+                                "bytes":  1212
+                            },
+                            {
+                                "path":  "tests/test_manufacturer_schemas.py",
+                                "sha256":  "4044f2f491f8097749bb9ab621e3a54bafa8a71fa79c45baa4d9ec36f5b2918d",
+                                "bytes":  6582
+                            },
+                            {
+                                "path":  "tests/test_manufacturer_service.py",
+                                "sha256":  "771411df203f6fa7eb51f4de0344c15659df20c88094ea11d698749ae7c683b6",
+                                "bytes":  9891
+                            },
+                            {
+                                "path":  "tests/test_manufacturers_api.py",
+                                "sha256":  "8a726c377df6ecc15ca76acfd7c4d1160a6f988125b97c7db496f356fbffbc3b",
+                                "bytes":  25535
+                            },
+                            {
+                                "path":  "tests/test_product.py",
+                                "sha256":  "ff241d03c793073d3059e15f685ae60e44b2f0af12f0870bf0db166e40488540",
+                                "bytes":  3932
+                            },
+                            {
+                                "path":  "tests/test_product_schemas.py",
+                                "sha256":  "e617e5d5b9f2bfbb05693999d2da771c3cb3d1afd78cdcb7c9304fe5ce1b6e71",
+                                "bytes":  15448
+                            },
+                            {
+                                "path":  "tests/test_product_service.py",
+                                "sha256":  "82056a0334c8c9add6bfbc9b9e40e7fd5ad9f9e9c0b583ef8ad73c5f9c863ffb",
+                                "bytes":  18979
+                            },
+                            {
+                                "path":  "tests/test_products_api.py",
+                                "sha256":  "50459d611f1a759d081304b42a38cf592f6d0b143153667e45bc130a0770415b",
+                                "bytes":  48206
+                            },
+                            {
+                                "path":  "tests/test_reconcile_storage_cli.py",
+                                "sha256":  "f8594a1ab8b230ded48bc57e8ea75ec8a0f4190da7fcf0b89183d782255d6319",
+                                "bytes":  14172
+                            },
+                            {
+                                "path":  "tests/test_storage.py",
+                                "sha256":  "e4d311495f7c78d875168f52044c7d74ed809f20fead1892febbf1a5415088d3",
+                                "bytes":  21028
+                            },
+                            {
+                                "path":  "tests/test_storage_reconciliation.py",
+                                "sha256":  "26c4f2bd4883e838913de8ee28a0ad458953e1384b630da3a9a95f1133da3a02",
+                                "bytes":  29262
+                            },
+                            {
+                                "path":  "tests/test_transaction.py",
+                                "sha256":  "e877799688cb16d175646de850754bd7e014314b8fb194369067e827b71964f7",
+                                "bytes":  16467
+                            },
+                            {
+                                "path":  "tests/test_variant.py",
+                                "sha256":  "ce194afbe90481326b594712f14f1887ec1b89b7fb1a42c31d99d8511db0e6a8",
+                                "bytes":  4732
+                            },
+                            {
+                                "path":  "tests/test_variant_schemas.py",
+                                "sha256":  "2dc7f58f75d9cad385e74a87c960dd79917aef943c19b2dd0bbfb9309320f220",
+                                "bytes":  17917
+                            },
+                            {
+                                "path":  "tests/test_variant_service.py",
+                                "sha256":  "c7ea0eb09cc3df3d3d9552cd66538eae4b9d69fb9bddeb7e4278c51fbcdabdd5",
+                                "bytes":  23853
+                            },
+                            {
+                                "path":  "tests/test_variants_api.py",
+                                "sha256":  "4940ee3447139f5aea43328831b5f0f227e67235fffa6a355fccaccf084103cf",
+                                "bytes":  52108
+                            },
+                            {
+                                "path":  "tests/test_verification_history.py",
+                                "sha256":  "7e761beaae4fd2e45e3c3b6d3b2b479015766d1bf4530c7426783e78ee1ca6f5",
+                                "bytes":  18166
+                            }
+                        ],
+    "changed_source_paths":  [
+
+                             ],
+    "removed_source_paths":  [
+
+                             ]
+}

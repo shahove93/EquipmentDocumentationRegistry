@@ -1,0 +1,11 @@
+﻿{
+    "check":  "ST-003 typecheck",
+    "command":  "wsl.exe -d Ubuntu -- bash -lc \u0027source /home/djeka/.nvm/nvm.sh; cd /mnt/d/Antigravity/EquipmentDocumentationRegistry/frontend \u0026\u0026 npm run typecheck\u0027",
+    "launcher_cwd":  "D:\\Antigravity\\EquipmentDocumentationRegistry",
+    "actual_cwd":  "/mnt/d/Antigravity/EquipmentDocumentationRegistry/frontend",
+    "started_utc":  "2026-10-26T19:03:28.7696888Z",
+    "ended_utc":  "2026-10-26T19:03:31.2178059Z",
+    "native_exit_code":  0,
+    "stdout_log":  "TASK-MVP-06-typecheck.stdout.log",
+    "stderr_log":  "TASK-MVP-06-typecheck.stderr.log"
+}

@@ -1,0 +1,11 @@
+﻿{
+  "id": "7def919c-6c77-4b2f-9bf2-4d9e463b255c",
+  "ok": true,
+  "result": {
+    "result": "{\"injectedOneShotListFailure\":true,\"clickedNext\":true}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

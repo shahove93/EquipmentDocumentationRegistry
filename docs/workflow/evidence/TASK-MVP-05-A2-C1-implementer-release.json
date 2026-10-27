@@ -1,0 +1,20 @@
+﻿{
+  "id": "8f2f690b-e11f-4427-ad0d-477bb43d0e15",
+  "ok": true,
+  "result": {
+    "dispatchId": "ctx_11a366a6c3d4",
+    "state": "released",
+    "processAction": "closed_agent_terminal",
+    "archive": {
+      "source": "transcript",
+      "status": "captured"
+    },
+    "mutation": {
+      "requestId": "06d1c2b5-fe53-4669-9b13-be91047c306c",
+      "replayed": false
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

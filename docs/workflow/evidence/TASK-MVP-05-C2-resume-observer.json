@@ -1,0 +1,8 @@
+{
+  "source": "C:\\Users\\user\\.codex\\sessions\\2026\\10\\26\\rollout-2026-10-26T17-07-46-01a17889-e7d6-7992-8d55-a616d1dde542.jsonl",
+  "observed_at": "2026-10-26T14:12:58.225Z",
+  "input": 923618,
+  "cached_included": 884608,
+  "checkpoint600k": true,
+  "actions": "READ_ONLY_ALERT_ONLY"
+}

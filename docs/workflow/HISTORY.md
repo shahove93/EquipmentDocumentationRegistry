@@ -452,3 +452,501 @@ push текущей `main` в `origin/main` без force/merge/deploy. На мо
 0/0. Force-push, merge и deployment не выполнялись. Проверки продукта не
 запускались повторно: публикация содержит принятый продуктовый коммит и
 документацию/evidence.
+
+### TASK-MVP-05 — повторный старт после задержки координатора
+
+Причина прежней задержки: координатор затянул read-only подготовку вместо
+фиксации TASK/dispatch; подтверждённого Orca/provider blocker не было.
+Пользователь остановил работу, затем явно повторно поручил следующий шаг:
+создать frozen TASK/STATE/HISTORY и запустить единственного Luna medium writer.
+Текущая инструкция не разрешает reviewer до завершения исполнителя.
+
+Baseline318e6336737ee635abf593c2643f26daba273f86, main/current, Run run_68046cea3eb4,
+coordinator term_d727cc23-31e8-42eb-a295-c42268e0c645 generation10.
+MVP-04 PASS и публикация сохраняются; Nemotron/WF не используются.
+TASK-MVP-05 R1 A1/C1, NOT_REVIEWED, frozen AC001..007 в docs/tasks/TASK-MVP-05.md.
+Scope Batch list/detail/create/edit + Vite /batches; backend/API/DB без изменений,
+без новых связей/auth/migrations. UI/API evidence mock явно отличается от real.
+Pre-dispatch budget: calls0/2, input0/1000000; reserve Luna600000/call1,
+potential independent Sol250000/call2, safety150000. Cached input входит.
+Review ещё0, failed-review0, diagnostic0; reviewer до worker completion запрещён.
+Численные expert caps не превращаются автоматически в разрешение эскалаций.
+Новый Run не создаётся; Orca Task ID будет вписан после реального task-create,
+Dispatch ID выдаётся реальным worker-start, заранее не выдумывается.
+Исторические бюджеты MVP-04 12285453/12400000,5/5calls,review2/2 сохранены.
+Provider последний известный snapshot12:22:58Z primary34%/reset1793032523 —
+исторический, не свежая проверка; нового доказанного exhaustion нет.
+Фактические metadata нового writer будут сохранены при старте/завершении.
+Push для этого TASK запрещён; старое разовое разрешение не распространяется.
+
+До dispatch: task-create вернул task_1f8ceba36e9e READY в прежнем Run; резерв call1/2,600000input Luna medium активирован. Dispatch ID ещё не назначен.
+
+
+MVP-05 launch receipt: task_1f8ceba36e9e/ctx_e9800c446d2d, worker term_e1a2c49b-45e0-4298-905c-34c9a0471add, ready/input_accepted/turnStart observed. Requested/effective codex gpt-6-luna medium, calls1/2 consumed; inputactual pending. Это запуск, НЕ завершение/приёмка. Единственный writer; reviewer не запущен. Receipt evidence/TASK-MVP-05-implementation-launch.json. Текущее поручение ограничено фиксацией и запуском, автоматическое ожидание/PASS здесь не заявляется.
+
+MVP-05 question msg_810275113727: worker CUA inventory empty/createBrowserTab(iab) unavailable. Coordinator checked real Orca tab list(empty), tab create help, then tab create about:blank succeeded: page a5a98608-453d-4c3c-b8be-5effd41ecae6. Receipt evidence/TASK-MVP-05-browser-provision.json. Reply provided same-task browser and exact CLI/page, no worker/budget/scope reset; UI evidence remains required, no BLOCKED inferred merely from CUA. Delivery3f057404bac8 processed/ack; same writer ctx_e9800c446d2d continues, reviewer not launched.
+
+### MVP-05 — metadata question выявил фактическое превышение input
+
+msg_b4d32c0715eb от task_1f8ceba36e9e/ctx_e9800c446d2d запрашивал
+реальные model/effort/token counters. Native rollout связан exact live preamble:
+rollout-2026-10-26T16-08-37-01a17853-c00d-7671-9966-39f89dd18a58.jsonl.
+turn_context13:08:49.572Z gpt-6-luna/medium, CWD верный.
+token_count13:28:51.800Z input7271010,cached7029120 входит вinput,
+output30891,reasoning9290,total7301901. Parent cap1000000 превышен6271010,
+workerreserve600000 превышен6671010. Не обрезать/не списывать реальный расход.
+Provider primary48%,reset1793032523,secondary23%; BLOCKED не provider exhaustion.
+Coordinator reply дал точные snapshot paths и запрет нового implementation/UI/
+checks/reviewer/commit; только bounded фактическое evidence/worker_done failed.
+calls1/2 остаётся consumed; review0; новый бюджет не разрешён.
+Ранние предупреждающие counters не получались; budget контроль до этой сверки
+оказался недостаточен. Task не принимается по assertion или completion alone.
+
+### MVP-05 — budget BLOCKED settlement и окончательный доступный расход
+
+msg_0c31348eff9f соответствует task_1f8ceba36e9e/ctx_e9800c446d2d,
+worker_done outcome failed, evidence/TASK-MVP-05-C1.md.
+Исполнитель заявил реализацию, typecheck/build exit0 и real browser smoke
+с явно mock in-memory API; независимое review не выполнялось, PASS нет.
+worker-release: released/closed_agent_terminal; затем ack delivery_d884728f1ca3.
+
+После settlement actual snapshot13:31:15.122Z:
+input8812350 (cached8561280 включён),output35712,reasoning11166,total8848062.
+Против cap1000000 превышение7812350; против reserve600000 превышение8212350.
+Первый snapshot7271010 остаётся историей, не подменяется финальным assertion.
+Финализация добавила1541340 input. Calls1/2 consumed; review0.
+Контроль раннего input до этой сверки был недостаточен; позднее обнаружение
+и перерасход записаны явно, без reset/возврата/переименования TASK.
+Provider49%/reset1793032523,secondary23%,не exhausted.
+Нового ресурса на reviewer/исправления/проверки пока нет; зависимая цепочка
+BLOCKED. Product/workflow/evidence сохранены uncommitted; push/commit не было.
+Фактический provider source/evidence snapshot TASK-MVP-05-usage-final.json.
+
+### MVP05_REVIEW_ONLY_9300000_20261026 — pre-dispatch reservation
+
+Текущее явное user исключение записано в TASK/APPROVALS.
+Тот же MVP-05/Run/main baseline318e633; Luna8812350 preserved,
+calls1/2, cap9300000; reserve sole Sol medium call2/2 max250000 including
+finalization, safety237650. Review slot1/2 A1/C1 reserved; review раньше не было.
+Frozen AC001..007/submission/evidence без изменений, old budget BLOCKED сохранён.
+Route/review-policy сверены: пользователь явно разрешает это ограниченное
+R1 Codex review, не stage acceptance; никаких fixes/tests/commit/push/новых
+product TASK после verdict. Конкретный reviewer Task/Dispatch выдаст Orca.
+
+Реальный reviewerstart task_0e67a288d075/ctx_41b021641e99, term_d9c62fe8-a19a-4d31-9524-69451d7f0837: ready,input_accepted,turnStart observed; requested/effective gpt-6.1-sol medium. Calls2/2 consumed, review slot1/2 started,250000 hardreserve. No new code/tests/commit/stage acceptance authorized.
+
+### MVP-05 — единственное разрешённое R1 review: FAIL, остановка
+
+matching worker_done msg_f0b7893182c5:
+task_0e67a288d075/ctx_41b021641e99, outcome succeeded (review завершён),
+product verdict FAIL, report reviews/TASK-MVP-05-C1.md.
+Worker released/closed_agent_terminal до delivery_bd6681b0e0c8 ack.
+Calls2/2 consumed, first full-review1/2 consumed, failed-review1,diagnostic0.
+Смена TASK/session не вернула расход. Новых вызовов/исправлений нет.
+
+Findings: F-01 MAJOR AC003/004/006 — неполный обязательный round-trip evidence
+(нет response bodies/полной последовательности edit/clear/read).
+F-02 MAJOR AC005/004 — старый submit callback после unmount меняет новый выбор;
+это статический вывод reviewer, динамическая проверка не запускалась.
+F-03 MAJOR AC001/002/003/005 — недостающие underlying HTML/refresh/edge-case
+артефакты. F-04 MINOR — prose C1 hash не совпадает с manifest, underlying
+продукт/артефакты совпали; самостоятельно не основание FAIL.
+Reviewer не запускал typecheck/build/UI/API/tests и не менял код/fixtures.
+
+Final native token_count13:41:38.976Z:
+review input398069 (cached340864 входит),output5743,reasoning1123,total403812.
+Reserve250000 превышен148069: не считать это разрешённым переносом safety.
+Первый coordinator snapshot13:39:31Z252482 уже выявил overrun2482;
+сообщение msg_e09c3f54d98b запретило дальнейшую инспекцию, оставило только
+краткую фиксацию уже полученных findings/settlement. Финализация добавила145587.
+Фактический overrun сохраняется без обрезания/counter reset.
+Итого MVP-05 input8812350+398069=9210419/9300000, остаток89581.
+Старые implementation cap1M/reserve600k и превышения7812350/8212350 сохранены.
+Provider56%/300min/reset1793032523,secondary24%; exhaustion не наблюдалось.
+Снимок evidence/TASK-MVP-05-review-usage-final.json.
+Все действия остановлены после verdict согласно явному user scope:
+без code/fixes/rechecks/new tasks/stage acceptance/commit/push.
+Любые исправления требуют отдельного решения и бюджета, не запрашиваются
+и не выполняются автоматически этим review-only поручением.
+
+### MVP05_C2_EXTRA_1500000_20261026 — append-only approval / pre-dispatch
+
+User явно разрешил C2 до1.5M по F01..F04. C1 settlement9210419/9300000,
+calls2/full-review1/failed-review1 сохранён; все overruns неизменны.
+Newcap10710419, newcalls2 cumulative4, R1 A1/C2. До dispatch reserve
+Luna implementation900000 incl checks/evidence, checkpoint600000/blocking,
+substantive stopbefore750000/safety finalization before900000;
+Sol independent review450000 call4/4, последний full-review2/2;
+parent safety150000. Writer не расходует reviewreserve.
+Current usage подтверждён exact C1 review rollout:398069 + Luna8812350 =
+9210419; provider последний observed13:41:38Z56%/reset1793032523,
+snapshot read13:52:01Z — historical, exhaustion не зафиксирован.
+Frozen C2: docs/tasks/TASK-MVP-05-C2.md, исходные AC/allowlist не менялись.
+Run/main/HEAD318e633 подтверждены; inbox пуст, активных writers не было.
+Новые Orca IDs выдадутся реальным dispatch, не выдумываются.
+
+C2 implementation launch: task_a9dda588c359/ctx_00fa3aee8c79,term_ea1c0a6d-b1bc-4bc1-99fc-7d90085b8afb. Ready/inputaccepted/turnStart observed; requested/effective gpt-6-luna medium, provider Luna/live. Calls3/4 consumed; не completion/PASS.
+
+C2 native budget guard запущен отдельным локальным процессом, не model worker: толькоtoken_count чтение, checkpoint message600k и protective worker-stop около800k до cap900k, без provider/API prompts. Sourceevidence TASK-MVP-05-C2-budget-guard.py/.json; endpointтолькоctx_00fa3aee8c79. Это обеспечение явного userbudgetstop, не новая allowance; writer уведомлён msg_a7b5575c2773.
+
+### C2 mid-implementation BLOCKED — factual RCA и receipt до release
+
+По прямому текущему поручению пользователя: никаких reviewer/implementation
+retry/new Dispatch/code edits. C2 не завершён, worker_done не поступал, evidence
+completion отсутствует; partial uncommitted code/evidence не откатывать.
+
+Фактический guardian TASK-MVP-05-C2-budget-guard.py имел threshold800000 и
+вызвал worker-stop при token_count825330 в13:58:03.919Z, несмотря на выданный
+implementation cap900000. Receipt id771cdd31-a30e-43bc-a9aa-06dde5976d7e,
+mutation8174a6a6-e538-4bcc-8032-6446bef2f182: state stopped,
+alreadySettled false, processAction closed_agent_terminal, ptyKilled true.
+Остановлен только term_ea1c0a6d-b1bc-4bc1-99fc-7d90085b8afb,
+task_a9dda588c359/ctx_00fa3aee8c79. worker-show подтвердил dispatch failed,
+worker stopped/process_stopped, liveness exited/worker_stop; full-reviewC2
+не запускался. Raw receipt сохранён evidence/TASK-MVP-05-C2-stop-receipt.json,
+полный resource snapshot TASK-MVP-05-C2-stopped-resource.json ДО worker-release.
+
+RCA: координатор ошибочно превратил предупредительный запас перед900k в
+автоматический threshold800k/worker-stop. Дискретный snapshot825330 вызвал
+преждевременное закрытие терминала вместо блокирующего checkpoint/координации.
+В результате call3 потреблён и процесс остановлен до cap; это НЕ доказанное
+исчерпание900k, не provider exhaustion и не FAIL независимого C2 review.
+Ошибка guard не расширяет разрешение на новый implementation call/Dispatch.
+
+Учёт: C1actual9210419 + call3actual825330 = cumulative10035749/10710419.
+Calls3/4 consumed, call3 stopped/unaccepted, review slot1/2 consumed толькоC1,
+failed-review1, C2 review slot2/2 не использован. Reviewer450000 и safety150000
+не затронуты; implementation reserve remaining74670.
+В текущем user поручении указано remaining675089; это сохранённая цитата,
+но арифметический остаток ceiling10710419-actual10035749 =674670,
+и74670+450000+150000 =674670. Расхождение419 не добавляет бюджета и не
+изменяет утверждённые cumulative ceiling/actual/reserves.
+Предыдущие C1 overruns/FAIL и прочая history сохраняются без сброса.
+
+Нужны новое явное решение о дополнительном implementation call и конкретный
+резерв на завершение C2: call3 terminated, оставшийся call4 назначен независимому
+Sol review и не может быть потрачен на writer. Остаток токенов не создаёт ещё
+один разрешённый вызов. Недостающий token budget на завершение не оценён/
+не выдаётся автоматически; новый user decision должен назвать call и reserve,
+сохранив450k review,150k safety и весь реальный расход.
+Без такого решения: BLOCKED, no reviewer/retry/fixes/checks/commit/push.
+
+После сохранения rawstopreceipt/resource snapshot и записи BLOCKED выполнен worker-release ctx_00fa3aee8c79: state released, processAction none, archive unavailable. Release receipt evidence/TASK-MVP-05-C2-resource-release.json. Это cleanup уже остановленного worker, не worker_done/acceptance; новых Dispatch/reviewer/code/checks/commit/push не было.
+
+### MVP05_C2_RESUME_CALL4_11535749_20261026 — pre-dispatch resume
+
+Новое явное user «Разрешаю» записано в APPROVALS, без сброса истории:
+C1actual9210419 + stopped call3actual825330 =10035749.
+C2 BLOCKED mid-implementation и erroneous guard-stop825330 сохранены.
+New cumulative cap11535749 (previouscap10710419 +825330); remaining1500000.
+Reserve continuation Luna call4/5≤900000 incl checks/evidence/finalization,
+checkpoint600000 manual review, substantive stopbefore750000; finalдо900000.
+Reserve final independent Sol call5/5≤450000, A1 full-review slot2/2,
+parent safety150000 неприкосновенны. C1full-review1/2,failed-review1 сохраняются.
+
+Прежний guardian artifact не изменяется и не запускается. Resume observer
+read-only/alert-only, без worker-stop/close/reset/runtime lifecycle mutations.
+Один writer, C2 scope/checklist без изменений. Exact prior partial state
+будет описан текущим evidence-file snapshot, не выдаётся за completion.
+Same Run run_68046cea3eb4,main baseline318e6336737ee635abf593c2643f26daba273f86.
+Следующее действие — real Luna continuation start; Orca IDs не выдумываются.
+
+Resume call4 launch task_85f835b6b49a/ctx_5be9101c483f,term_9ddc1f24-6136-45b5-bec3-89f5d56434a0: requested/effective Luna medium,ready/inputaccepted/turnStart observed. Calls4/5 consumed, notaccepted/notcompletion. Old guard не запускался; отдельный observer только alertmetadata.
+
+### C2 continuation call4 — manual stop после подтверждённого budget failure
+
+Новый read-only observer не выполнял runtime actions: только metadata/alert.
+Старый guard не запускался и не менялся. Exact native actual Luna medium
+call4 ctx_5be9101c483f:112831 at14:08:52Z,289665 at14:10:09Z,
+507575 at14:11:01Z,688760 at14:11:56Z,923618 at14:12:58.225Z.
+Checkpoint600k был пройден без ожидаемого blocking ask worker.
+Manual coordinator message msg_1ce0da3ebe46 отправлено14:12:47Z с688760
+и запретом новых substantive actions. Попытка terminal steering с сочетанием
+interrupt/wait-submit была отвергнута invalid_argument без runtime action;
+исправленная interrupt+text+enter принята. Следующий snapshot923618 уже
+превысил implementation900000 на23618.
+Ручная реакция координатора оказалась поздней; длительная финализация/повторное
+накопление input не уложились в reserve. Threshold600k/stopbefore750k не были
+обеспечены вовремя. Нельзя объявлять заранее разрешённым новый расход safety.
+
+По явному user условию stop at scope/budget failure координатор ВРУЧНУЮ
+вызвал worker-stop текущего exact Dispatch после actual923618>900000.
+Receipt af407133-a8d5-4306-9eab-938cf602548b,
+mutation60434620-e36b-431f-a6b3-894b5d4cfa69: stopped,
+alreadySettled false,closed_agent_terminal,ptyKilled true.
+Raw receipt: evidence/TASK-MVP-05-C2-resume-manual-budget-stop.json,
+сохранён ДО release. Никакого автоматического worker-stop observer/старого
+guard не было. Actual worker_done/evidence completion не поступали.
+Inbox после stop пуст. Partialcode/evidence uncommitted сохраняются.
+
+Последний доступный token_count14:12:58.225Z: call4input923618,
+cached884608 входит,output3871,reasoning1145,total927489.
+Cumulative10035749+923618=10959367/11535749; remaining576382.
+Calls4/5 consumed (call3/4 stopped), C1full-review1/2,failed-review1;
+C2full-review2/2 НЕ запускался. Writer reserve900k превышен23618.
+Неизрасходованные обязательства review450000+safety150000=600000
+не помещаются в remaining576382: shortfall23618; разрешения списать safety/
+снизить reviewreserve нет. Sol модель не запускалась.
+Provider72%/reset1793032523,secondary27%; provider не exhausted.
+Read-only observer остановлен локальным stopfile, без agent lifecycle actions.
+Source final snapshot TASK-MVP-05-C2-resume-usage-final.json.
+
+Результат BLOCKED mid-implementation, не C2 product FAIL и не accepted
+submission. Budget/call failure останавливает продолжение: no reviewer,
+new Dispatch/retry/fixes/checks/commit/push/stage acceptance. Новый ресурс/
+вызов не выводится из оставшегося aggregate баланса автоматически.
+
+Cleanup после rawreceipt/manual stop: worker-release ctx_5be9101c483f returned released/processAction none/archive unavailable; receipt TASK-MVP-05-C2-resume-resource-release.json. Read-only observer завершён; его stdout подтвердил alert600k при643198, без runtime mutations. Новых writers/reviewers/commits/push нет.
+
+### MVP05_C2_CALL5_12435749_20261026 — pre-dispatch
+
+Новое прямое user approval записано append-only. Settled10959367 preserved
+(C1 9210419 +call3 825330 stopped +call4 923618 stopped).
+Cumulative ceiling12435749, рост900000; remaining1476382 =
+Luna call5/6≤900000 +Sol call6/6≤450000 +safety126382.
+Calls4/6 consumed, C1full-review1/2,failed-review1; C2review2/2 не был запущен.
+Code/evidence partial сохраняются; no reset/refund/new approach.
+New frozen C2-call5 addendum: mandatory450k blockingask/manual response,
+substantive≤700k, finalize≤850k, hard900k; observer alert-only без runtime
+lifecycle actions. Не использовать старый guardian или старый терминал.
+No extensive prep: следующий шаг real новый single Luna medium writerstart.
+
+Call5 реальныйstart task_00e2569c1f2f/ctx_d76a9cb20092,term_f8c86a61-17df-44b1-be6f-9b77f8cd7a33. Requested/effective Luna medium,ready/inputaccepted/turnStartobserved; calls5/6 consumed, неcompletion/PASS. Старыеterminals/guardsнеиспользовались.
+
+### Call5 premature settlement before substantive C2 — BLOCKED coordination
+
+Orca question msg_023f0aa3fd7d at14:24:13Z запросил exact ownrollout/currentactual
+до substantivework. Coordinator durable message msg_07397f71bc47 at14:24:35Z
+передал path, но не являлся формальным reply на уже ожидающий question.
+Delivery6ff3140bcbb3 была прочитана позднее; coordinator попытался reply с
+actual145811 at14:25:13Z и явным разрешением продолжить, но вопрос уже закрыт
+dispatch_inactive: worker преждевременно отправил worker_done14:25:30Z.
+Первое указание required450k blockingask было ошибочно применено worker к
+начальному metadata вопросу; порог450k фактически НЕ достигнут.
+Worker сам сообщил, что substantive/project files не читал/не менял, ожидаетreply,
+но вместо resume того же вопроса завершился. Это worker assertion, не новая
+проверка productdiff. Coordinator тоже задержал formalreply; queued status не
+подменяет ответ на blockingask. Причина — coordination/premature settlement,
+НЕ inputcap/provider exhaustion, НЕ C2full-review FAIL, не acceptance.
+
+Matching msg_e8ba5513d79e task_00e2569c1f2f/ctx_d76a9cb20092
+worker_done outcome failed, report-path отсутствует.
+Full settlement сохранён TASK-MVP-05-C2-call5-settlement.json.
+Resource released/closed_agent_terminal до delivery_af41f71e4aed ack.
+Никакой auto worker-stop/close guard или coordinator worker-stop в call5 не было.
+Read-only observer остановлен локальным stopfile после settlement.
+
+Final available token_count14:25:35.246Z: call5actual203691input,
+cached185600included,output3022,reasoning2208,total206713.
+Parentactual10959367+203691=11163058/12435749, remaining1272691.
+Own unused696309, untouchedreview450000+safety126382;
+sum696309+450000+126382=1272691.
+Calls5/6 consumed: call5 failed/released несмотря на отсутствие substantivework.
+C1full-review1/2,failed-review1; finalC2review2/2 не был запущен.
+No reset/refund; call3 825330stopped/call4 923618stopped и их overruns
+сохранены без изменений. Provider79%/reset1793032523,secondary28%,не exhausted.
+Не запускать reviewer без завершённого C2; не создавать ещёодин implementation
+Dispatch из разрешения на один call5. Remainingcall6 назначен только Sol review,
+оставшиеся tokens не создают новый authorized writer call.
+Scope/code/evidence uncommitted сохранены, commit/push/новыхпроверок не было.
+
+### MVP05_C2_CALL6_12639440_20261026 — frozen/pre-dispatch
+
+Новое explicituserapproval append-only. Actual11163058 preserved:
+C1 9210419 +settledfailedcall3 825330 +call4 923618 +call5 203691.
+Newcap12639440,remaining1476382, calls5/7consumed,
+reserve Luna call6/7≤900000inclfinalization,
+Sol call7/7≤450000/fullreview2/2,safety126382 untouched.
+SameA1/C2 scope/F01..F04/originalAC001..007,oldC1FAIL/overruns сохранены.
+Prior partialcodecall3/4 preserved; call5 noprojectwork accordingtoreport.
+Newcallstartsownzero,NOupfrontask,workimmediately; mandatoryown450kblockingask,
+formalcoordinatorreply beforecontinuation, notstatus. Ask timeout is pending,
+never prematureworker_done solelywaiting. Observeralert-only,oldguardsnotrun.
+Substantive≤700k,final≤850k,hard900k; no extrareserve/auto-reset.
+Следующий шаг — exactlyone new Luna mediumwriterstart inexistingRun/workspace.
+
+Call6 launch task_8296e3d4e421/ctx_a12bcfc96cf1,term_eda9638a-3157-4d37-b6fd-7b8389fd89a6: requested/effectiveLunamedium,ready/inputaccepted/turnStartobserved,live. Calls6/7consumed,notaccepted/notcompletion. Newterminal,no oldguard.
+
+### Call6 checkpoint/formal reply и actual budget failure — BLOCKED
+
+Worker task_8296e3d4e421/ctx_a12bcfc96cf1 начал C2 без upfrontask.
+Requested/effective иactualturn_context gpt-6-luna/medium подтверждены.
+Native observer read-only/alert-only,безruntime actions; oldguardsне запускались.
+
+Call6native input255420 at14:36:19Z,306710 at14:36:37Z,520883 at14:37:26Z.
+Coordinator checkpoint message msg_773444165359 at14:38:30Z и manualsteer
+потребовали pause/realblockingask,не заменяли formalreply.
+Actualquestion msg_8565442fcae6 created14:38:44Z:
+worker сообщил изменение stale-submit invalidation, C2mock28rows/status/
+bodies/headers/controlled422, запускfixture/Vite и reloadpage; pending
+полный browserround-trip/delay/edgecases/typecheck/build/report/hashes.
+Это worker progressassertion, не completedcheck/evidence acceptance.
+
+Formalcoordinatorreply msg_0b8463668a10 at14:40:22Z ответил на exactquestion
+решением STOP: свежий snapshot14:39:39Z own1017458 уже>900000.
+Reply не был подменён queuedstatus; questionstatus answered, deliveryack.
+Однако ответ запоздал: между pause/ask иformalreply actualinput вырос
+(ожидание/обслуживаниеtoolturns тоже считается). Snapshot14:40:22Z1155000.
+450k pause, substantive700k/final850k/hard900k не обеспечены в пределах budget.
+Фраза remaining255233 вformalreply была арифметической ошибкой:
+при actual1017458 иparentcap12639440 правильныйremaining458924.
+Это не меняет STOP по owncap и не добавляет/не списывает разрешение.
+
+Координатор вручную остановил exact currentDispatch после подтверждённого
+owncapexceeded, не observer/старыйguard. Rawreceipt доrelease:
+TASK-MVP-05-C2-call6-manual-budget-stop.json,
+dc3b77bd-0976-49d5-974f-ab188929af15,
+mutation721affb5-7156-4dcb-a246-7a703355caa1: stopped,alreadySettled false,
+closed_agent_terminal,ptyKilled true. Нет worker_done/completionreport;
+inbox послеstopпуст. Partialproductcode/evidence сохраняются uncommitted.
+
+Последний доступный native token_count14:40:22.400Z:
+call6input1155000,cached1091200входит,output6827,reasoning3374,total1161827.
+Prioractual11163058+1155000=12318058/12639440;remaining321382.
+Ownreserve900000 превышен255000. Sol450000 иsafety126382 не использованы
+соответствующими workers, но их сумма576382 не помещается вremaining:
+shortfall255000. Никакого разрешённого перераспределения/сброса не было.
+Native computed ledger TASK-MVP-05-C2-call6-accounting.json, usage-final.json.
+Calls6/7consumed, C1fullreview1/2,failed-review1; C2secondreview2/2 НЕ запущен.
+No actualC2PASS/FAIL: BLOCKED midimplementation/budget.
+Provider88%/reset1793032523,secondary29%,не providerexhaustion.
+Read-onlyobserver завершён stopfile,никаких его lifecycle mutations.
+
+Дальнейшие implementation/review/дополнительныеcalls/checks/commit/push/
+stageacceptance не запускаются. Call7 выделен finalSol и не может тратиться
+наimplementation; незавершённая подача и недостаточный protectedreserve
+не позволяютreview. Currentnewcallauthorization исчерпан как call6;
+tokenbalance сам не разрешает ещёодин writer/возобновление.
+Все C1FAIL и stoppedcalls3/4/call5failed/previousoverruns сохраняются.
+
+После записиrawstopreceipt/RCA выполнен worker-release ctx_a12bcfc96cf1: released/processActionnone/archiveunavailable; receipt TASK-MVP-05-C2-call6-resource-release.json. Observerstdout подтвердил alert450k при466521, read-onlyobserver завершён. Активногоwriter/reviewerнет; новыхcalls/commit/pushнебыло.
+
+### Rejected budget decision_gate — authority not accepted
+
+Получено status/high msg_24131cab7bf3, delivery_0b87aa62aab3.
+Orca rejected original decision_gate worker_identity_changed:
+term_2d4e5739-0030-47c9-974b-dc80be833487 не exact process owner
+ctx_a12bcfc96cf1 (уже stopped/released).
+Original body утверждает новое user approval отмены hard token caps/checkpoint
+пауз и continuation C2+finalSol; это переданное утверждение, не принятый gate
+и не прямое сообщение пользователя в данном чате.
+Raw delivered status сохранён TASK-MVP-05-rejected-budget-gate.json.
+Не подменять sender/--from и не перепосылать rejectedgate как будто принят.
+Currentactual12318058, всяhistory/C1FAIL/C2partial остаются без изменений.
+Новых workers/Dispatch/code/tests/commit/push не запущено.
+Изменённая skillbudget policy проверяется read-only; она не подменяет
+прямое подтверждение конкретного возобновления после прежних usercap/stop.
+До верифицируемого текущего решения continuation остаётся NOT_AUTHORIZED.
+
+### Second rejected continuation decision_gate
+
+msg_58033adda1da/delivery_27fd00080bd4 from
+term_2d4e5739-0030-47c9-974b-dc80be833487:
+Orca rejected sender_not_assignee, No active Dispatch belongs to sender.
+Original body повторно передаёт claimed current userdecision про Codex-only,
+отмену token caps/checkpoint pauses и continuation C2+finalreview без новогоgate.
+Это status с _orcaLifecycleRejection, не принятый lifecycle decision_gate.
+В данной coordinator conversation прямой ответ на pending confirmation не поступал.
+Raw delivery сохранена TASK-MVP-05-rejected-budget-gate-2.json.
+Не повторять rejected mutation от чужого имени; execution не возобновлялся,
+новых approvals/calls/Dispatch/code/checks/commit/push нет.
+Фактический actual12318058 и BLOCKED/история сохраняются.
+
+### MVP05_C2_ACCOUNTING_ONLY_20261026 — прямой authority update / restart
+
+Пользователь прямо подтвердил continuation и отмену hardinputcaps/blocking
+token checkpoints. Предыдущие два rejecteddecisiongates остаются rejected
+и не переписываются как принятые; нынешнее directmessage является источником.
+Actual12318058 сохранён полностью: C1 9210419,call3 825330,call4 923618,
+call5 203691,call6 1155000. Callsused6; plannednext7 Luna completion и8Sol
+review — фактический учёт,не новый внутренний hardcall/tokenbudgetgate.
+C1review1/2,failed-review1; остаётся один C2full-review2/2 по qualitypolicy.
+Same R1 A1/C2/frozen scope/Run/main/partialcode; ни refunds/reset/newapproach.
+Новыйaddendum authoritative над устаревшими численными gate instructions.
+Никаких guards/observers/checkpointasks/пауз из-за токенов не запускается.
+Runtime objective при необходимости только документальный,Runне пересоздаётся.
+Следующее действие: единственный новый Luna medium workercompletion.
+
+Accounting-only C2 completion launched task_be6fd5441e23/ctx_14c1888cf95b,term_5a1aaebf-3abf-4e76-b4fc-bc9a8deb0590:requested/effectivegpt-6-lunamedium,ready/inputaccepted/turnStartobserved/live. Actualcall7counted;no tokenhold/observerguard,notcompletion/PASS. SameexistingRun retained; historicalobjective text is not currentrole authority.
+
+### Same live Dispatch resume after actual providerlimit/reset
+
+Directuser resume received. Inbox currentRun empty. Worker ctx_14c1888cf95b
+remains dispatched,capabilitynotrevoked,observationlive/exactWorkertrue.
+Terminalscreen directly confirms prior "You've hit your usage limit...
+tryagain7:35PM". Process not replaced; oldbrowserpartialstate preserved.
+Runtime now bb8033b2-2a05-4f9a-a053-5acabcd5ed3e afterrestore,projection
+restored_unconfirmed,resourceuser_owned/retained: preserve ownership and
+do not infer exit from staleprojection/no worker_done.
+User explicitly authorizes same-session resume afterreset,not quotaevasion.
+No newworker/Dispatch/callcounterreset. Continue frozenC2/accountingonly.
+
+Same-session terminalsend after explicitresume returned accepted+input_accepted+turn_started; request0d43764e-e53d-4034-beb1-05d2d1ec9a1f,processIncarnationde99df1f-ee71-4da5-a27b-9c786c950466 unchanged. Not newworker/session/Dispatch and no counterreset; receipt evidence/TASK-MVP-05-C2-provider-reset-same-session-resume.json. Followupmsg002048498bc8 enqueued. Workerterminal user_owned/retained,cleanupmustnotcloseuserownedpane.
+
+### C2 mock fixture correction / safe test resource setup
+
+После same-session resume realbrowser smoke выявил fixture ID collision:
+next_id3 совпал сexistingPAGE-03; worker изменил C2mock next_id29 и сохраняет
+исходный failedattempt. Это testfixture defect, не новыйproductscope/DB.
+Native terminal approval prompt предлагал broadkill любогоlistener8000;
+coordinator не подтвердил, направил на narrowownedprocess verification.
+Read-only owner evidence: PID20332,Python312,commandline exactC2fixture=true,
+creationtime сохранена TASK-MVP-05-C2-fixture-process-owner.json.
+Даже narrowrestart остался external shellapprovalgate; никакой bypass/approval
+от имени пользователя не выполнялся. Coordinator направил cancelproposal и
+безопасный test-only alternate mock/Viteports +temporary evidenceproxyconfig,
+оставляя oldfixture20332 иproductionconfig/DB untouched.
+Messages d8eed41282fa/448e5654b38f — scopedruntime/evidence guidance,не новый
+AC/архитектура/agentdispatch/tokenpause; samewritercontinues.
+
+## 2026-10-26 C2 real worker_done and settlement before final review
+Matching worker_done msg_1cb181d16233 at 17:15:04Z for task_be6fd5441e23 / ctx_14c1888cf95b; delivery_db9688b7ce4e ACKed. Same resumed Luna medium process, no duplicate implementation. Final native usage input15122458 (cached14863104 included), output84314; prior12318058 => cumulative27440516. Receipt: evidence/TASK-MVP-05-C2-completion-usage-final.json. All previous stopped/failed calls unchanged. Resource release decision retained/user_takeover/processAction none; user-owned terminal not closed. Product NOT_ACCEPTED.
+Final independent gpt-6.1-sol/medium full review2/2 (accounting call8) authorized; no token ceiling/reserve/checkpoint gate. Review carries original AC001..007/F01..F04 and C1 findings. Coordinator comment on out-of-contract large Decimal mock positive case raced worker_done by one second; pass concern to reviewer, no extra implementation loop. No push/deploy/commit before PASS.
+Final review dispatch started: task_c90a6464b95b / ctx_20bcbbca831b / term_b7bd634c-cc80-4830-a358-e1c649029854; requested/effective gpt-6.1-sol medium, turn_started observed. Receipt evidence/TASK-MVP-05-C2-final-review-launch.json. Full-review slot2/2, accounting call8.
+
+## 2026-10-26 17:26Z — A1/C2 final independent review FAIL; chain stopped
+Sol gpt-6.1-sol/medium (native turn_context confirmed), task_c90a6464b95b / ctx_20bcbbca831b, matching worker_done msg_b2454d21cbb3 at17:26:02Z. Final report docs/workflow/reviews/TASK-MVP-05-C2.md: FAIL, F-01 MAJOR open on AC003/004/006. Full CRUD scenarios ID29/32 have out-of-contract Quantity; fixture response_body aliases mutable rows so historical POST/GET bodies reflect later PATCH/clear. API-valid create/read alternatives lack complete edit/clear sequence. F02/F03/F04 closed; 139/139 manifest hashes/sizes matched; inherited final typecheck/build exit0 reused, no extra tests/fixes. C1 FAIL remains history; full reviews2/2 consumed, failed-review count2.
+Final reviewer native input1525345, cached1427968 INCLUDED, output10097, reasoning1558, total1535442; observed17:26:07.978Z. Receipt evidence/TASK-MVP-05-C2-final-review-usage-final.json. Prior27440516 +1525345 = cumulative28965861 input. Calls8 settled; no reset/refund. Primary40% reset1793050838, secondary38% reset1793600447; no new provider refusal. Hard token caps/checkpoint pauses remain removed.
+Reviewer resource released17:26:12Z, processAction closed_agent_terminal, transcript captured; worker-show receipt evidence/TASK-MVP-05-C2-final-review-settled.json. Delivery82034089e1b7 ACKed. Reclaimable enumeration empty. User-owned Luna terminal retained unchanged.
+Product remains NOT_ACCEPTED; dependent chain BLOCKED under explicit C2 FAIL=>STOP authority. No third review, fixes, C3, next TASK, local commit, push/merge/deploy. All uncommitted product code, C1/C2 evidence and earlier failures preserved. Stop caused by quality verdict, not budget. Further work requires a separate user decision.
+
+## MVP05_C3_A2_AUTHORIZED_20261026
+Пользователь «Ну делай что нужно)» прямо разрешил C3 read-only RCA и A2/C1 в прежнем frozen F01..F04+AC001..007 (TASK-MVP-05.md/TASK-MVP-05-C2.md; baseline318e6336737ee635abf593c2643f26daba273f86). Codex coordinator, один gpt-6-luna/medium writer, затем отдельный gpt-6.1-sol/medium reviewer после worker_done/evidence. A1 FAIL/FAIL и review2/2 сохранены, третьего A1 review нет.
+A2 materially distinct contract-enforcing immutable-wire evidence approach по C3 RCA. A2/C1 review1/2 зарезервирован; на FAIL STOP, автоматический C2/A3 не разрешён. Actual baseline28965861 input/calls8, все попытки/overruns сохраняются. Accounting-only без input/call caps и checkpoint gates. Stop real provider refusal/limit or explicit user stop, без обходов. No push/deploy/merge; local commit только routed PASS. Scope/backend/API/DB/deps unchanged, stage acceptance/следующий TASK не разрешены этим поручением.
+C3 read-only RCA complete: evidence/TASK-MVP-05-A1-C3-RCA.md; no code/tests/API/browser execution or third review. Selected A2 replaces permissive mutable harness with contract/wire oracle.
+A2/C1 implementation started: task_0fdf463a7de1 / ctx_11a366a6c3d4 / term_c3c06ca6-4379-4907-8754-59a293b179c6; requested/effective gpt-6-luna medium, turn_started observed. Receipt evidence/TASK-MVP-05-A2-C1-implementer-launch.json; accounting call9. One writer, no reviewer before done.
+
+## A2/C1 implementation settlement — 2026-10-26T18:39Z
+Matching worker_done msg_b142517ece06, task_0fdf463a7de1/ctx_11a366a6c3d4, outcome succeeded at18:39:10Z; evidence/TASK-MVP-05-A2-C1-evidence.md. No project PASS. Native gpt-6-luna medium input11840541 (cached11673728 included), output49639; prior28965861 => cumulative40806402. Calls9 settled, prior A1 attempts unchanged; receipt evidence/TASK-MVP-05-A2-C1-implementer-usage-final.json. Provider primary56%, secondary40%, no refusal.
+Worker-release state released/closed_agent_terminal/transcript captured; receipt evidence/TASK-MVP-05-A2-C1-implementer-release.json. delivery_c2dd87e4a14d ACKed. A2 report claims schema-based fixture, immutable wire snapshots, valid record29 fulltrace and unchanged product139 inherited hashes; independent review pending. A2 full-review1/2 reserved, call10 accounting-only; FAIL=>stop without C2/A3.
+A2/C1 independent review started task_36ad667176f9/ctx_90f25030eaee/term_4b9425d1-d82d-4b8f-bf07-890d307aa470. Requested/effective gpt-6.1-sol medium; fullreview A2 slot1/2/accounting call10. Receipt evidence/TASK-MVP-05-A2-C1-reviewer-launch.json. No routine reruns/code fixes authorized.
+
+## 2026-10-26T18:46Z — routed TASK-MVP-05 A2/C1 PASS
+Independent gpt-6.1-sol/medium task_36ad667176f9/ctx_90f25030eaee worker_done msg_e550b99b5d97 at18:45:51Z, report reviews/TASK-MVP-05-A2-C1.md. All AC001..007 PASS, F01 closed via actual schema-backed immutable same-ID trace, F02/F03/F04 confirmed. No open in-scope findings;46 A2+139 inherited hashes/sizes matched; no routine reruns. A1 FAIL/FAIL/review2/2 remain unchanged; A2 used review1/2, total fullreviews3, failed2, C3 diagnostics1. A2/C2/A3 not started.
+Reviewer final input1853222 (cached1738112 included), output10030; prior40806402=>cumulative42659624 input/calls10 settled. Receipt evidence/TASK-MVP-05-A2-C1-reviewer-usage-final.json. Provider primary64%,secondary41%; no refusal; accounting-only remains. Reviewer released closed_agent_terminal/transcript captured; delivery_399fedfe6d41 ACKed. No push/deploy/merge/stage acceptance/next TASK. Local product commit authorized after this routed PASS; workflow/evidence and all history preserved.
+Local product commit after routed PASS: 06f58065022db9c58524909027ddc2d454f7071f; exact eight reviewed frontend files only,234 insertions/1 deletion. No push/merge/deploy. Workflow/evidence remain saved locally, not included in product commit; all unrelated/uncommitted history preserved. No further TASK dispatched.
+
+## TASK-MVP-06 Stage start — existing approved ROADMAP v1.2
+Текущее поручение пользователя явно запускает следующий утверждённый TASK, approval не расширяется. Frozen docs/tasks/TASK-MVP-06.md; Stage A1/C1. Main baseline/delivery06f58065022db9c58524909027ddc2d454f7071f unpushed, predecessor MVP05 A2/C1 PASS; A1 FAIL/FAIL и actual42659624/calls10 сохранены.
+Один gpt-6-luna medium executor: только required full pytest, final frontend typecheck/build Node24.22.0, Alembic current/count expected13, identity/scope/evidence. Required failure/unavailability=>save facts/stop, no fixes. Separate Codex stage acceptance после evidence (пользователь «я после evidence»); FINAL-REPORT только после actual stage PASS, не dispatch executor. No product edits/commit/push/merge/deploy.
+Учёт actual без caps/checkpoint gates, next accounting call11; no reset/refund. Same Run run_68046cea3eb4/current workspace/coordinator term_d727cc23-31e8-42eb-a295-c42268e0c645. ST001..007 frozen, checks-only; stage review0, pending separate context.
+MVP06 checks executor started task_bfc414bad7a6/ctx_7ddb18624654/term_66ad1acb-5615-4cb6-8d32-12a39e7770e3; requested/effective gpt-6-luna medium, observed turn_started; receipt evidence/TASK-MVP-06-executor-launch.json. No acceptance decision.
+
+## 2026-10-26T19:06Z TASK-MVP-06 checks completed; separate acceptance pending
+Matching worker_done msg_217815cb0dbe at19:05:36Z, task_bfc414bad7a6/ctx_7ddb18624654, outcome succeeded. Evidence evidence/TASK-MVP-06-evidence.md. All required native exits0: pytest3771passed/1warning/471.65s; Nodev24.22.0,typecheck/build; Alembic currente4b8c2d16a70(head),actual count13. Before/after190-file source manifest unchanged; HEAD06f58065022db9c58524909027ddc2d454f7071f. Product diff empty, unrelated workflow/untracked evidence preserved; tree not claimed clean.
+Executor actual input2625483 (cached2557696 included), output12897; Stage execution1call, priorMVP05 actual42659624/calls10 => retained ledger45285107/calls11. No historical counter reset, A1 failures retained. Native requested/effective/turncontext gpt-6-luna medium. Usage receipt evidence/TASK-MVP-06-executor-usage-final.json; primary74%,secondary43%,no new refusal.
+Worker released/closed_agent_terminal/transcript captured; receipt evidence/TASK-MVP-06-executor-release.json. Delivery_c5fc0129a0fb ACKed. Coordinator inspected report/native-exit metadata and artifact hashes without rerunning commands or accepting stage. ST006 separate Codex stage review remains owner supplied by user «я после evidence»; ST007 FINAL-REPORT pending actual PASS. No reviewer automatically launched, no product edits/fixes/commit/push/merge/deploy. Approval unchanged.
+
+## Stage acceptance dispatch authorized — direct user «Приступай»
+Пользователь поручил выполнить описанный следующий шаг: отдельную Codex stage acceptance по готовому MVP06 evidence; после PASS coordinator FINAL-REPORT/COMPLETE, при FAIL stop без исправлений. Existing ROADMAP v1.2 scope/approval не расширяется. Stage reviewer gpt-6-astra/high по MODEL-ROUTING для итоговой cross-module проверки архитектурных инвариантов; отдельный контекст от Luna executor и coordinator.
+Frozen ST001..007 прежние. Stage A1/C1 acceptance review1/2 reserved (не дополнительное MVP05 review); prior actual45285107 input/calls11 сохраняется. Next accounting call12, Stage prior2625483; no caps/checkpoint gates. Same Run/main HEAD06f58065022db9c58524909027ddc2d454f7071f, no product edits/tests rerun/fixes/commit/push/merge/deploy.
+Stage acceptance started task_391aaf782f69/ctx_97a10d402fdd/term_64e33575-cd37-461b-bef5-2db42d2c347f; requested/effective gpt-6-astra high, turn_started observed. Receipt evidence/TASK-MVP-06-stage-review-launch.json; Stage acceptance slot1/2, retained accounting call12. No stage verdict yet.
+
+## 2026-10-27T03:10Z — resume SAME stage review after provider refusal
+User directly said «продолжи». Existing ctx_97a10d402fdd/task_391aaf782f69 remains dispatched, no worker_done/report. Terminal term_64e33575-cd37-461b-bef5-2db42d2c347f live/exactWorker/connected/writable, same incarnation835dc2a0-ebc7-464b-83b7-d245e67f92e1; fleet stale_status is not exit. Historical terminal shows provider refusal with retry afterOct27 00:40; current clock03:10UTC/06:10MSK is after that time. Last native usage snapshot19:17:27Z input1202405,cached1089664included,primary98%,secondary47%,reset1793050838; not final settledusage. Prior45285107/calls11 preserved, reviewer remains same accountingcall12; provisional cumulative46487512, not settlement. User's current direct continuation authorizes same-process resume after automatic provider reset, no bypass/newsession/duplicate/retry. Terminal is user_owned/retained, never close it. Scope/stage review only unchanged; new provider refusal=>stop.
+Same-process resume receipt165af4ff observed turn_started on incarnation835dc2a0, no duplicate; evidence/TASK-MVP-06-stage-review-resume-20261027.json.
+
+## 2026-10-27T03:22Z — MVP06 Stage PASS / FINAL-REPORT / COMPLETE
+Matching Astra high worker_done msg_2b4be7038149 at03:20:33Z, task_391aaf782f69/ctx_97a10d402fdd, report reviews/TASK-MVP-06-stage-acceptance.md. ST001..006 PASS on06f58065022db9c58524909027ddc2d454f7071f;26artifact/190source/46A2 identities match, required native exits0. No BLOCKER/MAJOR; MINOR MVP06-ST-001 doc drift remains OPEN/backlog, MOCK limitation preserved explicitly.
+Final same-call12 input2944731 (cached2693632 included), output13869; includes old provider-stop1202405, not added twice. Stage executor2625483+review2944731=5570214/2calls. Prior retained45285107+2944731=48229838/12calls; MVP05 actual42659624 unchanged and all A1 failures/overruns preserved. Usage receipt evidence/TASK-MVP-06-stage-review-usage-final.json. Snapshot primary28%,secondary51%,no new refusal after authorized resume.
+Resource release decision retained/user_takeover/processAction none; user-owned Astra terminal preserved, no force close. Delivery_989a9323b21a ACKed. Coordinator read report/evidence without rerun, wrote FINAL-REPORT.md after actual PASS, closing ST007. TASK-MVP-06 and approved local MVP+Batch now COMPLETE. No new product edits/fixes/commit/push/merge/deploy. Uncommitted workflow/evidence retained; tree not claimed clean. Historical unknown run-update --help was read-only unsupported, no Run mutation; durable Run namespace retained.

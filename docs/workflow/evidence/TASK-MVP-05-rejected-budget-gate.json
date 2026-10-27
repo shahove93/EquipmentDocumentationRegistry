@@ -1,0 +1,38 @@
+﻿{
+    "id":  "d677857b-0fd8-45e3-80bd-ce5ad7464b20",
+    "ok":  true,
+    "result":  {
+                   "runId":  "run_68046cea3eb4",
+                   "deliveryId":  "delivery_0b87aa62aab3",
+                   "messages":  [
+                                    {
+                                        "id":  "msg_24131cab7bf3",
+                                        "run_id":  "run_68046cea3eb4",
+                                        "delivery_contract":  "current_delivery",
+                                        "from_handle":  "term_2d4e5739-0030-47c9-974b-dc80be833487",
+                                        "to_handle":  "run:run_68046cea3eb4",
+                                        "subject":  "Rejected decision_gate: Пользователь утвердил изменение бюджетного правила и продолжение MVP-05 C2",
+                                        "body":  "Orca rejected this decision_gate: term_2d4e5739-0030-47c9-974b-dc80be833487 is not the exact process that owns Dispatch ctx_a12bcfc96cf1.\n\nOriginal body:\nПользователь явно утвердил: убрать жёсткие лимиты input-токенов на вызов/TASK и обязательные блокирующие checkpoint-паузы; оставить фактический учёт расхода. Останавливать только при фактическом отказе/лимите провайдера или явном решении пользователя. Провайдерный лимит не обходить. Изменение уже внесено в C:\\Users\\user\\.agents\\skills\\autonomous-development\\references\\routing-and-budget.md. Пользователь также утвердил продолжить текущий MVP-05 C2 с сохранёнными частичными изменениями и затем провести предусмотренный финальный Sol review без старых 900k/450k/safety потолков. Пожалуйста, обнови только принадлежащие координатору docs/workflow и TASK/ROADMAP бюджетные ссылки/счётчики: сохранить все actuals (включая 12,318,058 на момент остановки и перерасход call6), оставить тот же logical TASK/RUN/подход/цикл и frozen scope F01..F04 + AC001..007, не сбрасывать историю/попытки. Затем продолжить C2 тем же кодом/артефактами с одним исполнителем и обязательным reviewer; обычные quality gates/число циклов по review-policy остаются. Контрольные отметки — только информирование, никаких ожиданий формального ответа из-за token checkpoint. При реальном provider exhaustion — остановиться и сообщить. Push/deploy не разрешены; коммит только после routed PASS.",
+                                        "type":  "status",
+                                        "priority":  "high",
+                                        "thread_id":  null,
+                                        "payload":  "{\"taskId\":\"task_8296e3d4e421\",\"dispatchId\":\"ctx_a12bcfc96cf1\",\"_orcaLifecycleRejection\":{\"code\":\"worker_identity_changed\",\"reason\":\"term_2d4e5739-0030-47c9-974b-dc80be833487 is not the exact process that owns Dispatch ctx_a12bcfc96cf1.\"}}",
+                                        "created_at":  "2026-10-26T15:09:58Z",
+                                        "delivered_at":  "2026-10-26T15:09:59Z"
+                                    }
+                                ],
+                   "count":  1,
+                   "replayed":  true,
+                   "acknowledged":  null,
+                   "timedOut":  false,
+                   "cancelled":  false,
+                   "connectionLost":  false,
+                   "mutation":  {
+                                    "requestId":  "d94c94d5-5aad-4112-8999-f1af5d95679d",
+                                    "replayed":  false
+                                }
+               },
+    "_meta":  {
+                  "runtimeId":  "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+              }
+}

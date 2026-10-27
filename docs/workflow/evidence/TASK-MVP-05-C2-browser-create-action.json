@@ -1,0 +1,11 @@
+﻿{
+  "id": "e6ba7df8-e84e-4510-bbcd-d532b34201b7",
+  "ok": true,
+  "result": {
+    "result": "{\"requestValues\":{\"variant_id\":\"7\",\"batch_number\":\"C2-BROWSER-002\",\"manufacture_date\":\"2027-02-03\",\"quantity\":\"12345678901234567890.001\",\"quantity_unit\":\"kg\"}}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

@@ -1,24 +1,12 @@
-# Текущая сводка workflow
+﻿# Текущая сводка workflow
 
-- 2026-10-26: MVP-00…04 имеют routed PASS (5/7). MVP-04 AC-001…010 PASS;
-  полный backend: 3771 passed, 1 warning. Независимое R2 evidence review
-  закрыто; см. [финальный отчёт](reviews/TASK-MVP-04-evidence-final.md).
-- Product commit: `0db1f9e` (`Add Batch schemas, service and API`), 17 файлов.
-  Он включает Batch schemas/service/API/tests и обновление `PROJECT_STATUS.md`.
-- Workflow/docs/evidence commit: `96e81dc` (`docs: retire Nemotron workflow and
-  record MVP-04`), 63 файла. Он содержит актуальные правила Codex, историю и
-  evidence MVP-04, а также снятие TASK-WF-01.
-- Пользователь отозвал Nemotron: ADR-011 withdrawn, TASK-WF-01 withdrawn from
-  future execution (historical result BLOCKED/NOT_ACCEPTED сохраняется).
-  Активный координатор проекта — Codex; маршрутизация: [MODEL-ROUTING.md](MODEL-ROUTING.md).
-- Текущий roadmap v1.2: следующий этап MVP-05 (Batch frontend), затем MVP-06
-  (полная приёмка и FINAL-REPORT). MVP-05 ещё не запущен.
-- Codex usage по завершении MVP-04: 12,285,453 / 12,400,000 input; 5/5 calls,
-  review2/2. Все попытки и перерасходы отражены в [HISTORY.md](HISTORY.md).
-- Ветка `main` синхронизирована с `origin/main` fast-forward push до `96e81dc`.
-  Force-push, merge и deployment не выполнялись.
-- Рабочих writers/reviewers нет. Не запускать Nemotron и не возобновлять
-  TASK-WF-01. Не менять продуктовые требования и границы MVP.
-
-Источники: [APPROVALS.md](APPROVALS.md), [ROADMAP.md](../../ROADMAP.md),
-[PROJECT_STATUS.md](../PROJECT_STATUS.md), [MVP-04 evidence](evidence/TASK-MVP-04-ALL-final.txt).
+- **COMPLETE — утверждённый локальный MVP + Batch.** TASK-MVP-06 Stage/A1/C1 PASS ST001..006, отдельный Astra/high review1/2; FINAL-REPORT закрывает ST007.
+- [FINAL-REPORT](FINAL-REPORT.md),[Stage PASS](reviews/TASK-MVP-06-stage-acceptance.md),[Evidence](evidence/TASK-MVP-06-evidence.md).
+- Main delivery06f58065022db9c58524909027ddc2d454f7071f unpushed; новых коммитов/product edits нет. Workflow/evidence локально сохранены, tree не clean. No push/merge/deploy.
+- Required checks0:3771pytest passed/1warning,Node24.22.0/typecheck/build;Alembic e4b8c2d16a70(head),13migrations.26artifact/190source/46A2 identities matched. No reruns.
+- Open backlog MINOR MVP06-ST-001: ARCH/ROADMAP narrative drift; фактически API21/38,/batches. Batch browser evidence — разрешённый MOCK, не realDB end-to-end; Document→Batch/Product вне scope.
+- Run run_68046cea3eb4; Astra task_391aaf782f69/ctx_97a10d402fdd worker_done msg_2b4be7038149; delivery ACKed. Resource retained/user_takeover,processAction none; user terminal preserved. Executor done/released.
+- Stage executor2625483+same reviewercall2944731=5570214input/2calls; old stop1202405 INCLUDED, no double count. MVP05 historical42659624/calls10 unchanged. Retained ledger**48229838input/calls12**,cached included.
+- A1 MVP05 FAIL/FAIL/reviews2/2,C3RCA,A2/C1PASS/review1/2,all prior failures/overruns сохранены. Same-call resume after user27окт «продолжи»,no new session/reset/refund.
+- Accounting-only,no caps/checkpoint gates. Latest primary28%,secondary51%,no new refusal. No new task/worker awaiting work.
+- [HISTORY](HISTORY.md),[APPROVALS](APPROVALS.md),[Final usage](evidence/TASK-MVP-06-stage-review-usage-final.json).

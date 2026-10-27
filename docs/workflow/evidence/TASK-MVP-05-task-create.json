@@ -1,0 +1,30 @@
+﻿{
+  "id": "11772dcc-537f-4bbb-b51d-471f28b49d44",
+  "ok": true,
+  "result": {
+    "task": {
+      "id": "task_1f8ceba36e9e",
+      "run_id": "run_68046cea3eb4",
+      "parent_id": null,
+      "created_by_terminal_handle": "term_d727cc23-31e8-42eb-a295-c42268e0c645",
+      "created_by_pane_key": "6ef6ff14-8526-4ac2-963d-dfac561fbd47:ff78afbb-5375-406e-9138-6be2f9f1919e",
+      "created_by_process_incarnation": "b8346c2f-c3ac-411f-83b7-61eaef4eb338::D:/Antigravity/EquipmentDocumentationRegistry@@4b91627f:d18ec102-276e-408a-8850-9d7358d1555e",
+      "created_by_run_generation": 10,
+      "task_title": "Implement ONLY frozen docs/tasks/TASK-MVP-05.md, R1 A1/C1, in main/current D:...",
+      "display_name": "Implement ONLY frozen docs/tasks/TASK-MVP-05.md, R1 A1/C1, in main/current D:...",
+      "spec": "Implement ONLY frozen docs/tasks/TASK-MVP-05.md, R1 A1/C1, in main/current D:/Antigravity/EquipmentDocumentationRegistry baseline318e6336737ee635abf593c2643f26daba273f86. User explicitly repeats authorization to START single gpt-6-luna medium writer through existing Run. Read that bounded TASK as authoritative scope/AC/allowlist/commands/budget. Current Codex coordinator exception overrides historical OpenCode/Nemotron-only roles; Nemotron and WF are retired.\nTarget Batch list/detail/create/edit frontend and Vite /batches proxy, existing API only; no backend/API/DB/model/migration/dependency changes or Document→Batch/Product links/auth. Preserve existing workflow changes. Produce real typecheck/build logs in WSL nvm Node24.22.0 and demonstrable browser/UI/API scenario; mocked fixtures clearly labelled, no working DB/storage writes. No invented checks. Only edit TASK allowlist and TASK-MVP-05-* evidence, never coordinator STATE/HISTORY/TASK/APPROVALS. No commit/push/merge/deploy, no workers/reviewer/next tasks. Reviewer only after your actual worker_done.\nCall1/2; parent input ceiling1000000, own reserve600000 INCLUDING report/finalization; keep reads/output small and avoid re-reading entire repo/history. Stop at natural checkpoint while enough reserve remains; report actual own model/effort/rollout/token metadata. Cached input counts. Provider exhaustion stops work with factual BLOCKED, no resets/accounts/session bypass. Use exact live Orca preamble for questions/mail/heartbeat/completion. End with matching worker_done and actual evidence path, no project PASS.",
+      "status": "ready",
+      "deps": "[]",
+      "result": null,
+      "created_at": "2026-10-26 13:08:16",
+      "completed_at": null
+    },
+    "mutation": {
+      "requestId": "d8e08db5-fe5c-43b3-9990-ac63fb81490d",
+      "replayed": false
+    }
+  },
+  "_meta": {
+    "runtimeId": "bb188a0d-615c-4bb3-af01-79b07f0a3260"
+  }
+}

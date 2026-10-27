@@ -1,0 +1,296 @@
+﻿{
+    "task":  "TASK-MVP-05",
+    "approach":  "A2",
+    "cycle":  "C1",
+    "run":  "run_68046cea3eb4",
+    "task_id":  "task_0fdf463a7de1",
+    "dispatch_id":  "ctx_11a366a6c3d4",
+    "worker_model":  "Codex gpt-6-luna medium",
+    "workspace":  "D:\\Antigravity\\EquipmentDocumentationRegistry",
+    "branch":  "main",
+    "head":  "318e6336737ee635abf593c2643f26daba273f86",
+    "baseline":  "318e6336737ee635abf593c2643f26daba273f86",
+    "inherited_manifest":  "docs/workflow/evidence/TASK-MVP-05-C2-hashes.json",
+    "inherited_manifest_files_matched":  139,
+    "hash_scope":  "Frozen frontend product files, read-only Batch validator source, and all TASK-MVP-05-A2-* evidence/report files; excludes this manifest",
+    "generated_last":  true,
+    "file_count":  46,
+    "files":  [
+                  {
+                      "path":  "app/api/batches/schemas.py",
+                      "kind":  "read_only_contract_source",
+                      "sha256":  "46a12b11360f9a4e94c4b11e150eb93522890f26343fc2db12f1e14b9db5ceda",
+                      "bytes":  1748
+                  },
+                  {
+                      "path":  "app/api/variants/schemas.py",
+                      "kind":  "read_only_contract_source",
+                      "sha256":  "d79058889002a962c5c2031416fd96de6c6c1c09cc6ceb92d9d3de77d7446f36",
+                      "bytes":  4613
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-api-body.json",
+                      "kind":  "evidence",
+                      "sha256":  "592f9b251a68a270aab21ad307d70acfd3555c7f95245e28d82d9ff8b8da0a42",
+                      "bytes":  2942
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-api-headers.txt",
+                      "kind":  "evidence",
+                      "sha256":  "b9fcab03dd9502189b9acc48116e2fd200e5478c34a13e1e98ae506d3ba4c3ec",
+                      "bytes":  199
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-api-log.json",
+                      "kind":  "evidence",
+                      "sha256":  "116626b70790dd64274aff24193918ac5f6e8f001b2f7094a6d39664b23ec397",
+                      "bytes":  25232
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser.png",
+                      "kind":  "evidence",
+                      "sha256":  "4fc14ecf4ec48b05e4483c03ea37d778f4f17c0472e973c37424e480fe665fbc",
+                      "bytes":  42128
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-after-clear-other.txt",
+                      "kind":  "evidence",
+                      "sha256":  "3311d506e13a7e2918ec34bf8b121511292a3f88da03a6a0a1a4cb33a701ed4a",
+                      "bytes":  5398
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-cleared-ui.txt",
+                      "kind":  "evidence",
+                      "sha256":  "40e294dc480445a56b5def0680cad09902612db67e43b4deb0d44c2561e7f18d",
+                      "bytes":  15610
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-clear-form.txt",
+                      "kind":  "evidence",
+                      "sha256":  "fb1bc55a6a0f7dd86cf91051152238b50837adc7dec0df0f3d6c2a553b404d78",
+                      "bytes":  17360
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-created.txt",
+                      "kind":  "evidence",
+                      "sha256":  "f87265e25b20420d5bfdbff54ac9c44186586838247e3c24638af398635e9c92",
+                      "bytes":  15614
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-create-form.txt",
+                      "kind":  "evidence",
+                      "sha256":  "50383b99fb81aa2f3e81d3a4fdf9ee94f69968696aae5747e34b88112dff4299",
+                      "bytes":  18270
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-create-ready.txt",
+                      "kind":  "evidence",
+                      "sha256":  "d49aae0108fedee01b1e632c9eeb670ccd08a0f4a8ebe2ecdd7285e6184710a2",
+                      "bytes":  18608
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-create-selected.txt",
+                      "kind":  "evidence",
+                      "sha256":  "a709407c9a82f548758ebe06a17b7c1c66526f68fc8ae2d90b4c136fedfffd07",
+                      "bytes":  18296
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-create-variant-menu.txt",
+                      "kind":  "evidence",
+                      "sha256":  "50383b99fb81aa2f3e81d3a4fdf9ee94f69968696aae5747e34b88112dff4299",
+                      "bytes":  18270
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-edited.txt",
+                      "kind":  "evidence",
+                      "sha256":  "73bf250f23b48ef4ffbcc9a92115d992c1a99eddf35b5fe2ac30ba4596c40383",
+                      "bytes":  15628
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-edit-form.txt",
+                      "kind":  "evidence",
+                      "sha256":  "a5bbcdb6229dc934d07872a0f3a52a78fb0bdf72a3c4fdd92db09dd973d52be1",
+                      "bytes":  17332
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-final-detail.txt",
+                      "kind":  "evidence",
+                      "sha256":  "9bc703dfedcf260a8378a910841922981f7d725314051348c401a71b5d1854dc",
+                      "bytes":  5434
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-initial-detail.txt",
+                      "kind":  "evidence",
+                      "sha256":  "24a2e25eb2907c16043353d568fcb37048a7b266ed5f4f2ae90f7b97736ee1d1",
+                      "bytes":  15590
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-list.txt",
+                      "kind":  "evidence",
+                      "sha256":  "6e71b20018d10f6a047e3815de74b6c6d773270d6eb58a0adb9478982a43f53d",
+                      "bytes":  14254
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-page2.txt",
+                      "kind":  "evidence",
+                      "sha256":  "9bc703dfedcf260a8378a910841922981f7d725314051348c401a71b5d1854dc",
+                      "bytes":  5434
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-reload.json",
+                      "kind":  "evidence",
+                      "sha256":  "b546e919005e34b11f5550420e0020aecc41976ecb84bafdc9aaae9116ea1804",
+                      "bytes":  180
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-browser-reload.txt",
+                      "kind":  "evidence",
+                      "sha256":  "9bc703dfedcf260a8378a910841922981f7d725314051348c401a71b5d1854dc",
+                      "bytes":  5434
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-C1-evidence.md",
+                      "kind":  "evidence",
+                      "sha256":  "d8b0615a0a91b7c4504db319e26d32c0e4b5ce9801b8a4e227dd16e0b716076e",
+                      "bytes":  9035
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-C1-implementer-launch.json",
+                      "kind":  "evidence",
+                      "sha256":  "8f62c46618f86cc1640c29d2937f9ca2c010fef615ddf30526d94cc8e275bf54",
+                      "bytes":  2380
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-C1-implementer-spec.txt",
+                      "kind":  "evidence",
+                      "sha256":  "6484c5d0d00db0f263f7d1e034ea1f8ba76173aa499da41f58e91b2dae865c2a",
+                      "bytes":  5859
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-crud-trace.json",
+                      "kind":  "evidence",
+                      "sha256":  "26cfb80f9bdc66737e95f51021b89f78b7c0ba45f7be7b55a3b020b3847348f3",
+                      "bytes":  6153
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-fixture.py",
+                      "kind":  "evidence",
+                      "sha256":  "95828dfb0f98a2306db62cd576e406bba110013b9a916867c91d2564e2c7b9b6",
+                      "bytes":  6350
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-git-diff-check.log",
+                      "kind":  "evidence",
+                      "sha256":  "371f948236793933cb2dcda5d69733fd81dde6818e34abca1bec26de5cd8d623",
+                      "bytes":  1586
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-git-status.txt",
+                      "kind":  "evidence",
+                      "sha256":  "432f3758f825b87690a02f899e91af35679b5cd2c4a7c1a44a059cbfa5a3d9d2",
+                      "bytes":  25736
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-html-body.html",
+                      "kind":  "evidence",
+                      "sha256":  "26baa67268fb696de1e8783baf29b8aba3089d9e02ea926bc4c015f2b7c2f6fc",
+                      "bytes":  460
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-html-headers.txt",
+                      "kind":  "evidence",
+                      "sha256":  "55764d370e43726a37f5354aca0b842344e429ec7ca9f4c6d4355f8e97eb4d86",
+                      "bytes":  231
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-identity.txt",
+                      "kind":  "evidence",
+                      "sha256":  "82578b8480c987e275807a7d2a3089d1f46c360f38eaf80522d216aed24e96d9",
+                      "bytes":  112
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-inherited-hash-check.txt",
+                      "kind":  "evidence",
+                      "sha256":  "cb295a0fc63afe55e2cab447f34dc73b1fc3265c4d4ee390fd3d223b74f704a0",
+                      "bytes":  118
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-protected-diff.log",
+                      "kind":  "evidence",
+                      "sha256":  "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                      "bytes":  0
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-validation.json",
+                      "kind":  "evidence",
+                      "sha256":  "54ca3283b3774f9fa900213c17c462b3592732c6711435e42b19f413e18e8a43",
+                      "bytes":  8585
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-validation-probe.py",
+                      "kind":  "evidence",
+                      "sha256":  "34e29665da7b20cd1feb21cdc6de3969fe5674dd1669528292bcf9875861dafd",
+                      "bytes":  2345
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-verify-trace.py",
+                      "kind":  "evidence",
+                      "sha256":  "2851d27122b1b9aaf0030272a81b8f1010659baf1b0f76c4d49d6abce19f96c0",
+                      "bytes":  3948
+                  },
+                  {
+                      "path":  "docs/workflow/evidence/TASK-MVP-05-A2-vite.config.ts",
+                      "kind":  "evidence",
+                      "sha256":  "2390a5f1a5bbc90a48e04f01f23a1364bfb351ed69d9833605f556ae7d3e61d0",
+                      "bytes":  627
+                  },
+                  {
+                      "path":  "frontend/src/api/batches.ts",
+                      "kind":  "product",
+                      "sha256":  "8f893b995f19672f659d3f02108d647c2a9867bbae810ad55266a2c7c071044a",
+                      "bytes":  700
+                  },
+                  {
+                      "path":  "frontend/src/App.tsx",
+                      "kind":  "product",
+                      "sha256":  "a976b0c2c1fccd761ef02045b6b4766150787f58f2d87aa1f5545740820c7007",
+                      "bytes":  1156
+                  },
+                  {
+                      "path":  "frontend/src/components/BatchForm.tsx",
+                      "kind":  "product",
+                      "sha256":  "e9dbff269fe9f95b1e96ca593c8e8255e0554dd715ebecd20e86f6cb8fe40050",
+                      "bytes":  5874
+                  },
+                  {
+                      "path":  "frontend/src/components/Nav.tsx",
+                      "kind":  "product",
+                      "sha256":  "dac1865b5c5e7b9c44cfb428bc5ed9e9b3db5549ec8def71c06139a3f2870b3d",
+                      "bytes":  1742
+                  },
+                  {
+                      "path":  "frontend/src/pages/BatchesPage.tsx",
+                      "kind":  "product",
+                      "sha256":  "e6391b27026ac5fb1c8dcc50d2f597a929fb499cb90a39948a4678a850ffa11f",
+                      "bytes":  5697
+                  },
+                  {
+                      "path":  "frontend/src/styles.css",
+                      "kind":  "product",
+                      "sha256":  "703fd5520180f2080557219397b2a8ceccc55b51bcb8267c976926cdf49d37a4",
+                      "bytes":  18294
+                  },
+                  {
+                      "path":  "frontend/src/types/api.ts",
+                      "kind":  "product",
+                      "sha256":  "c68b2d4ce4ef043e0311351c9fde8d3ef53a650fd642dc414a5e7b07af80f0ed",
+                      "bytes":  7839
+                  },
+                  {
+                      "path":  "frontend/vite.config.ts",
+                      "kind":  "product",
+                      "sha256":  "c4570324c7e92fc25d16b425e75019c8a2598ba643e1fc72eb4d0afe622b5bd0",
+                      "bytes":  2974
+                  }
+              ]
+}

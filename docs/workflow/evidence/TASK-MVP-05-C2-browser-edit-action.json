@@ -1,0 +1,11 @@
+﻿{
+  "id": "6b57a1c2-d0a8-43b2-8a16-8f195fe453e4",
+  "ok": true,
+  "result": {
+    "result": "{\"patchField\":\"batch_number\",\"value\":\"C2-BROWSER-002-EDITED\"}",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}

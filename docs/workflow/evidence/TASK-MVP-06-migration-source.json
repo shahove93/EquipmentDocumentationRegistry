@@ -1,0 +1,67 @@
+﻿[
+    {
+        "file":  "056121f44e99_create_document_link_tables.py",
+        "revision":  "056121f44e99",
+        "down_revision":  "\u0027844b25c35c4b\u0027"
+    },
+    {
+        "file":  "4a43cb5a19ea_create_files.py",
+        "revision":  "4a43cb5a19ea",
+        "down_revision":  "\u0027056121f44e99\u0027"
+    },
+    {
+        "file":  "4d64e9e30df5_create_products.py",
+        "revision":  "4d64e9e30df5",
+        "down_revision":  "\u0027b0c2277bc034\u0027"
+    },
+    {
+        "file":  "6984fcc861e6_create_batches.py",
+        "revision":  "6984fcc861e6",
+        "down_revision":  "\u0027c3bb6dcf63cf\u0027"
+    },
+    {
+        "file":  "6a736cbf733b_create_document_types.py",
+        "revision":  "6a736cbf733b",
+        "down_revision":  "\u00276984fcc861e6\u0027"
+    },
+    {
+        "file":  "6fdaae2f21ea_create_issuers.py",
+        "revision":  "6fdaae2f21ea",
+        "down_revision":  "\u00276a736cbf733b\u0027"
+    },
+    {
+        "file":  "844b25c35c4b_create_documents.py",
+        "revision":  "844b25c35c4b",
+        "down_revision":  "\u00276fdaae2f21ea\u0027"
+    },
+    {
+        "file":  "9e6a954d41be_add_unique_constraint_product_variants_.py",
+        "revision":  "9e6a954d41be",
+        "down_revision":  "\u00274a43cb5a19ea\u0027"
+    },
+    {
+        "file":  "a3f1c72d5b90_create_document_verification_events.py",
+        "revision":  "a3f1c72d5b90",
+        "down_revision":  "\u00279e6a954d41be\u0027"
+    },
+    {
+        "file":  "b0c2277bc034_create_manufacturers.py",
+        "revision":  "b0c2277bc034",
+        "down_revision":  "None"
+    },
+    {
+        "file":  "c3bb6dcf63cf_create_product_variants.py",
+        "revision":  "c3bb6dcf63cf",
+        "down_revision":  "\u0027dc9ec9cdbb30\u0027"
+    },
+    {
+        "file":  "dc9ec9cdbb30_make_products_standard_not_null.py",
+        "revision":  "dc9ec9cdbb30",
+        "down_revision":  "\u00274d64e9e30df5\u0027"
+    },
+    {
+        "file":  "e4b8c2d16a70_add_ix_files_document_id_id.py",
+        "revision":  "e4b8c2d16a70",
+        "down_revision":  "\u0027a3f1c72d5b90\u0027"
+    }
+]

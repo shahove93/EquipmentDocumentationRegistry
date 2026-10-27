@@ -1,0 +1,50 @@
+﻿[
+    {
+        "Name":  "TASK-MVP-05-C2-budget-guard.json",
+        "Length":  958
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-budget-guard.py",
+        "Length":  2642
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-fixture.py",
+        "Length":  3512
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-implementation-launch.json",
+        "Length":  2381
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-implementation-spec.txt",
+        "Length":  2404
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-provider.json",
+        "Length":  344
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-resource-release.json",
+        "Length":  456
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-start-metadata.json",
+        "Length":  15893
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-stop-receipt.json",
+        "Length":  936
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-stopped-resource.json",
+        "Length":  16258
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-usage-final.json",
+        "Length":  1274
+    },
+    {
+        "Name":  "TASK-MVP-05-C2-usage-start.json",
+        "Length":  1274
+    }
+]

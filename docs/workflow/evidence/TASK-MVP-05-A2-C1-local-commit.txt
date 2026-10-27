@@ -1,0 +1,10 @@
+﻿06f5806 feat(frontend): add batch list detail and editing screens
+ frontend/src/App.tsx                  |   2 +
+ frontend/src/api/batches.ts           |  15 +++++
+ frontend/src/components/BatchForm.tsx |  71 +++++++++++++++++++++++
+ frontend/src/components/Nav.tsx       |   2 +
+ frontend/src/pages/BatchesPage.tsx    | 105 ++++++++++++++++++++++++++++++++++
+ frontend/src/styles.css               |  12 ++++
+ frontend/src/types/api.ts             |  24 ++++++++
+ frontend/vite.config.ts               |   4 +-
+ 8 files changed, 234 insertions(+), 1 deletion(-)

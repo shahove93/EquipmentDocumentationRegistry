@@ -1,0 +1,76 @@
+{
+  "kind": "verified browser CRUD trace against isolated MOCK; no DB/storage writes",
+  "record_id": 29,
+  "trace_ordinals": [
+    1,
+    6,
+    10,
+    11,
+    16,
+    21,
+    25
+  ],
+  "trace": [
+    {
+      "ordinal": 1,
+      "method": "GET",
+      "path_query": "/batches?limit=26&offset=0",
+      "status": 200,
+      "request_wire": null,
+      "response_wire": "[{\"id\":1,\"variant_id\":7,\"batch_number\":\"DETAIL-01\",\"manufacture_date\":\"2026-01-01\",\"quantity\":\"1.00\",\"quantity_unit\":\"kg\"},{\"id\":2,\"variant_id\":7,\"batch_number\":\"DETAIL-02\",\"manufacture_date\":null,\"quantity\":\"2.00\",\"quantity_unit\":\"kg\"},{\"id\":3,\"variant_id\":7,\"batch_number\":\"PAGE-03\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":4,\"variant_id\":7,\"batch_number\":\"PAGE-04\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":5,\"variant_id\":7,\"batch_number\":\"PAGE-05\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":6,\"variant_id\":7,\"batch_number\":\"PAGE-06\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":7,\"variant_id\":7,\"batch_number\":\"PAGE-07\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":8,\"variant_id\":7,\"batch_number\":\"PAGE-08\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":9,\"variant_id\":7,\"batch_number\":\"PAGE-09\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":10,\"variant_id\":7,\"batch_number\":\"PAGE-10\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":11,\"variant_id\":7,\"batch_number\":\"PAGE-11\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":12,\"variant_id\":7,\"batch_number\":\"PAGE-12\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":13,\"variant_id\":7,\"batch_number\":\"PAGE-13\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":14,\"variant_id\":7,\"batch_number\":\"PAGE-14\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":15,\"variant_id\":7,\"batch_number\":\"PAGE-15\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":16,\"variant_id\":7,\"batch_number\":\"PAGE-16\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":17,\"variant_id\":7,\"batch_number\":\"PAGE-17\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":18,\"variant_id\":7,\"batch_number\":\"PAGE-18\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":19,\"variant_id\":7,\"batch_number\":\"PAGE-19\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":20,\"variant_id\":7,\"batch_number\":\"PAGE-20\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":21,\"variant_id\":7,\"batch_number\":\"PAGE-21\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":22,\"variant_id\":7,\"batch_number\":\"PAGE-22\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":23,\"variant_id\":7,\"batch_number\":\"PAGE-23\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":24,\"variant_id\":7,\"batch_number\":\"PAGE-24\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":25,\"variant_id\":7,\"batch_number\":\"PAGE-25\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"},{\"id\":26,\"variant_id\":7,\"batch_number\":\"PAGE-26\",\"manufacture_date\":null,\"quantity\":\"3.00\",\"quantity_unit\":\"kg\"}]"
+    },
+    {
+      "ordinal": 6,
+      "method": "GET",
+      "path_query": "/batches/1",
+      "status": 200,
+      "request_wire": null,
+      "response_wire": "{\"id\":1,\"variant_id\":7,\"batch_number\":\"DETAIL-01\",\"manufacture_date\":\"2026-01-01\",\"quantity\":\"1.00\",\"quantity_unit\":\"kg\"}"
+    },
+    {
+      "ordinal": 10,
+      "method": "POST",
+      "path_query": "/batches",
+      "status": 201,
+      "request_wire": "{\"variant_id\":7,\"batch_number\":\"A2-BROWSER-001\",\"manufacture_date\":\"2027-02-03\",\"quantity\":\"12345.67\",\"quantity_unit\":\"kg\"}",
+      "response_wire": "{\"id\":29,\"variant_id\":7,\"batch_number\":\"A2-BROWSER-001\",\"manufacture_date\":\"2027-02-03\",\"quantity\":\"12345.67\",\"quantity_unit\":\"kg\"}"
+    },
+    {
+      "ordinal": 11,
+      "method": "GET",
+      "path_query": "/batches/29",
+      "status": 200,
+      "request_wire": null,
+      "response_wire": "{\"id\":29,\"variant_id\":7,\"batch_number\":\"A2-BROWSER-001\",\"manufacture_date\":\"2027-02-03\",\"quantity\":\"12345.67\",\"quantity_unit\":\"kg\"}"
+    },
+    {
+      "ordinal": 16,
+      "method": "PATCH",
+      "path_query": "/batches/29",
+      "status": 200,
+      "request_wire": "{\"batch_number\":\"A2-BROWSER-001-EDITED\"}",
+      "response_wire": "{\"id\":29,\"variant_id\":7,\"batch_number\":\"A2-BROWSER-001-EDITED\",\"manufacture_date\":\"2027-02-03\",\"quantity\":\"12345.67\",\"quantity_unit\":\"kg\"}"
+    },
+    {
+      "ordinal": 21,
+      "method": "PATCH",
+      "path_query": "/batches/29",
+      "status": 200,
+      "request_wire": "{\"manufacture_date\":null}",
+      "response_wire": "{\"id\":29,\"variant_id\":7,\"batch_number\":\"A2-BROWSER-001-EDITED\",\"manufacture_date\":null,\"quantity\":\"12345.67\",\"quantity_unit\":\"kg\"}"
+    },
+    {
+      "ordinal": 25,
+      "method": "GET",
+      "path_query": "/batches/29",
+      "status": 200,
+      "request_wire": null,
+      "response_wire": "{\"id\":29,\"variant_id\":7,\"batch_number\":\"A2-BROWSER-001-EDITED\",\"manufacture_date\":null,\"quantity\":\"12345.67\",\"quantity_unit\":\"kg\"}"
+    }
+  ],
+  "create_snapshot_unchanged_after_edit_and_clear": true,
+  "created_read_snapshot_unchanged_after_edit_and_clear": true,
+  "quantity_exact_string": true,
+  "clear_preserved_variant_number_quantity_unit": true,
+  "final_detail_get_after_clear": true
+}

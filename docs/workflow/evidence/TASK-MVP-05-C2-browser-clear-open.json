@@ -1,0 +1,11 @@
+﻿{
+  "id": "3c90c15a-5638-4b1c-a8e9-783c998fec6a",
+  "ok": true,
+  "result": {
+    "result": "clear-edit-opened",
+    "origin": "http://localhost:5175/batches"
+  },
+  "_meta": {
+    "runtimeId": "bb8033b2-2a05-4f9a-a053-5acabcd5ed3e"
+  }
+}
