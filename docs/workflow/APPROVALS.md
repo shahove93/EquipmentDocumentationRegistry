@@ -345,3 +345,29 @@ No push/deploy,localcommitonlyroutedPASS.
 ## MVP05_C3_A2_AUTHORIZED_20261026
 Пользователь «Ну делай что нужно)» прямо разрешил C3 read-only RCA и A2/C1 в прежнем frozen F01..F04+AC001..007 (TASK-MVP-05.md/TASK-MVP-05-C2.md; baseline318e6336737ee635abf593c2643f26daba273f86). Codex coordinator, один gpt-6-luna/medium writer, затем отдельный gpt-6.1-sol/medium reviewer после worker_done/evidence. A1 FAIL/FAIL и review2/2 сохранены, третьего A1 review нет.
 A2 materially distinct contract-enforcing immutable-wire evidence approach по C3 RCA. A2/C1 review1/2 зарезервирован; на FAIL STOP, автоматический C2/A3 не разрешён. Actual baseline28965861 input/calls8, все попытки/overruns сохраняются. Accounting-only без input/call caps и checkpoint gates. Stop real provider refusal/limit or explicit user stop, без обходов. No push/deploy/merge; local commit только routed PASS. Scope/backend/API/DB/deps unchanged, stage acceptance/следующий TASK не разрешены этим поручением.
+
+## WINDOWS_LOCAL_01_APPROVED_20261027
+
+Пользователь одобрил план первого этапа: устанавливаемая локальная поставка
+Windows x64 для одного компьютера, с приложением, локальной БД и файлами,
+запуском из ярлыка, сохранением данных при перезапуске и резервной копией БД и
+вложений. Утверждённый scope/acceptance: [ADR-012](../adr/ADR-012-windows-local-installation.md),
+[TASK-WINDOWS-LOCAL-01](../tasks/TASK-WINDOWS-LOCAL-01.md), [VISION](../../VISION.md),
+[ARCHITECTURE](../../ARCHITECTURE.md), [ROADMAP](../../ROADMAP.md). Базовый
+revision `1c362598e67f9a7645de2416e79c2bb8ca3f3dc4`. Никакого LAN/VPN,
+многопользовательского режима, облака, push, merge или deployment.
+
+Дополнение WINDOWS_LOCAL_01 / 2026-10-27: пользователь выбрал обнаружение Microsoft Visual C++ x64 runtime и открытие официальной страницы Microsoft для его установки при отсутствии. EDR не распространяет CRT files/package. Этот prerequisite и flow добавлены в ADR-012 и TASK-WINDOWS-LOCAL-01.
+
+## GITHUB_PUBLICATION_APPROVED_20261027
+
+Прямой ответ пользователя «Делай» утверждает показанный план публикации33 файлов
+тремя коммитами в `origin/main` репозитория
+`shahove93/EquipmentDocumentationRegistry`:17 файлов Windows-поставки/документации,
+6 файлов README/CONTRIBUTING/templates/CI,10 итоговых task/review/workflow records.
+План: `%TEMP%/EDR-github-publication-plan-20261027.json`, baseline
+`1c362598e67f9a7645de2416e79c2bb8ca3f3dc4`;33/33 SHA-256 совпали до исполнения.
+Разрешены локальные commit и обычный fast-forward push, затем проверка CI,
+который запускается push в main. Сырые Sandbox artifacts, runtime data,
+EXE/ZIP/dumps/logs и секреты исключены. Release/tag, force push, изменение
+visibility/settings и deployment этим решением не разрешены.

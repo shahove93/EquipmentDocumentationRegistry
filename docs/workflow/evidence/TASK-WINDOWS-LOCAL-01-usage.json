@@ -1,0 +1,68 @@
+{
+  "logical_task": "TASK-WINDOWS-LOCAL-01",
+  "risk_class": "R2",
+  "accounting": "Actual native rollout totals; cached input is included in input_tokens, not added again. Historical unavailable usage reports remain preserved; this is recovered telemetry.",
+  "settled_calls": [
+    {
+      "role": "A1/C1 implementation",
+      "dispatch": "ctx_68e68e4cf252",
+      "session_id": "01a17c7b-63f9-7f93-a283-24b603840bd0",
+      "source": "C:/Users/user/.codex/sessions/2026/10/27/rollout-2026-10-27T11-30-23-01a17c7b-63f9-7f93-a283-24b603840bd0.jsonl",
+      "dispatch_present": true,
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "usage_timestamp": "2026-10-27T09:23:43.055Z",
+      "input_tokens": 12952492,
+      "cached_input_tokens": 12822656,
+      "output_tokens": 95142
+    },
+    {
+      "role": "A1/C1 independent full review, BLOCKED",
+      "dispatch": "ctx_8051ae00e9fd",
+      "session_id": "01a17cad-59d9-77b1-a73d-a52f0c1499cb",
+      "source": "C:/Users/user/.codex/sessions/2026/10/27/rollout-2026-10-27T12-24-58-01a17cad-59d9-77b1-a73d-a52f0c1499cb.jsonl",
+      "dispatch_present": true,
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "usage_timestamp": "2026-10-27T09:33:06.764Z",
+      "input_tokens": 1237865,
+      "cached_input_tokens": 1145728,
+      "output_tokens": 8842
+    },
+    {
+      "role": "A1/C1 supplementary clean Windows evidence executor",
+      "dispatch": "ctx_996ca9959986",
+      "session_id": "01a17e00-2af9-7de1-beb6-4da51c01fdd8",
+      "source": "C:/Users/user/.codex/sessions/2026/10/27/rollout-2026-10-27T18-35-02-01a17e00-2af9-7de1-beb6-4da51c01fdd8.jsonl",
+      "dispatch_present": true,
+      "model": "gpt-6.1-sol",
+      "effort": "medium",
+      "usage_timestamp": "2026-10-27T16:01:55.158Z",
+      "input_tokens": 5110646,
+      "cached_input_tokens": 4948736,
+      "output_tokens": 27365
+    },
+    {
+      "role": "A1/C1 bounded G01/G02 independent supplementary verification, PASS",
+      "dispatch": "ctx_9237392c299b",
+      "session_id": "01a17e1a-9bcc-7ef0-b40f-6e3d30dbdf20",
+      "source": "C:/Users/user/.codex/sessions/2026/10/27/rollout-2026-10-27T19-03-55-01a17e1a-9bcc-7ef0-b40f-6e3d30dbdf20.jsonl",
+      "dispatch_present": true,
+      "model": "gpt-6-astra",
+      "effort": "high",
+      "usage_timestamp": "2026-10-27T16:12:26.269Z",
+      "input_tokens": 869048,
+      "cached_input_tokens": 794368,
+      "output_tokens": 7275
+    }
+  ],
+  "settled_input_tokens": 20170051,
+  "settled_calls_count": 4,
+  "in_progress": null,
+  "supplementary_expert_verifications": 1,
+  "final_task_verdict": "PASS",
+  "full_review_slots_used": 1,
+  "full_review_slots_per_approach": 2,
+  "failed_full_reviews": 0,
+  "note": "C1 was infrastructure BLOCKED, not implementation FAIL. Supplementary evidence is not a new code submission. Coordinator conversation usage is separate and not reconstructed here."
+}

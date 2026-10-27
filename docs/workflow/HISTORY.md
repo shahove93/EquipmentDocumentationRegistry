@@ -950,3 +950,119 @@ Same-process resume receipt165af4ff observed turn_started on incarnation835dc2a0
 Matching Astra high worker_done msg_2b4be7038149 at03:20:33Z, task_391aaf782f69/ctx_97a10d402fdd, report reviews/TASK-MVP-06-stage-acceptance.md. ST001..006 PASS on06f58065022db9c58524909027ddc2d454f7071f;26artifact/190source/46A2 identities match, required native exits0. No BLOCKER/MAJOR; MINOR MVP06-ST-001 doc drift remains OPEN/backlog, MOCK limitation preserved explicitly.
 Final same-call12 input2944731 (cached2693632 included), output13869; includes old provider-stop1202405, not added twice. Stage executor2625483+review2944731=5570214/2calls. Prior retained45285107+2944731=48229838/12calls; MVP05 actual42659624 unchanged and all A1 failures/overruns preserved. Usage receipt evidence/TASK-MVP-06-stage-review-usage-final.json. Snapshot primary28%,secondary51%,no new refusal after authorized resume.
 Resource release decision retained/user_takeover/processAction none; user-owned Astra terminal preserved, no force close. Delivery_989a9323b21a ACKed. Coordinator read report/evidence without rerun, wrote FINAL-REPORT.md after actual PASS, closing ST007. TASK-MVP-06 and approved local MVP+Batch now COMPLETE. No new product edits/fixes/commit/push/merge/deploy. Uncommitted workflow/evidence retained; tree not claimed clean. Historical unknown run-update --help was read-only unsupported, no Run mutation; durable Run namespace retained.
+
+## 2026-10-27T04:56Z — TASK-GITHUB-PRESENTATION-01 C2 PASS
+User approved a local GitHub presentation pass: README, CONTRIBUTING, issue/PR templates and CI, with external publication/settings after review. Baseline main/origin/main 1c362598e67f9a7645de2416e79c2bb8ca3f3dc4. No product changes, commit, push, visibility/settings change, release/tag, or deployment.
+C1 writer ctx_66aa4def7c13 (gpt-6-luna/medium) completed; independent C1 reviewer ctx_4009fddd1ba6 (gpt-6.1-sol/medium) returned FAIL with two MAJORs: GP-001 fresh CI database missing migrated tables; GP-002 local disposable test database created but not migrated before pytest. C1 review evidence is summarized in TASK-GITHUB-PRESENTATION-01.md.
+C2 scope remained limited to README/CONTRIBUTING/CI PostgreSQL setup. C2 writer ctx_16f9e3a5e8dd completed edits but Orca lifecycle settlement failed (`consumer_fenced`); after positive transcript evidence of final turn/no worker_done, exact terminal was stopped/released. Same C2 Task retried as ctx_9fea7f0cd24e (gpt-6-luna/medium), which confirmed consistency/static checks and sent worker_done. No third implementation approach.
+Independent final C2 reviewer ctx_1fd27bc5d80d (gpt-6.1-sol/medium) returned PASS, no findings, on frozen criteria 1–6; review [TASK-GITHUB-PRESENTATION-01-C2.md](reviews/TASK-GITHUB-PRESENTATION-01-C2.md), delivery_92650a64d839 ACKed, reviewer terminal released. Static PyYAML/source consistency and `git diff --check` passed. Full pytest, frontend typecheck/build, live migration and GitHub Actions execution remain NOT_RUN/unverified. All Orca worker terminals released; no pending worker. Files remain local pending user review before external publication/settings.
+## 2026-10-27T08:30Z — TASK-WINDOWS-LOCAL-01 A1/C1 dispatched
+User approved the single-computer Windows x64 local installation plan. Run `run_5a6ffc6d06c6`; writer Dispatch `ctx_68e68e4cf252`, Codex `gpt-6.1-sol/medium` (requested and effective settings match), current workspace/main. Initial `worker-show` preview included an HTML 403, but exact worker transcript and terminal reads subsequently showed active work and `liveness=live`; no provider exhaustion or worker failure established. No retry/duplicate dispatched. C1 reviewer reserved; implementation/evidence not yet complete. Existing GitHub-presentation changes remain outside scope.
+
+TASK-WINDOWS-LOCAL-01 environment escalation `msg_c6fed6f18737` (08:36Z): no Windows Sandbox binary on host. Coordinator replied to Dispatch `ctx_68e68e4cf252` (`msg_0b7a2b878e7e`): continue build and isolated synthetic host-native checks; do not install/enable Windows features or create/download a VM; clean VM criterion remains NOT_RUN absent user-provided VM. Dispatch remained live; no retry or cancellation.
+
+TASK-WINDOWS-LOCAL-01 escalation `msg_66a2e699bb98` (08:51Z): dependency audit found PostgreSQL runtime DLLs absent from EDB ZIP; local host success is not proof of clean-machine runtime. Read official Microsoft redistribution guidance: runtime package and individual DLL redistribution is limited to licensed Visual Studio users and subject to license terms; app-local copies are possible but not recommended for servicing. No Visual Studio/Build Tools/redistributable source found on this host, so eligibility is unconfirmed. Coordinator instructed worker not to copy System32 DLLs or bundle VC runtime absent user confirmation; continue independent work and report this gap. User is being asked to choose official prerequisite link vs provide licensed source.
+
+2026-10-27T08:56Z: User resolved the VC++ runtime escalation: check presence and open Microsoft's official downloads page if missing; do not bundle or redistribute CRT with EDR. Coordinator updated ADR-012/TASK-WINDOWS-LOCAL-01 and directed writer to implement/retest this preflight; install may require internet plus separate Microsoft runtime installer.
+
+Shortcut smoke diagnosis `msg_f127b1e8bdfb` (09:09Z): install log proved Inno correctly created `Programs/EDR-Smoke-smoke-final-2/EDR.lnk`; the test's `/GROUP=` argument was unquoted, so spaces/Unicode were parsed differently than the assertion expected. Worker corrected PowerShell quoting (test-only change; no installer rebuild) and will rerun with a fresh isolated profile; it will remove only the generated smoke install under that isolated LOCALAPPDATA, with no existing user data touched.
+
+Windows smoke follow-up `msg_81b7994f1a48` (09:11Z): correctly quoted Start Menu group now passes shortcut path/target assertions. Unicode/space data path exposed EDB `initdb` ANSI/UTF-8 path handling (`invalid byte sequence`) during bootstrap; ASCII-path startup/backup/restore/migration passed earlier. Worker is testing 8.3 short-path aliases; no system locale changes or data deletion allowed. If alias approach fails, report explicit compatibility impact for architecture decision.
+
+2026-10-27T09:19Z worker status `msg_50bec2a91a4d`: final host-native Windows smoke succeeded with Unicode/space install/profile/data paths: create/upload/download/restart, exact loopback listeners, backup/restore, failed migration preserving DB/files, reinstall update, ordinary uninstall preserving data; synthetic missing-CRT refusal and actual shortcut target/arguments passed. No system CRT was removed or bundled. Clean Windows VM and interactive browser launch remain NOT_RUN. Production installer compilation/final backend evidence still pending; not a PASS.
+
+2026-10-27T09:23Z worker `ctx_68e68e4cf252` completed successfully; delivery `msg_67d0526f87df` processed and ACKed (`delivery_cce61961925d`). Final report: `%TEMP%\edr-windows-build\implementation-report.md`; packaged installer `EDR-0.2.0-windows-x64.exe` (55,379,088 bytes) and Russian guide `docs/installation/windows.md`. Final evidence: 3,803 backend tests/1 warning; 32 native Windows tests; frontend typecheck/build; isolated Windows 11 synthetic install, shortcut, loopback, file upload/download, restart, backup/restore, failed migration, update, uninstall and missing-CRT preflight smoke. Clean VM, Windows 10, absent-CRT interactive flow and interactive shortcut browser launch remain NOT_RUN. No provider usage data available; no commit/push/merge/deployment.
+
+Independent R2 review dispatched as `task_bfa78842c0e9` / `ctx_8051ae00e9fd`, requested `gpt-6-astra/high`, same workspace, read-only; review slot 1/2. It must evaluate frozen criteria 1–8 and decide effect of clean-VM NOT_RUN. Writer terminal released after transcript capture. Coordinator has not claimed acceptance PASS.
+
+2026-10-27T09:32Z: independent review `ctx_8051ae00e9fd` completed; `msg_23086608410e` detailed verdict and `msg_2ffd8635de9c` worker_done were processed/ACKed. R2 result BLOCKED, not PASS: criteria 1/7 clean Windows and criteria 2/8 interactive shortcut/browser and missing-CRT Microsoft-page flows are NOT_RUN; native criteria 3–6 are supported. No BLOCKER/MAJOR implementation defect in the frozen happy path established. R01 MINOR backlog: if the supervisor crashes while PostgreSQL survives, stop may see a free lock and not stop the orphan before update/uninstall; no data loss observed. Source/payload/EXE hashes independently matched; reviewer did not edit or rerun tests. Full evidence: [C1 review](reviews/TASK-WINDOWS-LOCAL-01-C1.md). Parent TASK and ROADMAP marked BLOCKED; this preserves existing approval, review slot 1/2, local artifact and all pre-existing changes.
+
+User said a Windows VM may be installed if needed, but is currently away from the PC. Microsoft Windows Sandbox is the suitable disposable clean environment; attempted feature enable returned `requires elevation`. No UAC bypass or restart was attempted. Coordinator gave the admin PowerShell command; await user at-PC action/reboot before running clean Sandbox smoke. No provider usage figure was available from reviewer. No commit/push/merge/deployment.
+
+## 2026-10-27T15:32Z — Windows reboot / resume missing C1 evidence
+
+User directly reported «Перезагрузил ПК», following the Sandbox enable/reboot prerequisite. WindowsSandbox.exe is now present and vmcompute is running; Orca 1.4.230 runtime is ready. Existing Run run_5a6ffc6d06c6 and both prior settled/released workers were reconciled; no duplicate writer. Main baseline and all unrelated local changes are preserved. Production installer SHA-256 still b75f7132e2f17988eb213991d22a03fcb965165c5919510087d694c86d21594d.
+
+Resume is limited to missing clean-environment and interactive G01/G02 evidence for TASK-WINDOWS-LOCAL-01, frozen criteria 1–8. No product corrections, rebuild, full-suite reruns, commit, push, merge or deployment. Prior A1/C1 BLOCKED and full review slot 1/2 remain; acceptance is still BLOCKED until genuine supplementary evidence and independent gap verification. A bounded Sol/medium evidence worker may prepare temporary Sandbox inputs and synthetic output only. Existing usage unavailable remains unavailable; new usage will be recorded if exposed. No provider-limit bypass.
+
+Recovery: initial worker-start refused consumer_fenced before a Task/Dispatch was created; request f611353c-b58e-4147-9bc6-6cc2e9e0753e had no stored receipt, subsequent worker-list still contained only the two released prior workers. Legacy-only takeover was rejected for this ordinary Run. Supported `orca orchestration run-use --id run_5a6ffc6d06c6 --json` successfully bound authenticated live coordinator term_44f17629-77b9-4138-a7ea-5177379f3ecb, generation 2. No permission bypass or duplicate editor.
+
+Evidence executor started: task_4c623f9127b1 / ctx_996ca9959986 / term_bdb65e13-e292-4151-9a74-ac5c6d43b20b; requested/effective gpt-6.1-sol medium, turn_started observed, residualResources empty. This is supplementary checks only, no new implementation submission/full acceptance review. Computer Use sky.list_apps failed with native-pipe os error 2 twice, then after documented kernel reset/reinitialization once; UI automation stopped. No substitute OS UI inputs/helper launch.
+
+Executor reached a real local command-approval prompt (`Would you like to run the following command?`, `Yes, proceed`) for fresh temporary harness/input/output creation and Sandbox launch. No sandbox-* directory existed at inspection; guest execution not claimed. Coordinator asked user to approve in the worker terminal, without sending approval inputs or executing the blocked command elsewhere. Native worker resource is user_owned/retained (user_takeover); keep it live and do not release/close/retry. Next owner: user for terminal approval, then same executor/coordinator for G01/G02. This is agent permission waiting, not provider exhaustion or a product FAIL; historical review counters unchanged.
+
+## 2026-10-27T15:42Z — user approved terminal / genuine clean guest started
+
+User replied «готово». Current worker heartbeat msg_e8c96a8a0384 validated and delivery_6e90a38bbf12 ACKed. Same executor launched Sandbox with fresh input readonly/output writable at `%TEMP%/edr-windows-build/sandbox-20261027-183939`. Guest inventory: Windows 11 Enterprise x64 build26100; no Python/Node/PostgreSQL/Docker executables or developer installations found (Windows wsl.exe OS stub present). All three required CRT DLLs genuinely absent. Guest production installer SHA matches preserved EXE. Production prerequisite log records real missing-CRT message, user chose OK at15:41:38Z, InitializeSetup refused before payload, exit1. Actual Microsoft browser page observation remains pending user confirmation; no UI observation fabricated. Parent directed same executor to collect independent evidence/download/signature work while awaiting page observation; no guest prerequisite installation before that checkpoint. Prior C1 acceptance remains BLOCKED.
+
+User directly confirmed: «Да, страница Microsoft открылась. И я ее сам закрыл». This is user-observed real production prerequisite browser transition, separate from agent observation/log evidence. Same executor directed to proceed with already-approved official signed Microsoft VC++ x64 prerequisite inside guest and remaining clean smoke; no host CRT change. Actual shortcut/React browser observation still pending. No new review slot/approach reserved.
+
+Guest online prerequisite download failed (Invoke-WebRequest unable to connect); failure retained. Scoped transport recovery used official Microsoft download on host, valid Microsoft Authenticode and exact matching guest SHA-256 `843068991daaa1f73ad9f6239bce4d0f6a07a51f18c37ea2a867e9beca71295c`; version14.51.36247.0, installed only in guest. CRT install exit0 at15:53:54Z, production EDR installer exit0. Actual installed Start Menu EDR.lnk invoked15:54:21Z; health ok and API/PG listeners only127.0.0.1:18765/55432. Original Edge window title is EDR — Реестр сертификатов и паспортов. User directly confirmed visible interface («Да, интерфейс EDR виде[н]»). Both interactive checkpoints now have user observation plus independent native logs; clean data lifecycle evidence is still executing, no acceptance PASS yet.
+
+Recovered historical native usage (prior unavailable reports preserved): writer ctx_68e68e4cf252 session01a17c7b-63f9-7f93-a283-24b603840bd0 input12,952,492 incl cached12,822,656, output95,142; C1review ctx_8051ae00e9fd session01a17cad-59d9-77b1-a73d-a52f0c1499cb input1,237,865 incl cached1,145,728, output8,842. Both native turn_context model/effort match routing and rollouts contain their exact Dispatch IDs. Settled total14,190,357 input/2calls; supplementary executor still in progress, not settled usage. [Usage receipt](evidence/TASK-WINDOWS-LOCAL-01-usage.json). Historical counters unchanged.
+
+## 2026-10-27T16:02Z — clean Windows evidence завершено
+
+Matching worker_done msg_ca96eaee959c, task_4c623f9127b1/ctx_996ca9959986, outcome succeeded. Гостевой lifecycle exit0: PDF/запись сохраняются после restart/restore/update, uninstall exit0 сохраняет DB/вложения; после завершения listeners отсутствуют. [Дополнение evidence](evidence/TASK-WINDOWS-LOCAL-01-clean-windows.md), копия85 файлов/5,455,835 bytes; oversized исходный JSON и DB остаются в TEMP. Исходный код/production EXE не менялись, full suite не повторялся. Это не acceptance PASS.
+
+Release вернул retained/user_takeover/processAction none; пользовательский терминал не закрывался. Delivery_73722f134f9b ACKed. Executor final native input5,110,646 incl cached4,948,736, output27,365; settled total19,301,003 input/3calls. Provider27%/66%, refusal нет. Счётчики A1/C1 fullreview1/2/failed0 сохранены. Далее отдельный Astra/high выполняет ограниченную проверку новых G01/G02 evidence + source identity, не повторяет полное C1 review и подтверждённые checks; новый экспертный вызов учитывается отдельно. No code submission/fixes/commit/push/merge/deploy.
+
+Независимая проверка дополнения запущена: task_07a7800b876e / ctx_9237392c299b / term_6e206529-b517-45d6-a61a-44716655548c, requested/effective gpt-6-astra/high, turn_started observed, residualResources empty. Это проверка только G01/G02 evidence + неизменности исходников, не повторный full review и не новая кодовая подача. Accounting call4 in progress; settled19,301,003/3 сохраняются. Ревьюер пишет только TEMP supplementary-review.md; coordinator перенесёт фактический результат после settlement. No acceptance verdict yet.
+
+Ревьюер подготовил текст заключения после сверки12 source hashes, EXE и новых артефактов. Сохранение TEMP supplementary-review.md остановилось на реальном terminal command-approval prompt; пользователь получил просьбу выбрать Yes, proceed в Astra/high терминале. Coordinator не подтвердил за пользователя и не выполнил заблокированную запись другим инструментом. До actual report/worker_done приёмка не фиксируется; тот же live Dispatch сохранён, retry/новый review не запускались.
+
+## 2026-10-27T16:12Z — TASK-WINDOWS-LOCAL-01 принят: C1 + G01/G02 PASS
+
+Реальный supplementary-review.md сохранён ревьюером. Matching worker_done msg_5bba74f6e510, task_07a7800b876e/ctx_9237392c299b, outcome succeeded16:12:20Z. Независимый Astra/high дал G01 PASS и G02 PASS; совместно с прежним C1 подтверждены frozen criteria1–8. [Оригинальный отчёт дополнения](reviews/TASK-WINDOWS-LOCAL-01-C1-supplement.md) скопирован coordinator без изменения текста; исторический C1 BLOCKED не переписан. Проверены12/12 source hashes, EXE и85 файлов/18 ledger entries; mismatch нет. Никаких повторных suites/app runs или новых исправлений.
+
+Coordinator зафиксировал совокупный TASK PASS, обновил TASK/ROADMAP/STATE и evidence. A1/C1 full-review1/2, failed0 сохранены; дополнение отдельно как expert verification1, не C2/новый approach. Windows10/прочие builds и UI-формы остаются NOT_RUN, update проверен same-version, R01 MINOR и другие пределы C1 остаются backlog/ограничениями. No commit/push/merge/deploy, product/guide/installer неизменны. Последовательный утверждённый scope выполнен локально; новые TASK не запускались.
+
+Reviewer final native modelgpt-6-astra efforthigh, session01a17e1a-9bcc-7ef0-b40f-6e3d30dbdf20, exact Dispatch в rollout; input869,048 incl cached794,368, output7,275. Settled19,301,003 +869,048 =20,170,051 input/4worker calls; coordinator conversation отдельно. Snapshot46%/69%, provider refusal нет. [Usage](evidence/TASK-WINDOWS-LOCAL-01-usage.json). Release вернул retained/user_takeover/processAction none; пользовательский reviewer терминал не закрывался. Delivery_3e11f49603f4 обработан/ACKed, зависимых активных работ нет. Sandbox оставлен открытым с synthetic данными, helper завершён и EDR/PG остановлены.
+
+## 2026-10-27 — подготовка и разрешение публикации GitHub
+
+Независимый механический pre-publication audit task_dd053eb31c98/ctx_871dfe41dd08,
+gpt-6-luna/medium, завершён msg_5af58e7a9d85 succeeded; исходники/индекс не менял.
+Активных секретов и конкретного конфликта Windows additions с Linux CI не найдено;
+fixture/local/CI-only credentials помечены как synthetic/placeholder. Сырые
+Sandbox data/logs/backups и EXE исключены из предложенного плана. Дополнительных
+full acceptance reviews не выполнялось, прежние counters/PASS сохранены.
+Audit native input336,958 incl cached281,216, output1,621; это отдельная
+операция публикации, прежний Windows usage20,170,051/4 не переписан.
+Worker released/closed_agent_terminal/transcript captured, delivery_fc27171426c7 ACKed.
+
+Пользователь прямым «Делай» разрешил план33 файлов/3коммита и обычный push в
+origin/main с запуском CI. GitHub connector подтвердил private repo, default main,
+push permission; visibility не меняется. Перед исполнением33/33 исходных хеша
+плана совпали, index пуст, local/remote main совпадают с baseline1c362598.
+Продуктовые проверки не повторяются. Точный план и audit receipt сохранены
+локально в `%TEMP%/EDR-github-publication-plan-20261027.json` и
+`%TEMP%/EDR-github-publication-audit-20261027.json`.
+Фактические Git/CI результаты сохраняются в
+`%TEMP%/EDR-github-publication-result-20261027.json` по мере исполнения;
+до соответствующего receipt успешный push/CI не подразумевается.
+
+Первый git add отказал до записи index/commit: `CRLF would be replaced by LF
+in ROADMAP.md`. Проверено: HEAD прежний, index пуст; .gitattributes задаёт text/eol=lf,
+core.safecrlf=true. ROADMAP/APPROVALS/HISTORY нормализованы в LF с сохранёнными
+TEMP byte-backups и точным сравнением текста; Git configuration не менялась.
+Receipt: `%TEMP%/EDR-publication-normalization-20261027.json`. Продуктовый код
+и12 reviewed source hashes не затронуты; новая реализация/проверка не подразумевается.
+
+Повторная guard-проверка сначала неверно обработала JSON array в Windows
+PowerShell и отказала до git add (`Source changed: ROADMAP.md`); исходная и
+нормализованная версии связаны корректно, фактического стороннего изменения нет.
+После исправления чтения array созданы два локальных коммита с точным allowlist:
+`681129da0de734ef290c4c51a1036c300f76cdce` (17 Windows source/docs) и
+`61bbdc3be7ad49f58f6e773c5c5d8c7163af0352` (6 presentation/CI).
+Для каждого staged allowlist совпал, git diff --cached --check exit0,
+git commit exit0. Индекс/исходники после проверки не подменялись.
+Третий коммит содержит только10 согласованных итоговых records, включая
+новое явное разрешение и ссылки на локальный Git/CI receipt; raw package не staged.
+Push/CI отмечаются успешными только после соответствующего фактического receipt.
+
+Staged check10 новых workflow records выявил5 Markdown hard-break trailing-space
+строк в TASK/C1 review. Удалены только концевые пробелы этих5 metadata строк;
+вердикты, критерии и текст фактов сохранены. Публикуемые records приведены к LF;
+исходные TEMP отчёты и полный raw пакет остаются без изменений. Первоначальные
+отказы Git/guard/whitespace проверки не скрыты; продуктовые tests повторно не запускались.

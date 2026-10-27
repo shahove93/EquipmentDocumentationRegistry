@@ -1,12 +1,9 @@
-﻿# Текущая сводка workflow
+# Текущая сводка workflow
 
-- **COMPLETE — утверждённый локальный MVP + Batch.** TASK-MVP-06 Stage/A1/C1 PASS ST001..006, отдельный Astra/high review1/2; FINAL-REPORT закрывает ST007.
-- [FINAL-REPORT](FINAL-REPORT.md),[Stage PASS](reviews/TASK-MVP-06-stage-acceptance.md),[Evidence](evidence/TASK-MVP-06-evidence.md).
-- Main delivery06f58065022db9c58524909027ddc2d454f7071f unpushed; новых коммитов/product edits нет. Workflow/evidence локально сохранены, tree не clean. No push/merge/deploy.
-- Required checks0:3771pytest passed/1warning,Node24.22.0/typecheck/build;Alembic e4b8c2d16a70(head),13migrations.26artifact/190source/46A2 identities matched. No reruns.
-- Open backlog MINOR MVP06-ST-001: ARCH/ROADMAP narrative drift; фактически API21/38,/batches. Batch browser evidence — разрешённый MOCK, не realDB end-to-end; Document→Batch/Product вне scope.
-- Run run_68046cea3eb4; Astra task_391aaf782f69/ctx_97a10d402fdd worker_done msg_2b4be7038149; delivery ACKed. Resource retained/user_takeover,processAction none; user terminal preserved. Executor done/released.
-- Stage executor2625483+same reviewercall2944731=5570214input/2calls; old stop1202405 INCLUDED, no double count. MVP05 historical42659624/calls10 unchanged. Retained ledger**48229838input/calls12**,cached included.
-- A1 MVP05 FAIL/FAIL/reviews2/2,C3RCA,A2/C1PASS/review1/2,all prior failures/overruns сохранены. Same-call resume after user27окт «продолжи»,no new session/reset/refund.
-- Accounting-only,no caps/checkpoint gates. Latest primary28%,secondary51%,no new refusal. No new task/worker awaiting work.
-- [HISTORY](HISTORY.md),[APPROVALS](APPROVALS.md),[Final usage](evidence/TASK-MVP-06-stage-review-usage-final.json).
+- **PASS — TASK-WINDOWS-LOCAL-01 A1/C1, R2.** Source commit `681129da0de734ef290c4c51a1036c300f76cdce`; [приёмка](reviews/TASK-WINDOWS-LOCAL-01-C1-supplement.md), [evidence](evidence/TASK-WINDOWS-LOCAL-01-clean-windows.md). Исторический C1 BLOCKED сохранён, дополнение G01/G02 PASS;12 source hashes/EXE совпали, fullreview1/2/failed0 без сброса.
+- Чистая Win11 x64 build26100: install, Microsoft prerequisite flow, настоящий ярлык/React UI, synthetic restart/backup/restore/update/uninstall подтверждены. Backend3803/native32/frontend evidence переиспользованы. Win10/прочие builds NOT_RUN; R01 MINOR в backlog. EXE55,379,088bytes, SHA256 b75f7132…d21594d, только локально `%TEMP%/edr-windows-build/release`; raw Sandbox artifacts не публикуются.
+- **TASK-GITHUB-PRESENTATION-01 — C2 PASS.** README/CONTRIBUTING/templates/CI: commit `61bbdc3be7ad49f58f6e773c5c5d8c7163af0352`; [review](reviews/TASK-GITHUB-PRESENTATION-01-C2.md). Старые FAIL/пределы сохранены.
+- **Публикация разрешена пользователем «Делай»:33 файла/3коммита в origin/main**, private `shahove93/EquipmentDocumentationRegistry`; visibility/settings/release/deploy не меняются. Этот workflow record — третий коммит. Фактические remote/CI status и delivery HEAD: локальный `%TEMP%/EDR-github-publication-result-20261027.json`; [GitHub Actions](https://github.com/shahove93/EquipmentDocumentationRegistry/actions). Успешный CI без receipt не подразумевается.
+- **COMPLETE — локальный MVP+Batch.** MVP06 Stage PASS; [FINAL-REPORT](FINAL-REPORT.md), [stage review](reviews/TASK-MVP-06-stage-acceptance.md). Product delivery06f5806, прежняя docs publication1c362598. Backlog MVP06-ST-001 narrative drift, Batch evidence MOCK, Document→Batch/Product вне scope.
+- Worker usage Windows20,170,051input/4calls: [receipt](evidence/TASK-WINDOWS-LOCAL-01-usage.json). Отдельный publication audit336,958input/1call; cached включён, coordinator отдельно. Workers settled; user-owned terminals retained. Полная история, approvals и локальные Git/CI receipts сохраняются без сброса.
+- [HISTORY](HISTORY.md), [APPROVALS](APPROVALS.md). Следующий owner: coordinator завершает разрешённый push/CI observation, затем пользователь.
