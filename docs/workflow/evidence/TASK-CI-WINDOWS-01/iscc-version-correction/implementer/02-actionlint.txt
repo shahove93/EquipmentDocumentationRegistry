@@ -1,0 +1,3 @@
+﻿actionlint_exit=0
+diagnostics_count=0
+actionlint_version=1.7.12

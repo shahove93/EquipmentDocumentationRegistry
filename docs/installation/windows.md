@@ -264,8 +264,9 @@ Job в одной эфемерной VM выполняет следующую ц
    Перед запуском установщика job проверяет его SHA-256
    `9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732`
    и действительную Authenticode-подпись с `CN=Pyrsys B.V.` (при несоответствии
-   job падает), а после установки — `FileVersion` установленного `ISCC.exe`
-   `6.7.3`.
+   job падает), а версия compiler engine `6.7.3` проверяется по строке
+   `Compiler engine version: Inno Setup 6.7.3` из успешного build log
+   (не по `FileVersion` установленного `ISCC.exe`).
 4. `packaging/windows/build.ps1` собирает установщик в новом `-WorkDirectory`
    с загруженными архивами, `frontend/dist`, найденным `ISCC.exe` и
    `-BuilderPython` из `setup-python`. Путь, размер и SHA-256 собранного EXE

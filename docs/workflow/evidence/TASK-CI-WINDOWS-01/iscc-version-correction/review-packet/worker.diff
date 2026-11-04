@@ -1,0 +1,49 @@
+﻿diff --git a/.github/workflows/windows-installer.yml b/.github/workflows/windows-installer.yml
+index ab41b00..25109b0 100644
+--- a/.github/workflows/windows-installer.yml
++++ b/.github/workflows/windows-installer.yml
+@@ -109,11 +109,7 @@ jobs:
+           if (!(Test-Path -LiteralPath $iscc -PathType Leaf)) {
+               throw "ISCC.exe not found after Inno Setup installation: $iscc"
+           }
+-          $version = (Get-Item -LiteralPath $iscc).VersionInfo.FileVersion
+-          if ($version -notmatch '^6\.7\.3(\D|$)') {
+-              throw "Installed ISCC version is not 6.7.3: $version"
+-          }
+-          Write-Output "ISCC: $iscc ($version)"
++          Write-Output "ISCC: $iscc"
+ 
+       - name: Build installer
+         shell: pwsh
+@@ -144,6 +140,15 @@ jobs:
+               $_ | Out-String | Add-Content -LiteralPath $buildLog
+               throw
+           }
++          if (!(Test-Path -LiteralPath $buildLog -PathType Leaf)) {
++              throw "Build log missing: $buildLog"
++          }
++          $compilerVersionLine = Select-String -LiteralPath $buildLog `
++              -Pattern '^Compiler engine version: Inno Setup 6\.7\.3$' -Quiet
++          if (-not $compilerVersionLine) {
++              throw "ISCC compiler engine version line 'Inno Setup 6.7.3' not found in $buildLog"
++          }
++          Write-Output "ISCC compiler engine version verified from build log"
+           $exe = Get-ChildItem -LiteralPath $buildWork -Filter 'EDR-*-windows-x64.exe' -File |
+               Select-Object -First 1
+           if (!$exe) {
+diff --git a/docs/installation/windows.md b/docs/installation/windows.md
+index ff0cfae..3d52a33 100644
+--- a/docs/installation/windows.md
++++ b/docs/installation/windows.md
+@@ -264,8 +264,9 @@ Job ╨▓ ╨╛╨┤╨╜╨╛╨╣ ╤Н╤Д╨╡╨╝╨╡╤А╨╜╨╛╨╣ VM ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В ╤Б╨╗╨╡╨┤╤Г╤О╤Й╤Г╤О ╤Ж
+    ╨Я╨╡╤А╨╡╨┤ ╨╖╨░╨┐╤Г╤Б╨║╨╛╨╝ ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║╨░ job ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╨╡╨│╨╛ SHA-256
+    `9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732`
+    ╨╕ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╤В╨╡╨╗╤М╨╜╤Г╤О Authenticode-╨┐╨╛╨┤╨┐╨╕╤Б╤М ╤Б `CN=Pyrsys B.V.` (╨┐╤А╨╕ ╨╜╨╡╤Б╨╛╨╛╤В╨▓╨╡╤В╤Б╤В╨▓╨╕╨╕
+-   job ╨┐╨░╨┤╨░╨╡╤В), ╨░ ╨┐╨╛╤Б╨╗╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ тАФ `FileVersion` ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨╛╨│╨╛ `ISCC.exe`
+-   `6.7.3`.
++   job ╨┐╨░╨┤╨░╨╡╤В), ╨░ ╨▓╨╡╤А╤Б╨╕╤П compiler engine `6.7.3` ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В╤Б╤П ╨┐╨╛ ╤Б╤В╤А╨╛╨║╨╡
++   `Compiler engine version: Inno Setup 6.7.3` ╨╕╨╖ ╤Г╤Б╨┐╨╡╤И╨╜╨╛╨│╨╛ build log
++   (╨╜╨╡ ╨┐╨╛ `FileVersion` ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨╛╨│╨╛ `ISCC.exe`).
+ 4. `packaging/windows/build.ps1` ╤Б╨╛╨▒╨╕╤А╨░╨╡╤В ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╨▓ ╨╜╨╛╨▓╨╛╨╝ `-WorkDirectory`
+    ╤Б ╨╖╨░╨│╤А╤Г╨╢╨╡╨╜╨╜╤Л╨╝╨╕ ╨░╤А╤Е╨╕╨▓╨░╨╝╨╕, `frontend/dist`, ╨╜╨░╨╣╨┤╨╡╨╜╨╜╤Л╨╝ `ISCC.exe` ╨╕
+    `-BuilderPython` ╨╕╨╖ `setup-python`. ╨Я╤Г╤В╤М, ╤А╨░╨╖╨╝╨╡╤А ╨╕ SHA-256 ╤Б╨╛╨▒╤А╨░╨╜╨╜╨╛╨│╨╛ EXE

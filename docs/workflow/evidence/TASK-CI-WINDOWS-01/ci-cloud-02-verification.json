@@ -1,0 +1,73 @@
+{
+  "finding": "CI-CLOUD-02",
+  "kind": "read-only C3 diagnosis",
+  "date_utc": "2026-11-04",
+  "head": "44d7b65bd387b3ab0b670efcb2686c05d11290ae",
+  "failed_run": {
+    "id": 41884655362,
+    "url": "https://github.com/shahove93/EquipmentDocumentationRegistry/actions/runs/41884655362",
+    "head_sha": "44d7b65bd387b3ab0b670efcb2686c05d11290ae",
+    "conclusion": "failure",
+    "failed_step": "Install Inno Setup 6.7.3",
+    "error": "Installed ISCC version is not 6.7.3: 0.0.0.0",
+    "artifacts": 0,
+    "acquisition_checks_passed": {
+      "sha256": "9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732",
+      "authenticode": "Valid",
+      "signer": "CN=Pyrsys B.V., O=Pyrsys B.V., S=Noord-Holland, C=NL"
+    }
+  },
+  "official_source": {
+    "tag": "is-6_7_3",
+    "tree": "https://github.com/jrsoftware/issrc/tree/is-6_7_3",
+    "iscc_dpr": {"path": "Projects/ISCC.dpr", "sha256": "F357EF194F58BBE89B0C1A8F101BD11B681CD9F0F42F9DA889704F69A1001977"},
+    "iscc_dproj": {"path": "Projects/ISCC.dproj", "sha256": "8691A175F59181AA1E6331A15E255184EDA2587A833B7C3923A2828F5363CCB2"},
+    "iscc_versionandicon_res": {"path": "Projects/Res/ISCC.versionandicon.res", "sha256": "F05492F22C056951A5F3A0FBB5A2F947DEDF6ECA413406D9137526699D6CAC7C"}
+  },
+  "iscc_version_resource": {
+    "FileDescription": "Inno Setup Command-Line Compiler",
+    "FileVersion": "0.0.0.0",
+    "ProductName": "Inno Setup",
+    "ProductVersion": "0.0.0.0",
+    "fixed_file_version": "0.0.0.0",
+    "fixed_product_version": "0.0.0.0",
+    "conclusion": "FileVersion/ProductVersion are zero by design; the existing check is invalid, not evidence of a wrong compiler"
+  },
+  "real_version_signal": {
+    "line": "Compiler engine version: Inno Setup 6.7.3",
+    "stream": "stdout",
+    "emitted_by": "ISCC.dpr:600 when not quiet",
+    "success_exit": 0,
+    "failure_exit": "non-zero (Halt(ExitCode))",
+    "help_exit": 1,
+    "help_output": "Inno Setup 6 Command-Line Compiler (no patch version)",
+    "suppressed_by": ["/Q", "/Qp"]
+  },
+  "patch_proposal": {
+    "approach": "bounded A1 correction, not A2",
+    "allowlist": [".github/workflows/windows-installer.yml", "docs/installation/windows.md (optional CI note)"],
+    "remove": "VersionInfo.FileVersion check",
+    "add": "after successful build.ps1: Select-String -LiteralPath $buildLog -Pattern '^Compiler engine version: Inno Setup 6\\.7\\.3$' -Quiet; throw if false",
+    "keep": ["official immutable URL", "SHA-256 pin", "Authenticode Pyrsys B.V.", "ISCC existence check", "build.ps1 native exit check"]
+  },
+  "verification_before_run": {
+    "positive": "existing build.log contains 'Compiler engine version: Inno Setup 6.7.3'",
+    "negative": "synthetic 6.7.4 line must fail the pattern",
+    "static": ["yaml parse", "actionlint", "scoped git diff --check"]
+  },
+  "accounting": {
+    "full_reviews": 3,
+    "failed_reviews": 1,
+    "codex_calls_ci": "3/4",
+    "additional_a1_review_slot": "consumed",
+    "reserved_windows_calls": "untouched"
+  },
+  "non_actions": {
+    "code_edits": false,
+    "commit": false,
+    "push": false,
+    "workflow_run": false,
+    "new_review": false,
+    "host_install": false
+  }
+}

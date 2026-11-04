@@ -1,0 +1,401 @@
+﻿Build and verify Windows installer	Set up job	я╗┐2026-11-04T18:11:35.4602680Z Current runner version: '2.338.2'
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4662254Z ##[group]Runner Image Provisioner
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4663444Z Hosted Compute Agent
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4664283Z Version: 20261021.618
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4665592Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4666708Z Build Date: 2026-10-21T00:45:21Z
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4667754Z Worker ID: {51cceaa3-24bb-4817-bf45-7330f6596da2}
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4668820Z Region: westcentralus
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4669655Z Cloud: Azure
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4670435Z ##[endgroup]
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4672351Z ##[group]Operating System
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4673301Z Microsoft Windows Server 2025
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4674312Z 10.0.26100
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4675041Z Datacenter
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4676669Z ##[endgroup]
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4677471Z ##[group]Runner Image
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4678354Z Image: windows-2025-vs2026
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4679253Z Version: 20261030.294.1
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4680975Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261030.294/images/windows/Windows2025-VS2026-Readme.md
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4684595Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261030.294
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4686634Z ##[endgroup]
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4688360Z ##[group]GITHUB_TOKEN Permissions
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4690839Z Contents: read
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4691727Z Metadata: read
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4692531Z ##[endgroup]
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4695453Z Secret source: Actions
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4697286Z Cache mode: write
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.4698340Z Prepare workflow directory
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.5173677Z Prepare all required actions
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.5228756Z Getting action download info
+Build and verify Windows installer	Set up job	2026-11-04T18:11:35.8951050Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Build and verify Windows installer	Set up job	2026-11-04T18:11:36.0236737Z Download action repository 'actions/setup-python@v7' (SHA:6d4fd22b20465ccc0f7354476588e8df7c9ca0e0)
+Build and verify Windows installer	Set up job	2026-11-04T18:11:36.6540064Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Build and verify Windows installer	Set up job	2026-11-04T18:11:36.8039296Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Build and verify Windows installer	Set up job	2026-11-04T18:11:37.1540194Z Complete job name: Build and verify Windows installer
+Build and verify Windows installer	Check out source	я╗┐2026-11-04T18:11:37.3388650Z ##[group]Run actions/checkout@v7
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3390268Z with:
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3391185Z   persist-credentials: false
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3392244Z   repository: shahove93/EquipmentDocumentationRegistry
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3400465Z   token: ***
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3401221Z   ssh-strict: true
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3401978Z   ssh-user: git
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3402732Z   clean: true
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3403525Z   sparse-checkout-cone-mode: true
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3404589Z   fetch-depth: 1
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3405396Z   fetch-tags: false
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3406352Z   show-progress: true
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3407148Z   lfs: false
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3407910Z   submodules: false
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3409006Z   set-safe-directory: true
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3409903Z   allow-unsafe-pr-checkout: false
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3411119Z env:
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3411829Z   PYTHON_VERSION: 3.12.10
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3412662Z   NODE_VERSION: 24.22.0
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3413464Z   INNO_VERSION: 6.7.3
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3414765Z   PYTHON_ZIP_URL: https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3416609Z   PYTHON_ZIP_SHA256: 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3418601Z   POSTGRES_ZIP_URL: https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3420652Z   POSTGRES_ZIP_SHA256: E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3422615Z   INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3424587Z   INNO_SETUP_SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.3428212Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.4949759Z Syncing repository: shahove93/EquipmentDocumentationRegistry
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.4952366Z ##[group]Getting Git version info
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.4953822Z Working directory is 'D:\a\EquipmentDocumentationRegistry\EquipmentDocumentationRegistry'
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.5902565Z [command]"C:\Program Files\Git\bin\git.exe" version
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9272455Z git version 2.56.0.windows.4
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9326620Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9342668Z Temporarily overriding HOME='D:\a\_temp\3bfe47e8-baf5-4dad-acab-ad4e4c4be202' before making global git config changes
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9344899Z Adding repository directory to the temporary git global config as a safe directory
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9353357Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\EquipmentDocumentationRegistry\EquipmentDocumentationRegistry
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9979333Z Deleting the contents of 'D:\a\EquipmentDocumentationRegistry\EquipmentDocumentationRegistry'
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9984291Z ##[group]Determining repository object format
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9986864Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9988114Z ##[group]Initializing the repository
+Build and verify Windows installer	Check out source	2026-11-04T18:11:37.9996259Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\EquipmentDocumentationRegistry\EquipmentDocumentationRegistry
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.0971566Z Initialized empty Git repository in D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git/
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.1033087Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/shahove93/EquipmentDocumentationRegistry
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.1794526Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.1878840Z ##[group]Disabling automatic garbage collection
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.1880766Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.2199768Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.2201014Z ##[group]Setting up auth
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.2201991Z Removing SSH command configuration
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.2212074Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+Build and verify Windows installer	Check out source	2026-11-04T18:11:38.2599984Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+Build and verify Windows installer	Check out source	2026-11-04T18:11:39.7387050Z Removing HTTP extra header
+Build and verify Windows installer	Check out source	2026-11-04T18:11:39.7397561Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build and verify Windows installer	Check out source	2026-11-04T18:11:39.7811864Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+Build and verify Windows installer	Check out source	2026-11-04T18:11:40.3579288Z Removing includeIf entries pointing to credentials config files
+Build and verify Windows installer	Check out source	2026-11-04T18:11:40.3594805Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build and verify Windows installer	Check out source	2026-11-04T18:11:40.4012841Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+Build and verify Windows installer	Check out source	2026-11-04T18:11:40.9761952Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+Build and verify Windows installer	Check out source	2026-11-04T18:11:41.0179926Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git.path D:\a\_temp\git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:41.0586993Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git/worktrees/*.path D:\a\_temp\git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:41.1025771Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:41.1434742Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:41.1831562Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:41.1832260Z ##[group]Fetching the repository
+Build and verify Windows installer	Check out source	2026-11-04T18:11:41.1845158Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +44d7b65bd387b3ab0b670efcb2686c05d11290ae:refs/remotes/origin/main
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.6510981Z From https://github.com/shahove93/EquipmentDocumentationRegistry
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.6511974Z  * [new ref]         44d7b65bd387b3ab0b670efcb2686c05d11290ae -> origin/main
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.6580285Z [command]"C:\Program Files\Git\bin\git.exe" branch --list --remote origin/main
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.6989005Z   origin/main
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.7043462Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse refs/remotes/origin/main
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.7495320Z 44d7b65bd387b3ab0b670efcb2686c05d11290ae
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.7535326Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.7535930Z ##[group]Determining the checkout info
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.7536984Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.7546587Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.8091845Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.8484525Z ##[group]Checking out the ref
+Build and verify Windows installer	Check out source	2026-11-04T18:11:42.8493790Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force -B main refs/remotes/origin/main
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.0680888Z Switched to a new branch 'main'
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.0702372Z branch 'main' set up to track 'origin/main'.
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.0754069Z ##[endgroup]
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.1240966Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.1607875Z 44d7b65bd387b3ab0b670efcb2686c05d11290ae
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.1655853Z ##[group]Removing auth
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.1656331Z Removing SSH command configuration
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.1666290Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.2068240Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.8014399Z Removing HTTP extra header
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.8026159Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build and verify Windows installer	Check out source	2026-11-04T18:11:43.8519008Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4005876Z Removing includeIf entries pointing to credentials config files
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4006536Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4346092Z includeif.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4347111Z includeif.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git/worktrees/*.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4348188Z includeif.gitdir:/github/workspace/.git.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4348570Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4394208Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4738980Z D:\a\_temp\git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.4787046Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git.path D\:\\a\\_temp\\git\-credentials\-67109649\-d2d3\-4871\-bde9\-7d6fc3c30c00\.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.5176067Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git/worktrees/*.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.5518469Z D:\a\_temp\git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.5581388Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/EquipmentDocumentationRegistry/EquipmentDocumentationRegistry/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-67109649\-d2d3\-4871\-bde9\-7d6fc3c30c00\.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.5979532Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.6308599Z /github/runner_temp/git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.6353258Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-67109649\-d2d3\-4871\-bde9\-7d6fc3c30c00\.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.6733565Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.7060520Z /github/runner_temp/git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.7103884Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-67109649\-d2d3\-4871\-bde9\-7d6fc3c30c00\.config
+Build and verify Windows installer	Check out source	2026-11-04T18:11:44.7497804Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+Build and verify Windows installer	Check out source	2026-11-04T18:11:45.3060625Z Removing credentials config 'D:\a\_temp\git-credentials-67109649-d2d3-4871-bde9-7d6fc3c30c00.config'
+Build and verify Windows installer	Check out source	2026-11-04T18:11:45.3072202Z ##[endgroup]
+Build and verify Windows installer	Set up build Python	я╗┐2026-11-04T18:11:45.3502655Z ##[group]Run actions/setup-python@v7
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3503013Z with:
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3503227Z   python-version: 3.12.10
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3503471Z   check-latest: false
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3506541Z   token: ***
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3506873Z   mirror: https://raw.githubusercontent.com/actions/python-versions/main
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3507267Z   update-environment: true
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3507501Z   allow-prereleases: false
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3507730Z   freethreaded: false
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3507943Z env:
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3508121Z   PYTHON_VERSION: 3.12.10
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3508337Z   NODE_VERSION: 24.22.0
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3508536Z   INNO_VERSION: 6.7.3
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3508924Z   PYTHON_ZIP_URL: https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3509482Z   PYTHON_ZIP_SHA256: 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3510094Z   POSTGRES_ZIP_URL: https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3510741Z   POSTGRES_ZIP_SHA256: E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3511329Z   INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3511900Z   INNO_SETUP_SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.3512281Z ##[endgroup]
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.4972785Z ##[group]Installed versions
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.5021680Z Successfully set up CPython (3.12.10)
+Build and verify Windows installer	Set up build Python	2026-11-04T18:11:45.5022428Z ##[endgroup]
+Build and verify Windows installer	Set up Node.js	я╗┐2026-11-04T18:11:45.5332060Z ##[group]Run actions/setup-node@v7
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5332404Z with:
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5332797Z   node-version: 24.22.0
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5333030Z   package-manager-cache: false
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5333279Z   check-latest: false
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5335942Z   token: ***
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5336136Z env:
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5336321Z   PYTHON_VERSION: 3.12.10
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5336550Z   NODE_VERSION: 24.22.0
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5336755Z   INNO_VERSION: 6.7.3
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5337212Z   PYTHON_ZIP_URL: https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5337821Z   PYTHON_ZIP_SHA256: 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5338433Z   POSTGRES_ZIP_URL: https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5339035Z   POSTGRES_ZIP_SHA256: E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5339619Z   INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5340237Z   INNO_SETUP_SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5340708Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5341164Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.12.10\x64/lib/pkgconfig
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5341615Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5342011Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5342392Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.5342694Z ##[endgroup]
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:45.6930097Z Attempting to download 24.22.0...
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:46.7127741Z Acquiring 24.22.0 - x64 from https://github.com/actions/node-versions/releases/download/24.22.0-38668177966/node-24.22.0-win32-x64.7z
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:47.3876381Z Extracting ...
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:49.6477608Z Adding to the cache ...
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:53.4478374Z ##[group]Environment details
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:54.1844535Z node: v24.22.0
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:54.1844943Z npm: 11.19.1
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:54.1845212Z yarn: 1.22.22
+Build and verify Windows installer	Set up Node.js	2026-11-04T18:11:54.1845821Z ##[endgroup]
+Build and verify Windows installer	Build frontend	я╗┐2026-11-04T18:11:54.2143945Z ##[group]Run $ErrorActionPreference = 'Stop'
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.2144409Z ^[[36;1m$ErrorActionPreference = 'Stop'^[[0m
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.2144691Z ^[[36;1mnpm ci^[[0m
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.2145064Z ^[[36;1mif ($LASTEXITCODE -ne 0) { throw "npm ci failed with exit code $LASTEXITCODE" }^[[0m
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.2145720Z ^[[36;1mnpm run build^[[0m
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.2146104Z ^[[36;1mif ($LASTEXITCODE -ne 0) { throw "npm run build failed with exit code $LASTEXITCODE" }^[[0m
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3228546Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3228935Z env:
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3229137Z   PYTHON_VERSION: 3.12.10
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3229364Z   NODE_VERSION: 24.22.0
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3229572Z   INNO_VERSION: 6.7.3
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3229964Z   PYTHON_ZIP_URL: https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3230569Z   PYTHON_ZIP_SHA256: 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3231263Z   POSTGRES_ZIP_URL: https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3231874Z   POSTGRES_ZIP_SHA256: E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3232471Z   INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3233080Z   INNO_SETUP_SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3233572Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3234027Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.12.10\x64/lib/pkgconfig
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3234468Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3234872Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3236615Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:54.3236947Z ##[endgroup]
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:57.1675346Z 
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:57.1684114Z added 28 packages, and audited 29 packages in 2s
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:57.1684590Z 
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:57.1684867Z 9 packages are looking for funding
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:57.1685367Z   run `npm fund` for details
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:57.1691055Z 
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:57.1691337Z found 0 vulnerabilities
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:58.8842626Z 
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:58.8843518Z > edr-frontend@0.1.0 build
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:58.8844313Z > tsc --noEmit && vite build
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:58.8844587Z 
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.5499783Z ^[[36mvite v8.3.4 ^[[32mbuilding client environment for production...^[[36m^[[39m
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.5620170Z transforming...
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.6509258Z тЬУ 63 modules transformed.
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.6850026Z rendering chunks...
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.7519251Z computing gzip size...
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.7587475Z dist/index.html                   0.50 kB тФВ gzip:   0.35 kB
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.7588348Z dist/assets/index-BPEvob3t.css   12.13 kB тФВ gzip:   2.93 kB
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.7589104Z dist/assets/index-CoBLwFIU.js   352.99 kB тФВ gzip: 103.23 kB
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.7589352Z 
+Build and verify Windows installer	Build frontend	2026-11-04T18:11:59.7604546Z ^[[32mтЬУ built in 209ms^[[39m
+Build and verify Windows installer	Download and verify pinned build inputs	я╗┐2026-11-04T18:12:00.1434509Z ##[group]Run $ErrorActionPreference = 'Stop'
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1434999Z ^[[36;1m$ErrorActionPreference = 'Stop'^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1435382Z ^[[36;1m$buildInputs = Join-Path $env:RUNNER_TEMP 'build-inputs'^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1435786Z ^[[36;1mif (Test-Path -LiteralPath $buildInputs) {^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1436194Z ^[[36;1m    throw "Build inputs directory must be fresh: $buildInputs"^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1436531Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1436815Z ^[[36;1mNew-Item -ItemType Directory -Path $buildInputs | Out-Null^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1437274Z ^[[36;1m$pythonZip = Join-Path $buildInputs 'python-3.12.10-embed-amd64.zip'^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1437824Z ^[[36;1m$postgresZip = Join-Path $buildInputs 'postgresql-18.6-5-windows-x64-binaries.zip'^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1438758Z ^[[36;1mInvoke-WebRequest -UseBasicParsing -Uri $env:PYTHON_ZIP_URL -OutFile $pythonZip^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1439359Z ^[[36;1mInvoke-WebRequest -UseBasicParsing -Uri $env:POSTGRES_ZIP_URL -OutFile $postgresZip^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1439887Z ^[[36;1mforeach ($pair in @(^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1440202Z ^[[36;1m    @{ Path = $pythonZip; Expected = $env:PYTHON_ZIP_SHA256 },^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1440630Z ^[[36;1m    @{ Path = $postgresZip; Expected = $env:POSTGRES_ZIP_SHA256 }^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1440957Z ^[[36;1m)) {^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1441263Z ^[[36;1m    $actual = (Get-FileHash -LiteralPath $pair.Path -Algorithm SHA256).Hash^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1441671Z ^[[36;1m    if ($actual -ne $pair.Expected) {^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1442110Z ^[[36;1m        throw "SHA-256 mismatch for $($pair.Path): expected $($pair.Expected), got $actual"^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1442513Z ^[[36;1m    }^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1442773Z ^[[36;1m    Write-Output "SHA-256 verified: $($pair.Path) $actual"^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1443084Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1513872Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1514229Z env:
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1514424Z   PYTHON_VERSION: 3.12.10
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1514658Z   NODE_VERSION: 24.22.0
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1514859Z   INNO_VERSION: 6.7.3
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1515238Z   PYTHON_ZIP_URL: https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1515813Z   PYTHON_ZIP_SHA256: 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1516428Z   POSTGRES_ZIP_URL: https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1517050Z   POSTGRES_ZIP_SHA256: E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1517843Z   INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1518435Z   INNO_SETUP_SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1518909Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1519365Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.12.10\x64/lib/pkgconfig
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1519810Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1520199Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1520582Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:00.1520892Z ##[endgroup]
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:02.5474559Z SHA-256 verified: D:\a\_temp\build-inputs\python-3.12.10-embed-amd64.zip 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Download and verify pinned build inputs	2026-11-04T18:12:03.0601038Z SHA-256 verified: D:\a\_temp\build-inputs\postgresql-18.6-5-windows-x64-binaries.zip E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Install Inno Setup 6.7.3	я╗┐2026-11-04T18:12:03.1358570Z ##[group]Run $ErrorActionPreference = 'Stop'
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1359055Z ^[[36;1m$ErrorActionPreference = 'Stop'^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1359399Z ^[[36;1m$innoDir = Join-Path $env:RUNNER_TEMP 'inno-setup'^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1359753Z ^[[36;1mif (Test-Path -LiteralPath $innoDir) {^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1360125Z ^[[36;1m    throw "Inno Setup directory must be fresh: $innoDir"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1360439Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1360706Z ^[[36;1m$setup = Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1361188Z ^[[36;1mInvoke-WebRequest -UseBasicParsing -Uri $env:INNO_SETUP_URL -OutFile $setup^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1361729Z ^[[36;1m$actualHash = (Get-FileHash -LiteralPath $setup -Algorithm SHA256).Hash^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1362147Z ^[[36;1mif ($actualHash -ne $env:INNO_SETUP_SHA256) {^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1362604Z ^[[36;1m    throw "SHA-256 mismatch for $($setup): expected $($env:INNO_SETUP_SHA256), got $actualHash"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1363037Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1363347Z ^[[36;1m$signature = Get-AuthenticodeSignature -LiteralPath $setup^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1363715Z ^[[36;1mif ($signature.Status -ne 'Valid') {^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1364142Z ^[[36;1m    throw "Inno Setup installer signature status is not Valid: $($signature.Status)"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1364540Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1364868Z ^[[36;1mif ($signature.SignerCertificate.Subject -notmatch 'CN=Pyrsys B\.V\.') {^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1365474Z ^[[36;1m    throw "Inno Setup installer signer is not Pyrsys B.V.: $($signature.SignerCertificate.Subject)"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1365927Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1366395Z ^[[36;1mWrite-Output "Inno Setup installer verified: $($setup) sha256=$actualHash signer=$($signature.SignerCertificate.Subject)"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1367070Z ^[[36;1m$process = Start-Process -FilePath $setup -Wait -PassThru -ArgumentList @(^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1367590Z ^[[36;1m    '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', "/DIR=$innoDir"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1367969Z ^[[36;1m)^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1368181Z ^[[36;1mif ($process.ExitCode -ne 0) {^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1368549Z ^[[36;1m    throw "Inno Setup installation failed: $($process.ExitCode)"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1369235Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1369452Z ^[[36;1m$iscc = Join-Path $innoDir 'ISCC.exe'^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1369814Z ^[[36;1mif (!(Test-Path -LiteralPath $iscc -PathType Leaf)) {^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1370236Z ^[[36;1m    throw "ISCC.exe not found after Inno Setup installation: $iscc"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1370580Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1370865Z ^[[36;1m$version = (Get-Item -LiteralPath $iscc).VersionInfo.FileVersion^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1371245Z ^[[36;1mif ($version -notmatch '^6\.7\.3(\D|$)') {^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1371613Z ^[[36;1m    throw "Installed ISCC version is not 6.7.3: $version"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1372172Z ^[[36;1m}^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1372384Z ^[[36;1mWrite-Output "ISCC: $iscc ($version)"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1440386Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1440738Z env:
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1440947Z   PYTHON_VERSION: 3.12.10
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1441173Z   NODE_VERSION: 24.22.0
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1441382Z   INNO_VERSION: 6.7.3
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1441775Z   PYTHON_ZIP_URL: https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1442348Z   PYTHON_ZIP_SHA256: 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1442965Z   POSTGRES_ZIP_URL: https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1443577Z   POSTGRES_ZIP_SHA256: E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1444170Z   INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1444778Z   INNO_SETUP_SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1447435Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1447917Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.12.10\x64/lib/pkgconfig
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1448358Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1448753Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1449144Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:03.1449454Z ##[endgroup]
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:04.4518050Z Inno Setup installer verified: D:\a\_temp\innosetup-6.7.3.exe sha256=9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732 signer=CN=Pyrsys B.V., O=Pyrsys B.V., S=Noord-Holland, C=NL
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:07.9677436Z ^[[31;1mException: ^[[0mD:\a\_temp\565c2234-1084-4586-b2f6-0ce297da40ff.ps1:33^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:07.9678126Z ^[[31;1m^[[0m^[[36;1mLine |^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:07.9678740Z ^[[31;1m^[[0m^[[36;1m^[[36;1m  33 | ^[[0m     ^[[36;1mthrow "Installed ISCC version is not 6.7.3: $version"^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:07.9679718Z ^[[31;1m^[[0m^[[36;1m^[[36;1m^[[0m^[[36;1m^[[0m^[[36;1m     | ^[[31;1m     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:07.9680808Z ^[[31;1m^[[0m^[[36;1m^[[36;1m^[[0m^[[36;1m^[[0m^[[36;1m^[[31;1m^[[31;1m^[[36;1m     | ^[[31;1mInstalled ISCC version is not 6.7.3: 0.0.0.0^[[0m
+Build and verify Windows installer	Install Inno Setup 6.7.3	2026-11-04T18:12:08.0378386Z ##[error]Process completed with exit code 1.
+Build and verify Windows installer	Upload Windows installer evidence	я╗┐2026-11-04T18:12:08.0619036Z ##[group]Run actions/upload-artifact@v4
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0619410Z with:
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0619623Z   name: windows-installer-evidence
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0619889Z   if-no-files-found: warn
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0620112Z   retention-days: 14
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0621011Z   path: D:\a\_temp/edr-ci-work
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/installer-exe.json
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/installer-exe.sha256
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/EDR-*-windows-x64.exe
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/payload/build-manifest.json
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build-logs/build.log
+Build and verify Windows installer	Upload Windows installer evidence	
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0621949Z   compression-level: 6
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0622164Z   overwrite: false
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0622378Z   include-hidden-files: false
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0622603Z env:
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0622782Z   PYTHON_VERSION: 3.12.10
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0622989Z   NODE_VERSION: 24.22.0
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0623189Z   INNO_VERSION: 6.7.3
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0623567Z   PYTHON_ZIP_URL: https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0624180Z   PYTHON_ZIP_SHA256: 4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0624795Z   POSTGRES_ZIP_URL: https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0625395Z   POSTGRES_ZIP_SHA256: E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0625998Z   INNO_SETUP_URL: https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0626933Z   INNO_SETUP_SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0627413Z   pythonLocation: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0627856Z   PKG_CONFIG_PATH: C:\hostedtoolcache\windows\Python\3.12.10\x64/lib/pkgconfig
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0628293Z   Python_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0628680Z   Python2_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0629054Z   Python3_ROOT_DIR: C:\hostedtoolcache\windows\Python\3.12.10\x64
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.0629363Z ##[endgroup]
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.2723495Z (node:8680) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.2724355Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.2783009Z Multiple search paths detected. Calculating the least common ancestor of all paths
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.2787042Z The least common ancestor is D:\a\_temp. This will be the root directory of the artifact
+Build and verify Windows installer	Upload Windows installer evidence	2026-11-04T18:12:08.2802536Z ##[warning]No files were found with the provided path: D:\a\_temp/edr-ci-work
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/installer-exe.json
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/installer-exe.sha256
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/EDR-*-windows-x64.exe
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build/payload/build-manifest.json
+Build and verify Windows installer	Upload Windows installer evidence	D:\a\_temp/edr-build-logs/build.log. No artifacts will be uploaded.
+Build and verify Windows installer	Post Check out source	я╗┐2026-11-04T18:12:08.3128993Z Post job cleanup.
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.4987645Z [command]"C:\Program Files\Git\bin\git.exe" version
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.5349352Z git version 2.56.0.windows.4
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.5412850Z Temporarily overriding HOME='D:\a\_temp\737d2ae5-4ad1-478e-af66-9400dd9f8262' before making global git config changes
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.5414181Z Adding repository directory to the temporary git global config as a safe directory
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.5424283Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\EquipmentDocumentationRegistry\EquipmentDocumentationRegistry
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.5803215Z Removing SSH command configuration
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.5821060Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:08.6270046Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:09.2156796Z Removing HTTP extra header
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:09.2167797Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:09.2553126Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:09.8533441Z Removing includeIf entries pointing to credentials config files
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:09.8545591Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build and verify Windows installer	Post Check out source	2026-11-04T18:12:09.8949082Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+Build and verify Windows installer	Complete job	я╗┐2026-11-04T18:12:10.4688765Z Cleaning up orphan processes
+Build and verify Windows installer	Complete job	2026-11-04T18:12:10.4784060Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

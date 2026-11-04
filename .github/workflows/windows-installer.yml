@@ -109,11 +109,7 @@ jobs:
           if (!(Test-Path -LiteralPath $iscc -PathType Leaf)) {
               throw "ISCC.exe not found after Inno Setup installation: $iscc"
           }
-          $version = (Get-Item -LiteralPath $iscc).VersionInfo.FileVersion
-          if ($version -notmatch '^6\.7\.3(\D|$)') {
-              throw "Installed ISCC version is not 6.7.3: $version"
-          }
-          Write-Output "ISCC: $iscc ($version)"
+          Write-Output "ISCC: $iscc"
 
       - name: Build installer
         shell: pwsh
@@ -144,6 +140,15 @@ jobs:
               $_ | Out-String | Add-Content -LiteralPath $buildLog
               throw
           }
+          if (!(Test-Path -LiteralPath $buildLog -PathType Leaf)) {
+              throw "Build log missing: $buildLog"
+          }
+          $compilerVersionLine = Select-String -LiteralPath $buildLog `
+              -Pattern '^Compiler engine version: Inno Setup 6\.7\.3$' -Quiet
+          if (-not $compilerVersionLine) {
+              throw "ISCC compiler engine version line 'Inno Setup 6.7.3' not found in $buildLog"
+          }
+          Write-Output "ISCC compiler engine version verified from build log"
           $exe = Get-ChildItem -LiteralPath $buildWork -Filter 'EDR-*-windows-x64.exe' -File |
               Select-Object -First 1
           if (!$exe) {
