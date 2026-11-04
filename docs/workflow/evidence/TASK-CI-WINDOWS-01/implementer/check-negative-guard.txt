@@ -1,0 +1,10 @@
+COMMAND: powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File packaging/windows/ci-installer.ps1 -Exe <missing> -WorkDirectory <fresh> -InstallDirectory <fresh>
+ENV: GITHUB_ACTIONS, CI, RUNNER_OS, RUNNER_ENVIRONMENT unset
+EXIT=2
+STDERR/stdout: ci-installer guard failed: GITHUB_ACTIONS must be exactly true
+STDERR/stdout: ci-installer guard failed: CI must be exactly true
+STDERR/stdout: ci-installer guard failed: RUNNER_OS must be exactly Windows
+STDERR/stdout: ci-installer guard failed: RUNNER_ENVIRONMENT must be exactly github-hosted
+STDERR/stdout: ci-installer guard failed: built installer EXE is missing: C:\Users\user\AppData\Local\Temp\missing-ci-setup.exe
+INSTALL_DIR_CREATED=False
+WORK_DIR_CREATED=False

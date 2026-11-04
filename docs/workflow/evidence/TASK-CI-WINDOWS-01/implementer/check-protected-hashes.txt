@@ -1,0 +1,28 @@
+Protected paths required byte-unchanged by frozen checklist C10:
+packaging/windows/build.ps1 current=5F2C7729C1B0AD61C471A6EB3D753D69928901637D398D5B9EA4970BAB38D593 baseline=5F2C7729C1B0AD61C471A6EB3D753D69928901637D398D5B9EA4970BAB38D593 match=True
+packaging/windows/smoke.ps1 current=16EABA34D7F94499E47E92CE9F6427D217364D3E1E588619F25C7B1F6E10A170 baseline=16EABA34D7F94499E47E92CE9F6427D217364D3E1E588619F25C7B1F6E10A170 match=True
+packaging/windows/smoke.py current=F75E2012C1DAEF9B09E2092A8AA27B32ECE55FDACB23A48F8633FE33C9DECCB3 baseline=F75E2012C1DAEF9B09E2092A8AA27B32ECE55FDACB23A48F8633FE33C9DECCB3 match=True
+packaging/windows/edr.iss current=C912AE4A8614C3B6516DACD094A8356B555B889BBF4A464C931DF14073A8AD7C baseline=C912AE4A8614C3B6516DACD094A8356B555B889BBF4A464C931DF14073A8AD7C match=True
+app/windows_local.py current=648F15B5E08185D4FA9FAB4ED457D81ABD31CDD0878EB439E87065D30E613C4A baseline=648F15B5E08185D4FA9FAB4ED457D81ABD31CDD0878EB439E87065D30E613C4A match=True
+app/windows_layout.py current=C7081F5A4C400E89D862865D5A6EEB4450B98C024CB8C90A2EA891372B08F8E0 baseline=C7081F5A4C400E89D862865D5A6EEB4450B98C024CB8C90A2EA891372B08F8E0 match=True
+.github/workflows/ci.yml current=A64A5083B7C62FA3B819C6ADB777747AEA6B912D286A2BEBB3F8F63AB9340C59 baseline=<not recorded; tracked git diff: >
+
+git diff --name-status (tracked changes):
+M	AGENTS.md
+M	ROADMAP.md
+M	app/windows_local.py
+M	docs/installation/windows.md
+M	docs/workflow/APPROVALS.md
+M	docs/workflow/HISTORY.md
+M	docs/workflow/MODEL-ROUTING.md
+M	docs/workflow/STATE.md
+M	packaging/windows/build.ps1
+M	packaging/windows/edr.iss
+M	packaging/windows/smoke.ps1
+M	packaging/windows/smoke.py
+M	tests/test_windows_local.py
+
+Baseline entries whose current hash differs from baseline-hashes.json:
+docs/installation/windows.md
+docs/workflow/HISTORY.md
+docs/workflow/STATE.md

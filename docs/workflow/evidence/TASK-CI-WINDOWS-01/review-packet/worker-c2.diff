@@ -1,0 +1,53 @@
+--- a/.github/workflows/windows-installer.yml
++++ b/.github/workflows/windows-installer.yml
+@@ -44,9 +44,13 @@
+ 
+       - name: Build frontend
+         working-directory: frontend
++        shell: pwsh
+         run: |
++          $ErrorActionPreference = 'Stop'
+           npm ci
++          if ($LASTEXITCODE -ne 0) { throw "npm ci failed with exit code $LASTEXITCODE" }
+           npm run build
++          if ($LASTEXITCODE -ne 0) { throw "npm run build failed with exit code $LASTEXITCODE" }
+ 
+       - name: Download and verify pinned build inputs
+         shell: pwsh
+@@ -148,8 +152,7 @@
+           & "$env:GITHUB_WORKSPACE/packaging/windows/ci-installer.ps1" `
+               -Exe $exe `
+               -WorkDirectory (Join-Path $env:RUNNER_TEMP 'edr-ci-work') `
+-              -InstallDirectory (Join-Path $env:RUNNER_TEMP 'edr-ci-install') `
+-              -BuildWorkDirectory $buildWork
++              -InstallDirectory (Join-Path $env:RUNNER_TEMP 'edr-ci-install')
+           exit $LASTEXITCODE
+ 
+       - name: Upload Windows installer evidence
+--- a/packaging/windows/ci-installer.ps1
++++ b/packaging/windows/ci-installer.ps1
+@@ -8,8 +8,7 @@
+ param(
+     [Parameter(Mandatory = $true)][string]$Exe,
+     [string]$WorkDirectory = (Join-Path $env:TEMP 'edr-ci-work'),
+-    [string]$InstallDirectory = (Join-Path $env:TEMP 'edr-ci-install'),
+-    [string]$BuildWorkDirectory = (Join-Path $env:TEMP 'edr-build')
++    [string]$InstallDirectory = (Join-Path $env:TEMP 'edr-ci-install')
+ )
+ $ErrorActionPreference = 'Stop'
+ 
+--- a/docs/installation/windows.md
++++ b/docs/installation/windows.md
+@@ -259,8 +259,11 @@
+    Эти значения взяты из существующего build contract
+    (`TASK-WINDOWS-CRT-OFFLINE-01/manifest.json`,
+    `TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/build-manifest.json`).
+-3. Детерминированно ставится Inno Setup **6.7.3**; job проверяет
++3. Ставится Inno Setup **6.7.3** с официального URL; job проверяет
+    `FileVersion` установленного `ISCC.exe` и падает, если это не `6.7.3`.
++   Версия подтверждается по `FileVersion`, а не по байтам: закреплённый SHA-256
++   установщика Inno Setup не записан, поэтому байтовая воспроизводимость не
++   гарантируется.
+ 4. `packaging/windows/build.ps1` собирает установщик в новом `-WorkDirectory`
+    с загруженными архивами, `frontend/dist`, найденным `ISCC.exe` и
+    `-BuilderPython` из `setup-python`. Путь, размер и SHA-256 собранного EXE

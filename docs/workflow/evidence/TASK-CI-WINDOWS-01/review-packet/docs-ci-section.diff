@@ -1,0 +1,71 @@
+--- docs/installation/windows.md (pre-TASK baseline)
++++ docs/installation/windows.md (current)
+@@ -235,3 +235,68 @@
+ результаты и NOT_RUN перечисляются в отчёте исполнителя, принятие выполняется
+ отдельным ревьюером. Не используйте клиентские документы в smoke-проверках.
+ 
++## Проверка установщика в GitHub Actions (Windows CI)
++
++Отдельный job `.github/workflows/windows-installer.yml`
++(`windows-installer`, `runs-on: windows-latest`) запускается **только вручную**
++через `workflow_dispatch`; push/pull_request его не запускают. Права job —
++`permissions: contents: read`, checkout с `persist-credentials: false`, задана
++собственная группа `concurrency`. Существующий Ubuntu `ci.yml` не изменяется.
++
++Job в одной эфемерной VM выполняет следующую цепочку:
++
++1. `actions/setup-python@v7` ставит builder **CPython 3.12.10**,
++   `actions/setup-node@v7` — **Node.js 24.22.0**; во `frontend` выполняются
++   `npm ci` и `npm run build`.
++2. Скачиваются официальные входы сборки и проверяются их закреплённые SHA-256
++   (`Get-FileHash -Algorithm SHA256`, при несовпадении job падает):
++   - CPython embedded `3.12.10` amd64,
++     `https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip`,
++     SHA-256 `4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3`;
++   - EDB PostgreSQL `18.6-5` Windows x64 binaries,
++     `https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip`,
++     SHA-256 `E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2`.
++   Эти значения взяты из существующего build contract
++   (`TASK-WINDOWS-CRT-OFFLINE-01/manifest.json`,
++   `TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/build-manifest.json`).
++3. Ставится Inno Setup **6.7.3** с официального URL; job проверяет
++   `FileVersion` установленного `ISCC.exe` и падает, если это не `6.7.3`.
++   Версия подтверждается по `FileVersion`, а не по байтам: закреплённый SHA-256
++   установщика Inno Setup не записан, поэтому байтовая воспроизводимость не
++   гарантируется.
++4. `packaging/windows/build.ps1` собирает установщик в новом `-WorkDirectory`
++   с загруженными архивами, `frontend/dist`, найденным `ISCC.exe` и
++   `-BuilderPython` из `setup-python`. Путь, размер и SHA-256 собранного EXE
++   записываются в work-каталог.
++5. `packaging/windows/ci-installer.ps1` сначала выполняет fail-closed guard:
++   требует `GITHUB_ACTIONS=true`, `CI=true`, `RUNNER_OS=Windows`,
++   `RUNNER_ENVIRONMENT=github-hosted`, отвергает узлы `EDR-Win11-Test` и
++   `WDAG*`, а также существующие work/install каталоги и
++   `%ProgramData%\EDR`. Только после этого он делает silent install
++   (`/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /DIR=... /LOG=...`), проверяет
++   наличие `python\python.exe`, `launcher.ps1`, `alembic.ini`, `ui\index.html`
++   и `%ProgramData%\EDR\runtime\postgresql\bin\postgres.exe`.
++6. `packaging/windows/ci-installer.py` запускается **установленным** bundled
++   интерпретатором, стартует приложение как `app.windows_local start
++   --no-browser`, ждёт `GET /health` = `{"status":"ok"}`, проверяет `GET /`
++   (наличие `<div id="root">`), создаёт синтетические document type, документ и
++   PDF-вложение, скачивает вложение и сверяет SHA-256; затем останавливает
++   приложение, запускает снова, проверяет сохранность документа и неизменность
++   SHA-256 вложения и останавливает снова.
++
++Артефакты (`if: always()`, retention 14 дней) включают: work-каталог CI
++(`install.log`, `results.json`, app/PostgreSQL logs, supervisor logs), собранный
++EXE, `installer-exe.json`, `installer-exe.sha256`, `build-manifest.json` и
++`build.log`.
++
++### Что этот CI **не** проверяет
++
++- Настоящий интерактивный UAC consent/credential prompt: runner — администратор,
++  поэтому этот сценарий остаётся ручной проверкой.
++- Установку на чистую пользовательскую Windows без предустановленных
++  инструментов/зависимостей.
++- Полный жизненный цикл (backup/restore, update/uninstall/reinstall, ACL/
++  migration matrix) — это отдельный lifecycle TASK.
++- Статус реального облачного запуска: **NOT_RUN** до фактического успешного
++  запуска job в GitHub Actions; локальная статическая проверка не является
++  подтверждением работоспособности установленного приложения.

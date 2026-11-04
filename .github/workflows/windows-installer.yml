@@ -1,0 +1,171 @@
+name: Windows installer
+
+# Opt-in only: this job builds and silently installs the real installer in one
+# ephemeral hosted Windows runner. It must never run on pushes or pull requests.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-installer-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows-installer:
+    name: Build and verify Windows installer
+    runs-on: windows-latest
+    env:
+      PYTHON_VERSION: '3.12.10'
+      NODE_VERSION: '24.22.0'
+      INNO_VERSION: '6.7.3'
+      PYTHON_ZIP_URL: 'https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip'
+      PYTHON_ZIP_SHA256: '4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3'
+      POSTGRES_ZIP_URL: 'https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip'
+      POSTGRES_ZIP_SHA256: 'E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2'
+      INNO_SETUP_URL: 'https://files.jrsoftware.org/is/6/innosetup-6.7.3.exe'
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up build Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12.10'
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24.22.0'
+          package-manager-cache: false
+
+      - name: Build frontend
+        working-directory: frontend
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          npm ci
+          if ($LASTEXITCODE -ne 0) { throw "npm ci failed with exit code $LASTEXITCODE" }
+          npm run build
+          if ($LASTEXITCODE -ne 0) { throw "npm run build failed with exit code $LASTEXITCODE" }
+
+      - name: Download and verify pinned build inputs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildInputs = Join-Path $env:RUNNER_TEMP 'build-inputs'
+          if (Test-Path -LiteralPath $buildInputs) {
+              throw "Build inputs directory must be fresh: $buildInputs"
+          }
+          New-Item -ItemType Directory -Path $buildInputs | Out-Null
+          $pythonZip = Join-Path $buildInputs 'python-3.12.10-embed-amd64.zip'
+          $postgresZip = Join-Path $buildInputs 'postgresql-18.6-5-windows-x64-binaries.zip'
+          Invoke-WebRequest -UseBasicParsing -Uri $env:PYTHON_ZIP_URL -OutFile $pythonZip
+          Invoke-WebRequest -UseBasicParsing -Uri $env:POSTGRES_ZIP_URL -OutFile $postgresZip
+          foreach ($pair in @(
+              @{ Path = $pythonZip; Expected = $env:PYTHON_ZIP_SHA256 },
+              @{ Path = $postgresZip; Expected = $env:POSTGRES_ZIP_SHA256 }
+          )) {
+              $actual = (Get-FileHash -LiteralPath $pair.Path -Algorithm SHA256).Hash
+              if ($actual -ne $pair.Expected) {
+                  throw "SHA-256 mismatch for $($pair.Path): expected $($pair.Expected), got $actual"
+              }
+              Write-Output "SHA-256 verified: $($pair.Path) $actual"
+          }
+
+      - name: Install Inno Setup 6.7.3
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $innoDir = Join-Path $env:RUNNER_TEMP 'inno-setup'
+          if (Test-Path -LiteralPath $innoDir) {
+              throw "Inno Setup directory must be fresh: $innoDir"
+          }
+          $setup = Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'
+          Invoke-WebRequest -UseBasicParsing -Uri $env:INNO_SETUP_URL -OutFile $setup
+          $process = Start-Process -FilePath $setup -Wait -PassThru -ArgumentList @(
+              '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', "/DIR=$innoDir"
+          )
+          if ($process.ExitCode -ne 0) {
+              throw "Inno Setup installation failed: $($process.ExitCode)"
+          }
+          $iscc = Join-Path $innoDir 'ISCC.exe'
+          if (!(Test-Path -LiteralPath $iscc -PathType Leaf)) {
+              throw "ISCC.exe not found after Inno Setup installation: $iscc"
+          }
+          $version = (Get-Item -LiteralPath $iscc).VersionInfo.FileVersion
+          if ($version -notmatch '^6\.7\.3(\D|$)') {
+              throw "Installed ISCC version is not 6.7.3: $version"
+          }
+          Write-Output "ISCC: $iscc ($version)"
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildWork = Join-Path $env:RUNNER_TEMP 'edr-build'
+          $logDir = Join-Path $env:RUNNER_TEMP 'edr-build-logs'
+          if (Test-Path -LiteralPath $buildWork) {
+              throw "Build work directory must be fresh: $buildWork"
+          }
+          if (Test-Path -LiteralPath $logDir) {
+              throw "Build log directory must be fresh: $logDir"
+          }
+          New-Item -ItemType Directory -Path $logDir | Out-Null
+          $buildInputs = Join-Path $env:RUNNER_TEMP 'build-inputs'
+          $iscc = Join-Path (Join-Path $env:RUNNER_TEMP 'inno-setup') 'ISCC.exe'
+          $builderPython = (Get-Command python.exe -CommandType Application | Select-Object -First 1).Source
+          $buildLog = Join-Path $logDir 'build.log'
+          try {
+              & "$env:GITHUB_WORKSPACE/packaging/windows/build.ps1" `
+                  -PythonArchive (Join-Path $buildInputs 'python-3.12.10-embed-amd64.zip') `
+                  -PostgresArchive (Join-Path $buildInputs 'postgresql-18.6-5-windows-x64-binaries.zip') `
+                  -UiDirectory (Join-Path $env:GITHUB_WORKSPACE 'frontend/dist') `
+                  -WorkDirectory $buildWork `
+                  -Iscc $iscc `
+                  -BuilderPython $builderPython 2>&1 | Tee-Object -FilePath $buildLog
+          } catch {
+              $_ | Out-String | Add-Content -LiteralPath $buildLog
+              throw
+          }
+          $exe = Get-ChildItem -LiteralPath $buildWork -Filter 'EDR-*-windows-x64.exe' -File |
+              Select-Object -First 1
+          if (!$exe) {
+              throw "Built installer EXE not found in $buildWork"
+          }
+          $hash = (Get-FileHash -LiteralPath $exe.FullName -Algorithm SHA256).Hash
+          @{ path = $exe.FullName; size = $exe.Length; sha256 = $hash } |
+              ConvertTo-Json | Set-Content -LiteralPath (Join-Path $buildWork 'installer-exe.json') -Encoding utf8
+          "$hash  $($exe.Name)" |
+              Set-Content -LiteralPath (Join-Path $buildWork 'installer-exe.sha256') -Encoding ascii
+          Write-Output "Installer EXE: $($exe.FullName) size=$($exe.Length) sha256=$hash"
+
+      - name: Silent install and installed-runtime checks
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $buildWork = Join-Path $env:RUNNER_TEMP 'edr-build'
+          $exe = (Get-Content -LiteralPath (Join-Path $buildWork 'installer-exe.json') -Raw | ConvertFrom-Json).path
+          & "$env:GITHUB_WORKSPACE/packaging/windows/ci-installer.ps1" `
+              -Exe $exe `
+              -WorkDirectory (Join-Path $env:RUNNER_TEMP 'edr-ci-work') `
+              -InstallDirectory (Join-Path $env:RUNNER_TEMP 'edr-ci-install')
+          exit $LASTEXITCODE
+
+      - name: Upload Windows installer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer-evidence
+          if-no-files-found: warn
+          retention-days: 14
+          path: |
+            ${{ runner.temp }}/edr-ci-work
+            ${{ runner.temp }}/edr-build/installer-exe.json
+            ${{ runner.temp }}/edr-build/installer-exe.sha256
+            ${{ runner.temp }}/edr-build/EDR-*-windows-x64.exe
+            ${{ runner.temp }}/edr-build/payload/build-manifest.json
+            ${{ runner.temp }}/edr-build-logs/build.log

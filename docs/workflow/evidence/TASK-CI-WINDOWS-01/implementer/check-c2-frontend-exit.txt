@@ -1,0 +1,70 @@
+C2 frontend exit-code proof (CI-C2-01)
+=======================================
+
+Host: Windows; Windows PowerShell 5.1.26100.9711.
+`pwsh` (PowerShell 7) is NOT installed on this host (`Get-Command pwsh`
+returns nothing; `C:\Program Files\PowerShell` does not exist). The workflow
+uses `shell: pwsh` on the GitHub-hosted runner; the local probe below runs the
+same explicit `$LASTEXITCODE` pattern under Windows PowerShell 5.1, which has
+identical native-exit-code semantics. No software was installed.
+
+CWD: D:\Antigravity\EquipmentDocumentationRegistry
+Probe script: docs/workflow/evidence/TASK-CI-WINDOWS-01/implementer/check-frontend-exit.ps1
+
+Command
+-------
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File docs/workflow/evidence/TASK-CI-WINDOWS-01/implementer/check-frontend-exit.ps1
+Exit code: 1 (non-zero: the step fails closed)
+
+Transcript (stdout+stderr)
+--------------------------
+powershell.exe : first native command failed with exit code 7
+At D:\Antigravity\EquipmentDocumentationRegistry\docs\workflow\evidence\TASK-CI-WINDOWS-01\implementer\check-frontend-exit.ps1:7 char:28
++ ... DE -ne 0) { throw "first native command failed with exit code $LASTEX ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (first native co...ith exit code 7:String) [], RuntimeException
+    + FullyQualifiedErrorId : first native command failed with exit code 7
+
+OUTER_EXIT=1
+
+Probe content (same structure as the workflow step)
+---------------------------------------------------
+$ErrorActionPreference = 'Stop'
+cmd /c exit 7
+if ($LASTEXITCODE -ne 0) { throw "first native command failed with exit code $LASTEXITCODE" }
+cmd /c exit 0
+if ($LASTEXITCODE -ne 0) { throw "second native command failed with exit code $LASTEXITCODE" }
+
+The failing native command aborts via `throw` before the later succeeding
+`cmd /c exit 0` can run, so the outer exit is 1. A later success cannot mask it.
+
+Control: the old fail-open shape
+--------------------------------
+Script (temp `%TEMP%\edr-ci-c2-failopen-control.ps1`):
+  cmd /c exit 7
+  cmd /c exit 0
+
+Command:
+powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "%TEMP%\edr-ci-c2-failopen-control.ps1"
+Result: CONTROL_OUTER_EXIT=0
+
+This reproduces the C1 defect: without explicit checks the outer exit is 0 even
+though the first native command failed. The corrected pattern above returns 1.
+
+Static proof: explicit checks after both npm commands
+-----------------------------------------------------
+$ grep -n 'name: Build frontend\|npm ci\|LASTEXITCODE\|npm run build' .github/workflows/windows-installer.yml
+45:      - name: Build frontend
+46:        working-directory: frontend
+47:        shell: pwsh
+48:        run: |
+49:          $ErrorActionPreference = 'Stop'
+50:          npm ci
+51:          if ($LASTEXITCODE -ne 0) { throw "npm ci failed with exit code $LASTEXITCODE" }
+52:          npm run build
+53:          if ($LASTEXITCODE -ne 0) { throw "npm run build failed with exit code $LASTEXITCODE" }
+
+Both `npm ci` and `npm run build` are immediately followed by an explicit
+`$LASTEXITCODE` check that throws, so the step stops on the first nonzero npm
+exit. The YAML structural check `check-yaml.py` also asserts `shell: pwsh` and
+exactly two `$LASTEXITCODE -ne 0` guards, with the first before `npm run build`.

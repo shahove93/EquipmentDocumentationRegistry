@@ -1,0 +1,4 @@
+CWD: D:\Antigravity\EquipmentDocumentationRegistry
+Command: python -m py_compile packaging/windows/ci-installer.py
+Exit code: 0
+Output: (none; a clean py_compile run prints nothing)

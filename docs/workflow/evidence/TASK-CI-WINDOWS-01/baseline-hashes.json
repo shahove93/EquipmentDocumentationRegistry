@@ -1,0 +1,2072 @@
+﻿[
+    {
+        "status":  " M",
+        "path":  "AGENTS.md",
+        "sha256":  "2468ED8567403BFFD0211E286C4645A860760ABF8B0E2E7472B537A9454A4FC8",
+        "size":  2849
+    },
+    {
+        "status":  "??",
+        "path":  "app/windows_layout.py",
+        "sha256":  "C7081F5A4C400E89D862865D5A6EEB4450B98C024CB8C90A2EA891372B08F8E0",
+        "size":  6005
+    },
+    {
+        "status":  " M",
+        "path":  "app/windows_local.py",
+        "sha256":  "648F15B5E08185D4FA9FAB4ED457D81ABD31CDD0878EB439E87065D30E613C4A",
+        "size":  26195
+    },
+    {
+        "status":  "??",
+        "path":  "docs/adr/ADR-013-windows-programdata-runtime.md",
+        "sha256":  "0227E7C8DFD8ADEAEDE64E32B3EC48DC4201B57611BD0AF75AA0D77571D621C2",
+        "size":  7534
+    },
+    {
+        "status":  "??",
+        "path":  "docs/adr/ADR-014-windows-offline-vcredist.md",
+        "sha256":  "BB93F5806757A35C51BB05CB1A33AAFAEA63EB34E5066C694605450DB8DB7C75",
+        "size":  3710
+    },
+    {
+        "status":  " M",
+        "path":  "docs/installation/windows.md",
+        "sha256":  "30DD9AF7DE3C3FFF050A4EC8C3AC2C8F19160539AA708A4DE7B1BE0DAF7DC48A",
+        "size":  23326
+    },
+    {
+        "status":  "??",
+        "path":  "docs/tasks/TASK-CI-WINDOWS-01.md",
+        "sha256":  "DE3B5B2D12C1F76DBA775BC82C391DF85EFAC1FCDB67291BF20371BB72ECB950",
+        "size":  8817
+    },
+    {
+        "status":  "??",
+        "path":  "docs/tasks/TASK-EDR-UI-PASSPORTS-01.md",
+        "sha256":  "E34CDC439DDE34257B4C4500C27EC663B74A83F2B8CE11D770B0B293C7C40291",
+        "size":  3896
+    },
+    {
+        "status":  "??",
+        "path":  "docs/tasks/TASK-README-PRESENTATION-02.md",
+        "sha256":  "C243CAF5F6AE72CE361C4C3A7AC4FE200CF47ABA75574327648CD35C3F54C8DF",
+        "size":  7545
+    },
+    {
+        "status":  "??",
+        "path":  "docs/tasks/TASK-RELEASE-0.2.0.md",
+        "sha256":  "20124F573928E21E1825FCBA3B0C8792A75279C2060D4D19856E4421D836404C",
+        "size":  5084
+    },
+    {
+        "status":  "??",
+        "path":  "docs/tasks/TASK-WINDOWS-CRT-OFFLINE-01.md",
+        "sha256":  "C9F4E48A08B722CDD5657EE926FCB119638241D9CDDB0ADD1D4E21EB5ED948C2",
+        "size":  9266
+    },
+    {
+        "status":  "??",
+        "path":  "docs/tasks/TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01.md",
+        "sha256":  "4A92D092B4FC3242FC1FC2602908F1082F3F6E38BBED217BAAF038FC81AC3F5C",
+        "size":  3481
+    },
+    {
+        "status":  "??",
+        "path":  "docs/tasks/TASK-WINDOWS-PROGRAMDATA-01.md",
+        "sha256":  "9EFC6DA641C2F4A9DE916D635C3FFEDBC13505D1BAA8948EC17536AA17B4C657",
+        "size":  31920
+    },
+    {
+        "status":  " M",
+        "path":  "docs/workflow/APPROVALS.md",
+        "sha256":  "ACAAF73C0E44086CA8A1C9DD5FE2B73C58FCAB844FC53B8FF5A4C1C57326ED4D",
+        "size":  65071
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-CI-WINDOWS-01/baseline-dirty.diff",
+        "sha256":  "03EC257F89C2CC6D4EFA02F36A87F354927C31B1E50B00D3A4DB9FF0A9B405EE",
+        "size":  279482
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-CI-WINDOWS-01/baseline-head.txt",
+        "sha256":  "A9A47839746F634467A7957A2BD82863E4C4B94DDAF4B5D2DD0859CFF460ACCF",
+        "size":  42
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-CI-WINDOWS-01/baseline-status.txt",
+        "sha256":  "C5C3B47BB54C265F0CD9AA898A195A2BCF096DCC7984B3EFA47C906281B40115",
+        "size":  1907
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/artifact-hashes.json",
+        "sha256":  "AF630C888CE0D614A59572F7D4E68789E3CC627BC38BD90543E4C4AEB1C5EB51",
+        "size":  412
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/baseline-status.txt",
+        "sha256":  "4CA9E29217369C5D770F881490E05CCBFE60FDC7CDB91747A74886D3D58E702E",
+        "size":  2266
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/build.log",
+        "sha256":  "9B91A251C129A2B5BB9C15E4FDCD859038E6F53AB209F67A5CAD63348F10E6B0",
+        "size":  1539302
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/build.ps1",
+        "sha256":  "1C502AB440C192F0549BCE4C011A32C092D7F82D01975DF15D9964D86A0A2B05",
+        "size":  5198
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/build-command.txt",
+        "sha256":  "CC633E4E35F48D83D7BB6EAE7D068F187F146AD2BBAE5D78E91C02BBA4E683A2",
+        "size":  522
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/edr.iss",
+        "sha256":  "89380C19F212349935E0AAF14EB477399BD4B4E15099F2F499BF572105BF9CB5",
+        "size":  5273
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/focused.log",
+        "sha256":  "29A034A23382839A567227F57165CC7F3A1A0906B19840D934FEFBEE8C687AB4",
+        "size":  3406
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/focused-final.log",
+        "sha256":  "FAEDED4A79DCB034DA5E0026FFF8BA9F31ADC3DEF3C2893DD6B02D34897C5367",
+        "size":  3418
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/focused-runtime.log",
+        "sha256":  "C9C73AE872939D752D76D88B5390501DEA5C6E8466CCCF45F79FF70DC34997F9",
+        "size":  2960
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/manifest.json",
+        "sha256":  "FB577C01774C1683300EBE62573D4DEB8612C903DE3925A890D2008A781939C6",
+        "size":  7630
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/report.md",
+        "sha256":  "FBF6FFF89285A593CDD1289A3B0761F9B937CC14BE0CE69B820CFF66754FA938",
+        "size":  9558
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/source-hashes.json",
+        "sha256":  "72A660C692CF576D8B096D1C4FFC9FD19D41175E01703111B4D82DD3A883871D",
+        "size":  524
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/vm-programdata-guard-error.png",
+        "sha256":  "8B15FE57E9DDB29DCFC6612E13A7DB156CD48069BD8CAE9F66F4CA843AA3B8AA",
+        "size":  338909
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/vm-runtime-registry.png",
+        "sha256":  "8823EF3823A3695AB63B3CC10568D715A8A6656C098DF610F8D1552C5E4CBE66",
+        "size":  236745
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/windows.md",
+        "sha256":  "C55F941B430611039A0B8D94219801C9BD6754F90AA8AD39A69D4E415F5DC355",
+        "size":  22559
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/worker.diff",
+        "sha256":  "E5FA57BF4E315EA89043F3723C39B54ACF7D438A3351E66C324775F87F24EAC2",
+        "size":  18704
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01-approval.md",
+        "sha256":  "5DEB0B0BCDB93CA3B6BE5E2B15A9C9186A9899C001A5DFFCB6FEEB421947FB77",
+        "size":  1429
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/browser-cdp.ps1",
+        "sha256":  "EB838762E182581FC7CC0787938C281C59572A1DB9A36239B16F9CD0BA93824F",
+        "size":  2832
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/browser-metadata.ps1",
+        "sha256":  "5327C1DD2DA0B516562C3A2FF666E5E818E5A38D58DDE8423C0DEFBD4798A7E1",
+        "size":  768
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/compact-evidence.py",
+        "sha256":  "85F97A11710C5A12027A6FAC8A6596A8BFABC4D4CB793C85287CE7D3DF147550",
+        "size":  1032
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/evidence.wsb",
+        "sha256":  "0713BDF9295F36125A8D7B0C2054159E28378D4CBE2997DC97B53D3470055001",
+        "size":  633
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/evidence-hashes.json",
+        "sha256":  "3BCBDDE2152B0243C02BD021489263325B49112CE72929405D2FEA3FB36B5356",
+        "size":  3143
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/evidence-hashes-incomplete.json",
+        "sha256":  "469CD05D292CA39E550B70CE1F2008E8A0CC30AC683F3CD8C011A547361DFC9A",
+        "size":  2964
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/evidence-report.md",
+        "sha256":  "08C2671CA5F30ACE4CFF95B01CE9FF825DF5E3E783E456560E0649C902118072",
+        "size":  7184
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/final-input-hashes.json",
+        "sha256":  "54F4121FF06DA6111CEA45A51758236D07CC4E9C7C9D46DF0E2339AC31217BC1",
+        "size":  1817
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/host-crt-download.json",
+        "sha256":  "9B1C5380E7289F8711A5180F3A0EDEBF78D758C9D0D84662C5E0B4A446EAA48A",
+        "size":  1020
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/host-launch.json",
+        "sha256":  "AABF72A637255B4E2040557FE77A7B92B194F3C4E291F01B2CE72D9962ACBA70",
+        "size":  748
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/host-launch-process-check.json",
+        "sha256":  "4862ABAD53D3F3BBA88E4CA5E61BE2D75DC29A905EEE0481BA47B9A447522C0A",
+        "size":  91
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/input/guest.ps1",
+        "sha256":  "98FCD5F3B5B41BB8BF820B7A4FAF24DE853E1C547BD2EA2151380A86E259CC90",
+        "size":  3598
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/input/launcher.ps1",
+        "sha256":  "3CF7BA26C114210F6ADB6A0E438997FA290E2AEDDBA2974012D2A93C6C3DE5AD",
+        "size":  2281
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/input/lifecycle.py",
+        "sha256":  "1B7B6991443C5E9FFCF0CB25C1CF9A3B884C9D268B576229B3B755472EC1A702",
+        "size":  6604
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/input/smoke.py",
+        "sha256":  "E44D57BFD5156C156CB4CB1610311915CACE5E403BE06FB118EED4BA40AF3B20",
+        "size":  7441
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/lifecycle.py",
+        "sha256":  "1B7B6991443C5E9FFCF0CB25C1CF9A3B884C9D268B576229B3B755472EC1A702",
+        "size":  6604
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/lifecycle-command.ps1",
+        "sha256":  "B0CA06B579795EFD47845B2D2421C3D01DEC67C2671C1B49BD2B33083C08CA53",
+        "size":  1761
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/lifecycle-summary.json",
+        "sha256":  "8FC321B0355A1843A00D86FB0C43489901D6D8183230776F7D8766B6B051566C",
+        "size":  6548
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/manifest.json",
+        "sha256":  "73D84312002DA0D47A2F04B69CCC5CD8B1D82B67E36A970C2B70E2903EA186F9",
+        "size":  2345
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/cdp-provenance.json",
+        "sha256":  "342B1F91C4C7685F62A86C1E75C73C73A0363B3D71A30E3CB6EC25CBFC57ACE9",
+        "size":  1067
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/cdp-react.png",
+        "sha256":  "82E00C6CDBF41614F51EFAE968CB31C1AEF91179E8590A5451E2B8A67C9D3623",
+        "size":  43708
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/cdp-react-dom.json",
+        "sha256":  "5DD6C28EF12A37D6C7406DE3AA73FFBF76C16E6A8131B41CD8EBE6FD113CDF46",
+        "size":  1644
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-01-inventory.error.txt",
+        "sha256":  "148CC86D519092433AE5C1FF9173FBEB6A3A28443E121644A9499E85D717EA62",
+        "size":  559
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-01-inventory.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-01-inventory.ps1",
+        "sha256":  "755715FB6ADF5FE5FEE09CBF07BB01D5AC3C3263D6910A31082CB3515C70B8A7",
+        "size":  741
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-02-prerequisite-install.error.txt",
+        "sha256":  "67BECE7BAFF4EAA183DBA66A0576E52B599E85D45138B3674D80DC16BF76D095",
+        "size":  531
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-02-prerequisite-install.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-02-prerequisite-install.ps1",
+        "sha256":  "424BF960C690BBE1599241499998B5008935400F477C463DCB577933C779D276",
+        "size":  3531
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-03-network.done.json",
+        "sha256":  "4A4FA0071821830F7211FA10FF54D8A77177E210922AEA1B09AAE05B5C8770BC",
+        "size":  68
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-03-network.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-03-network.ps1",
+        "sha256":  "CCD89B645CF08373B6D71697D6D3503DCE5E50CD5DE7BE6BA05BF5397B99979E",
+        "size":  351
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-04-offline-prerequisite-install.done.json",
+        "sha256":  "191E70B21C56F4983A871FF6C9051392AECDB65F7C8459EEADA6A5B0EE64FBDD",
+        "size":  68
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-04-offline-prerequisite-install.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-04-offline-prerequisite-install.ps1",
+        "sha256":  "0AA78EA1CE3688A5ABC209D6B96EB3FDD1D781AC4EDF8FA24A71D748423FF3A7",
+        "size":  3708
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-05-browser-metadata.done.json",
+        "sha256":  "9F7922FD89CA99CC997D8538A7FED6EC6B00FD7ADECA98063BABEA38409AC855",
+        "size":  68
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-05-browser-metadata.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-05-browser-metadata.ps1",
+        "sha256":  "8AB72B3C40410A62A441F3E6ECB8CBCF039C4AB19A469BD66A0A4184C23B9211",
+        "size":  907
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-06-browser-cdp.done.json",
+        "sha256":  "C945A990F6B02ED2DE231F5B257680896AE144B6C1342129EB9EAD4F91945489",
+        "size":  68
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-06-browser-cdp.log",
+        "sha256":  "6A6AE6273C004FAD24101BE5E1169BF9EF312A97B456AF569589BD39B381BA48",
+        "size":  80
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-06-browser-cdp.ps1",
+        "sha256":  "D0224089F7A372F7BC7E06B3D78E36BC67823DD48FC2E0F93B30D6C5DA3AB092",
+        "size":  2884
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-07-lifecycle.done.json",
+        "sha256":  "1B8EA2517EDC6FF341E4067D3D31337949D49AB41E341C34A17CEF38DE421AE4",
+        "size":  68
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-07-lifecycle.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-07-lifecycle.ps1",
+        "sha256":  "B0CA06B579795EFD47845B2D2421C3D01DEC67C2671C1B49BD2B33083C08CA53",
+        "size":  1761
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-08-final-postconditions.done.json",
+        "sha256":  "29526DE1E434E6E4DCDB25D3DA7DF6794E4B9718DD62B9C10D524E86470D3653",
+        "size":  68
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-08-final-postconditions.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-08-final-postconditions.ps1",
+        "sha256":  "0F1018148F4DD73BCFF79216361B95EEDFD8102F00F8B78C67C71E106241FF6F",
+        "size":  1324
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-09-finish-helper.log",
+        "sha256":  "B24ED317B199B90EAE11A3803CC4A937B173C68D946A7E2178E966C7497DC272",
+        "size":  142
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/command-09-finish-helper.ps1",
+        "sha256":  "E79D4269D524D1C1FE73D8712EF30C16A24E3D5286886726EED421DA1D4CE344",
+        "size":  674
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/crt-after.json",
+        "sha256":  "D6402D2186299CA9FA3CE5D25C433F3DCF5E9D48251C280B4991059D32CE1CDF",
+        "size":  537
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/crt-download-signature.json",
+        "sha256":  "AEA8C969BF1E07B3BB60B987E1C191B8CAEEE7F9C2BF4DB9A42E7E70D5CFE3B6",
+        "size":  479
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/crt-install.log",
+        "sha256":  "3C49240314A950E01D2CFD587D21E6A9B547F031A7B0959A321F60345FCDC579",
+        "size":  10322
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/crt-install_000_vcRuntimeMinimum_x64.log",
+        "sha256":  "CEBB5657A53B64D15B73010CEAAF3C7507FDFA7AA1A038903A7B76D70EF67263",
+        "size":  130312
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/crt-install_001_vcRuntimeAdditional_x64.log",
+        "sha256":  "5963C1E18B58FD7020B30A6A753DB4DA361AB4DA837C0BFE7E9E1D164B341F77",
+        "size":  134504
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/crt-install-result.json",
+        "sha256":  "4A908530EC561E09C7366BFC37CBF6DFAD09E9CB5372FB4E33FF99D2E0D915C7",
+        "size":  210
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/final-postconditions-compact.json",
+        "sha256":  "E6587AD7C1E30FA85FE2117E31133BE775A56EDB3CA012C1CF75D429DC129833",
+        "size":  1064
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/guest-inventory.json",
+        "sha256":  "594DF6FCA9B6011E2A248426B0404E86C97C2FEAC6CF0B07D9B0C3686E1F2EEE",
+        "size":  5922
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/guest-network.json",
+        "sha256":  "53F6DAD6AB67D190F8B0F79B460BB09AB45FFE942B80BED006A47F335DB3E77C",
+        "size":  22502
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/guest-transcript.txt",
+        "sha256":  "E61B3CA5A3050ABF8D332AB85983D9BB3AF5AD5DE395E0130C42408BAB364AD3",
+        "size":  1885
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/harness-final-stage.json",
+        "sha256":  "EFA6CEEBE013AEAEC544E5C4A77CFF333D89FAEF9DA43837640F9B5866B95657",
+        "size":  486
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/installed-shortcut.json",
+        "sha256":  "E92090221AF03B85E6DA04A3FFC188CFAE19FAC3BEF610CCCDC13AA0681B41BA",
+        "size":  478
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle.stderr",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle.stdout",
+        "sha256":  "C18BA0A449E77A51EC8C1AD2DC5D271CB4ABADBD583E8CE612B5E42ED06D759D",
+        "size":  5021
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/backup.zip",
+        "sha256":  "A4CD335CC6C16CDA0EB1002B718D24DD8816E4B0D32383BFF14B55FF2C4E9E15",
+        "size":  5943
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/recovered.lock",
+        "sha256":  "5FECEB66FFC86F38D952786C6D696C79C2DBC239DD4E91B46729D73A27FB57E9",
+        "size":  1
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/results.json",
+        "sha256":  "90BE3AA37FE6D6A90BB892D6264B56ECFF46632EB4F04D1857AFA914468A5372",
+        "size":  6835
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/supervisor-1793116630733803300.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/supervisor-1793116638025628200.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/supervisor-1793116658372325400.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/supervisor-1793116697399093200.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle/update.log",
+        "sha256":  "3646198902AA40EFFEB698D692D9EF50F613CDC2D1A950800115E842027EB0B9",
+        "size":  2854843
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/lifecycle-driver-result.json",
+        "sha256":  "5D7EC5EF72DD703BB54FB806B7C7D36072A12F4670B482D39AE712BB6FF74332",
+        "size":  434
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/prerequisite-exit.json",
+        "sha256":  "A15CC37EDDFAE44E5B2368A59AB66C46A132605BAEB2D10DA17D61103B0B4F37",
+        "size":  67
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/prerequisite-installer.log",
+        "sha256":  "043765C8765C5F3512AF9A6A84B2FDC77081B8726FCD0898BD0AD582AB51B063",
+        "size":  1842
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/production-install.log",
+        "sha256":  "853466DEF05FE195FC858E371D7BACD13941B1B79A1323EF3147E5134FC5D460",
+        "size":  2137625
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/production-install-result.json",
+        "sha256":  "F9BCEF42E901E834E666D9366E109C9E6FCE9E4D5946BB0AFF67441F8C05105F",
+        "size":  265
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/shortcut-browser-process-evidence.json",
+        "sha256":  "327141FE5EFDF80CD9049E33722807807CEF5B8EF8809B8B30BE8A5408EF5582",
+        "size":  8570
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/shortcut-stage.json",
+        "sha256":  "370E8E5122E190CBE5778CFB9DA20AEB3A0F62B021AB1D10D0856A7B74355CA3",
+        "size":  340
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/shortcut-stop.stderr",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/shortcut-stop.stdout",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/shortcut-stop-result.json",
+        "sha256":  "50427C467731E051924E20DB6796574FDDA33EF2D3A9277ED9E2F9D7CA5D713A",
+        "size":  157
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/stage.json",
+        "sha256":  "616B11E83DA4D9FCADCE64E8212495464CC1E612015F29C987825D6325B75D89",
+        "size":  463
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/wsl-status.json",
+        "sha256":  "9128CAA7A7444C1EEE54817201DBAF87B9F8C543CC250BCEE8162BF70BDDEB75",
+        "size":  211
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/wsl-stderr.bin",
+        "sha256":  "B05F4D48CCB5CF47CB416E44C98F339582DB61FF2549E93D883E3C6C3BAAA457",
+        "size":  324
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/output/wsl-stdout.bin",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/user-observation.txt",
+        "sha256":  "B955FE0B3F8B369FCDB79555CAFB576D8BB53B629BD93F9A19D56C9BA96E9D60",
+        "size":  759
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/build-manifest.json",
+        "sha256":  "E4EAB943615414831922AC5F486A4374773B1FB858A5497D64D9235B443F1DFF",
+        "size":  7028
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/compile-revision2.log",
+        "sha256":  "307C702528CAD72E62D2C1EED9CFBE57DFE1C2009F53A9E2366EA12DE754B8B8",
+        "size":  1729368
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/EDR-ProgramData-build-20261028-1040.log",
+        "sha256":  "8C907A330D94F7509D0E032676F9A3A4A4D87492CBA99B2C8C1EC7EFCA2D9D71",
+        "size":  1747140
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/final-source-hashes.json",
+        "sha256":  "3959773CDB15C168A3A57902CD7EF78765F7BD98CC24C542D8D2FA4C2246C6A3",
+        "size":  1594
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/hashes.json",
+        "sha256":  "BCC297DE56F0EA136DCF014E80EBF8FE6E02EB74F44447BECCB393510CCD6308",
+        "size":  1031
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/launch.json",
+        "sha256":  "2FF3881B4B164ABE0179FF5B2E134EE18B6335796C659A14B2580301F288746B",
+        "size":  189
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/command-01-unicode.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/command-01-unicode.ps1",
+        "sha256":  "93E90F691B103BE226061E73F23258871C8BF35D51E707D7843D2C05CEFD9D77",
+        "size":  1460
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/crt.log",
+        "sha256":  "C618FA2EC2F469505BBBE00006C2727712FC3507410355E66AF6ADC719725FCF",
+        "size":  7135
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/crt_000_vcRuntimeMinimum_x64.log",
+        "sha256":  "0BD71E44EF7DAF9F5A28AB855A2A96C2F57F01961A780B019785BF0D63C85D7D",
+        "size":  130328
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/crt_001_vcRuntimeAdditional_x64.log",
+        "sha256":  "E7B0800924E5B27BCDD348C1ED7E35C6FC8D15FCC465F193BBCB503666CBB1CF",
+        "size":  4242
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/evidence.wsb",
+        "sha256":  "5E216CC3BD073914C542EB3EFD059693BC275D45CFD7E33C3669E631A95A4301",
+        "size":  654
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/file-status-at-stop.json",
+        "sha256":  "6492925BB9F356D7BD85ADB22695586B3DE4657CE9E5A4411206E93EEC755C84",
+        "size":  1107
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/finish",
+        "sha256":  "D6D6FF7CE24061CB6471825A6D79B28C3EF2571C528434102925849DF2C45B43",
+        "size":  59
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/inventory.json",
+        "sha256":  "F5CF009C4A0520E7807496B68E9D3EBBC7650309029C1E1178E14D432181353F",
+        "size":  494
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/launch.json",
+        "sha256":  "C562A7135A49CC77E3479AC1978E0765D4704904E882958FCB707194A34970F3",
+        "size":  217
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/summary.json",
+        "sha256":  "59E73BA38E2E77D19BCBC2BF0C869730E05C2A1E6913D240A6FDEC2FA49A844B",
+        "size":  298
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/lifecycle-at-stop/transcript.txt",
+        "sha256":  "A4BB903D05998F0E750734BE7849BEDD9D2139AEF4F9D02929BFA1DFC484F9D8",
+        "size":  730
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/probe.json",
+        "sha256":  "C464876257ACE50C25A4D174B895441F856CEC60000FD105157EC98F47D1F387",
+        "size":  6991
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/probe.ps1",
+        "sha256":  "B3C7E759CBBE75E17A5B8265FDA6D0E7C8F4C47939CF9D03D13A08CA7CE9169A",
+        "size":  2603
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/probe.wsb",
+        "sha256":  "3FBA5021534D2C205AC847F0C5C89B3F791725CC7B4731804568C31E0867F09C",
+        "size":  687
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/report.md",
+        "sha256":  "1EA6DD4FEEE6296D20CF1F89E2F9BBAF57E8A5E34CA1D11C1D1CE9EC20164F10",
+        "size":  22845
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/artifact-hashes.json",
+        "sha256":  "58E0F28ED44C3674900EADB3E81D72C05C0DA3B1BE6EBB7FD56A10BAA2647D29",
+        "size":  2468
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/c2.wsb",
+        "sha256":  "8A49B986D9C149B4FC5C8C38CAE74A658D269C9687596E2A0D3D5972EA32595E",
+        "size":  638
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/compile.log",
+        "sha256":  "E5066080D8D692E8A2A3EB5BDC9D3E0CF38585CD1887BC386DE577CD024F27C7",
+        "size":  350
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/compile-final.log",
+        "sha256":  "761AF4A8859BA5ED3D1CDB8F06576F9A042CD743993C9745FF4E3C76D677AEA7",
+        "size":  351
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/compile-final-output.log",
+        "sha256":  "4011801EA123E6E1CD144B600948F3561A1C75F845022F6C88FDC555587A0DAA",
+        "size":  864644
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/compile-output.log",
+        "sha256":  "FABCF0ABCFCE22A3302A68C61EBC557CDB3ACF98D5C011AB3748AB6E950740F4",
+        "size":  864648
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/diff-check.log",
+        "sha256":  "B0838A05B09241EC230299B538154724B9461CC5E345C41E1FCE3CE5FA43E862",
+        "size":  87
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/diff-check-output.log",
+        "sha256":  "B65CC39C4B5DF0D63CCCDB354A64CA3313EE5FEA8BD61B0E34E656B4F981C9A7",
+        "size":  658
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/final-scoped.diff",
+        "sha256":  "B1221AE8C4ABCAA4C863868C765175325BBAE48C4E7616F050062BD688850E96",
+        "size":  60764
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/final-source-hashes.json",
+        "sha256":  "D407400C2F76155F9C62628826928AAF33B3A1045AF78924B8540B287B106BA0",
+        "size":  808
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/focused.log",
+        "sha256":  "267374640231D4BE89221024B649ABB472056F4C43E7DFDBCD959ED9948D58E9",
+        "size":  1463
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/focused.log.raw",
+        "sha256":  "267374640231D4BE89221024B649ABB472056F4C43E7DFDBCD959ED9948D58E9",
+        "size":  1463
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/focused.log.readable.txt",
+        "sha256":  "F6DF3A76B979B3E8D1D855C225C2A85CDF2B46D0F5FFB571F7E03B607681B201",
+        "size":  849
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/focused-final.log",
+        "sha256":  "6E8921E00AB9B016CD5AA422710EE71BAF346DA3D65F5AE372BCF817E82D1285",
+        "size":  216
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/focused-final-output.log",
+        "sha256":  "0281D3519BF6ADC5D64F60A91C89CE2F49F2F8C866CF42ED59162FC9233C574F",
+        "size":  628
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/guest.ps1",
+        "sha256":  "53E542216B9E2E695D1A6BF7D99F2876F38EA8A5B883A445EC5C764FBDB09C99",
+        "size":  1659
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/guest-cancelled.ps1",
+        "sha256":  "61F3E0F29FED2ECC03F85A59628FDB9B4E8C870E8CF1C63731BE204059E63A29",
+        "size":  1835
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/guest-launched.ps1",
+        "sha256":  "083E2487510AEABE52B922F0EBF4A22A27650C8FED23EF320B1B7AD4ABCDB58E",
+        "size":  1661
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/installer.json",
+        "sha256":  "3B682920FDC2E263EED840C6FEB4B87ECA6ADDB7B09AFA656533BAD392B899D3",
+        "size":  210
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/native.log",
+        "sha256":  "BABE1C10C49B30F293F7DFE6631CFDC94A7FB2B8A2199A87A5C171D8A7B3F150",
+        "size":  729
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/native.log.raw",
+        "sha256":  "BABE1C10C49B30F293F7DFE6631CFDC94A7FB2B8A2199A87A5C171D8A7B3F150",
+        "size":  729
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/native.log.readable.txt",
+        "sha256":  "030A664C86C1C227C25CDAB4F6C77A324490F954F1358EA9934E4F55A63AEEF6",
+        "size":  442
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/native_check.py",
+        "sha256":  "E3193CE46948F0341650495B639BCE567A889E7CE8C5FB16E12A7E9C4BA3A434",
+        "size":  2086
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/parser.log",
+        "sha256":  "0AC714261D18F0E5B4A7C0B43E9ECF4119653853110B1CCA27A015D6795C893E",
+        "size":  168
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/parser-final.log",
+        "sha256":  "F753B05B0FF1F25E22DAE690CB5B09B9EAF6C888BBBFDB904A4D54171EA821C3",
+        "size":  246
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/report.md",
+        "sha256":  "C5F9135943DD77255DD93C8DAE82D6C1AD377382CB36727AFA08A065330A7F8D",
+        "size":  7848
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/sandbox-launch.json",
+        "sha256":  "6CC9DE7846108B85E09ADB745838B92FCFCAF4FDDECAD777BBF0F4157C41244A",
+        "size":  455
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/sandbox-snapshot.json",
+        "sha256":  "92BB248E075DF5D7CDA3D13B151BD47C70CEFFDD0322023F75553CB0A5D48EC5",
+        "size":  329
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/acceptance.log",
+        "sha256":  "3CDF48286C2BFA7E1438F96254102D296D09F09CD0A096A5F986C0F289995419",
+        "size":  1092
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/completed.txt",
+        "sha256":  "FF282CD5CA11FE7132F65A0705C12B4CFA0974C0990E9F69BFC1D1CDDA4BC092",
+        "size":  200
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/fresh.ps1",
+        "sha256":  "BB39980FA2557426324E1AD5C5613723EE326DEB3876DA2C99C0ABF6CDCB461E",
+        "size":  10338
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/fresh-result.json",
+        "sha256":  "06C857B659E0591AB206B5E5C0EFBAB0E45AB6D1FF72D4A8B547D386F3B52900",
+        "size":  119
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/fresh-state-sddl.txt",
+        "sha256":  "AC364CB48783A03C527E4AE248C219AC9FD321DFA75835579A4AB3063738EC8F",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/fresh-stderr.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/fresh-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/install.log",
+        "sha256":  "D69E31EBD5D505A5C838B332EBDDC19C9B045B630AA6D0A7117E2616F7B903F2",
+        "size":  2356570
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/install-update.log",
+        "sha256":  "E743EAD09F2CB49EECF6EDE6621B2752EB998A2B794485B86C8EEAF8421218A9",
+        "size":  3045888
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/native-manifest.json",
+        "sha256":  "909C1FE6C239477D647EF0917F2573D236C49D750F8A16AC8991C5DB01493BB7",
+        "size":  30702
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-runtime.ps1",
+        "sha256":  "453F8A07DBFD4FA3CC8138AFE26F90E4B65CB4E1BB0FC099A23EF2D31917BF08",
+        "size":  10513
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-runtime-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-runtime-result.json",
+        "sha256":  "F76CBC17D88F9C878D90EF8436DA16A8B7CC56EA9CD07EDF0E2EC2D475A381F4",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-runtime-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-runtime-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-state.ps1",
+        "sha256":  "0EF7923ADA6B2DB01E4DB163C4DE49BEF5B7FE0AEB3F6A9AAA9844EE7E5CEE87",
+        "size":  10566
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-state-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-state-result.json",
+        "sha256":  "19E3A6AEF761533FA59465C31D3998D220C65CF363F291B0164C0423B05DE738",
+        "size":  128
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-state-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/nonempty-state-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/old-owner.ps1",
+        "sha256":  "B31B11F01D14C606CEFCC15EBD35EB6F7CC891B7E861E4369BC95D795E99FDA1",
+        "size":  10376
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/old-owner-error.txt",
+        "sha256":  "C19430FDA582416373714D1B57042CEDD6C92D513F410656577DC7FB2691042A",
+        "size":  139
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/old-owner-result.json",
+        "sha256":  "C87E09FC6EAF5627BF28B188A85BF72C09AE09F47F6CDD7742C8D67018A062E6",
+        "size":  123
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/old-owner-stderr.txt",
+        "sha256":  "F3B028F8B63600E1868EB53A64137161D36BFC4933D067D7AE6CCA0F07892414",
+        "size":  141
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/old-owner-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/programdata-acls-before.json",
+        "sha256":  "6AA4111671CA98E6F19D292E5F6479BE081B61978BDCBD6A659C779D2F744A57",
+        "size":  1252
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/programdata-control-sddl.txt",
+        "sha256":  "4EC4B5535B825056B72FCEA1A499C96961E93A4F858891C077C00FF0BB225147",
+        "size":  152
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/programdata-root-sddl.txt",
+        "sha256":  "4EC4B5535B825056B72FCEA1A499C96961E93A4F858891C077C00FF0BB225147",
+        "size":  152
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/programdata-runtime-sddl.txt",
+        "sha256":  "4EC4B5535B825056B72FCEA1A499C96961E93A4F858891C077C00FF0BB225147",
+        "size":  152
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/programdata-state-acl.json",
+        "sha256":  "BA8B43C2BD8F8B6BDFAACE3682B1FC52B6758E1DCF12EBF5E60197685611BD60",
+        "size":  921
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/programdata-state-sddl.txt",
+        "sha256":  "AC364CB48783A03C527E4AE248C219AC9FD321DFA75835579A4AB3063738EC8F",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/programdata-state-sddl-after.txt",
+        "sha256":  "AC364CB48783A03C527E4AE248C219AC9FD321DFA75835579A4AB3063738EC8F",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/runtime-only.ps1",
+        "sha256":  "B812DB2CC171712797872AEF05C4CBD9A4CB5BB365F279D53CCE66EA4CA47D90",
+        "size":  10429
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/runtime-only-result.json",
+        "sha256":  "58456B2B68FAB1B2432712F5EF5633B0CDBA2D98293C393DB773ECB874394D57",
+        "size":  126
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/runtime-only-state-sddl.txt",
+        "sha256":  "AC364CB48783A03C527E4AE248C219AC9FD321DFA75835579A4AB3063738EC8F",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/runtime-only-stderr.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/runtime-only-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/standard-user-list-stderr.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/standard-user-list-stdout.txt",
+        "sha256":  "31D116175767EB6026CDEF783D36DC9DF3CF8FFB0F5FB398C716824D37FF55F6",
+        "size":  36
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/standard-user-read-stderr.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/standard-user-read-stdout.txt",
+        "sha256":  "31D116175767EB6026CDEF783D36DC9DF3CF8FFB0F5FB398C716824D37FF55F6",
+        "size":  36
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/standard-user-result.json",
+        "sha256":  "63D450BF76071748A30633081D95D35BF88843CD71C1EF01E34EB5338820E129",
+        "size":  321
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/unexpected.ps1",
+        "sha256":  "14DFBC6AC68F9E80128F3FE06B54D3C4C126C4C08083AEF89FFE7AB812CF2A8D",
+        "size":  10505
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/unexpected-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/unexpected-result.json",
+        "sha256":  "C99AC74A1F6537434C3C496A8493E96F54B724168C1E55F0BF89BA0D8508228D",
+        "size":  124
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/unexpected-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/unexpected-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/waiver-result.json",
+        "sha256":  "B21AE65079EE8B5EF50F1656D600F70AE53F8DE775C3B2B9BC68FC5143CDA16D",
+        "size":  11707
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/wrong-acl.ps1",
+        "sha256":  "B28A0C384DF5F2F3FDF132D18621F53FF70722D89877D62C3E267A06CFE6BB4D",
+        "size":  10506
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/wrong-acl-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/wrong-acl-result.json",
+        "sha256":  "4425A216C2B8120B4F9F02325C0E7E9EA8F1BC3745C426F50FB8235BDE62BF30",
+        "size":  123
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/wrong-acl-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/wrong-acl-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/build.log",
+        "sha256":  "3EF2F37F012136FB226CC085B4D498DE2930C8D7110796FC724F12347E8FB112",
+        "size":  1522322
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/diff-check.log",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/focused-tests.log",
+        "sha256":  "4C31532638C841CEE0ADFEDC6BC6EABE8362F24B349C2158A64E322F29EB5031",
+        "size":  1252
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/full-acceptance-defect-2026-11-03/fix.md",
+        "sha256":  "941A64C891626341B214521CF672F40AD8C59615689CA2DC0A276EB6222F5A80",
+        "size":  5978
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/full-acceptance-defect-2026-11-03/report.md",
+        "sha256":  "17F475D503BE27C7161C7775A71EFDF2A6104863980F8A29DB4215297A28D39B",
+        "size":  3627
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/full-acceptance-defect-2026-11-03/vm-installer-cleanup-diagnosis.md",
+        "sha256":  "FA917EF94431BC7266E89BC56D7D616277CF2F864E217F9278997C3FCFC7F00F",
+        "size":  14287
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/full-acceptance-defect-2026-11-03/vm-thumb72.png",
+        "sha256":  "7B91BD7D5C53DDFB18F391B0A1DC8669C358167DD00CEABA908B996B3F984F43",
+        "size":  184868
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/full-acceptance-defect-2026-11-03/vm-thumb73.png",
+        "sha256":  "F27E0D6D8F582630684A01478693EF16EBA1BF06BA4FD10E64812DBADCDFEE0D",
+        "size":  178832
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/full-acceptance-harness.md",
+        "sha256":  "AF14E5607180834E0B54CEE9AEC49D24F6AFCE173DC260721E09F3C45149E1AC",
+        "size":  7960
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/implementation.md",
+        "sha256":  "7C3FCD681AB93E56193154E29F9D662B64218C1E5B78F86C46D89F18B6308387",
+        "size":  4829
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/implementation-hashes.json",
+        "sha256":  "12BF9CE6F70D5DA87DCCFA83726EE13D84AE5C0E278DC23BF4B4BE85ECACA009",
+        "size":  1411
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-review-diff.txt",
+        "sha256":  "D8549DA9DC2C674D0BC7BBDD3BB6E7781A1D2DF97F5E883FE5340C35340E535A",
+        "size":  113370
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-review-meta.txt",
+        "sha256":  "C5FC41218D14586316963DDC339CF4C9DA58F6DBCC9BBD7E9A8535392BD0097C",
+        "size":  14589
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/acceptance.log",
+        "sha256":  "B87EB41783D023DA24587C0C260A1A11184401E513CF0529B0ABA94475F8BDEF",
+        "size":  1094
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/completed.txt",
+        "sha256":  "CE81B8B2305765C18A5C0346757293B5E54F46803B1DEE7D9CD47E6C4B58859D",
+        "size":  95
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/fresh.ps1",
+        "sha256":  "0311257B36A1BB39B3B71C5CE07F2D70A5A831A50DCFACC9ADEC7E209EDEED9C",
+        "size":  10338
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/fresh-result.json",
+        "sha256":  "E964752F1908A4EB8F5D4A0A9E051518688A733E5A1D25456A79120E94AFE58E",
+        "size":  119
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/fresh-state-sddl.txt",
+        "sha256":  "AC364CB48783A03C527E4AE248C219AC9FD321DFA75835579A4AB3063738EC8F",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/fresh-stderr.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/fresh-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/install.log",
+        "sha256":  "093736BD3F450D9F7BB91346ADBA7DDD789EE5A776F8DAB777780D61EB6B8DC6",
+        "size":  2356570
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/native-manifest.json",
+        "sha256":  "45E03CFDADAF8C36583EC6A3C989C14F0D2AC4BB64F0F820CAF85202FA7432E8",
+        "size":  22374
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-runtime.ps1",
+        "sha256":  "9B1ACFC04350F4EE1C70C673E9494C90682D8DAC924D1175065FCF4BC2BDDEDF",
+        "size":  10513
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-runtime-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-runtime-result.json",
+        "sha256":  "2BAB241CA88BF4414F6A3DF65A43A4CCCE0B587F47C9F4FF4891108A7F733DFA",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-runtime-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-runtime-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-state.ps1",
+        "sha256":  "BC41C40CE608B46D7B336D3F847D9E38C8199021D255C8B608892C3B1B57BB9D",
+        "size":  10566
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-state-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-state-result.json",
+        "sha256":  "EF8B6091157118367C13BA60DD232B8B8939DF1FF98C2F1ADA24F19AB2F1D05B",
+        "size":  128
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-state-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/nonempty-state-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/old-owner.ps1",
+        "sha256":  "E650D153D953D5826D85748D453324B8D40BEB1AAB3CFD48922E7915B44A6FAE",
+        "size":  10376
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/old-owner-error.txt",
+        "sha256":  "C19430FDA582416373714D1B57042CEDD6C92D513F410656577DC7FB2691042A",
+        "size":  139
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/old-owner-result.json",
+        "sha256":  "B2C26DEC10D455E27FFEDF768B24D102A0A49C0C7E2BD7F7856073CBE3642048",
+        "size":  123
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/old-owner-stderr.txt",
+        "sha256":  "F3B028F8B63600E1868EB53A64137161D36BFC4933D067D7AE6CCA0F07892414",
+        "size":  141
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/old-owner-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/runtime-only.ps1",
+        "sha256":  "CD723EE15C465E7310A75034B405F9CE91DD3B2B9007BD670B345EF06A859A17",
+        "size":  10429
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/runtime-only-result.json",
+        "sha256":  "06A59AFC551FB09C5F5231E70A271E823D4CC05C50826BB898513201F0813C31",
+        "size":  126
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/runtime-only-state-sddl.txt",
+        "sha256":  "AC364CB48783A03C527E4AE248C219AC9FD321DFA75835579A4AB3063738EC8F",
+        "size":  130
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/runtime-only-stderr.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/runtime-only-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/unexpected.ps1",
+        "sha256":  "E779432D4C14719B9C97BC32C377F428BCDFBE8226C530EF1F3D04D6C2DBAD9F",
+        "size":  10505
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/unexpected-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/unexpected-result.json",
+        "sha256":  "A1BA43278907FC87EADFF18FF8ED29B40EB84F864D2D2E126F36285B9E05F74D",
+        "size":  124
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/unexpected-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/unexpected-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/wrong-acl.ps1",
+        "sha256":  "725F977066C1AEB9A041CE00881A5D262F7827C1905257601E33F724EAE79FE2",
+        "size":  10506
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/wrong-acl-error.txt",
+        "sha256":  "F352F69D389C13834F6A8AFC91E4D9BC93BCB76A90851DEC38516438FF129DF2",
+        "size":  136
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/wrong-acl-result.json",
+        "sha256":  "C68DAC1822A9D0E887666011B0F9B6CCF4954EE074AAF0761845DAFFB4DA8C7E",
+        "size":  123
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/wrong-acl-stderr.txt",
+        "sha256":  "698C67D90EA162DFBC41E7BEFC5ABF7B4BECB83CBD792FF3C1B891867A9072C3",
+        "size":  138
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/wrong-acl-stdout.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/parser.log",
+        "sha256":  "D72D039C4665E48FD5E5D0100649F0CF68AA15C5D03DE8570CCFD3C78C0C857B",
+        "size":  115
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/report.md",
+        "sha256":  "5EF596D1C8E26FC69D93A2DC9C76E802A061E10E482783730BB5476C141902C2",
+        "size":  11926
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/audit/security-4663-4660-2h.csv",
+        "sha256":  "FDFC6BE61DB472A761763B6B17C79AB11F11FFA10ABA4A87323A5DFA7034EE57",
+        "size":  166
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/defender/computer-status.json",
+        "sha256":  "3A8586B63CFBD5BDAD7855701F2300B5D99B89B977F8D11A4B978487881A5B75",
+        "size":  395
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/defender/preferences.json",
+        "sha256":  "A0A8DEB5A0DBF6A2FC46DC40279014CCA5DA3DD25D206EA9DE83DFF8FFD550A9",
+        "size":  1653
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/defender/services.json",
+        "sha256":  "AB921A52D41E11EF419FD4F6E8522A486E80B77FB11511EFF39F99CD3A6C747F",
+        "size":  391
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/defender/threat-detections.json",
+        "sha256":  "84B1C14E68260082E3E79EDFF0A78F4EBF1942CFD6C593246044EC2149CBB87D",
+        "size":  11
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/defender/threats.json",
+        "sha256":  "84B1C14E68260082E3E79EDFF0A78F4EBF1942CFD6C593246044EC2149CBB87D",
+        "size":  11
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/events/application-2h.csv",
+        "sha256":  "CD5954B79778D52CC777332A8132604F8DC60FFE142AF7BCA1D1AC3ABB8A3E64",
+        "size":  12037
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/events/defender-operational-24h.csv",
+        "sha256":  "15B54ADC114AAFE3C8AE4CC6C173899CAF574AF8BDC60134B6DFEEB5DF64FFFC",
+        "size":  23215
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/events/system-2h.csv",
+        "sha256":  "BA66E4A03FC31C9AC7B3546D31B998EFB11D63B3801B73DF26F7B87552A93B01",
+        "size":  4201
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Program_Files_x86-edr-recursive.csv",
+        "sha256":  "C25B3CA5823E4626A1A0C2CC25B94DF94354E7C5A29B376962473F39E141FEF6",
+        "size":  26
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Program_Files_x86-top-level.csv",
+        "sha256":  "D752723B1F528C3B7B16BDFC6B9E3851FE97F2504C074567F5A2FCE16881645D",
+        "size":  2221
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Program_Files-edr-recursive.csv",
+        "sha256":  "C25B3CA5823E4626A1A0C2CC25B94DF94354E7C5A29B376962473F39E141FEF6",
+        "size":  26
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Program_Files-top-level.csv",
+        "sha256":  "D1C7B027CB5D924A2DC31CD871C8A2BACFF4F2CA0DA01B83265934AFAA1590E7",
+        "size":  2587
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_ProgramData-edr-recursive.csv",
+        "sha256":  "FDC6DC087FABF7EA45DC962BD2BB4AF865659492BC6C5B675E1ED214F4806D5F",
+        "size":  765732
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_ProgramData-top-level.csv",
+        "sha256":  "2B939EB6427FA1B6AD7FA0483AEE95CF64F05C553B8A6B2C13F5C74851A0C36A",
+        "size":  7403
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Users_EDRUser_Downloads-edr-recursive.csv",
+        "sha256":  "0ED4A9B48CF879D96F063D0965B999EE4D4BDC2626862D59F3AA111BEF4D2E2B",
+        "size":  4321
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Users_EDRUser_Downloads-top-level.csv",
+        "sha256":  "BC45723CE049F3545D42BFC1ECEC0408B0ACF00CF86CCEA8DF8F84ABE07340E6",
+        "size":  1911
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Users_Public-edr-recursive.csv",
+        "sha256":  "60D60AB31CCAFFF5D0216CDCC9A651C09E97D80FE52BE66F1A27BA65B9298B16",
+        "size":  1860030
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/filesystem/C_Users_Public-top-level.csv",
+        "sha256":  "AB52281BD208057F89D9DD315FA4B5769B818A732F52B236566B0520750103F8",
+        "size":  2213
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/identity.json",
+        "sha256":  "897DB84DC9A6B4AD2CAF22B3CA0BBB55C2EB85264B5158702401E0EA8E27ACA5",
+        "size":  660
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/001-C_Users_Public_EDR_A2_271e418c60654a3f893922560f22d2eb_install_log",
+        "sha256":  "093736BD3F450D9F7BB91346ADBA7DDD789EE5A776F8DAB777780D61EB6B8DC6",
+        "size":  2356570
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/002-C_Users_Public_EDR_A2_29717f64da36466f80b8393da042e44c_install_update_log",
+        "sha256":  "E743EAD09F2CB49EECF6EDE6621B2752EB998A2B794485B86C8EEAF8421218A9",
+        "size":  3045888
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/003-C_Users_Public_EDR_A2_29717f64da36466f80b8393da042e44c_install_log",
+        "sha256":  "D69E31EBD5D505A5C838B332EBDDC19C9B045B630AA6D0A7117E2616F7B903F2",
+        "size":  2356570
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/004-C_Users_EDRUser_Downloads_EDR_A2_Acceptance_work_update_installer_update_log",
+        "sha256":  "F9A0BF4B6AEB5681C6F65919D32FFECD270A236AB26FE0B84BEFDECB147C3CE8",
+        "size":  3062643
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/005-C_Users_vmadmin_AppData_Local_Temp_Setup_Log_2026_10_29_001_txt",
+        "sha256":  "3D5873364E61B4DE1DFAA1E39D15AFEECBA4494389D17BEEF20C0B81870DBD42",
+        "size":  1945
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/006-C_Users_vmadmin_AppData_Local_Temp_Setup_Log_2026_10_29_002_txt",
+        "sha256":  "D926CA3FDC545DF2430E6C7C9C9AB35B75D77E189B644054DBD055AA3AD6FF6E",
+        "size":  1926
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/007-C_Users_vmadmin_AppData_Local_Temp_Setup_Log_2026_10_29_003_txt",
+        "sha256":  "FD297974E8FCE7A2082A951B5B091B20A43C8DA43E71369EF0766D71FFB2AD1F",
+        "size":  1853
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/copied-manifest.json",
+        "sha256":  "71C7AFA4E03ED80D4A78BE93BC092111D00079E741E8DADB971418C85B03D72F",
+        "size":  2287
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/logs/extracted-lines.txt",
+        "sha256":  "1BD2DCDF7A02A2E165EC2E11C66E14AFFFDED203256332E1B91E4A2F92F8B41D",
+        "size":  2144448
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/markers/marker-20261104093552.txt",
+        "sha256":  "323984C93C30BACAED1B502CF6D347893EDACD941FB89598BC72EDA65AB7CC0A",
+        "size":  38
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/markers/marker-observations.csv",
+        "sha256":  "E8D0219607D7F627C471AC8D5F5CFC3A98E83E1EEE2B1D797B7DDBFC64E38C95",
+        "size":  551
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/markers/marker-observations.json",
+        "sha256":  "982E69BCF6894345E153947981CE439DC0A8B7FA123E0051598BC714DE2B066D",
+        "size":  1347
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/processes/matching-processes.csv",
+        "sha256":  "D4762C27C364B46B7B9FC88FADD66A77B21F1E8640F68C93AEBB1FF8CAF0F64E",
+        "size":  17035
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/processes/matching-processes.json",
+        "sha256":  "8BDDC02B1A2C8025DFD0CB393E2842842A28B93835F5694C41218C6323073B15",
+        "size":  21055
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/processes/matching-services.json",
+        "sha256":  "852E946BB90EBEA1A1B2E22FFBF329A8E9A228184CDCF84185149152290A2B95",
+        "size":  3336
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/recycle/recycle-bin.csv",
+        "sha256":  "DBF67D006CF5576FAB0C140A2F733364D68161D53B40D7837E00C51473D12365",
+        "size":  409
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/summary.json",
+        "sha256":  "D353FEC83BAC207EB5BD9539E66631F4D742172A55C027579676A2B3FCE87A2D",
+        "size":  1999038
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/summary.txt",
+        "sha256":  "8F499F923E4FA8046473E524FE1B12EC4AB296E2458072F9B4F5BEB7BB8C7E39",
+        "size":  5758
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/temp-admin.json",
+        "sha256":  "D32DE0FE47FD8DBC4053A96F5AB738C0B2CCA7D784029FADED6F6E28B4EA29DC",
+        "size":  371
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/usn/usn-deletion-candidates.csv",
+        "sha256":  "C88A68B97EA7545F0BC1FD181FD1C1378DC5D843E4EAA4BBDE76EEECB8729021",
+        "size":  27506
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/usn/usn-queryjournal.err.txt",
+        "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "size":  0
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/usn/usn-queryjournal.txt",
+        "sha256":  "4529408CE4155538919430E661246951A8F1E2E4EB56CE845A279CBE115FE938",
+        "size":  460
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/usn/usn-summary.json",
+        "sha256":  "08B075895AAF2F93C222D69687D5806846DA423716B048E44A8682C0BF987FCD",
+        "size":  437
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-interactive-identity-probe.png",
+        "sha256":  "AAF1C5AFDF9B5D84943E4C00CB001E31AB2AE0EEF244493C2A40CCABFDC43AC4",
+        "size":  75148
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-smoke-programdata-state.png",
+        "sha256":  "6E3D5EA6B7EAB10229762570DDBEBB505CFED8979C75CCC94196E3D235C7A173",
+        "size":  98179
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/waiver-harness-update.md",
+        "sha256":  "5905413083C1F568B916B3367E5C8894CD4E2CBB0BCFF1C82A2B0F4018204F99",
+        "size":  31837
+    },
+    {
+        "status":  " M",
+        "path":  "docs/workflow/HISTORY.md",
+        "sha256":  "57742D2428FCC55E74C27802E6E3AAA03414361C3A76DE0BE311A2CEC898FD32",
+        "size":  206449
+    },
+    {
+        "status":  " M",
+        "path":  "docs/workflow/MODEL-ROUTING.md",
+        "sha256":  "8E526F59B21F88E418508629E30B13BF931FEF752983572CF026E6CBE63D635C",
+        "size":  6091
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/NEXT-STAGE.md",
+        "sha256":  "32BEC04F5EAA100A740A6308D3F9DF37F15D97B7DB4D3F33EF52D1F17FD0309F",
+        "size":  10864
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C1.md",
+        "sha256":  "7BE0A446A66384E1463F239FD6289D3BA47C3E3DB28054A1AD917D6006C4B664",
+        "size":  11242
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C2.md",
+        "sha256":  "19534DE39C3AFA4D41B2623207446C863421951E2779C99F1852CD1F092AD9C5",
+        "size":  9064
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C1.md",
+        "sha256":  "D21FBBBBF896E4EC4636BE7C5D96223BD4B841D9F98AA9FC2C831567BC8361B4",
+        "size":  6424
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C2.md",
+        "sha256":  "54944B6ADC1BB796EFAEEBB2FDDD89EC70FF4D96CC106D354E26C4143FD43520",
+        "size":  5386
+    },
+    {
+        "status":  "??",
+        "path":  "docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C3-diagnosis.md",
+        "sha256":  "138ED9C8CAAF2F0B1FBEDFD9A2B0B521139B9E5C1BF2F9A6A0C809E83263127B",
+        "size":  6242
+    },
+    {
+        "status":  " M",
+        "path":  "docs/workflow/STATE.md",
+        "sha256":  "139ED9CE476CB02523D24ACCA76DC0D680F617B0A63AA2D6EDE60D4F29B34D2E",
+        "size":  2810
+    },
+    {
+        "status":  "??",
+        "path":  "opencode.json",
+        "sha256":  "9CC44E8AB3AC25299A74C1982E15830AA82FC5AC957F875CAB0C6D4270D693A5",
+        "size":  3625
+    },
+    {
+        "status":  " M",
+        "path":  "packaging/windows/build.ps1",
+        "sha256":  "5F2C7729C1B0AD61C471A6EB3D753D69928901637D398D5B9EA4970BAB38D593",
+        "size":  5298
+    },
+    {
+        "status":  "??",
+        "path":  "packaging/windows/diagnose-edr-cleanup.ps1",
+        "sha256":  "4AE9A5AC998CFB0A954D441D5807AF3AB1D05FEBED653D87C1E0D372E2CDF42F",
+        "size":  43851
+    },
+    {
+        "status":  " M",
+        "path":  "packaging/windows/edr.iss",
+        "sha256":  "C912AE4A8614C3B6516DACD094A8356B555B889BBF4A464C931DF14073A8AD7C",
+        "size":  6771
+    },
+    {
+        "status":  "??",
+        "path":  "packaging/windows/fetch-vcredist.ps1",
+        "sha256":  "579D272A64FDFAF50474420292E5C3892C976A54F46D2EE77207F8446705B08E",
+        "size":  1533
+    },
+    {
+        "status":  "??",
+        "path":  "packaging/windows/provision.ps1",
+        "sha256":  "57ABDD5D3BFCDB5B289139BAF6BFF7D16BB62AAFAE47F3BED9BCC351E0831F2C",
+        "size":  10300
+    },
+    {
+        "status":  " M",
+        "path":  "packaging/windows/smoke.ps1",
+        "sha256":  "16EABA34D7F94499E47E92CE9F6427D217364D3E1E588619F25C7B1F6E10A170",
+        "size":  3274
+    },
+    {
+        "status":  " M",
+        "path":  "packaging/windows/smoke.py",
+        "sha256":  "F75E2012C1DAEF9B09E2092A8AA27B32ECE55FDACB23A48F8633FE33C9DECCB3",
+        "size":  9483
+    },
+    {
+        "status":  "??",
+        "path":  "packaging/windows/test-crt.ps1",
+        "sha256":  "3026FC80B459464D9F9DDDF9320EBCB0163B62F92260EC15EC7A8610D0E68CA2",
+        "size":  3782
+    },
+    {
+        "status":  "??",
+        "path":  "packaging/windows/test-programdata.ps1",
+        "sha256":  "6B29C97A267C3E6C7B13A028B9E0F15985DBDFBD6247D2D18716D5B8428FB20D",
+        "size":  22892
+    },
+    {
+        "status":  "??",
+        "path":  "packaging/windows/test-programdata-installer.ps1",
+        "sha256":  "036852DC085B7984D686B12156A2FC1A03B84BBE6F052AA346ED2E9BDB0E0BA3",
+        "size":  3281
+    },
+    {
+        "status":  "??",
+        "path":  "packaging/windows/test-programdata-lifecycle.py",
+        "sha256":  "36B0DB71C6D3E266D2DE159B962AE40DC1FD55AB60B2C439C2713E7F1DDE9775",
+        "size":  18058
+    },
+    {
+        "status":  " M",
+        "path":  "ROADMAP.md",
+        "sha256":  "D52C7982F2C88198771A12B2E8A1176EB3AD9F089B507269C81C8545C87DCFA5",
+        "size":  11495
+    },
+    {
+        "status":  " M",
+        "path":  "tests/test_windows_local.py",
+        "sha256":  "6F1A32489FCB7C956AE2337E75678F0F9338A70F11F8D73E9BA05C82BB384999",
+        "size":  15216
+    }
+]

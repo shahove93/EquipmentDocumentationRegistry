@@ -1,0 +1,2335 @@
+﻿diff --git a/AGENTS.md b/AGENTS.md
+index 8a70cdc..5478edc 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -15,12 +15,12 @@
+ ## Roles and permissions
+ 
+ - The user approves requirements, architecture and the overall ROADMAP.
+-- Codex is the active Orca coordinator for this project. It owns the queue,
+-  frozen checklists, evidence and workflow records. Use separate Orca Codex
+-  workers for implementation and independent review as required by risk.
+-- Select a Codex model and effort for each role using
+-  `docs/workflow/MODEL-ROUTING.md`. Use lower-cost models for bounded routine
+-  work and reserve Astra for difficult or high-risk review.
++- OpenCode with DeepSeek coordinates Orca: queue, frozen checklists, evidence
++  and workflow records. It delegates product changes to separate OpenCode
++  workers and acceptance to separate reviewers using the risk route.
++- Codex owns architecture, R2/R3 review and final stage acceptance; it does not
++  coordinate the queue or wait for implementation. Select role models using
++  `docs/workflow/MODEL-ROUTING.md`.
+ - Nemotron and the abandoned TASK-WF-01 coordinator experiment are not part of
+   the project workflow. Do not start or route project work to Nemotron.
+ - A routed PASS is required before advancing a TASK. Worker completion alone
+diff --git a/ROADMAP.md b/ROADMAP.md
+index 0a2e4af..0e8c2dd 100644
+--- a/ROADMAP.md
++++ b/ROADMAP.md
+@@ -1,8 +1,9 @@
+ # ROADMAP тАФ Equipment Documentation Registry
+ 
+-╨Т╨╡╤А╤Б╨╕╤П ╤Б╨╛╨│╨╗╨░╤Б╤Г╨╡╨╝╨╛╨│╨╛ ╨╛╨▒╤К╤С╨╝╨░: 1.3. MVP + Batch ╨╖╨░╨▓╨╡╤А╤И╤С╨╜; ╨┤╨╛╨▒╨░╨▓╨╗╨╡╨╜ ╤Г╤В╨▓╨╡╤А╨╢╨┤╤С╨╜╨╜╤Л╨╣
+-╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝ ╤Н╤В╨░╨┐ ╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╨╝╨╛╨╣ ╨╗╨╛╨║╨░╨╗╤М╨╜╨╛╨╣ ╨┐╨╛╤Б╤В╨░╨▓╨║╨╕ Windows.
+-╨Ю╨▒╤Й╨╡╨╡ ╤Б╨╛╤Б╤В╨╛╤П╨╜╨╕╨╡: ╤Г╤В╨▓╨╡╤А╨╢╨┤╤С╨╜╨╜╤Л╨╡ TASK ╨▓╤Л╨┐╨╛╨╗╨╜╨╡╨╜╤Л ╨╗╨╛╨║╨░╨╗╤М╨╜╨╛; TASK-WINDOWS-LOCAL-01 ╨┐╤А╨╕╨╜╤П╤В ╨┐╨╛ C1 ╨╕ ╨┤╨╛╨┐╨╛╨╗╨╜╨╡╨╜╨╕╤О G01/G02 PASS. ╨Т╨╜╨╡╤И╨╜╤П╤П ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╤П ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╗╨░╤Б╤М.
++╨Т╨╡╤А╤Б╨╕╤П ╤Б╨╛╨│╨╗╨░╤Б╤Г╨╡╨╝╨╛╨│╨╛ ╨╛╨▒╤К╤С╨╝╨░: 1.5. MVP + Batch ╨╕ ╨┐╨╡╤А╨▓╨░╤П Windows-╨┐╨╛╤Б╤В╨░╨▓╨║╨░ ╨┐╤А╨╕╨╜╤П╤В╤Л;
++`TASK-WINDOWS-PROGRAMDATA-01` тАФ PARTIAL/CLOSED ╨▓ ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╤С╨╜╨╜╨╛╨╝ ╨╛╨▒╤К╤С╨╝╨╡, VM-╨┐╤А╨╛╨│╨╛╨╜╤Л
++╨╛╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╤Л, ╨╛╤Б╤В╨░╨▓╤И╨╕╨╡╤Б╤П AC1тАУAC8 ╨┐╨╡╤А╨╡╨╜╨╡╤Б╨╡╨╜╤Л ╨▓ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ lifecycle-TASK. ╨Т╨╜╨╡╤И╨╜╤П╤П
++╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╤П ╨╜╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨░.
+ 
+ ## ╨Я╨╛╤Б╨╗╨╡╨┤╨╛╨▓╨░╤В╨╡╨╗╤М╨╜╨╛╤Б╤В╤М
+ 
+@@ -16,20 +17,37 @@
+ | 6 | TASK-MVP-05 | ╨Ш╨╜╤В╨╡╤А╤Д╨╡╨╣╤Б ╨┐╨░╤А╤В╨╕╨╣ ╨╕ ╤Б╨║╨▓╨╛╨╖╨╜╨╛╨╣ ╤Б╤Ж╨╡╨╜╨░╤А╨╕╨╣ | MVP-04 | `typecheck`/`build`; ╤Б╨╛╨╖╨┤╨░╤В╤М ╨┐╨░╤А╤В╨╕╤О, ╨┐╤А╨╕╨╗╨╛╨╢╨╕╤В╤М ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В, ╨┐╤А╨╕╨▓╤П╨╖╨░╤В╤М, ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М, ╨╛╤В╨║╤А╤Л╤В╤М ╨╕╤Б╤В╨╛╤А╨╕╤О | R1 | PASS A2/C1 Sol medium; A1 FAIL/FAIL preserved |
+ | 7 | TASK-MVP-06 | ╨д╨╕╨╜╨░╨╗╤М╨╜╨░╤П ╨┐╤А╨╕╤С╨╝╨║╨░ ╤Н╤В╨░╨┐╨░ | MVP-05 | ╨Я╨╛╨╗╨╜╤Л╨╣ `pytest`, frontend `typecheck`/`build`, Codex stage acceptance, `FINAL-REPORT` | Stage | PASS / COMPLETE; FINAL-REPORT,2026-10-27 |
+ | 8 | [TASK-WINDOWS-LOCAL-01](docs/tasks/TASK-WINDOWS-LOCAL-01.md) | ╨г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╨╝╤Л╨╣ ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣ ╤А╨╡╨╢╨╕╨╝ Windows x64 ╤Б ╨▒╨░╨╖╨╛╨╣ ╨╕ ╤Д╨░╨╣╨╗╨░╨╝╨╕ ╨╜╨░ ╨╛╨┤╨╜╨╛╨╝ ╨║╨╛╨╝╨┐╤М╤О╤В╨╡╤А╨╡ | MVP-06 | ╨з╨╕╤Б╤В╨░╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░, ╨╖╨░╨┐╤Г╤Б╨║ ╤З╨╡╤А╨╡╨╖ ╤П╤А╨╗╤Л╨║, ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣ ╨┤╨╛╤Б╤В╤Г╨┐, ╤Б╨╛╤Е╤А╨░╨╜╨╜╨╛╤Б╤В╤М, backup/restore, ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡ ╨╕ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╡ ╨▒╨╡╨╖ ╨┐╨╛╤В╨╡╤А╨╕ ╨┤╨░╨╜╨╜╤Л╤Е | R2 | PASS C1 + G01/G02 supplement (2026-10-27); clean Win11, Win10 NOT_RUN |
++| 9 | [TASK-WINDOWS-PROGRAMDATA-01](docs/tasks/TASK-WINDOWS-PROGRAMDATA-01.md) | Unicode-╨┐╤Г╤В╤М ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П ╨╕ PostgreSQL/╨┤╨░╨╜╨╜╤Л╨╡ ╨▓ ╨╖╨░╤Й╨╕╤Й╤С╨╜╨╜╨╛╨╝ ProgramData | WINDOWS-LOCAL-01 | Admin install, Unicode install path, ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╡ ASCII runtime/data paths, ╨▒╨╡╨╖╨╛╨┐╨░╤Б╨╜╤Л╨╣ ╨┐╨╡╤А╨╡╤Е╨╛╨┤ ╨╕ ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╨╡ ╨┤╨░╨╜╨╜╤Л╤Е | R3 | PARTIAL/CLOSED confirmed scope; remaining AC1тАУAC8 in TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01; VM stopped |
++| 10 | [TASK-WINDOWS-CRT-OFFLINE-01](docs/tasks/TASK-WINDOWS-CRT-OFFLINE-01.md) | ╨Т╨║╨╗╤О╤З╤С╨╜╨╜╤Л╨╣ Microsoft Visual C++ prerequisite ╤Б ╨╛╤Д╨╗╨░╨╣╨╜ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╛╨╣ | WINDOWS-LOCAL-01 PASS | Standalone EXE ╨▓╨║╨╗╤О╤З╨░╨╡╤В runtime; VM ╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╨╗╨░ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г 14.51.36247 ╨╛╤Д╨╗╨░╨╣╨╜ | R2 | PASS (R2 `task_d55d6550e738`/`ctx_5a73a16376fb`) |
++
++## ╨Э╨╛╨▓╤Л╨╣ ╨┐╤А╨╛╤Ж╨╡╤Б╤Б ╤В╨╡╤Б╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╤П ╨╕ ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╣ ╤Д╤Г╨╜╨║╤Ж╨╕╨╛╨╜╨░╨╗╤М╨╜╤Л╨╣ TASK (2026-11-04)
++
++- VM `EDR-Win11-Test` ╨▒╨╛╨╗╤М╤И╨╡ ╨╜╨╡ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В╤Б╤П; ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╨╡ evidence ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л.
++- ╨Р╨▓╤В╨╛╨╝╨░╤В╨╕╨╖╨╕╤А╤Г╨╡╨╝╤Л╨╡ Windows-╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨╕ ╤Б╨▒╨╛╤А╨║╨░ EXE тАФ GitHub Actions Windows runners:
++  [TASK-CI-WINDOWS-01](docs/tasks/TASK-CI-WINDOWS-01.md) (PROPOSED).
++- ╨Э╨░╤Б╤В╨╛╤П╤Й╨╕╨╣ interactive UAC/alternate credentials тАФ ╤В╨╛╨╗╤М╨║╨╛ ╤А╤Г╤З╨╜╨╛╨╡ ╤В╨╡╤Б╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡
++  ╨╜╨░ ╤З╨╕╤Б╤В╨╛╨╝ ╨Я╨Ъ ╨┐╨╡╤А╨╡╨┤ ╤А╨╡╨╗╨╕╨╖╨╛╨╝.
++- ╨Ю╤Б╤В╨░╨▓╤И╨╕╨╣╤Б╤П lifecycle тАФ [TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01](docs/tasks/TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01.md)
++  (PROPOSED, ╨╜╨╡ ╨╜╨░╤З╨░╤В; ╨▒╨╡╨╖ ╨╜╨╛╨▓╤Л╤Е Codex reviews ╨▒╨╡╨╖ ╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨╛╤Б╤В╨╕).
++- ╨б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╣ ╤Д╤Г╨╜╨║╤Ж╨╕╨╛╨╜╨░╨╗╤М╨╜╤Л╨╣ TASK тАФ [TASK-EDR-UI-PASSPORTS-01](docs/tasks/TASK-EDR-UI-PASSPORTS-01.md)
++  (PROPOSED): ╨┐╨░╤Б╨┐╨╛╤А╤В╨░/╤Б╨╡╤А╤В╨╕╤Д╨╕╨║╨░╤В╤Л ╨╕ document-upload UX ╨╜╨░ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╡╨╝ API.
+ 
+ ## ╨а╨░╨▒╨╛╤З╨╕╨╣ ╨┐╤А╨╛╤Ж╨╡╤Б╤Б
+ 
+-- Codex ╨║╨╛╨╛╤А╨┤╨╕╨╜╨╕╤А╤Г╨╡╤В Orca Run; ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╡ Codex workers ╤А╨╡╨░╨╗╨╕╨╖╤Г╤О╤В TASK ╨╕
+-  ╨┐╤А╨╛╨▓╨╛╨┤╤П╤В ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡ ╤А╨╡╨▓╤М╤О ╨┐╨╛ ╨║╨╗╨░╤Б╤Б╤Г ╤А╨╕╤Б╨║╨░. ╨Ь╨░╤А╤И╤А╤Г╤В╨╕╨╖╨░╤Ж╨╕╤П ╨╝╨╛╨┤╨╡╨╗╨╡╨╣ ╨╜╨░╤Е╨╛╨┤╨╕╤В╤Б╤П
++- OpenCode ╨║╨╛╨╛╤А╨┤╨╕╨╜╨╕╤А╤Г╨╡╤В Orca Run; ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ OpenCode worker ╤А╨╡╨░╨╗╨╕╨╖╤Г╨╡╤В TASK.
++  ╨Э╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╤Л╨╣ ╤А╨╡╨▓╤М╤О╨╡╤А ╨┐╤А╨╕╨╜╨╕╨╝╨░╨╡╤В TASK ╨┐╨╛ ╨║╨╗╨░╤Б╤Б╤Г ╤А╨╕╤Б╨║╨░; Codex ╨┐╤А╨╛╨╡╨║╤В╨╕╤А╤Г╨╡╤В,
++  ╨┐╤А╨╛╨▓╨╛╨┤╨╕╤В R2/R3 review ╨╕ ╨╕╤В╨╛╨│╨╛╨▓╤Г╤О ╨┐╤А╨╕╤С╨╝╨║╤Г ╤Н╤В╨░╨┐╨░, ╨╜╨╡ ╨▓╨╡╨┤╤С╤В ╨╛╤З╨╡╤А╨╡╨┤╤М ╨╕ ╨╜╨╡ ╨╢╨┤╤С╤В workers.
++  ╨Ь╨░╤А╤И╤А╤Г╤В╨╕╨╖╨░╤Ж╨╕╤П ╨╝╨╛╨┤╨╡╨╗╨╡╨╣ ╨╜╨░╤Е╨╛╨┤╨╕╤В╤Б╤П
+   ╨▓ [docs/workflow/MODEL-ROUTING.md](docs/workflow/MODEL-ROUTING.md).
+ - Nemotron ╨╜╨╡ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В╤Б╤П. ╨Ю╨┐╨╡╤А╨░╤Ж╨╕╨╛╨╜╨╜╤Л╨╣ TASK-WF-01 ╤Б╨╜╤П╤В ╤Б ╨╕╤Б╨┐╨╛╨╗╨╜╨╡╨╜╨╕╤П ╨┐╨╛
+   ╤А╨╡╤И╨╡╨╜╨╕╤О ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П; ╨╛╨╜ ╨╜╨╡ ╤П╨▓╨╗╤П╨╡╤В╤Б╤П ╨┐╤А╨╡╨┤╤И╨╡╤Б╤В╨▓╨╡╨╜╨╜╨╕╨║╨╛╨╝ ╨╕╨╗╨╕ ╨▒╨╗╨╛╨║╨╕╤А╨╛╨▓╤Й╨╕╨║╨╛╨╝
+   ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╤Е MVP. ADR-011 ╨╕ ╨╛╤В╤З╤С╤В╤Л WF-01 ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л ╨║╨░╨║ ╨╕╤Б╤В╨╛╤А╨╕╤П.
+ - ╨б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╣ TASK ╨╖╨░╨┐╤Г╤Б╨║╨░╨╡╤В╤Б╤П ╤В╨╛╨╗╤М╨║╨╛ ╨┐╨╛╤Б╨╗╨╡ routed PASS ╨┐╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╡╨│╨╛. ╨б╤В╨░╤В╤Г╤Б
+   ╨╕╤Б╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤П `worker_done` ╤Б╨░╨╝ ╨┐╨╛ ╤Б╨╡╨▒╨╡ ╨╜╨╡ ╤П╨▓╨╗╤П╨╡╤В╤Б╤П ╨┐╤А╨╕╤С╨╝╨║╨╛╨╣.
+-- ╨Т╨╡╤В╨║╨░ `main`. ╨Ы╨╛╨║╨░╨╗╤М╨╜╤Л╨╡ ╨║╨╛╨╝╨╝╨╕╤В╤Л ╨┐╨╛╤Б╨╗╨╡ PASS ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╤Л. Push, merge ╨╕
+-  deployment ╤В╤А╨╡╨▒╤Г╤О╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛ ╤А╨╡╤И╨╡╨╜╨╕╤П ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П. ╨Ф╨╗╤П ╤В╨╡╨║╤Г╤Й╨╡╨╣ ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╨╕
+-  ╤Н╤В╨░╨┐╨░ ╤А╨░╨╖╤А╨╡╤И╤С╨╜ ╨╛╨▒╤Л╤З╨╜╤Л╨╣ fast-forward push `main` ╨▓ `origin`.
++- ╨Т╨╡╤В╨║╨░ `main`. ╨Ю╨▒╤Й╨░╤П ╨┐╨╛╨╗╨╕╤В╨╕╨║╨░ ╨┤╨╛╨┐╤Г╤Б╨║╨░╨╡╤В ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╡ ╨║╨╛╨╝╨╝╨╕╤В╤Л ╨┐╨╛╤Б╨╗╨╡ routed PASS,
++  ╨╜╨╛ ╨▒╨╛╨╗╨╡╨╡ ╤Г╨╖╨║╨╕╨╣ ╨╖╨░╨┐╤А╨╡╤В ╨░╨║╤В╨╕╨▓╨╜╨╛╨│╨╛ TASK ╨╕╨╝╨╡╨╡╤В ╨┐╤А╨╕╨╛╤А╨╕╤В╨╡╤В. ╨б╨╡╨╣╤З╨░╤Б ╨┤╨╡╨╣╤Б╤В╨▓╤Г╤О╤В
++  no commit/push/merge/release/deployment; ╨┐╤А╨╡╨╢╨╜╨╡╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╨╡ ╨╜╨░ ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╤О
++  ╨╖╨░╨▓╨╡╤А╤И╤С╨╜╨╜╨╛╨│╨╛ ╤Н╤В╨░╨┐╨░ ╨╜╨╡ ╤А╨░╤Б╨┐╤А╨╛╤Б╤В╤А╨░╨╜╤П╨╡╤В╤Б╤П ╨╜╨░ ╨╜╨╛╨▓╤Л╨╡ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П.
+ - Backend/pytest ╨▓╤Л╨┐╨╛╨╗╨╜╤П╤О╤В╤Б╤П ╨▓ WSL Ubuntu ╤Б `.venv/bin/python`; PostgreSQL 18
+   ╨┤╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╤В╤М ╨╛╨╜╨╗╨░╨╣╨╜. Frontend ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В WSL ╨╕ nvm Node.js v24.22.0.
+ - ╨Я╨╛╨╗╨╜╨░╤П ╤Д╨╕╨╜╨░╨╗╤М╨╜╨░╤П ╨┐╤А╨╛╨▓╨╡╤А╨║╨░: `pytest -q`, frontend `typecheck` ╨╕ `build`,
+@@ -50,6 +68,11 @@
+ 
+ ## ╨Ш╤Б╤В╨╛╤А╨╕╤П ╤А╨╡╤И╨╡╨╜╨╕╤П
+ 
++2026-10-29: ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╕╨╖╨╝╨╡╨╜╨╕╨╗ ╤В╨╛╨╗╤М╨║╨╛ CRT prerequisite flow: EDR EXE ╨▓╨║╨╗╤О╤З╨░╨╡╤В
++╨╛╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╤Л╨╣ Visual C++ x64 package ╨╕ ╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В ╨╡╨│╨╛ offline. ╨Т╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П ╨║╨░╨║
++╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ scoped TASK; ╤Н╤В╨╛ ╨╜╨╡ ╨╕╨╖╨╝╨╡╨╜╤П╨╡╤В frozen checklist/╤Б╤З╤С╤В╤З╨╕╨║╨╕ ╨╕ ╨╜╨╡ ╨┤╨░╤С╤В PASS
++╨┤╨╗╤П TASK-WINDOWS-PROGRAMDATA-01.
++
+ ROADMAP v1.1 ╨▓╨║╨╗╤О╤З╨░╨╗ TASK-WF-01 тАФ ╤Н╨║╤Б╨┐╨╡╤А╨╕╨╝╨╡╨╜╤В ╤Б Nemotron-╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А╨╛╨╝. ╨Я╨╛╤Б╨╗╨╡
+ ╨╜╨╡╤Г╨┤╨░╤З╨╜╤Л╤Е ╨╖╨░╨┐╤Г╤Б╨║╨╛╨▓ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╛╤В╨╛╨╖╨▓╨░╨╗ ╤Н╤В╨╛ ╨╜╨░╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╨╡. ╨Я╨╛╨┐╤Л╤В╨║╨╕ ╨╕ ╨╕╤Е
+ BLOCKED/FAIL evidence ╨╜╨╡ ╤Г╨┤╨░╨╗╨╡╨╜╤Л: ╤Б╨╝. [ADR-011](docs/adr/ADR-011-local-nemotron-coordinator.md),
+@@ -60,6 +83,9 @@ BLOCKED/FAIL evidence ╨╜╨╡ ╤Г╨┤╨░╨╗╨╡╨╜╤Л: ╤Б╨╝. [ADR-011](docs/adr/ADR-011-loca
+ ╨в╨╡╨║╤Г╤Й╨╕╨╣ ╤Б╤В╨░╤В╤Г╤Б, ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П ╨╕ evidence: [docs/workflow/STATE.md](docs/workflow/STATE.md),
+ [docs/workflow/APPROVALS.md](docs/workflow/APPROVALS.md), [docs/PROJECT_STATUS.md](docs/PROJECT_STATUS.md).
+ 
++╨Я╨╗╨░╨╜ ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╡╨│╨╛ ╤Н╤В╨░╨┐╨░ ╨┤╨╗╤П ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╤П: [NEXT-STAGE.md](docs/workflow/NEXT-STAGE.md).
++╨Э╨░╤Б╤В╤А╨╛╨╣╨║╨░ ╨┐╤А╨╛╤Ж╨╡╤Б╤Б╨░ 2026-11-04 ╨╜╨╡ ╤Г╤В╨▓╨╡╤А╨╢╨┤╨░╨╡╤В ╤А╨╡╨░╨╗╨╕╨╖╨░╤Ж╨╕╤О ╤Н╤В╨╛╨│╨╛ ╨┐╨╗╨░╨╜╨░.
++
+ 
+ 2026-10-26 C2 final settlement: TASK-MVP-05 FAIL, F-01 MAJOR remains (API-invalid positive CRUD quantities and mutable historical mock responses); F02-F04 closed. Full reviews2/2 exhausted for A1; TASK-MVP-06 not started. Cumulative actual28965861 input, calls8 settled, accounting-only authority unchanged. See docs/workflow/reviews/TASK-MVP-05-C2.md and STATE/HISTORY. Stop without further fixes/review/commit/push.
+ 
+diff --git a/app/windows_local.py b/app/windows_local.py
+index 427c154..db613d1 100644
+--- a/app/windows_local.py
++++ b/app/windows_local.py
+@@ -77,6 +77,8 @@ def exclusive(data: Path):
+ 
+ 
+ def checked_data(path: Path, install: Path = INSTALL) -> Path:
++    from app.windows_layout import no_links
++    no_links(path)
+     data = path.resolve()
+     installation = install.resolve()
+     if data == installation or installation in data.parents or data in installation.parents:
+@@ -86,8 +88,7 @@ def checked_data(path: Path, install: Path = INSTALL) -> Path:
+     return data
+ 
+ 
+-def private_directory(path: Path):
+-    path.mkdir(parents=True, exist_ok=True)
++def current_sid():
+     if os.name == "nt":
+         # Numeric SID works with non-English Windows and Cyrillic user names.
+         import ctypes
+@@ -115,15 +116,42 @@ def private_directory(path: Path):
+             if not advapi.ConvertSidToStringSidW(sid, ctypes.byref(sid_text)):
+                 raise OSError("Cannot convert user SID")
+             try:
+-                subprocess.run(["icacls.exe", str(path), "/inheritance:r", "/grant:r",
+-                                f"*{sid_text.value}:(OI)(CI)F", "*S-1-5-18:(OI)(CI)F"],
+-                               check=True, capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
++                return sid_text.value
+             finally:
+                 kernel.LocalFree(ctypes.cast(sid_text, ctypes.c_void_p))
+         finally:
+             kernel.CloseHandle(token)
+-    else:
++
++
++def private_directory(path: Path):
++    from app.windows_layout import no_links
++    no_links(path)
++    if os.name != "nt":
++        path.mkdir(parents=True, exist_ok=True, mode=0o700)
+         path.chmod(0o700)
++        return
++    import ctypes
++    import ctypes.wintypes as wt
++    # Replace the complete DACL, including explicit broad ACEs; /grant:r alone
++    # would retain existing explicit Users/Everyone grants. Only the intended
++    # account and SYSTEM may access user data, including backup/staging paths.
++    descriptor = ctypes.c_void_p()
++    advapi = ctypes.WinDLL("advapi32", use_last_error=True)
++    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
++    advapi.ConvertStringSecurityDescriptorToSecurityDescriptorW.argtypes = [wt.LPCWSTR, wt.DWORD, ctypes.POINTER(ctypes.c_void_p), ctypes.c_void_p]
++    advapi.SetFileSecurityW.argtypes = [wt.LPCWSTR, wt.DWORD, ctypes.c_void_p]
++    kernel.LocalFree.argtypes = [ctypes.c_void_p]
++    sddl = f"D:P(A;OICI;FA;;;{current_sid()})(A;OICI;FA;;;SY)"
++    if not advapi.ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl, 1, ctypes.byref(descriptor), None):
++        raise OSError("Cannot construct private data ACL")
++    try:
++        # Installed state parent is already private. Restore/migration stages
++        # inherit that protection before any contents are written.
++        path.mkdir(parents=True, exist_ok=True)
++        if not advapi.SetFileSecurityW(str(path), 0x80000004, descriptor):
++            raise OSError("Cannot protect EDR data directory")
++    finally:
++        kernel.LocalFree(descriptor)
+ 
+ 
+ def ensure_port_free(port):
+@@ -134,31 +162,12 @@ def ensure_port_free(port):
+ 
+ 
+ def postgres_path(path: Path) -> str:
+-    """EDB's initdb embeds Windows ANSI paths in bootstrap SQL; use ASCII aliases.
+-
+-    Never change Windows' system locale or move existing data to work around it.
+-    On volumes without 8.3 aliases, fail before invoking PostgreSQL and explain
+-    that an ASCII installation/data path is required.
+-    """
+-    if os.name != "nt":
+-        return str(path)
+-    import ctypes
+-    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+-    kernel.GetShortPathNameW.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint]
+-    kernel.GetShortPathNameW.restype = ctypes.c_uint
+-    existing = path.resolve()
+-    suffix = []
+-    while not existing.exists():
+-        if existing.parent == existing:
+-            raise OSError("PostgreSQL filesystem root is unavailable")
+-        suffix.insert(0, existing.name)
+-        existing = existing.parent
+-    output = ctypes.create_unicode_buffer(32768)
+-    if not kernel.GetShortPathNameW(str(existing), output, len(output)):
+-        raise OSError("Cannot resolve PostgreSQL filesystem path")
+-    result = str(Path(output.value).joinpath(*suffix))
+-    if not result.isascii():
+-        raise ValueError("PostgreSQL requires ASCII installation/data paths or available Windows 8.3 aliases; existing data preserved")
++    """Use actual ASCII paths; no temporary drives or 8.3 aliases."""
++    from app.windows_layout import no_links
++    no_links(path)
++    result = str(path.resolve())
++    if os.name == "nt" and not result.isascii():
++        raise ValueError("PostgreSQL requires ASCII paths; existing data preserved")
+     return result
+ 
+ 
+@@ -166,7 +175,14 @@ class Runtime:
+     def __init__(self, data: Path, install: Path = INSTALL, *, restoring=False):
+         self.data = checked_data(data, install)
+         self.install = install
+-        self.pg = install / "postgresql" / "bin"
++        if os.name == "nt":
++            from app.windows_layout import installed_layout
++            root, _ = installed_layout(install)
++            self.pg = root / "runtime" / "postgresql" / "bin"
++            if root / "state" not in self.data.parents:
++                raise ValueError("Windows data must stay inside protected ProgramData state")
++        else:
++            self.pg = install / "postgresql" / "bin"
+         self.cluster = data / "postgres"
+         self.config = None
+         self.restoring = restoring
+@@ -186,7 +202,7 @@ class Runtime:
+             log.flush()
+             result = subprocess.run([postgres_path(self.pg / (program + ".exe")),
+                                      *(postgres_path(arg) if isinstance(arg, Path) else str(arg) for arg in args)],
+-                                    env=env, stdout=log, stderr=subprocess.STDOUT,
++                                    env=env, cwd=self.data, stdout=log, stderr=subprocess.STDOUT,
+                                     creationflags=0x08000000 if os.name == "nt" else 0)
+         if check and result.returncode:
+             # No command/env/password echo; full DB diagnostic stays in local PG logs.
+@@ -316,6 +332,11 @@ class Runtime:
+                 request.unlink(missing_ok=True)
+ 
+     def backup(self, destination: Path):
++        if os.name == "nt":
++            from app.windows_layout import installed_layout, checked_backup_destination
++            root, _ = installed_layout(self.install)
++            destination = checked_backup_destination(root, destination)
++            private_directory(destination.parent)
+         if destination.exists() or self.data == destination or self.data in destination.parents:
+             raise ValueError("Backup must be a new file outside the data directory")
+         with self.database():
+@@ -443,21 +464,37 @@ def stop(data: Path):
+     raise Busy("EDR has not stopped; update/uninstall must not proceed")
+ 
+ 
+-def main(argv=None):
++def _main(argv=None):
+     parser = argparse.ArgumentParser(description="EDR Windows local runtime")
+     parser.add_argument("command", choices=["start", "stop", "backup", "restore"])
+     parser.add_argument("file", nargs="?", type=Path)
+-    parser.add_argument("--data-dir", type=Path,
+-                        default=Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "EDR" / "data")
++    parser.add_argument("--data-dir", type=Path)
+     parser.add_argument("--no-browser", action="store_true")
+     args = parser.parse_args(argv)
+-    data = checked_data(args.data_dir)
+     try:
++        legacy = None
++        if os.name == "nt":
++            from app.windows_layout import installed_layout
++            root, legacy = installed_layout(INSTALL)
++            private_directory(root / "state" / "backups")
++            default_data = root / "state" / "data"
++        else:
++            default_data = Path.home() / ".edr" / "data"
++        data = checked_data(args.data_dir or default_data)
++        if os.name == "nt" and root / "state" not in data.parents:
++            raise ValueError("Windows data must stay inside protected ProgramData state")
++        # Reject unsupported PG paths before creating a directory or lock.
++        postgres_path(data)
+         if args.command == "stop":
+             stop(data)
+         else:
+             try:
+                 with exclusive(data):
++                    if os.name == "nt" and (root / "maintenance").exists():
++                        raise Busy("Installer maintenance is in progress")
++                    if legacy is not None and args.data_dir is None and args.command != "restore":
++                        from app.windows_layout import migrate_legacy
++                        migrate_legacy(legacy, data, INSTALL)
+                     runtime = Runtime(data)
+                     if args.command == "start":
+                         runtime.start(not args.no_browser)
+@@ -488,5 +525,20 @@ def main(argv=None):
+         return 1
+ 
+ 
++def main(argv=None):
++    if os.name != "nt":
++        return _main(argv)
++    from app.windows_layout import runtime_gate
++    try:
++        # Held across every command and every supported state root, including
++        # startup, migration, backup and restore into an absent target.
++        with runtime_gate(INSTALL):
++            return _main(argv)
++    except Exception as error:
++        if sys.stderr is not None:
++            print(f"EDR: {type(error).__name__}: {error}", file=sys.stderr)
++        return 1
++
++
+ if __name__ == "__main__":
+     raise SystemExit(main())
+diff --git a/docs/installation/windows.md b/docs/installation/windows.md
+index b5d7a5e..929ddfa 100644
+--- a/docs/installation/windows.md
++++ b/docs/installation/windows.md
+@@ -4,18 +4,22 @@
+ ╨Я╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╛╤В╨║╤А╤Л╨▓╨░╨╡╤В╤Б╤П ╨▓ ╨╛╨▒╤Л╤З╨╜╨╛╨╝ ╨▒╤А╨░╤Г╨╖╨╡╤А╨╡. ╨Ф╨╛╤Б╤В╤Г╨┐ ╤Б ╨┤╤А╤Г╨│╨╕╤Е ╨║╨╛╨╝╨┐╤М╤О╤В╨╡╤А╨╛╨▓, LAN/VPN,
+ ╤А╨╛╨╗╨╕ ╨╕ ╨╛╨▒╨╗╨░╤З╨╜╨╛╨╡ ╤Е╤А╨░╨╜╨╡╨╜╨╕╨╡ ╨╜╨╡ ╨┐╤А╨╡╨┤╤Г╤Б╨╝╨╛╤В╤А╨╡╨╜╤Л. WSL, Docker, Python, Node.js ╨╕
+ PostgreSQL ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О ╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╤В╤М ╨╜╨╡ ╨╜╤Г╨╢╨╜╨╛.
+-╨в╤А╨╡╨▒╤Г╨╡╤В╤Б╤П **Microsoft Visual C++ Runtime x64 14.44 ╨╕╨╗╨╕ ╨╜╨╛╨▓╨╡╨╡**. ╨Я╨╛ ╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╜╨╛╨╝╤Г
+-╤А╨╡╤И╨╡╨╜╨╕╤О ╨╛╨╜ ╨╜╨╡ ╨▓╨║╨╗╤О╤З╤С╨╜ ╨▓ ╨┐╨░╨║╨╡╤В: ╨╡╤Б╨╗╨╕ runtime ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╤Г╨╡╤В, ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╨╛╤В╨║╤А╤Л╨▓╨░╨╡╤В
+-[╨╛╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╤Г╤О ╤Б╤В╤А╨░╨╜╨╕╤Ж╤Г Microsoft](https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-160)
+-╨╕ ╨┐╤А╨╡╨║╤А╨░╤Й╨░╨╡╤В ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г ╨┤╨╛ ╨╖╨░╨┐╨╕╤Б╨╕ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П. ╨г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╨╡ ╨┐╨░╨║╨╡╤В **x64** (Windows
+-╨╝╨╛╨╢╨╡╤В ╨╖╨░╨┐╤А╨╛╤Б╨╕╤В╤М ╨┐╤А╨░╨▓╨░ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░), ╨╖╨░╤В╨╡╨╝ ╤Б╨╜╨╛╨▓╨░ ╨╖╨░╨┐╤Г╤Б╤В╨╕╤В╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ EDR.
+-╨Ф╨╗╤П ╨║╨╛╨╝╨┐╤М╤О╤В╨╡╤А╨░ ╨▒╨╡╨╖ ╨╕╨╜╤В╨╡╤А╨╜╨╡╤В╨░ prerequisite ╨╖╨░╤А╨░╨╜╨╡╨╡ ╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А
+-╨╕╨╖ ╨╛╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╨╛╨│╨╛ ╨┐╨░╨║╨╡╤В╨░ Microsoft. EDR ╨╜╨╡ ╤Б╨║╨░╤З╨╕╨▓╨░╨╡╤В ╨╕ ╨╜╨╡ ╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В ╨╡╨│╨╛ ╤Б╨║╤А╤Л╤В╨╛.
++Microsoft Visual C++ v14 Runtime x64 (╨╝╨╕╨╜╨╕╨╝╤Г╨╝ 14.44) ╨▓╨║╨╗╤О╤З╤С╨╜ ╨▓ EXE EDR.
++╨Я╨╛╨┤╤Е╨╛╨┤╤П╤Й╨░╤П ╨╕╨╗╨╕ ╨▒╨╛╨╗╨╡╨╡ ╨╜╨╛╨▓╨░╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨░╤П ╨▓╨╡╤А╤Б╨╕╤П ╨┐╤А╨╛╨┐╤Г╤Б╨║╨░╨╡╤В╤Б╤П; ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╤Г╤О╤Й╨░╤П
++╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В╤Б╤П ╤В╨╕╤Е╨╛ ╨┐╨╛╨┤ ╤В╨╡╨╝ ╨╢╨╡ ╨┐╨╛╨▓╤Л╤И╨╡╨╜╨╕╨╡╨╝ ╨┐╤А╨░╨▓ ╨┤╨╛ ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨║╨╕ ProgramData.
++╨Ш╨╜╤В╨╡╤А╨╜╨╡╤В ╨╕ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨╡ ╤Б╨║╨░╤З╨╕╨▓╨░╨╜╨╕╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝ ╨╜╨╡ ╨╜╤Г╨╢╨╜╤Л. ╨Ю╤И╨╕╨▒╨║╨░ prerequisite
++╨╛╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г EDR. ╨Я╤А╨╕ ╨╖╨░╨┐╤А╨╛╤Б╨╡ ╨┐╨╡╤А╨╡╨╖╨░╨│╤А╤Г╨╖╨║╨╕ ╨┐╨╡╤А╨╡╨╖╨░╨│╤А╤Г╨╖╨╕╤В╨╡ Windows
++╨╕ ╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛ ╨╖╨░╨┐╤Г╤Б╤В╨╕╤В╨╡ setup. ╨Ц╤Г╤А╨╜╨░╨╗ `EDR-vcredist.log` ╨╜╨░╤Е╨╛╨┤╨╕╤В╤Б╤П ╨▓╨╛ ╨▓╤А╨╡╨╝╨╡╨╜╨╜╨╛╨╝
++╨║╨░╤В╨░╨╗╨╛╨│╨╡ setup.
+ 
+ ## ╨г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨╕ ╤А╨░╨▒╨╛╤В╨░
+ 
+ 1. ╨Ч╨░╨┐╤Г╤Б╤В╨╕╤В╨╡ `EDR-0.2.0-windows-x64.exe` ╨┐╨╛╨┤ ╤Б╨▓╨╛╨╡╨╣ ╨╛╨▒╤Л╤З╨╜╨╛╨╣ ╤Г╤З╤С╤В╨╜╨╛╨╣ ╨╖╨░╨┐╨╕╤Б╤М╤О.
+-   ╨г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П ╨┤╨╗╤П ╤В╨╡╨║╤Г╤Й╨╡╨│╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨▒╨╡╨╖ ╨┐╨╛╨▓╤Л╤И╨╡╨╜╨╕╤П ╨┐╤А╨╕╨▓╨╕╨╗╨╡╨│╨╕╨╣.
++   ╨г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╨╖╨░╨┐╤А╨░╤И╨╕╨▓╨░╨╡╤В ╨┐╤А╨░╨▓╨░ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░ ╨┤╨╗╤П ╨╖╨░╤Й╨╕╤Й╤С╨╜╨╜╨╛╨│╨╛ ProgramData.
++   ╨Ь╨╛╨╢╨╜╨╛ ╨▓╤Л╨▒╤А╨░╤В╤М ╨║╨░╤В╨░╨╗╨╛╨│ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л ╤Б ╨║╨╕╤А╨╕╨╗╨╗╨╕╤Ж╨╡╨╣, Unicode ╨╕ ╨┐╤А╨╛╨▒╨╡╨╗╨░╨╝╨╕.
++   ╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝ EDR ╨╛╤Б╤В╨░╤С╤В╤Б╤П ╨▓╨╗╨░╨┤╨╡╨╗╨╡╤Ж ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╨╛╨▒╨╛╨╗╨╛╤З╨║╨╕ ╤А╨░╨▒╨╛╤З╨╡╨│╨╛ ╤Б╤В╨╛╨╗╨░,
++   ╨┤╨░╨╢╨╡ ╨╡╤Б╨╗╨╕ ╨▓ UAC ╨▓╨▓╨╡╨┤╨╡╨╜╤Л ╨┤╨░╨╜╨╜╤Л╨╡ ╨┤╤А╤Г╨│╨╛╨╣ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╕╨▓╨╜╨╛╨╣ ╤Г╤З╤С╤В╨╜╨╛╨╣ ╨╖╨░╨┐╨╕╤Б╨╕.
++   ╨Я╤А╨╕ ╨╜╨╡╨┤╨╛╤Б╤В╤Г╨┐╨╜╨╛╨╣ ╨╕╨╗╨╕ ╨┤╤А╤Г╨│╨╛╨╣ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╨╛╨▒╨╛╨╗╨╛╤З╨║╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨╛╤В╨╝╨╡╨╜╤П╨╡╤В╤Б╤П.
+    ╨Э╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╣╤В╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╛╤В ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░: PostgreSQL ╤Н╤В╨╛╨│╨╛ ╨╜╨╡ ╨┤╨╛╨┐╤Г╤Б╨║╨░╨╡╤В.
+ 2. ╨Ю╤В╨║╤А╨╛╨╣╤В╨╡ ╤П╤А╨╗╤Л╨║ **EDR** ╨╜╨░ ╤А╨░╨▒╨╛╤З╨╡╨╝ ╤Б╤В╨╛╨╗╨╡ ╨╕╨╗╨╕ ╨▓ ╨╝╨╡╨╜╤О ┬л╨Я╤Г╤Б╨║┬╗. ╨Я╤А╨╕ ╨┐╨╡╤А╨▓╨╛╨╝ ╨╖╨░╨┐╤Г╤Б╨║╨╡
+    ╤Б╨╛╨╖╨┤╨░╤О╤В╤Б╤П ╨╛╤В╨┤╨╡╨╗╤М╨╜╨░╤П ╨▒╨░╨╖╨░ ╨╕ ╤Б╤Е╨╡╨╝╨░. ╨Ф╨╛╨╢╨┤╨╕╤В╨╡╤Б╤М ╨╛╤В╨║╤А╤Л╤В╨╕╤П ╨▒╤А╨░╤Г╨╖╨╡╤А╨░.
+@@ -25,18 +29,46 @@ PostgreSQL ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О ╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╤В╤М ╨╜╨╡ ╨╜╤Г╨╢╨╜╨╛.
+ 4. ╨Ч╨░╨║╤А╤Л╤В╨╕╨╡ ╨▓╨║╨╗╨░╨┤╨║╨╕ ╨▒╤А╨░╤Г╨╖╨╡╤А╨░ ╨╜╨╡ ╨╛╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В EDR. ╨Ф╨╗╤П ╨╛╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╣╤В╨╡
+    **Stop EDR** ╨▓ ╨╝╨╡╨╜╤О ┬л╨Я╤Г╤Б╨║┬╗. ╨Я╨╛╨▓╤В╨╛╤А╨╜╤Л╨╣ ╨╖╨░╨┐╤Г╤Б╨║ ╤П╤А╨╗╤Л╨║╨░ ╨╛╤В╨║╤А╤Л╨▓╨░╨╡╤В ╨╕╨╝╨╡╤О╤Й╨╕╨╣╤Б╤П ╨┐╤А╨╛╤Ж╨╡╤Б╤Б.
+ 
+-╨Я╤А╨╛╨│╤А╨░╨╝╨╝╨░: `%LOCALAPPDATA%\Programs\EDR`. ╨Ф╨░╨╜╨╜╤Л╨╡:
+-`%LOCALAPPDATA%\EDR\data`. ╨Т╨╜╤Г╤В╤А╨╕ ╨╜╨░╤Е╨╛╨┤╤П╤В╤Б╤П `postgres` (╨║╨╗╨░╤Б╤В╨╡╤А ╨С╨Ф), `attachments`
++╨Я╤А╨╛╨│╤А╨░╨╝╨╝╨░ ╨┐╨╛ ╤Г╨╝╨╛╨╗╤З╨░╨╜╨╕╤О: `%ProgramFiles%\EDR`; ╨╝╨╛╨╢╨╜╨╛ ╨▓╤Л╨▒╤А╨░╤В╤М ╨┤╤А╤Г╨│╨╛╨╣ ╨║╨░╤В╨░╨╗╨╛╨│.
++PostgreSQL ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛: `%ProgramData%\EDR\runtime\postgresql`.
++╨Ф╨░╨╜╨╜╤Л╨╡: `%ProgramData%\EDR\state\data`. ╨Т╨╜╤Г╤В╤А╨╕ ╨╜╨░╤Е╨╛╨┤╤П╤В╤Б╤П `postgres` (╨║╨╗╨░╤Б╤В╨╡╤А ╨С╨Ф), `attachments`
+ (╨▓╨╗╨╛╨╢╨╡╨╜╨╕╤П), `logs` (╨╢╤Г╤А╨╜╨░╨╗╤Л), `runtime.json` (╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨╕ ╨╕ ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣ ╨┐╨░╤А╨╛╨╗╤М ╨С╨Ф).
+-╨Ъ╨░╤В╨░╨╗╨╛╨│ ╨╕╨╝╨╡╨╡╤В ACL ╤В╨╡╨║╤Г╤Й╨╡╨│╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨╕ SYSTEM. ╨Э╨╡ ╨╝╨╡╨╜╤П╨╣╤В╨╡ `runtime.json`
++╨Ы╨╛╨║╨░╨╗╤М╨╜╤Л╨╡ ╤А╨╡╨╖╨╡╤А╨▓╨╜╤Л╨╡ ╨║╨╛╨┐╨╕╨╕ ╨╝╨╛╨╢╨╜╨╛ ╤Е╤А╨░╨╜╨╕╤В╤М ╨▓ `%ProgramData%\EDR\state\backups`.
++ACL ╨┤╨░╨╜╨╜╤Л╤Е ╤А╨░╨╖╤А╨╡╤И╨░╨╡╤В ╨┤╨╛╤Б╤В╤Г╨┐ ╤В╨╛╨╗╤М╨║╨╛ ╨┐╤А╨╡╨┤╨╜╨░╨╖╨╜╨░╤З╨╡╨╜╨╜╨╛╨╣ ╤Г╤З╤С╤В╨╜╨╛╨╣ ╨╖╨░╨┐╨╕╤Б╨╕ ╨╕ SYSTEM.
++Administrators, Users ╨╕ Everyone ╨╜╨╡ ╨┐╨╛╨╗╤Г╤З╨░╤О╤В ACE ╨╜╨░ ╨┤╨░╨╜╨╜╤Л╨╡ ╨╕ backups.
++╨Ю╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ `control/gate` ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В ╤В╨╛╨╗╤М╨║╨╛ ╨┐╤Г╤Б╤В╨╛╨╣ ╤Д╨░╨╣╨╗ ╨▒╨╗╨╛╨║╨╕╤А╨╛╨▓╨║╨╕: SYSTEM ╨╕
++Administrators ╨╕╨╝╨╡╤О╤В FullControl, intended SID тАФ ReadAndExecute; ╨╜╨░╤Б╨╗╨╡╨┤╨╛╨▓╨░╨╜╨╕╨╡
++╨╛╤В╨║╨╗╤О╤З╨╡╨╜╨╛. ╨Ъ╨╛╤А╨╡╨╜╤М ╨╕ runtime ╨╕╨╝╨╡╤О╤В ╤В╨░╨║╨╕╨╡ ╨╢╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╛╤З╨╜╤Л╨╡ ACL. ╨б╨╡╨║╤А╨╡╤В╤Л ╨╕
++╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨╡ ╤Б╨╛╨┤╨╡╤А╨╢╨╕╨╝╨╛╨╡ ╨▓ control ╨╜╨╡ ╤Е╤А╨░╨╜╤П╤В╤Б╤П.
++╨Т╨╗╨░╨┤╨╡╨╗╤М╤Ж╨╡╨╝ `state` ╨╕ ╨╖╨░╤Й╨╕╤Й╨░╨╡╨╝╤Л╤Е ╨┤╨╛╤З╨╡╤А╨╜╨╕╤Е ╨╛╨▒╤К╨╡╨║╤В╨╛╨▓ ╨╝╨╛╨╢╨╡╤В ╨▒╤Л╤В╤М
++`BUILTIN\Administrators` (╤П╨▓╨╜╤Л╨╣ waiver 2026-11-03). ╨Т╨╗╨░╨┤╨╡╨╜╨╕╨╡ ╨╜╨╡ ╨┤╨╛╨▒╨░╨▓╨╗╤П╨╡╤В ACE ╨╜╨░
++╨┤╨░╨╜╨╜╤Л╨╡: Administrators ╨╜╨╡ ╨┐╨╛╨╗╤Г╤З╨░╨╡╤В ╨┐╤А╤П╨╝╨╛╨│╨╛ ╤З╤В╨╡╨╜╨╕╤П/╨╖╨░╨┐╨╕╤Б╨╕. ╨Ы╨╛╨║╨░╨╗╤М╨╜╤Л╨╣
++╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А ╨╝╨╛╨╢╨╡╤В ╨╕╨╖╨╝╨╡╨╜╨╕╤В╤М DACL ╨║╨░╨║ owner; ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╨░╤П ╨╖╨░╤Й╨╕╤В╨░ ╨┤╨░╨╜╨╜╤Л╤Е ╨╛╤В
++╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╤Е ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨╛╨▓ Windows ╨╜╨╡ ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П. ╨Ю╨▒╤Л╤З╨╜╤Л╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╕,
++Administrators ╨╕ Everyone ╨┐╨╛-╨┐╤А╨╡╨╢╨╜╨╡╨╝╤Г ╨╜╨╡ ╨╕╨╝╨╡╤О╤В ACE ╨╜╨░ ╨┤╨░╨╜╨╜╤Л╨╡ ╨╕ backups.
++`owner.json` ╨▓ ╨╖╨░╤Й╨╕╤Й╤С╨╜╨╜╨╛╨╝ ╨║╨╛╤А╨╜╨╡ ╤Е╤А╨░╨╜╨╕╤В SID ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨╕
++╨╕╤Б╤Е╨╛╨┤╨╜╤Л╨╣ ╨┐╤Г╤В╤М ╤Б╤В╨░╤А╤Л╤Е ╨┤╨░╨╜╨╜╤Л╤Е; ╨┤╤А╤Г╨│╨░╤П Windows-╤Г╤З╤С╤В╨╜╨░╤П ╨╖╨░╨┐╨╕╤Б╤М ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╡╤В EDR.
++╨Э╨╡ ╨╝╨╡╨╜╤П╨╣╤В╨╡ `owner.json`, `runtime.json`
+ ╨╕ ╨╜╨╡ ╨┐╨╡╤А╨╡╨╜╨╛╤Б╨╕╤В╨╡ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛ ╨╛╨┤╨╜╤Г ╨╕╨╖ ╤З╨░╤Б╤В╨╡╨╣ ╨┤╨░╨╜╨╜╤Л╤Е. ╨н╤В╨╛ ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣ ╤А╨╡╨╢╨╕╨╝ ╨▒╨╡╨╖
+ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨╣ ╨░╨▓╤В╨╛╤А╨╕╨╖╨░╤Ж╨╕╨╕; ╨┤╨╛╤Б╤В╤Г╨┐ ╨║ Windows-╨┐╤А╨╛╤Д╨╕╨╗╤О ╨┤╨░╤С╤В ╨┤╨╛╤Б╤В╤Г╨┐ ╨║ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨░╨╝.
+ 
+-╨Ф╨╗╤П PostgreSQL launcher ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В ASCII-╨┐╤Г╤В╨╕ Windows 8.3, ╨║╨╛╨│╨┤╨░ ╨║╨░╤В╨░╨╗╨╛╨│ ╨╕╨╗╨╕
+-╨┐╤А╨╛╤Д╨╕╨╗╤М ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В ╨║╨╕╤А╨╕╨╗╨╗╨╕╤Ж╤Г. ╨Х╤Б╨╗╨╕ ╨╜╨░ ╨┤╨╕╤Б╨║╨╡ ╨╛╤В╨║╨╗╤О╤З╨╡╨╜╤Л/╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╤Г╤О╤В 8.3-╨╕╨╝╨╡╨╜╨░,
+-╤В╤А╨╡╨▒╤Г╤О╤В╤Б╤П ╨┐╤Г╤В╨╕ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л ╨╕ ╨┤╨░╨╜╨╜╤Л╤Е ╨▒╨╡╨╖ ╨║╨╕╤А╨╕╨╗╨╗╨╕╤Ж╤Л; ╨╖╨░╨┐╤Г╤Б╨║ ╨▓╤Л╨┤╨░╤Б╤В ╨┐╨╛╨╜╤П╤В╨╜╤Г╤О ╨╛╤И╨╕╨▒╨║╤Г
+-╨┤╨╛ ╨╛╨▒╤А╨░╤Й╨╡╨╜╨╕╤П ╨║ PostgreSQL. ╨Т╤Л╨▒╨╡╤А╨╕╤В╨╡ ASCII-╨║╨░╤В╨░╨╗╨╛╨│ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ ╨╕ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ ╨┤╨╛╤Б╤В╤Г╨┐╨╜╤Л╨╣
+-ASCII `--data-dir`. ╨Э╨╡ ╨╝╨╡╨╜╤П╨╣╤В╨╡ ╤Б╨╕╤Б╤В╨╡╨╝╨╜╤Г╤О ╨║╨╛╨┤╨╕╤А╨╛╨▓╨║╤Г Windows ╤А╨░╨┤╨╕ ╨╖╨░╨┐╤Г╤Б╨║╨░ EDR.
++╨Я╤Г╤В╤М ProgramData ╨┤╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╤В╤М ASCII (╨╛╨▒╤Л╤З╨╜╨╛ `C:\ProgramData`). ╨г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║
++╨╛╤В╨║╨╗╨╛╨╜╤П╨╡╤В Unicode ProgramData ╨╕ reparse points. ╨Т╤А╨╡╨╝╨╡╨╜╨╜╤Л╨╡ ╨┤╨╕╤Б╨║╨╕, ╨┐╤Б╨╡╨▓╨┤╨╛╨╜╨╕╨╝╤Л ╨╕
++╨║╨╛╤А╨╛╤В╨║╨╕╨╡ ╨╕╨╝╨╡╨╜╨░ 8.3 ╨╜╨╡ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╤О╤В╤Б╤П. ╨Ъ╨░╤В╨░╨╗╨╛╨│ ╤Б╨░╨╝╨╛╨╣ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л ╨╝╨╛╨╢╨╡╤В ╨▒╤Л╤В╤М Unicode.
++╨Э╨╡╤Б╤В╨░╨╜╨┤╨░╤А╤В╨╜╤Л╨╣ `--data-dir` ╨┤╨╛╨┐╤Г╤Б╨║╨░╨╡╤В╤Б╤П ╤В╨╛╨╗╤М╨║╨╛ ╨▓╨╜╤Г╤В╤А╨╕ ╨╖╨░╤Й╨╕╤Й╤С╨╜╨╜╨╛╨│╨╛
++`%ProgramData%\EDR\state` ╨╕ ╨┤╨╛╨╗╨╢╨╡╨╜ ╨╕╨╝╨╡╤В╤М ASCII-╨┐╤Г╤В╤М. ╨б╨╕╤Б╤В╨╡╨╝╨╜╤Г╤О ╨║╨╛╨┤╨╕╤А╨╛╨▓╨║╤Г ╨╝╨╡╨╜╤П╤В╤М
++╨╜╨╡ ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П. ╨п╤А╨╗╤Л╨║╨╕ ╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╤О╤В╤Б╤П ╨▓ ╨╛╨▒╤Й╨╡╨╡ ╨╝╨╡╨╜╤О ┬л╨Я╤Г╤Б╨║┬╗ ╨╕, ╨┐╨╛ ╨▓╤Л╨▒╨╛╤А╤Г, ╨╜╨░ ╨╛╨▒╤Й╨╕╨╣
++╤А╨░╨▒╨╛╤З╨╕╨╣ ╤Б╤В╨╛╨╗; ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╤М╤Б╤П ╨┤╨░╨╜╨╜╤Л╨╝╨╕ ╨╝╨╛╨╢╨╡╤В ╨╜╨░╨╖╨╜╨░╤З╨╡╨╜╨╜╨░╤П ╤Г╤З╤С╤В╨╜╨░╤П ╨╖╨░╨┐╨╕╤Б╤М.
++
++╨Я╨╡╤А╨╡╨┤ ╨┐╨╡╤А╨▓╤Л╨╝ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡╨╝ ╤Б╤В╨░╤А╨╛╨╣ per-user ╨┐╨╛╤Б╤В╨░╨▓╨║╨╕ ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╨╡ ╨╡╤С ╤З╨╡╤А╨╡╨╖ ╤Б╤В╨░╤А╤Л╨╣
++**Stop EDR**. ╨Я╤А╨╕ ╨┐╨╡╤А╨▓╨╛╨╝ ╨╖╨░╨┐╤Г╤Б╨║╨╡ ╨╜╨╛╨▓╨░╤П ╨▓╨╡╤А╤Б╨╕╤П ╨║╨╛╨┐╨╕╤А╤Г╨╡╤В
++`%LOCALAPPDATA%\EDR\data` ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨│╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨▓ ╨╖╨░╨║╤А╤Л╤В╤Л╨╣ staging ╨▓╨╜╤Г╤В╤А╨╕
++ProgramData, ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╤А╨░╨╖╨╝╨╡╤А╤Л/SHA-256, ╨╖╨░╨┐╤Г╤Б╨║╨░╨╡╤В ╨║╨╛╨┐╨╕╤О ╨║╨╗╨░╤Б╤В╨╡╤А╨░ ╨╕ ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В
++╤Б╨╛╨╛╤В╨▓╨╡╤В╤Б╤В╨▓╨╕╨╡ ╨╖╨░╨┐╨╕╤Б╨╡╨╣ ╨▓╨╗╨╛╨╢╨╡╨╜╨╕╤П╨╝. ╨в╨╛╨╗╤М╨║╨╛ ╨┐╨╛╤Б╨╗╨╡ ╤Г╤Б╨┐╨╡╤И╨╜╨╛╨╣ ╨╛╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ ╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╨╛╨╣
++╨║╨╛╨┐╨╕╨╕ ╨║╨░╤В╨░╨╗╨╛╨│ ╨░╤В╨╛╨╝╨░╤А╨╜╨╛ ╨┐╨╡╤А╨╡╨╕╨╝╨╡╨╜╨╛╨▓╤Л╨▓╨░╨╡╤В╤Б╤П ╨▓ `state\data`. ╨Ш╤Б╤Е╨╛╨┤╨╜╨╕╨║ ╤Б╨╛╤Е╤А╨░╨╜╤П╨╡╤В╤Б╤П
++╨╕ ╨┐╨╛╤Б╨╗╨╡ ╤Г╤Б╨┐╨╡╤Е╨░. ╨Я╤А╨╕ ╨╛╤И╨╕╨▒╨║╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╜╨╡ ╨┐╨╡╤А╨╡╨║╨╗╤О╤З╨░╨╡╤В╤Б╤П ╨╜╨░ staging; ╨╕╤Б╤Е╨╛╨┤╨╜╨╕╨║
++╨╕ ╨╜╨╡╤Г╨┤╨░╤З╨╜╤Л╨╣ staging ╨╛╤Б╤В╨░╤О╤В╤Б╤П ╨┤╨╗╤П ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╨╕. ╨Э╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╣╤В╨╡ ╤Б╤В╨░╤А╤Г╤О ╨▓╨╡╤А╤Б╨╕╤О
++╨┐╨╛╤Б╨╗╨╡ ╨┐╨╡╤А╨╡╤Е╨╛╨┤╨░: ╨╛╨╜╨░ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В ╤Б╨╛╤Е╤А╨░╨╜╤С╨╜╨╜╤Г╤О ╤Б╤В╨░╤А╤Г╤О ╨║╨╛╨┐╨╕╤О, ╨░ ╨╜╨╡ ╨╜╨╛╨▓╤Л╨╡ ╨┤╨░╨╜╨╜╤Л╨╡.
+ 
+ ╨Я╤А╨╕ ╨╛╤И╨╕╨▒╨║╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛╨║╨░╨╖╤Л╨▓╨░╨╡╤В ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╨╡ ╨╕ ╤Б╨╛╤Е╤А╨░╨╜╤П╨╡╤В ╨╕╤Б╤Е╨╛╨┤╨╜╤Л╨╡ ╨┤╨░╨╜╨╜╤Л╨╡.
+ ╨Я╤А╨╛╨▓╨╡╤А╤М╤В╨╡ ╤Б╨▓╨╛╨▒╨╛╨┤╨╜╨╛╨╡ ╨╝╨╡╤Б╤В╨╛, ╨╖╨░╨╜╤П╤В╤Л╨╡ ╨┐╨╛╤А╤В╤Л ╨╕ ╨╢╤Г╤А╨╜╨░╨╗╤Л. ╨Э╨╡ ╤Г╨┤╨░╨╗╤П╨╣╤В╨╡ ╨║╨░╤В╨░╨╗╨╛╨│ ╨┤╨░╨╜╨╜╤Л╤Е
+@@ -48,13 +80,16 @@ ASCII `--data-dir`. ╨Э╨╡ ╨╝╨╡╨╜╤П╨╣╤В╨╡ ╤Б╨╕╤Б╤В╨╡╨╝╨╜╤Г╤О ╨║╨╛╨┤╨╕╤А╨╛╨▓╨║╤Г Wi
+ ╨б╨╜╨░╤З╨░╨╗╨░ ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╨╡ EDR. ╨Ю╤В╨║╤А╨╛╨╣╤В╨╡ **╨Ъ╨╛╨╝╨░╨╜╨┤╨╜╤Г╤О ╤Б╤В╤А╨╛╨║╤Г** ╨╕ ╨▓╤Л╨┐╨╛╨╗╨╜╨╕╤В╨╡:
+ 
+ ```bat
+-"%LOCALAPPDATA%\Programs\EDR\EDR.cmd" stop
+-"%LOCALAPPDATA%\Programs\EDR\EDR.cmd" backup "D:\EDR-backups\2026-10-27.zip"
++"C:\╨Ь╨╛╨╕ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л\EDR\EDR.cmd" stop
++"C:\╨Ь╨╛╨╕ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л\EDR\EDR.cmd" backup "%ProgramData%\EDR\state\backups\2026-10-28.zip"
+ ```
+ 
++╨Ч╨░╨╝╨╡╨╜╨╕╤В╨╡ `C:\╨Ь╨╛╨╕ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л\EDR` ╨▓╤Л╨▒╤А╨░╨╜╨╜╤Л╨╝ ╨║╨░╤В╨░╨╗╨╛╨│╨╛╨╝ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л.
+ ╨а╨╛╨┤╨╕╤В╨╡╨╗╤М╤Б╨║╨╕╨╣ ╨║╨░╤В╨░╨╗╨╛╨│ ╨║╨╛╨┐╨╕╨╕ ╨┤╨╛╨╗╨╢╨╡╨╜ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╨╛╨▓╨░╤В╤М. ╨Ш╨╝╤П ZIP ╨┤╨╛╨╗╨╢╨╜╨╛ ╨▒╤Л╤В╤М ╨╜╨╛╨▓╤Л╨╝;
+-╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨░╤П ╨║╨╛╨┐╨╕╤П ╨╜╨╡ ╨┐╨╡╤А╨╡╨╖╨░╨┐╨╕╤Б╤Л╨▓╨░╨╡╤В╤Б╤П. ╨Ъ╨╛╨┐╨╕╤О ╤Б╨╛╤Е╤А╨░╨╜╤П╨╣╤В╨╡ ╨▓╨╜╨╡ ╨║╨░╤В╨░╨╗╨╛╨│╨░ ╨┤╨░╨╜╨╜╤Л╤Е,
+-╨╢╨╡╨╗╨░╤В╨╡╨╗╤М╨╜╨╛ ╨╜╨░ ╨┤╤А╤Г╨│╨╛╨╝ ╤Д╨╕╨╖╨╕╤З╨╡╤Б╨║╨╛╨╝ ╨╜╨╛╤Б╨╕╤В╨╡╨╗╨╡. ╨Т╨╛ ╨▓╤А╨╡╨╝╤П ╨╛╨┐╨╡╤А╨░╤Ж╨╕╨╕ ╨╖╨░╨┐╤Г╤Б╨║ ╨╕╨╜╤В╨╡╤А╤Д╨╡╨╣╤Б╨░
++╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨░╤П ╨║╨╛╨┐╨╕╤П ╨╜╨╡ ╨┐╨╡╤А╨╡╨╖╨░╨┐╨╕╤Б╤Л╨▓╨░╨╡╤В╤Б╤П. Windows ╨┐╤А╨╕╨╜╨╕╨╝╨░╨╡╤В ╤В╨╛╨╗╤М╨║╨╛ ╤Д╨░╨╣╨╗╤Л ╨┐╤А╤П╨╝╨╛
++╨▓ `%ProgramData%\EDR\state\backups`; ╨┤╤А╤Г╨│╨╕╨╡ ╨╜╨░╨╖╨╜╨░╤З╨╡╨╜╨╕╤П ╨╛╤В╨║╨╗╨╛╨╜╤П╤О╤В╤Б╤П ╨┤╨╛ ╨╖╨░╨┐╨╕╤Б╨╕.
++╨з╨░╤Б╤В╨╕╤З╨╜╤Л╨╣ ╤Д╨░╨╣╨╗ ╨╕ ╨│╨╛╤В╨╛╨▓╤Л╨╣ ZIP ╨╜╨░╤Б╨╗╨╡╨┤╤Г╤О╤В ACL intended SID ╨╕ SYSTEM.
++╨Т╨╛ ╨▓╤А╨╡╨╝╤П ╨╛╨┐╨╡╤А╨░╤Ж╨╕╨╕ ╨╖╨░╨┐╤Г╤Б╨║ ╨╕╨╜╤В╨╡╤А╤Д╨╡╨╣╤Б╨░
+ ╨╖╨░╨▒╨╗╨╛╨║╨╕╤А╨╛╨▓╨░╨╜. ╨Р╤А╤Е╨╕╨▓ ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В PostgreSQL custom dump, ╨▓╤Б╨╡ ╨▓╨╗╨╛╨╢╨╡╨╜╨╕╤П ╨╕ manifest
+ ╤Б ╤А╨░╨╖╨╝╨╡╤А╨░╨╝╨╕ ╨╕ SHA-256. ╨Т╤А╨╡╨╝╨╡╨╜╨╜╤Л╨╣ ╨░╤А╤Е╨╕╨▓ ╨┐╤Г╨▒╨╗╨╕╨║╤Г╨╡╤В╤Б╤П ╤В╨╛╨╗╤М╨║╨╛ ╨┐╨╛╤Б╨╗╨╡ ╤Г╤Б╨┐╨╡╤И╨╜╨╛╨╣ ╨╖╨░╨┐╨╕╤Б╨╕.
+ ╨Ъ╨╛╨┐╨╕╤П ╨╜╨╡ ╨╖╨░╤И╨╕╤Д╤А╨╛╨▓╨░╨╜╨░: ╤Е╤А╨░╨╜╨╕╤В╨╡ ╨╡╤С ╤Б ╤Б╨╛╨╛╤В╨▓╨╡╤В╤Б╤В╨▓╤Г╤О╤Й╨╕╨╝ ╨┤╨╛╤Б╤В╤Г╨┐╨╛╨╝.
+@@ -69,8 +104,8 @@ ASCII `--data-dir`. ╨Э╨╡ ╨╝╨╡╨╜╤П╨╣╤В╨╡ ╤Б╨╕╤Б╤В╨╡╨╝╨╜╤Г╤О ╨║╨╛╨┤╨╕╤А╨╛╨▓╨║╤Г Wi
+ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨░╤П ╨▒╨░╨╖╨░ ╨╕ ╤Д╨░╨╣╨╗╤Л ╨╜╨╕╨║╨╛╨│╨┤╨░ ╨╜╨╡ ╨╖╨░╨╝╨╡╨╜╤П╤О╤В╤Б╤П ╨║╨╛╨╝╨░╨╜╨┤╨╛╨╣ restore.
+ 
+ ```bat
+-"%LOCALAPPDATA%\Programs\EDR\EDR.cmd" restore "D:\EDR-backups\2026-10-27.zip" --data-dir "D:\EDR-recovered"
+-"%LOCALAPPDATA%\Programs\EDR\EDR.cmd" start --data-dir "D:\EDR-recovered"
++"C:\╨Ь╨╛╨╕ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л\EDR\EDR.cmd" restore "%ProgramData%\EDR\state\backups\2026-10-28.zip" --data-dir "%ProgramData%\EDR\state\recovered"
++"C:\╨Ь╨╛╨╕ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л\EDR\EDR.cmd" start --data-dir "%ProgramData%\EDR\state\recovered"
+ ```
+ 
+ ╨Я╤А╨╛╨▓╨╡╤А╤П╤О╤В╤Б╤П ╤Б╨╛╤Б╤В╨░╨▓, ╨┐╤Г╤В╨╕, ╤А╨░╨╖╨╝╨╡╤А╤Л ╨╕ SHA-256 ╨░╤А╤Е╨╕╨▓╨░. ╨С╨░╨╖╨░ ╨╕ ╤Д╨░╨╣╨╗╤Л ╤А╨░╨╖╨▓╨╛╤А╨░╤З╨╕╨▓╨░╤О╤В╤Б╤П
+@@ -88,7 +123,12 @@ ASCII `--data-dir`. ╨Э╨╡ ╨╝╨╡╨╜╤П╨╣╤В╨╡ ╤Б╨╕╤Б╤В╨╡╨╝╨╜╤Г╤О ╨║╨╛╨┤╨╕╤А╨╛╨▓╨║╤Г Wi
+ 
+ ╨Я╨╡╤А╨╡╨┤ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡╨╝ ╤Б╨┤╨╡╨╗╨░╨╣╤В╨╡ ╤А╨╡╨╖╨╡╤А╨▓╨╜╤Г╤О ╨║╨╛╨┐╨╕╤О. ╨Ч╨░╨┐╤Г╤Б╤В╨╕╤В╨╡ ╨╜╨╛╨▓╤Л╨╣ ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╨┐╨╛╨┤ ╤В╨╛╨╣
+ ╨╢╨╡ Windows-╤Г╤З╤С╤В╨╜╨╛╨╣ ╨╖╨░╨┐╨╕╤Б╤М╤О ╨▓ ╤В╨╛╤В ╨╢╨╡ ╨║╨░╤В╨░╨╗╨╛╨│ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л. ╨г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╤Б╨╜╨░╤З╨░╨╗╨░
+-╨╛╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡; ╨┐╤А╨╕ ╨╜╨╡╤Г╨┤╨░╤З╨╡ ╨╛╨┐╨╡╤А╨░╤Ж╨╕╤П ╨╛╤В╨╝╨╡╨╜╤П╨╡╤В╤Б╤П. ╨Ф╨░╨╜╨╜╤Л╨╡ ╨╜╨░╤Е╨╛╨┤╤П╤В╤Б╤П
++╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╨╛╨▒╤Й╨╕╨╣ ╤И╨╗╤О╨╖ ╨▓╤Б╨╡╤Е runtime roots, ╨▓╨║╨╗╤О╤З╨░╤П `state/recovered`. ╨Я╤А╨╕ ╨░╨║╤В╨╕╨▓╨╜╨╛╨╝
++start, stop, backup ╨╕╨╗╨╕ restore ╨╛╨┐╨╡╤А╨░╤Ж╨╕╤П ╤Б╤А╨░╨╖╤Г ╨╛╤В╨╝╨╡╨╜╤П╨╡╤В╤Б╤П: ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╨╡ ╨║╨░╨╢╨┤╤Л╨╣
++╤Н╨║╨╖╨╡╨╝╨┐╨╗╤П╤А ╤Б ╨╡╨│╨╛ `--data-dir`, ╨┤╨╛╨╢╨┤╨╕╤В╨╡╤Б╤М ╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╕╤П ╨╛╨┐╨╡╤А╨░╤Ж╨╕╨╣ ╨╕ ╨┐╨╛╨▓╤В╨╛╤А╨╕╤В╨╡.
++Maintenance marker ╨╕╤Б╨║╨╗╤О╤З╨░╨╡╤В ╨╖╨░╨┐╤Г╤Б╨║ ╨▓╨╛ ╨▓╤А╨╡╨╝╤П ╨╖╨░╨╝╨╡╨╜╤Л ╤Д╨░╨╣╨╗╨╛╨▓. ╨н╨║╤Б╨┐╨╡╤А╨╕╨╝╨╡╨╜╤В╨░╨╗╤М╨╜╤Л╨╡
++╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ ╨▒╨╡╨╖ `control/gate` ╨╛╤В╨║╨╗╨╛╨╜╤П╤О╤В╤Б╤П ╨▒╨╡╨╖ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П ╨┤╨░╨╜╨╜╤Л╤Е ╨╕ ╤В╤А╨╡╨▒╤Г╤О╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛
++╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╜╨╛╨│╨╛ ╨║╨╛╨╜╤В╤А╨╛╨╗╨╕╤А╤Г╨╡╨╝╨╛╨│╨╛ ╨┐╨╡╤А╨╡╨╜╨╛╤Б╨░. ╨Ф╨░╨╜╨╜╤Л╨╡ ╨╜╨░╤Е╨╛╨┤╤П╤В╤Б╤П
+ ╨▓╨╜╨╡ ╨║╨░╤В╨░╨╗╨╛╨│╨░ ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Л ╨╕ ╨┐╤А╨╕ ╨╖╨░╨╝╨╡╨╜╨╡ ╤Д╨░╨╣╨╗╨╛╨▓ ╨╜╨╡ ╨╖╨░╤В╤А╨░╨│╨╕╨▓╨░╤О╤В╤Б╤П.
+ 
+ ╨Я╤А╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╕ Alembic head ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨║╨╛╨┐╨╕╤А╤Г╨╡╤В ╨░╨║╤В╨╕╨▓╨╜╤Г╤О ╨С╨Ф ╨▓ ╨╜╨╛╨▓╤Г╤О ╨С╨Ф ╤В╨╛╨│╨╛ ╨╢╨╡
+@@ -99,8 +139,16 @@ ASCII `--data-dir`. ╨Э╨╡ ╨╝╨╡╨╜╤П╨╣╤В╨╡ ╤Б╨╕╤Б╤В╨╡╨╝╨╜╤Г╤О ╨║╨╛╨┤╨╕╤А╨╛╨▓╨║╤Г Wi
+ PostgreSQL major upgrade ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╕: ╨╜╨╡╤Б╨╛╨▓╨╝╨╡╤Б╤В╨╕╨╝╤Л╨╣ ╨║╨╗╨░╤Б╤В╨╡╤А
+ ╤Б╨╛╤Е╤А╨░╨╜╤П╨╡╤В╤Б╤П ╨╕ ╨╖╨░╨┐╤Г╤Б╨║ ╨┐╤А╨╡╨║╤А╨░╤Й╨░╨╡╤В╤Б╤П. ╨Ф╨╗╤П ╤Н╤В╨╛╨╣ ╨┐╨╛╤Б╤В╨░╨▓╨║╨╕ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В╤Б╤П major 18.
+ 
+-╨б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╡ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╡ ╤З╨╡╤А╨╡╨╖ Windows ┬л╨г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╤Л╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П┬╗ ╤Г╨┤╨░╨╗╤П╨╡╤В ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Г
+-╨╕ ╤П╤А╨╗╤Л╨║╨╕, ╤Б╨╛╤Е╤А╨░╨╜╤П╤П `%LOCALAPPDATA%\EDR\data` ╨╕ ╤А╨╡╨╖╨╡╤А╨▓╨╜╤Л╨╡ ╨║╨╛╨┐╨╕╨╕. ╨Я╨╛╨▓╤В╨╛╤А╨╜╨░╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░
++╨Ю╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡ ╨╕ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╡ ╤В╨░╨║╨╢╨╡ ╨╖╨░╨┐╤А╨░╤И╨╕╨▓╨░╤О╤В ╨┐╤А╨░╨▓╨░ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░. ╨Ф╨╗╤П ╨╜╨╕╤Е ╨╜╤Г╨╢╨╜╨╛
++╤А╨░╨▒╨╛╤В╨░╤В╤М ╨╜╨░ ╤А╨░╨▒╨╛╤З╨╡╨╝ ╤Б╤В╨╛╨╗╨╡ ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨│╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П. ╨г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╤Б╨╛╤Е╤А╨░╨╜╤С╨╜╨╜╤Л╨╣
++SID ╨╕ ╨╛╤В╨║╨░╨╖╤Л╨▓╨░╨╡╤В ╨┐╤А╨╕ ╨╖╨░╨╜╤П╤В╨╛╨╝ ╨╛╨▒╤Й╨╡╨╝ ╤И╨╗╤О╨╖╨╡; ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╤Л╨╣ Python ╨╜╨╡
++╨╖╨░╨┐╤Г╤Б╨║╨░╨╡╤В╤Б╤П ╨╛╤В ╨╕╨╝╨╡╨╜╨╕ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░. ╨Х╤Б╨╗╨╕ ╨╜╨╡╨╗╤М╨╖╤П ╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╤В╤М ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨╕╨╗╨╕
++╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М maintenance, ╨╛╨┐╨╡╤А╨░╤Ж╨╕╤П ╨╛╤В╨╝╨╡╨╜╤П╨╡╤В╤Б╤П. ╨з╤Г╨╢╤Г╤О ╤Г╤З╤С╤В╨╜╤Г╤О ╨╖╨░╨┐╨╕╤Б╤М UAC ╨╜╨╡
++╨╜╨░╨╖╨╜╨░╤З╨░╤О╤В ╨▓╨╗╨░╨┤╨╡╨╗╤М╤Ж╨╡╨╝ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╤Е ╨┤╨░╨╜╨╜╤Л╤Е.
++
++╨б╤В╨░╨╜╨┤╨░╤А╤В╨╜╨╛╨╡ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╡ ╤З╨╡╤А╨╡╨╖ Windows ┬л╨г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╤Л╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П┬╗ ╤Г╨┤╨░╨╗╤П╨╡╤В ╨┐╤А╨╛╨│╤А╨░╨╝╨╝╤Г,
++PostgreSQL executables ╨╕ ╤П╤А╨╗╤Л╨║╨╕, ╤Б╨╛╤Е╤А╨░╨╜╤П╤П `%ProgramData%\EDR\state`, `owner.json`,
++╤Б╤В╨░╤А╤Л╨╣ `%LOCALAPPDATA%\EDR\data` ╨╕ ╤А╨╡╨╖╨╡╤А╨▓╨╜╤Л╨╡ ╨║╨╛╨┐╨╕╨╕. ╨Я╨╛╨▓╤В╨╛╤А╨╜╨░╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░
+ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В ╤Б╨╛╤Е╤А╨░╨╜╤С╨╜╨╜╤Л╨╡ ╨┤╨░╨╜╨╜╤Л╨╡. ╨Ю╤В╨┤╨╡╨╗╤М╨╜╨╛╨╣ ╨║╨╛╨╝╨░╨╜╨┤╤Л ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╛╨│╨╛ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╤П
+ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╕╤Е ╨┤╨░╨╜╨╜╤Л╤Е ╨╜╨╡╤В. ╨Ф╨╗╤П ╨╛╨║╨╛╨╜╤З╨░╤В╨╡╨╗╤М╨╜╨╛╨│╨╛ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╤П ╨╛╨┐╨╡╤А╨░╤В╨╛╤А ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛
+ ╤Г╨┤╨░╨╗╤П╨╡╤В ╤П╨▓╨╜╨╛ ╨▓╤Л╨▒╤А╨░╨╜╨╜╤Л╨╣ ╨║╨░╤В╨░╨╗╨╛╨│ ╤Б╤А╨╡╨┤╤Б╤В╨▓╨░╨╝╨╕ Windows ╨┐╨╛╤Б╨╗╨╡ ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨║╨╛╨┐╨╕╨╕.
+@@ -111,7 +159,8 @@ PostgreSQL major upgrade ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╕:
+ **18.6-5 x64** (╨░╤А╤Е╨╕╨▓ EDB). React production build ╨╛╨▒╤Б╨╗╤Г╨╢╨╕╨▓╨░╨╡╤В╤Б╤П FastAPI/ASGI
+ ╨┐╤А╨╛╤Ж╨╡╤Б╤Б╨╛╨╝. ╨Т╨╝╨╡╤Б╤В╨╛ ╤Б╨╗╤Г╨╢╨▒╤Л Windows ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В╤Б╤П per-user supervisor ╨╜╨░ Python:
+ ╨╛╨╜ ╨▓╨╗╨░╨┤╨╡╨╡╤В lock ╨║╨░╤В╨░╨╗╨╛╨│╨░, ╨╖╨░╨┐╤Г╤Б╨║╨░╨╡╤В ╨С╨Ф, ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В ╨╝╨╕╨│╤А╨░╤Ж╨╕╨╕ ╨╕ ╨┤╨╡╤А╨╢╨╕╤В API ╨┤╨╛
+-╨║╨╛╨╝╨░╨╜╨┤╤Л ╨╛╤Б╤В╨░╨╜╨╛╨▓╨║╨╕. SCM/service wrapper ╨╕ ╨┐╤А╨░╨▓╨░ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░ ╨╜╨╡ ╨╜╤Г╨╢╨╜╤Л.
++╨║╨╛╨╝╨░╨╜╨┤╤Л ╨╛╤Б╤В╨░╨╜╨╛╨▓╨║╨╕. SCM/service wrapper ╨╜╨╡ ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П; ╨┐╤А╨░╨▓╨░ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░ ╨╜╤Г╨╢╨╜╤Л
++╨┤╨╗╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕/╤Г╨┤╨░╨╗╨╡╨╜╨╕╤П, ╤Б╨░╨╝╨╛ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╡╤В╤Б╤П ╨╛╨▒╤Л╤З╨╜╤Л╨╝ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝.
+ 
+ ╨Р╨╗╤М╤В╨╡╤А╨╜╨░╤В╨╕╨▓╤Л: PyInstaller ╤В╤А╨╡╨▒╤Г╨╡╤В ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ hooks ╨┤╨╗╤П Alembic/psycopg ╨╕ ╨▓╤Б╤С ╤А╨░╨▓╨╜╨╛
+ ╨╜╨╡ ╤Г╨┐╨░╨║╨╛╨▓╤Л╨▓╨░╨╡╤В ╨╢╨╕╨╖╨╜╨╡╨╜╨╜╤Л╨╣ ╤Ж╨╕╨║╨╗ PostgreSQL; ╨┐╨╛╨╗╨╜╨╛╤Ж╨╡╨╜╨╜╨░╤П Windows-╤Б╨╗╤Г╨╢╨▒╨░ ╨┤╨╛╨▒╨░╨▓╨╗╤П╨╡╤В
+@@ -120,7 +169,7 @@ PostgreSQL major upgrade ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╕:
+ 
+ ╨б╨▒╨╛╤А╤Й╨╕╨║: Windows x64, Python 3.12 ╤Б pip, Inno Setup 6.7.3; frontend ╨╖╨░╤А╨░╨╜╨╡╨╡
+ ╤Б╨╛╨▒╨╕╤А╨░╨╡╤В╤Б╤П Node.js 24.22.0 ╨║╨╛╨╝╨░╨╜╨┤╨░╨╝╨╕ `npm ci`, `npm run typecheck`, `npm run build`.
+-╨б╨║╤А╨╕╨┐╤В ╨╜╨╡ ╨╖╨░╨│╤А╤Г╨╢╨░╨╡╤В runtime ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╕: ╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╡ ╨░╤А╤Е╨╕╨▓╤Л ╨┐╨╡╤А╨╡╨┤╨░╤О╤В╤Б╤П ╤П╨▓╨╜╨╛.
++╨Р╤А╤Е╨╕╨▓╤Л Python ╨╕ PostgreSQL ╨┐╨╡╤А╨╡╨┤╨░╤О╤В╤Б╤П ╤П╨▓╨╜╨╛; Visual C++ ╤Б╨║╨░╤З╨╕╨▓╨░╨╡╤В╤Б╤П ╨┐╤А╨╕ ╤Б╨▒╨╛╤А╨║╨╡.
+ ╨Э╨░ ╤Б╨▒╨╛╤А╤Й╨╕╨║╨╡ ╤В╨░╨║╨╢╨╡ ╨┤╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╤В╤М ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜ Microsoft CRT x64 >=14.44. ╨Я╤А╨╛╨▓╨╡╤А╨║╨░
+ prerequisite ╨▓╤Б╤В╤А╨╛╨╡╨╜╨░ ╨╕ ╨▓ ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║, ╨╕ ╨▓ PowerShell launcher ╨┐╨╡╤А╨╡╨┤ ╨╖╨░╨│╤А╤Г╨╖╨║╨╛╨╣
+ Python. Microsoft DLL ╨╜╨╡ ╨▓╨║╨╗╤О╤З╨░╤О╤В╤Б╤П ╨▓ payload, ╨▓ ╤В╨╛╨╝ ╤З╨╕╤Б╨╗╨╡ ╤Г╨┤╨░╨╗╤П╤О╤В╤Б╤П ╨┤╨▓╨╡ DLL
+@@ -139,12 +188,16 @@ CRT ╨╕╨╖ ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨│╨╛ Python embedded ZIP. Windows PowerShell 5.1 ╨▓╤Е╨╛╨┤
+ ╨Ф╨╗╤П ╨▓╤Л╨┐╤Г╤Б╨║╨░ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╣╤В╨╡ ╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╡ ╨╕╤Б╤В╨╛╤З╨╜╨╕╨║╨╕ ╨╕ ╤Б╨▓╨╡╤А╤П╨╣╤В╨╡ ╨┐╤А╨╛╨╕╤Б╤Е╨╛╨╢╨┤╨╡╨╜╨╕╨╡ ╨░╤А╤Е╨╕╨▓╨╛╨▓,
+ ╨┐╤А╨╛╨▓╨╡╤А╤П╨╣╤В╨╡ ╨┐╨╛╨┤╨┐╨╕╤Б╤М ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║╨░ ╨╕ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╣╤В╨╡ smoke-╨┐╤А╨╛╨▓╨╡╤А╨║╤Г ╨▓ ╤З╨╕╤Б╤В╨╛╨╣ Windows VM.
+ ╨б╨░╨╝ ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ EDR ╨▓ ╤Н╤В╨╛╨╣ ╤А╨╡╨░╨╗╨╕╨╖╨░╤Ж╨╕╨╕ ╨╜╨╡ ╨┐╨╛╨┤╨┐╨╕╤Б╤Л╨▓╨░╨╡╤В╤Б╤П ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╤З╨╡╤Б╨║╨╕.
+-Manifest ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В `selfContained=false` ╨╕ ╨▓╨╜╨╡╤И╨╜╨╕╨╣ prerequisite Microsoft CRT.
+-╨Ъ╨╗╤О╤З `-SmokeBuild` ╨╜╨░╨╖╨╜╨░╤З╨░╨╡╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ AppId, ╤З╤В╨╛╨▒╤Л ╤В╨╡╤Б╤В ╨╜╨╡ ╨╖╨░╤В╤А╨░╨│╨╕╨▓╨░╨╗ ╤А╨╡╨│╨╕╤Б╤В╤А╨░╤Ж╨╕╤О
+-╤И╤В╨░╤В╨╜╨╛╨╣ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕. ╨в╨╛╨╗╤М╨║╨╛ ╨▓ ╤Н╤В╨╛╨╣ ╤В╨╡╤Б╤В╨╛╨▓╨╛╨╣ ╤Б╨▒╨╛╤А╨║╨╡ ╨┤╨╛╤Б╤В╤Г╨┐╨╡╨╜ ╨║╨╗╤О╤З ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║╨░
+-`/EDRTestMissingCRT=1`: ╨╛╨╜ ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╨╛╤В╨║╨░╨╖ ╨┐╤А╨╕ ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╨╕╨╕ runtime, ╨╜╨╡ ╤Г╨┤╨░╨╗╤П╤П
+-╤Б╨╕╤Б╤В╨╡╨╝╨╜╤Л╨╡ DLL. ╨Т ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╝ ╤А╨╡╨╢╨╕╨╝╨╡ ╨╛╤В╨║╤А╤Л╨▓╨░╨╡╤В╤Б╤П Microsoft; ╨▓ silent-╤А╨╡╨╢╨╕╨╝╨╡
+-╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╨╖╨░╨▓╨╡╤А╤И╨░╨╡╤В╤Б╤П ╨╛╤И╨╕╨▒╨║╨╛╨╣ ╨╕ ╨┐╨╕╤И╨╡╤В ╨╛╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╤Л╨╣ URL ╨▓ ╨╢╤Г╤А╨╜╨░╨╗.
++Manifest ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В `selfContained=true` ╨╕ ╨╛╨▒╤К╨╡╨║╤В `prerequisite` ╤Б ╤В╨╛╤З╨╜╤Л╨╝╨╕ version,
++SHA-256, architecture, minimumVersion ╨╕ ╨┤╨░╨╜╨╜╤Л╨╝╨╕ ╨┐╨╛╨┤╨┐╨╕╤Б╨╕. ╨Ъ╨░╨╢╨┤╨░╤П ╤Б╨▒╨╛╤А╨║╨░ ╨┐╨╛╨╗╤Г╤З╨░╨╡╤В
++╨┐╨░╨║╨╡╤В ╨╕╨╖ `https://aka.ms/vc14/vc_redist.x64.exe` ╨╕ ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╨┤╨╡╨╣╤Б╤В╨▓╨╕╤В╨╡╨╗╤М╨╜╤Г╤О
++Authenticode ╨┐╨╛╨┤╨┐╨╕╤Б╤М Microsoft Corporation, ╨┐╨╛╨┤╨┐╨╕╤Б╨░╨╜╨╜╤Л╨╡ ╨╝╨╡╤В╨░╨┤╨░╨╜╨╜╤Л╨╡ x64 ╨╕ ╨▓╨╡╤А╤Б╨╕╤О
++>=14.44.0.0. ╨б╨░╨╝ PE bootstrapper ╨╝╨╛╨╢╨╡╤В ╨▒╤Л╤В╤М x86; ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В╤Б╤П ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░ runtime.
++╨Э╨╛╨▓╤Л╨╣ EXE ╨╝╨╛╨╢╨╡╤В ╨┐╤А╨╕╨╜╨╛╤Б╨╕╤В╤М ╨▒╨╛╨╗╨╡╨╡ ╨╜╨╛╨▓╤Л╨╣ ╨┐╨╛╨┤╨┤╨╡╤А╨╢╨╕╨▓╨░╨╡╨╝╤Л╨╣ runtime. Microsoft binary
++╤Е╤А╨░╨╜╨╕╤В╤Б╤П ╤В╨╛╨╗╤М╨║╨╛ ╨▓ WorkDirectory ╨▓╨╜╨╡ Git.
++╨Ъ╨╗╤О╤З `-SmokeBuild` ╨╜╨░╨╖╨╜╨░╤З╨░╨╡╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ AppId ╨╕ ╨║╨╛╤А╨╡╨╜╤М `%ProgramData%\EDR-Smoke`,
++╤З╤В╨╛╨▒╤Л ╤В╨╡╤Б╤В ╨╜╨╡ ╨╖╨░╤В╤А╨░╨│╨╕╨▓╨░╨╗ ╤А╨╡╨│╨╕╤Б╤В╤А╨░╤Ж╨╕╤О/╨┤╨░╨╜╨╜╤Л╨╡ ╤И╤В╨░╤В╨╜╨╛╨╣ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕.
++╨Я╤А╨╡╨╢╨╜╨╕╨╣ ╨║╨╗╤О╤З `/EDRTestMissingCRT` ╨▒╨╛╨╗╤М╤И╨╡ ╨╜╨╡ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В╤Б╤П.
+ 
+ ╨Ш╤Б╤В╨╛╤З╨╜╨╕╨║╨╕ ╨╕ ╨╗╨╕╤Ж╨╡╨╜╨╖╨╕╨╕ (╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╤Л ╨┐╤А╨╕ ╤А╨╡╨░╨╗╨╕╨╖╨░╤Ж╨╕╨╕ 2026-10-27):
+ 
+@@ -165,14 +218,19 @@ Manifest ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В `selfContained=false` ╨╕ ╨▓╨╜╨╡╤И╨╜╨╕╨╣ prerequisite M
+   ╤А╨░╨╖╤А╨╡╤И╨░╨╡╤В app-local ╤А╨░╨╖╨╝╨╡╤Й╨╡╨╜╨╕╨╡, ╨╜╨╛ ╨╛╨│╤А╨░╨╜╨╕╤З╨╕╨▓╨░╨╡╤В ╤А╨░╤Б╨┐╤А╨╛╤Б╤В╤А╨░╨╜╨╡╨╜╨╕╨╡ runtime
+   ╨╗╨╕╤Ж╨╡╨╜╨╖╨╕╤А╨╛╨▓╨░╨╜╨╜╤Л╨╝╨╕ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П╨╝╨╕ Visual Studio ╤Б╨╛╨│╨╗╨░╤Б╨╜╨╛ Microsoft Software
+   License Terms. ╨н╤В╨╛ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ ╨▓╤Е╨╛╨┤ ╤Б╨▒╨╛╤А╨║╨╕ ╨╕ ╤В╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╨╡ ╨║ ╨▓╤Л╨┐╤Г╤Б╨║╨░╤О╤Й╨╡╨╣ ╨╛╤А╨│╨░╨╜╨╕╨╖╨░╤Ж╨╕╨╕.
+-  ╨Я╨╛╤Н╤В╨╛╨╝╤Г EDR ╨╜╨╡ ╤А╨░╤Б╨┐╤А╨╛╤Б╤В╤А╨░╨╜╤П╨╡╤В ╨╡╨│╨╛ ╨╕ ╨╜╨░╨┐╤А╨░╨▓╨╗╤П╨╡╤В ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨║ Microsoft.
++  EDR ╨▓╨║╨╗╤О╤З╨░╨╡╤В ╨╛╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╤Л╨╣ Redistributable ╨┐╤А╨╕ ╤Б╨╛╨▒╨╗╤О╨┤╨╡╨╜╨╕╨╕ ╤Н╤В╨╕╤Е ╤Г╤Б╨╗╨╛╨▓╨╕╨╣.
+   ╨Э╨░╨╗╨╕╤З╨╕╨╡ VC runtime ╨╜╨░ ╨╝╨░╤И╨╕╨╜╨╡ ╤А╨░╨╖╤А╨░╨▒╨╛╤В╤З╨╕╨║╨░ ╨╜╨╡ ╨┤╨╛╨║╨░╨╖╤Л╨▓╨░╨╡╤В ╨│╨╛╤В╨╛╨▓╨╜╨╛╤Б╤В╤М ╤З╨╕╤Б╤В╨╛╨╣ ╨┐╨╛╤Б╤В╨░╨▓╨║╨╕.
+ 
+ ## ╨Я╤А╨╛╨▓╨╡╤А╨║╨░ ╨┐╨╛╤Б╤В╨░╨▓╨║╨╕
+ 
+-`packaging/windows/smoke.ps1` ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Г╤О ╤В╨╡╤Б╤В╨╛╨▓╤Г╤О ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г ╨╕ ╤Б╨╕╨╜╤В╨╡╤В╨╕╤З╨╡╤Б╨║╨╕╨╡
++`packaging/windows/smoke.ps1` ╨┤╨╛╨┐╤Г╤Б╨║╨░╨╡╤В ╨╖╨░╨┐╤Г╤Б╨║ ╤В╨╛╨╗╤М╨║╨╛ ╨┐╨╛╨┤ WDAGUtilityAccount
++╨▓ ╤Б╨▓╨╡╨╢╨╡╨╣ Windows Sandbox ╨╕ ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Г╤О ╤В╨╡╤Б╤В╨╛╨▓╤Г╤О ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г ╨╕ ╤Б╨╕╨╜╤В╨╡╤В╨╕╤З╨╡╤Б╨║╨╕╨╡
+ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л: ╨╖╨░╨┐╤Г╤Б╨║, ╨╖╨░╨┐╨╕╤Б╤М/╨▓╨╗╨╛╨╢╨╡╨╜╨╕╨╡, ╨┐╨╡╤А╨╡╨╖╨░╨┐╤Г╤Б╨║, backup/restore, ╨╛╤В╨║╨░╨╖ ╨╛╤В ╨╖╨░╨╝╨╡╨╜╤Л
+-╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╤Е ╨┤╨░╨╜╨╜╤Л╤Е, ╤Б╨╛╤Е╤А╨░╨╜╨╜╨╛╤Б╤В╤М ╨┐╤А╨╕ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╕ ╨╕ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╕. ╨Я╤А╨╛╨▓╨╡╤А╨║╨░ ╨╜╨░ ╤А╨░╨▒╨╛╤З╨╡╨╣
++╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╤Е ╨┤╨░╨╜╨╜╤Л╤Е, ╨║╨╛╨┐╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ legacy ╤Б ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╨╡╨╝ ╨╕╤Б╤Е╨╛╨┤╨╜╨╕╨║╨░, ╤Б╨╛╤Е╤А╨░╨╜╨╜╨╛╤Б╤В╤М
++╨┐╤А╨╕ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╕, ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╕ ╨╕ ╨┐╨╡╤А╨╡╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╡. ╨Я╨░╤А╨░╨╝╨╡╤В╤А `-InstallDirectoryName`
++╨┐╨╛╨╖╨▓╨╛╨╗╤П╨╡╤В ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М Unicode-╨┐╤Г╤В╤М. ╨Э╨░╤Б╤В╨╛╤П╤Й╨╕╨╡ UAC consent/credential prompts
++╤В╤А╨╡╨▒╤Г╤О╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨│╨╛ ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╤П: Sandbox ╤Б `EnableLUA=0`
++╨╜╨╡ ╨┤╨╛╨║╨░╨╖╤Л╨▓╨░╨╡╤В ╤Н╤В╨╕ ╤Б╤Ж╨╡╨╜╨░╤А╨╕╨╕. ╨Я╤А╨╛╨▓╨╡╤А╨║╨░ ╨╜╨░ ╤А╨░╨▒╨╛╤З╨╡╨╣
+ Windows ╤Б ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╤Л╨╝╨╕ ╨╕╨╜╤Б╤В╤А╤Г╨╝╨╡╨╜╤В╨░╨╝╨╕ **╨╜╨╡ ╤А╨░╨▓╨╜╨░ ╤З╨╕╤Б╤В╨╛╨╣ Windows VM**. ╨д╨░╨║╤В╨╕╤З╨╡╤Б╨║╨╕╨╡
+ ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В╤Л ╨╕ NOT_RUN ╨┐╨╡╤А╨╡╤З╨╕╤Б╨╗╤П╤О╤В╤Б╤П ╨▓ ╨╛╤В╤З╤С╤В╨╡ ╨╕╤Б╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤П, ╨┐╤А╨╕╨╜╤П╤В╨╕╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П
+ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╝ ╤А╨╡╨▓╤М╤О╨╡╤А╨╛╨╝. ╨Э╨╡ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╣╤В╨╡ ╨║╨╗╨╕╨╡╨╜╤В╤Б╨║╨╕╨╡ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╤Л ╨▓ smoke-╨┐╤А╨╛╨▓╨╡╤А╨║╨░╤Е.
+diff --git a/docs/workflow/APPROVALS.md b/docs/workflow/APPROVALS.md
+index 4b763f3..94acc30 100644
+--- a/docs/workflow/APPROVALS.md
++++ b/docs/workflow/APPROVALS.md
+@@ -384,3 +384,262 @@ Path-import +2 cwd change ╨▓ tests/test_transaction.py, ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ commi
+ ╨╜╨░ ╤А╨╡╨░╨╗╤М╨╜╤Л╨╡ ╤Б╨╡╨║╤А╨╡╤В╤Л/╨┤╨░╨╜╨╜╤Л╨╡; ╨┐╤А╨╕ ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╨╛╨╣ ╨╜╨░╤Е╨╛╨┤╨║╨╡ ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╤П ╨╛╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В╤Б╤П
+ ╨┤╨╗╤П ╤А╨╡╤И╨╡╨╜╨╕╤П, ╨╕╤Б╤В╨╛╤А╨╕╤П ╨╕ ╨▓╨░╨╢╨╜╤Л╨╡ ╨┤╨░╨╜╨╜╤Л╨╡ ╨╜╨╡ ╤Г╨┤╨░╨╗╤П╤О╤В╤Б╤П. Release/deployment/force push
+ ╨╕ ╨┐╤А╨╛╤З╨╕╨╡ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨╕ ╨╜╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╤Л. ╨Я╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╕╨╡ scopes/FAIL/usage ╤Б╨╛╤Е╤А╨░╨╜╤П╤О╤В╤Б╤П.
++
++## RELEASE_0_2_0_APPROVED_20261027
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ┬л╨Ф╨░╨▓╨░╨╣ ╤В╨╛╨│╨┤╨░ ╨┤╨╡╨╗╨░╨╡╨╝ ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╣ ╤И╨░╨│┬╗ ╤Г╤В╨▓╨╡╤А╨╢╨┤╨░╨╡╤В ╨╜╨╡╨┐╨╛╤Б╤А╨╡╨┤╤Б╤В╨▓╨╡╨╜╨╜╨╛
++╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╜╤Л╨╣ Release v0.2.0 ╤Б ╨│╨╛╤В╨╛╨▓╤Л╨╝ EXE ╨╕ ╤А╤Г╤Б╤Б╨║╨╛╨╣ ╨╕╨╜╤Б╤В╤А╤Г╨║╤Ж╨╕╨╡╨╣. ╨а╨░╨╖╤А╨╡╤И╨╡╨╜╤Л
++tag/release ╨╕3assets (EXE/guide/SHA256SUMS) ╨▒╨╡╨╖ source rebuild. Target
++4e2107e5b006a81da15d5ffc23b88888440534b7; EXE SHA256
++b75f7132e2f17988eb213991d22a03fcb965165c5919510087d694c86d21594d.
++Scope: [TASK-RELEASE-0.2.0](../tasks/TASK-RELEASE-0.2.0.md).
++╨Я╤А╤П╨╝╨╛╨╡ ╤А╨╡╤И╨╡╨╜╨╕╨╡ ╤Г╨╢╨╡ ╤А╨░╨╖╤А╨╡╤И╨░╨╡╤В ╤Д╨╕╨╜╨░╨╗╤М╨╜╤Г╤О ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╤О ╨▒╨╡╨╖ ╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛╨│╨╛ ╨▓╨╛╨┐╤А╨╛╤Б╨░.
++
++## README_PRESENTATION_02_APPROVED_20261027
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М: ┬л╨Ф╨░╨▓╨░╨╣ ╤Б╨┤╨╡╨╗╨░╨╣ ╤Б╨║╤А╨╕╨╜╤Л ╤Б╨╡╨╣╤З╨░╤Б, ╨╖╨░╨▓╤В╤А╨░ ╨┐╨╛╤Б╨╗╨╡ ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨▓╤Б╨╡╨│╨┤╨░ ╨╝╨╛╨╢╨╜╨╛
++╨╖╨░╨╝╨╡╨╜╨╕╤В╤М) ╨╕ ╨▓╤Б╨╡ ╨╛╤Б╤В╨░╨╗╤М╨╜╨╛╨╡ ╤В╨╛╨╢╨╡ ╤Б╨┤╨╡╨╗╨░╨╣ ╤З╤В╨╛ ╨╜╨░╨┐╨╕╤Б╨░╨╗┬╗. ╨г╤В╨▓╨╡╤А╨╢╨┤╤С╨╜ ╨║╨╛╨╝╨┐╨░╨║╤В╨╜╤Л╨╣ README
++╨┤╨╗╤П GitHub: ╨╖╨░╨│╤А╤Г╨╖╨║╨░ Windows release, ╨┤╨▓╨╡ ╨╕╨╗╨╗╤О╤Б╤В╤А╨░╤Ж╨╕╨╕ ╤В╨╡╨║╤Г╤Й╨╡╨│╨╛ UI, ╨║╨╛╤А╨╛╤В╨║╨╕╨╡
++╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛╤Б╤В╨╕/╨│╤А╨░╨╜╨╕╤Ж╤Л/╤В╨╡╤Е╨╜╨╛╨╗╨╛╨│╨╕╨╕ ╨╕ ╤Б╤Б╤Л╨╗╨║╨╕; ╨┤╨╗╨╕╨╜╨╜╤Л╨╣ WSL2 ╤А╨░╨╖╨┤╨╡╨╗ ╨┐╨╡╤А╨╡╨╜╨╛╤Б╨╕╤В╤Б╤П ╨▓
++developer guide. ╨в╨╛╤З╨╜╤Л╨╣ frozen scope/checklist:
++[TASK-README-PRESENTATION-02](../tasks/TASK-README-PRESENTATION-02.md), SHA256
++`D00E7438B088D2883B2CC642E5AC630BC276210CBF676F5A3CFFC44A83EC183E`. ╨а╨░╨╖╤А╨╡╤И╨╡╨╜╤Л
++╤В╨╛╨╗╤М╨║╨╛ README, ╨╜╨╛╨▓╤Л╨╣ developer guide, ╨┤╨▓╨╡ ╨╕╨╗╨╗╤О╤Б╤В╤А╨░╤Ж╨╕╨╕ ╨╕ coordinator-owned
++workflow ╨╖╨░╨┐╨╕╤Б╨╕. ╨б╨║╤А╨╕╨╜╤И╨╛╤В╤Л ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╤О╤В ╤В╨╛╨╗╤М╨║╨╛ ╤Б╨╕╨╜╤В╨╡╤В╨╕╤З╨╡╤Б╨║╨╕╨╡ ╤В╨╡╤Б╤В╨╛╨▓╤Л╨╡ ╨╖╨░╨┐╨╕╤Б╨╕.
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨┐╨╛╤А╤Г╤З╨╕╨╗ ╨╛╤Д╨╛╤А╨╝╨╕╤В╤М ╨╕╨╝╨╡╨╜╨╜╨╛ ╨┐╤Г╨▒╨╗╨╕╤З╨╜╤Л╨╣ GitHub-╤А╨╡╨┐╨╛╨╖╨╕╤В╨╛╤А╨╕╨╣; ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣
++commit ╨╕ ╨╛╨▒╤Л╤З╨╜╤Л╨╣ push ╨┐╨╛╤Б╨╗╨╡ PASS ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╤Л. ╨Э╨╡╤В ╤А╨╡╨╗╨╕╨╖╨░/tag/deploy ╨╕╨╗╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╣
++╨┐╤А╨╛╨┤╤Г╨║╤В╨░, CI ╨╕ GitHub settings. ╨г╨║╨░╨╖╨░╨╜╨╜╤Л╨╣ SHA ╨╛╤В╨╜╨╛╤Б╨╕╤В╤Б╤П ╨║ ╨▓╨╡╤А╤Б╨╕╨╕ frozen TASK ╨┐╤А╨╕
++approval; ╨┐╨╛╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╡ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А╤Б╨║╨╕╨╡ C1/C2/publication outcome ╨╖╨░╨┐╨╕╤Б╨╕
++╨┤╨╛╨┐╨╛╨╗╨╜╤П╤О╤В TASK, ╨╜╨╛ checklist ╨╕ ╤А╨░╨╖╤А╨╡╤И╤С╨╜╨╜╤Л╨╡ ╤В╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╤П ╨╜╨╡ ╨╝╨╡╨╜╤П╤О╤В.
++
++## WINDOWS_PROGRAMDATA_01_APPROVED_20261028
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨┐╨╛╤Б╨╗╨╡ ╨╛╨▒╤Б╤Г╨╢╨┤╨╡╨╜╨╕╤П ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╕╨╣ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ ╤П╨▓╨╜╨╛ ╤Г╤В╨▓╨╡╤А╨┤╨╕╨╗ ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╤Г:
++┬л╨Ы╨░╨┤╨╜╨╛, ╨┤╨╡╨╗╨░╨╣ ╨▓ ╨┐╨░╨┐╨║╤Г C:\ProgramData ╤Б ╨╖╨░╨┐╤А╨╛╤Б╨╛╨╝ ╨┐╤А╨░╨▓ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░┬╗.
++╨а╨░╨╖╤А╨╡╤И╨╡╨╜╤Л TASK-WINDOWS-PROGRAMDATA-01 ╨╕ [ADR-013](../adr/ADR-013-windows-programdata-runtime.md):
++╨║╨░╤В╨░╨╗╨╛╨│ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П EDR ╨╛╤Б╤В╨░╤С╤В╤Б╤П ╨▓╤Л╨▒╨╕╤А╨░╨╡╨╝╤Л╨╝ ╨╕ ╨╝╨╛╨╢╨╡╤В ╤Б╨╛╨┤╨╡╤А╨╢╨░╤В╤М Unicode; ╨┐╨╛╤Б╤В╨░╨▓╨╗╤П╨╡╨╝╤Л╨╡
++╨╕╤Б╨┐╨╛╨╗╨╜╤П╨╡╨╝╤Л╨╡ ╤Д╨░╨╣╨╗╤Л PostgreSQL ╨╕ ╨┐╨╛╤Б╤В╨╛╤П╨╜╨╜╤Л╨╡ ╨┤╨░╨╜╨╜╤Л╨╡ ╤А╨░╨╖╨╝╨╡╤Й╨░╤О╤В╤Б╤П ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛ ╨▓
++`%ProgramData%\EDR` ╤Б ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╤Л╨╝╨╕ ACL; ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║ ╨╖╨░╨┐╤А╨░╤И╨╕╨▓╨░╨╡╤В admin elevation;
++╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡/╨┐╨╡╤А╨╡╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╤Б╨╛╤Е╤А╨░╨╜╤П╨╡╤В ╨С╨Ф ╨╕ ╨▓╨╗╨╛╨╢╨╡╨╜╨╕╤П. ╨Я╨╡╤А╨╡╨╜╨╛╤Б ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╤Е ╨┤╨░╨╜╨╜╤Л╤Е
++╨┤╨╛╨╗╨╢╨╡╨╜ ╨▒╤Л╤В╤М ╨▒╨╡╨╖╨╛╨┐╨░╤Б╨╜╤Л╨╝ ╨╕ ╨╛╤Б╤В╨░╨▓╨╗╤П╤В╤М ╨╕╤Б╤Е╨╛╨┤╨╜╨╕╨║ ╨┐╤А╨╕ ╨╛╤И╨╕╨▒╨║╨╡. ╨Ч╨░╨┐╤А╨╡╤Й╨╡╨╜╤Л ╨▓╤А╨╡╨╝╨╡╨╜╨╜╨╛╨╡
++╨┐╤Б╨╡╨▓╨┤╨╛╨╜╨╕╨╝╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡/╨▒╤Г╨║╨▓╨░ ╨┤╨╕╤Б╨║╨░, ╨┐╨╡╤А╨╡╤Б╨▒╨╛╤А╨║╨░/╨╖╨░╨╝╨╡╨╜╨░ PostgreSQL ╨╕ ╨┤╤А╤Г╨│╨░╤П ╨б╨г╨С╨Ф.
++╨а╨░╨╖╤А╨╡╤И╨╡╨╜╤Л ╤В╨╛╨╗╤М╨║╨╛ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П ╨╕╨╖ allowlist TASK ╨╕ ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╡ ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨▓ ╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣
++Windows-╤Б╤А╨╡╨┤╨╡. ╨в╨╡╨║╤Г╤Й╤Г╤О ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╤Г╤О ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г/╨┤╨░╨╜╨╜╤Л╨╡ ╨╜╨╡ ╤В╤А╨╛╨│╨░╤В╤М. Commit/push,
++release/tag, deployment ╨╕ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╡ ╨┐╨╛╤Б╤В╨╛╤П╨╜╨╜╤Л╤Е ╨┤╨░╨╜╨╜╤Л╤Е ╤Н╤В╨╛╨╣ ╨╖╨░╨┐╨╕╤Б╤М╤О ╨╜╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╤Л.
++
++## CODEX_CLI_UPDATE_20261028
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤П╨▓╨╜╨╛ ╤А╨░╨╖╤А╨╡╤И╨╕╨╗ ╨╛╨▒╨╜╨╛╨▓╨╕╤В╤М ╨│╨╗╨╛╨▒╨░╨╗╤М╨╜╤Л╨╣ Codex CLI ╤Б ╨▓╨╡╤А╤Б╨╕╨╕ 0.164.0 ╨┤╨╛
++0.165.0, ╤З╤В╨╛╨▒╤Л Orca ╤Б╨╝╨╛╨│ ╨╖╨░╨┐╤Г╤Б╤В╨╕╤В╤М ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨│╨╛ R3 ╤А╨╡╨▓╤М╤О╨╡╤А╨░. ╨Ъ╨╛╨╝╨░╨╜╨┤╨░
++`npm install -g @openai/codex@0.165.0` ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╨░╤Б╤М ╤Б exit code 0; `codex --version`
++╨╕ `npm list -g @openai/codex --depth=0` ╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╨╗╨╕ `0.165.0`. npm ╨▓╤Л╨▓╨╡╨╗ cleanup
++warning EPERM ╨┤╨╗╤П ╨╖╨░╨╜╤П╤В╨╛╨│╨╛ ╤Б╤В╨░╤А╨╛╨│╨╛ ╨▓╤А╨╡╨╝╨╡╨╜╨╜╨╛╨│╨╛ `codex-code-mode-host.exe`; ╨┐╨░╨║╨╡╤В
++╨┐╤А╨╕ ╤Н╤В╨╛╨╝ ╨╛╨▒╨╜╨╛╨▓╨╗╤С╨╜.
++
++## WINDOWS_PROGRAMDATA_ACL_CONFIRM_20261028
++
++╨Я╨╛╤Б╨╗╨╡ C1 FAIL ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╨╗ frozen ACL ╨┤╨╗╤П ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╕╤Е ╨┤╨░╨╜╨╜╤Л╤Е
++EDR: ┬л╨в╨╛╨╗╤М╨║╨╛ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М EDR ╨╕ SYSTEM┬╗. ╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П BUILTIN\\Administrators,
++BUILTIN\\Users, Everyone ╨╕ ╨╕╨╜╤Л╨╡ ╤И╨╕╤А╨╛╨║╨╕╨╡ ACE ╨╜╨╡ ╨┤╨╛╨┐╤Г╤Б╨║╨░╤О╤В╤Б╤П ╨╜╨░ ╨▒╨░╨╖╤Г, ╨▓╨╗╨╛╨╢╨╡╨╜╨╕╤П,
++╨╢╤Г╤А╨╜╨░╨╗╤Л ╨╕ backup. ╨Ш╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ACL contract ╨╜╨╡ ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П; C2 ╨╛╨▒╤П╨╖╨░╨╜ ╤А╨╡╨░╨╗╨╕╨╖╨╛╨▓╨░╤В╤М ╨╕
++╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╨╕╤Б╤Е╨╛╨┤╨╜╨╛╨╡ ╤В╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╨╡. ╨б╨╗╤Г╨╢╨╡╨▒╨╜╤Л╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╛╤З╨╜╤Л╨╡ ╤Д╨░╨╣╨╗╤Л ╨▓╨╜╨╡ ╨║╨░╤В╨░╨╗╨╛╨│╨░ ╨┤╨░╨╜╨╜╤Л╤Е
++╨┤╨╛╨╗╨╢╨╜╤Л ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨╕╤А╨╛╨▓╨░╤В╤М ╤Б╨▓╨╛╨╕ ╨┐╤А╨░╨▓╨░ ╨╕ ╨╜╨╡ ╤Б╨╛╨┤╨╡╤А╨╢╨░╤В╤М ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╕╤Е ╨┤╨░╨╜╨╜╤Л╤Е.
++
++## WINDOWS_CRT_OFFLINE_20261029
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╕╨╖╨╝╨╡╨╜╨╕╨╗ ╤А╨░╨╜╨╡╨╡ ╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╜╤Л╨╣ prerequisite flow ╨┐╤А╤П╨╝╤Л╨╝ ╨┐╨╛╤А╤Г╤З╨╡╨╜╨╕╨╡╨╝:
++┬л╨╜╤Г ╤В╨╛╨│╨┤╨░ ╨▓╨║╨╗╤О╤З╨╕ Visual C++ Runtime ╨▓ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╛╤З╨╜╤Л╨╣ ╨┐╨░╨║╨╡╤В EDR. ╨Ш ╨┐╨╛╤В╨╛╨╝ ╨┐╤А╨╛╨▓╨╡╤А╨╕╨╝
++╨╜╨░ VM┬╗. ╨г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╤Л [ADR-014](../adr/ADR-014-windows-offline-vcredist.md) ╨╕
++[TASK-WINDOWS-CRT-OFFLINE-01](../tasks/TASK-WINDOWS-CRT-OFFLINE-01.md):
++╨╛╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╤Л╨╣ Microsoft Visual C++ v14 x64 Redistributable ╨▓ standalone EDR EXE,
++╨┐╤А╨╛╨▓╨╡╤А╨║╨░ ╨╕ ╤В╨╕╤Е╨░╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨┐╤А╨╕ ╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨╛╤Б╤В╨╕ ╨┐╨╛╨┤ ╤В╨╡╨╝ ╨╢╨╡ admin elevation,
++╨▒╨╡╨╖ ╤Б╨╡╤В╨╡╨▓╨╛╨╣ ╨╖╨░╨│╤А╤Г╨╖╨║╨╕ ╨╜╨░ ╨Я╨Ъ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П, ╤Б ╨┐╤А╨╛╨▓╨╡╤А╨║╨╛╨╣ ╨▓ ╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣ Hyper-V
++`EDR-Win11-Test`. ╨в╨╡╨║╤Г╤Й╨░╤П ╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╨░╤П ╤Б╨▒╨╛╤А╨╛╤З╨╜╨░╤П ╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╤Б╤В╤М тАФ ╨▓╨╡╤А╤Б╨╕╤П 14.51.36247.0;
++manifest ╨┤╨╛╨╗╨╢╨╡╨╜ ╤Д╨╕╨║╤Б╨╕╤А╨╛╨▓╨░╤В╤М ╤В╨╛╤З╨╜╤Г╤О ╨▓╨╡╤А╤Б╨╕╤О ╨╕ SHA-256 ╤А╨╡╨░╨╗╤М╨╜╨╛ ╨▓╨║╨╗╤О╤З╤С╨╜╨╜╨╛╨│╨╛ ╤Д╨░╨╣╨╗╨░.
++╨а╨░╤Б╨┐╤А╨╛╤Б╤В╤А╨░╨╜╨╡╨╜╨╕╨╡ ╨┤╨╛╨┐╤Г╤Б╤В╨╕╨╝╨╛ ╤В╨╛╨╗╤М╨║╨╛ ╨▓ ╤А╨░╨╝╨║╨░╤Е ╨╗╨╕╤Ж╨╡╨╜╨╖╨╕╨╕ Visual Studio ╨╕ ╤Г╤Б╨╗╨╛╨▓╨╕╨╣
++Microsoft Software License Terms.
++
++╨а╨░╨╖╤А╨╡╤И╨╡╨╜╤Л ╤В╨╛╨╗╤М╨║╨╛ ╤Д╨░╨╣╨╗╤Л allowlist ╨╜╨╛╨▓╨╛╨│╨╛ TASK, focused checks ╨╕ ╨▓╤А╨╡╨╝╨╡╨╜╨╜╤Л╨╣ EXE ╨▓╨╜╨╡
++`dist/`, ╨░ ╤В╨░╨║╨╢╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨▓ ╨╜╨░╨╖╨▓╨░╨╜╨╜╤Г╤О ╤В╨╡╤Б╤В╨╛╨▓╤Г╤О VM. ╨Э╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╤Л commit/push,
++release/tag, deployment, ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П host install/data ╨╕╨╗╨╕ ╨┤╤А╤Г╨│╨╕╤Е VM. ╨н╤В╨░ ╨┐╨╛╨┐╤А╨░╨▓╨║╨░
++╨╜╨╡ ╤Б╨▒╤А╨░╤Б╤Л╨▓╨░╨╡╤В ╨▒╤О╨┤╨╢╨╡╤В╤Л/╤Б╤З╤С╤В╤З╨╕╨║╨╕ TASK-WINDOWS-PROGRAMDATA-01 ╨╕ ╨╜╨╡ ╨╛╨╖╨╜╨░╤З╨░╨╡╤В ╨╡╨│╨╛ PASS.
++
++## PROGRAMDATA_A2_RESUME_20261029
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤П╨▓╨╜╨╛ ╤А╨░╨╖╤А╨╡╤И╨╕╨╗ ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨╕╤В╤М ╨╖╨░╨▒╨╗╨╛╨║╨╕╤А╨╛╨▓╨░╨╜╨╜╤Г╤О ╤А╨░╨▒╨╛╤В╤Г:
++┬л╨Я╤А╨╛╨┤╨╛╨╗╨╢╨░╨╡╨╝ ╤Б ProgramData┬╗, ╨╕ ╨┐╨╛╨┐╤А╨╛╤Б╨╕╨╗ ╨╝╨░╨║╤Б╨╕╨╝╨░╨╗╤М╨╜╨╛ ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╨╖╨╕╤А╨╛╨▓╨░╤В╤М ╤А╨░╨▒╨╛╤В╤Г,
++╤З╤В╨╛╨▒╤Л ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╤В╤М ╨┐╨╛╨▓╤В╨╛╤А╤П╤О╤Й╨╕╨╡╤Б╤П ╤А╤Г╤З╨╜╤Л╨╡ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╤П ╨▓ VM. ╨Ю╨┤╨╛╨▒╤А╨╡╨╜╨╜╤Л╨╡ ╤В╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╤П,
++ACL (╤В╨╛╨╗╤М╨║╨╛ intended EDR user + SYSTEM), ADR-013 ╨╕ Roadmap ╨╜╨╡ ╨╝╨╡╨╜╤П╤О╤В╤Б╤П.
++╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨░ ╨╜╨╛╨▓╨░╤П ╨╝╨░╤В╨╡╤А╨╕╨░╨╗╤М╨╜╨╛ ╨╛╤В╨╗╨╕╤З╨░╤О╤Й╨░╤П╤Б╤П ╨┐╨╛╨┐╤Л╤В╨║╨░ A2/C1 ╨▓ ╤Г╨╢╨╡ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╡╨╣
++╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ Hyper-V VM; C1/C2/C3 A1, ╨╕╤Е ╤А╨╡╨▓╤М╤О, ╨╕╤Б╤В╨╛╤А╨╕╤П ╨╕
++╤А╨░╤Б╤Е╨╛╨┤ ╤Б╨╛╤Е╤А╨░╨╜╤П╤О╤В╤Б╤П. ╨Ю╤Б╤В╨░╨▓╤И╨╕╨╡╤Б╤П ╨▓ R3 ╨╗╨╕╨╝╨╕╤В╨╡ TASK-WINDOWS-PROGRAMDATA-01 ╨┤╨▓╨░
++Codex provider calls ╨╖╨░╤А╨╡╨╖╨╡╤А╨▓╨╕╤А╨╛╨▓╨░╨╜╤Л ╨╜╨░ A2/C1 implementation ╨╕ ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡
++review; A2/C2 ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╤В╤М ╨▒╨╡╨╖ ╨╜╨╛╨▓╨╛╨│╨╛ ╨┤╨╛╨┐╤Г╤Б╤В╨╕╨╝╨╛╨│╨╛ ╨▒╤О╨┤╨╢╨╡╤В╨╜╨╛╨│╨╛ ╤А╨╡╤И╨╡╨╜╨╕╤П.
++╨а╨░╨╖╤А╨╡╤И╨╡╨╜╤Л ╤В╨╛╨╗╤М╨║╨╛ ╨╕╤Б╤Е╨╛╨┤╨╜╤Л╨╣ TASK allowlist, ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨▓ EDR-Win11-Test ╨╕ ╨▓╤А╨╡╨╝╨╡╨╜╨╜╤Л╨╡
++╨░╤А╤В╨╡╤Д╨░╨║╤В╤Л ╨▓╨╜╨╡ `dist/`. ╨Э╨╡╤В ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П ╨╜╨░ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ host UAC/install/data,
++╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╡ ╨▓╨░╨╢╨╜╤Л╤Е ╨┤╨░╨╜╨╜╤Л╤Е, commit/push/release/tag/deployment.
++
++## WINDOWS_PROGRAMDATA_OWNER_WAIVER_20261103
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М 2026-11-03 ╤П╨▓╨╜╨╛ ╤Г╤В╨▓╨╡╤А╨┤╨╕╨╗ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨╛╨╡ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ security-╨║╨╛╨╜╤В╤А╨░╨║╤В╨░
++EDR ╨┐╨╛╤Б╨╗╨╡ FAIL A2/C1 (PD-C1-02 BLOCKER):
++
++1. `BUILTIN\Administrators` ╤А╨░╨╖╤А╨╡╤И╤С╨╜ ╨║╨░╨║ Owner ╨║╨░╤В╨░╨╗╨╛╨│╨░ `state` ╨╕ ╨╖╨░╤Й╨╕╤Й╨░╨╡╨╝╤Л╤Е
++   ╨┤╨╛╤З╨╡╤А╨╜╨╕╤Е ╨╛╨▒╤К╨╡╨║╤В╨╛╨▓.
++2. DACL ╨╛╤Б╤В╨░╤С╤В╤Б╤П ╤Б╤В╤А╨╛╨│╨╛╨╣: FullControl ╤В╨╛╨╗╤М╨║╨╛ intended EDRUser ╨╕ SYSTEM; ╨╜╨╡
++   ╨┤╨╛╨▒╨░╨▓╨╗╤П╤В╤М ACE ╨┤╨╗╤П Administrators, Users ╨╕╨╗╨╕ Everyone.
++3. ╨Ф╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╨░╤П ╨╖╨░╤Й╨╕╤В╨░ ╨┤╨░╨╜╨╜╤Л╤Е ╨╛╤В ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╤Е ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨╛╨▓ Windows ╨╜╨╡
++   ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П.
++4. ╨Р╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╤Г A3 ╨╜╨╡ ╤А╨░╨╖╤А╨░╨▒╨░╤В╤Л╨▓╨░╤В╤М; ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╣ broker/service ╨┤╨╗╤П ╨╜╨░╨╖╨╜╨░╤З╨╡╨╜╨╕╤П
++   owner ╨╜╨╡ ╨▓╨╜╨╡╨┤╤А╤П╤В╤М.
++5. ╨а╨╡╤И╨╡╨╜╨╕╨╡ ╤Д╨╕╨║╤Б╨╕╤А╤Г╨╡╤В╤Б╤П ╨║╨░╨║ ╤П╨▓╨╜╤Л╨╣ security waiver; ╨╛╨▒╨╜╨╛╨▓╨╕╤В╤М ╨║╤А╨╕╤В╨╡╤А╨╕╨╕ ╨┐╤А╨╕╤С╨╝╨║╨╕ ╨╕
++   ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨░╤Ж╨╕╤О.
++6. ╨Я╨╛╨▓╤В╨╛╤А╨╜╨╛ ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г ╨┐╨╛╨┤ alternate-admin, ╤Д╨░╨║╤В╨╕╤З╨╡╤Б╨║╨╕╨╡ ACL/Owner,
++   ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╨╕╨╡ ╨┐╤А╤П╨╝╨╛╨│╨╛ ╨┤╨╛╤Б╤В╤Г╨┐╨░ ╨╛╨▒╤Л╤З╨╜╤Л╤Е ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╣ ╨╕ ╤Б╨╛╤Е╤А╨░╨╜╨╜╨╛╤Б╤В╤М ╨┤╨░╨╜╨╜╤Л╤Е ╨┐╤А╨╕
++   ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╡ ╨╕ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╕. ╨Я╨╛╤Б╨╗╨╡ ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ тАФ ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡ ╤А╨╡╨▓╤М╤О; PASS ╤В╨╛╨╗╤М╨║╨╛ ╨┐╤А╨╕
++   ╨▓╤Л╨┐╨╛╨╗╨╜╨╡╨╜╨╕╨╕ ╨╛╨▒╨╜╨╛╨▓╨╗╤С╨╜╨╜╤Л╤Е ╨║╤А╨╕╤В╨╡╤А╨╕╨╡╨▓.
++
++╨Ф╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╣ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╤Л╨╣ ╨▒╤О╨┤╨╢╨╡╤В: ╨┤╨╛ 3 ╨▓╤Л╨╖╨╛╨▓╨╛╨▓ Codex ╨┤╨╗╤П ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨╕
++╨╖╨░╨▓╨╡╤А╤И╨╡╨╜╨╕╤П ╤Н╤В╨╛╨│╨╛ BLOCKER; ╨╡╤Б╨╗╨╕ ╨┐╨╛╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П ╨▒╨╛╨╗╤М╤И╨╡ тАФ ╤Б╨╛╨╛╨▒╤Й╨╕╤В╤М ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛. ╨Я╤А╨╡╨╢╨╜╨╕╨╡
++╤Б╤З╤С╤В╤З╨╕╨║╨╕ R3 (6/6) ╤Б╨╛╤Е╤А╨░╨╜╤П╤О╤В╤Б╤П; ╤Н╤В╨╛ ╤П╨▓╨╜╨╛╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨╡ ╤А╨░╤Б╤И╨╕╤А╨╡╨╜╨╕╨╡ logical
++TASK, ╨░ ╨╜╨╡ ╤Б╨▒╤А╨╛╤Б ╨╕╤Б╤В╨╛╤А╨╕╨╕. ╨Ч╨░╨┐╤А╨╡╤Й╨╡╨╜╤Л push/merge ╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ╤А╨░╨▒╨╛╤З╨╡╨╣ ╨▒╨░╨╖╤Л ╨┤╨░╨╜╨╜╤Л╤Е
++╨▒╨╡╨╖ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П.
++
++## FULL_TASK_ACCEPTANCE_20261103
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨▓╤Л╨▒╤А╨░╨╗ ╨▓╨░╤А╨╕╨░╨╜╤В B: ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨╕╤В╤М ╨┤╨╛ ╨┐╨╛╨╗╨╜╨╛╨│╨╛ TASK PASS ╨┐╨╛╤Б╨╗╨╡ scoped
++PASS A2/C2. ╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨░ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨░╤П acceptance-verification ╨▓ ╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣
++`EDR-Win11-Test`:
++
++- PostgreSQL start/stop, ╨▓╨╗╨╛╨╢╨╡╨╜╨╕╤П ╨╕ loopback-only;
++- backup/restore ╨╕ recovery;
++- legacy migration ╨╕ ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╨╡ ╨╕╤Б╤Е╨╛╨┤╨╜╤Л╤Е ╨┤╨░╨╜╨╜╤Л╤Е;
++- update/uninstall/reinstall ╤Б ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╨╡╨╝ ╨▒╨░╨╖╤Л, ╨▓╨╗╨╛╨╢╨╡╨╜╨╕╨╣ ╨╕ backup;
++- active alternate-root maintenance;
++- ╨┐╨╛╨╗╨╜╨░╤П UAC/identity matrix: intended EDRUser, unrelated standard user,
++  alternate admin;
++- ASCII application-path install;
++- ╤В╨╛╤З╨╜╤Л╨╡ native commands/results/logs.
++
++╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤ ╨╜╨╡ ╨╝╨╡╨╜╤П╤В╤М; ╨┐╤А╨╕ ╨╛╨▒╨╜╨░╤А╤Г╨╢╨╡╨╜╨╕╨╕ ╨┤╨╡╤Д╨╡╨║╤В╨░ ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М╤Б╤П ╨╕ ╨╖╨░╨┐╤А╨╛╤Б╨╕╤В╤М
++╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨╡ ╤А╨╡╤И╨╡╨╜╨╕╨╡. Architecture, ADR-013 ╨╕ owner waiver ╨╜╨╡ ╨╝╨╡╨╜╤П╤В╤М.
++╨С╤О╨┤╨╢╨╡╤В: ╨╕╨╖ ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╤Е 3 Codex calls ╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╜ 1; ╨╛╤Б╤В╨░╤О╤В╤Б╤П 2 (╨▓╤Б╨╡╨│╨╛ 7/9).
++╨Ю╨┤╨╕╨╜ тАФ ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡ Astra R3 review ╨┐╨╛╨╗╨╜╨╛╨│╨╛ lifecycle-╨┐╨░╨║╨╡╤В╨░, ╨╛╨┤╨╕╨╜ тАФ ╤А╨╡╨╖╨╡╤А╨▓ ╨╜╨░
++╨╕╤Б╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╨╡/╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛╨╡ ╤А╨╡╨▓╤М╤О. ╨Х╤Б╨╗╨╕ ╨┐╨╛╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П ╨▒╨╛╨╗╤М╤И╨╡ тАФ ╤Б╨╛╨╛╨▒╤Й╨╕╤В╤М ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛.
++No commit/push/merge/release; no working-DB changes.
++
++## FULL_ACCEPTANCE_DEFECT_FIX_20261103
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М 2026-11-03 ╨▓╤Л╨▒╤А╨░╨╗ ╨▓╨░╤А╨╕╨░╨╜╤В 1 тАФ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨╛╨╡ ╤А╨░╤Б╤Б╨╗╨╡╨┤╨╛╨▓╨░╨╜╨╕╨╡ ╨╕
++╨╕╤Б╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╨╡ SQLAlchemy ImportError, ╨▓╨╛╨╖╨╜╨╕╨║╤И╨╡╨│╨╛ ╨┐╤А╨╕ app-phase.
++
++Root cause ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜: `packaging/windows/edr.iss:43`
++`Excludes: "postgresql\*"` ╨╕╤Б╨║╨╗╤О╤З╨╕╨╗ nested
++`packages\sqlalchemy\dialects\postgresql\*`; install log ╨┐╨╛╨║╨░╨╖╤Л╨▓╨░╨╡╤В ╤Б╨╛╨╖╨┤╨░╨╜╨╜╤Л╨╣
++╨║╨░╤В╨░╨╗╨╛╨│ ╨▒╨╡╨╖ `__init__.py`/`base.py`, ╨░ payload ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В ╤Н╤В╨╕ ╤Д╨░╨╣╨╗╤Л. ╨Ы╨╛╨║╨░╨╗╤М╨╜╤Л╨╣
++SQLAlchemy 2.1.3 ╨╕╨╝╨┐╨╛╤А╤В╨╕╤А╤Г╨╡╤В `BIGINT` ╤Г╤Б╨┐╨╡╤И╨╜╨╛. ╨н╤В╨╛ packaging-╨┤╨╡╤Д╨╡╨║╤В.
++
++╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨╛: ╨╕╨╖╨╝╨╡╨╜╨╕╤В╤М ╤В╨╛╨╗╤М╨║╨╛ ╤Г╨┐╨░╨║╨╛╨▓╨║╤Г (`edr.iss`; build script ╤В╨╛╨╗╤М╨║╨╛ ╨┐╤А╨╕
++╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨╛╤Б╤В╨╕), ╨┐╨╡╤А╨╡╤Б╨╛╨▒╤А╨░╤В╤М SmokeBuild EXE ╨▓╨╜╨╡ `dist/`, ╨┐╨╡╤А╨╡╤Г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М ╨╕
++╨┐╨╛╨▓╤В╨╛╤А╨╕╤В╤М app-phase. ╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤ тАФ ╤В╨╛╨╗╤М╨║╨╛ ╨┐╨╛╤Б╨╗╨╡ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛ ╤А╨╡╤И╨╡╨╜╨╕╤П.
++╨С╤О╨┤╨╢╨╡╤В: ╨╛╤Б╤В╨░╤О╤В╤Б╤П 2 Codex calls (╨▓╤Б╨╡╨│╨╛ 7/9), ╨╛╨┤╨╕╨╜ review ╨╕ ╨╛╨┤╨╕╨╜ ╤А╨╡╨╖╨╡╤А╨▓; ╨╛
++╨┐╤А╨╡╨▓╤Л╤И╨╡╨╜╨╕╨╕ ╤Б╨╛╨╛╨▒╤Й╨╕╤В╤М ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛. No commit/push/merge/release; no working-DB
++changes.
++
++╨б╨╡╤Б╤Б╨╕╤П ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨░ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝ 2026-11-03 **╨┤╨╛ dispatch fix worker**: ╨╜╨╕╨║╨░╨║╨╕╤Е
++╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╣ ╤Г╨┐╨░╨║╨╛╨▓╨║╨╕/╨║╨╛╨┤╨░ ╨╜╨╡ ╨▓╨╜╨╡╤Б╨╡╨╜╨╛; fix ╨╜╨╡ ╨╜╨░╤З╨░╤В.
++
++## VM_INSTALLER_CLEANUP_DIAG_20261104
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М 2026-11-04 ╨▓╤Л╨▒╤А╨░╨╗ ╨▓╨░╤А╨╕╨░╨╜╤В 3 тАФ ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╤Г ╨╕╤Б╤З╨╡╨╖╨╜╨╛╨▓╨╡╨╜╨╕╤П
++╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨╛╨│╨╛ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П EDR ╨╕ ╤В╨╡╤Б╤В╨╛╨▓╤Л╤Е ╤Б╨║╤А╨╕╨┐╤В╨╛╨▓ ╨┐╨╛╤Б╨╗╨╡ update.
++
++╨в╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╤П: ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╨┐╨╛╨▓╨╡╨┤╨╡╨╜╨╕╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║╨░ ╨┐╤А╨╕ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╕ (╨╜╨╡ ╤Г╨┤╨░╨╗╤П╨╡╤В ╨╗╨╕ ╨╛╨╜
++╨┐╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╕╨╣ install root ╨▒╨╡╨╖ ╨▓╨╛╤Б╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╕╤П); ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╨╝╨╡╤Е╨░╨╜╨╕╨╖╨╝╤Л ╨╛╤З╨╕╤Б╤В╨║╨╕ VM ╨╕
++test harness ╨╕ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╤Л╨╣ ╨┐╤А╨╛╤Ж╨╡╤Б╤Б; ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М install logs, ╤Д╨░╨║╤В╨╕╤З╨╡╤Б╨║╨╕╨╣
++exit code, ╨┐╨░╤А╨░╨╝╨╡╤В╤А╤Л ╨╕ ╨╖╨░╤А╨╡╨│╨╕╤Б╤В╤А╨╕╤А╨╛╨▓╨░╨╜╨╜╤Л╨╣ ╨┐╤Г╤В╤М ╨┐╨╛╤Б╨╗╨╡ update; ╨┐╨╛ ╨▓╨╛╨╖╨╝╨╛╨╢╨╜╨╛╤Б╤В╨╕
++╨▓╨╛╤Б╨┐╤А╨╛╨╕╨╖╨▓╨╡╤Б╤В╨╕ ╨▓ ╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣ VM ╤Б ╤Д╨╕╨║╤Б╨░╤Ж╨╕╨╡╨╣ ╤Д╨░╨╣╨╗╨╛╨▓╨╛╨╣ ╤Б╨╕╤Б╤В╨╡╨╝╤Л ╨┤╨╛/╨┐╨╛╤Б╨╗╨╡; ╨╜╨╡
++╤Б╤З╨╕╤В╨░╤В╤М `EXIT=0` ╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓╨╛╨╝ ╤Г╤Б╨┐╨╡╤Е╨░, ╨┐╤А╨╛╨▓╨╡╤А╤П╤В╤М ╨╜╨░╨╗╨╕╤З╨╕╨╡ ╨╕ ╨╖╨░╨┐╤Г╤Б╨║ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П.
++╨Я╨╛╤Б╨╗╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╕╤П ╨┐╤А╨╕╤З╨╕╨╜╤Л ╤А╨░╨╖╤А╨╡╤И╤С╨╜ ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╤З╨╡╤Б╨║╨╕╨╣ fresh install ╨▓ ╤Б╤В╨░╨▒╨╕╨╗╤М╨╜╤Л╨╣
++`C:\EDR-App`, ╨╜╨╛ ╤Н╤В╨╛ ╨╜╨╡ ╨╖╨░╨╝╨╡╨╜╤П╨╡╤В ╨╛╨▒╤П╨╖╨░╤В╨╡╨╗╤М╨╜╤Г╤О ╨┐╤А╨╛╨▓╨╡╤А╨║╤Г update lifecycle.
++
++╨Э╨╡ ╨╝╨╡╨╜╤П╤В╤М ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤ ╨╕ ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╤Г ╨▒╨╡╨╖ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛ ╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╕╤П; ╨╜╨╡
++╨╖╨░╤В╤А╨░╨│╨╕╨▓╨░╤В╤М ╤А╨░╨▒╨╛╤З╤Г╤О ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г/╨С╨Ф; no commit/push/merge/release. ╨Я╨╛╨╗╨╜╤Л╨╣ TASK PASS
++╨╜╨╡ ╨▓╤Л╨┤╨░╨▓╨░╤В╤М ╨┤╨╛ ╤Г╤Б╨┐╨╡╤И╨╜╨╛╨╣ ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨▓╤Б╨╡╤Е AC1тАУAC8.
++
++╨С╤О╨┤╨╢╨╡╤В ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╨╕: ╨╝╨░╨║╤Б╨╕╨╝╤Г╨╝ 1 ╨╕╨╖ ╨╛╤Б╤В╨░╨▓╤И╨╕╤Е╤Б╤П 2 Codex calls; ╨▓╤В╨╛╤А╨╛╨╣ ╤Б╨╛╤Е╤А╨░╨╜╨╕╤В╤М ╨┤╨╗╤П
++╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨│╨╛ ╤А╨╡╨▓╤М╤О ╨╕╨╗╨╕ ╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛╨╣ ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕. ╨Х╤Б╨╗╨╕ ╨┐╤А╨╕╤З╨╕╨╜╨░ ╨╜╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨░ тАФ ╤П╨▓╨╜╨╛
++╨┐╨╡╤А╨╡╤З╨╕╤Б╨╗╨╕╤В╤М ╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╡ ╨│╨╕╨┐╨╛╤В╨╡╨╖╤Л ╨╕ ╨╛╤Б╤В╨░╨▓╤И╨╕╨╡╤Б╤П.
++
++## TESTING_STRATEGY_AND_TASK_SPLIT_20261104
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М 2026-11-04 ╨╕╨╖╨╝╨╡╨╜╨╕╨╗ ╨┐╨╛╨┤╤Е╨╛╨┤ ╨║ ╤В╨╡╤Б╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╤О EDR:
++
++1. ╨Я╤А╨╡╨║╤А╨░╤В╨╕╤В╤М ╨┤╨░╨╗╤М╨╜╨╡╨╣╤И╨╕╨╡ ╨┐╤А╨╛╨│╨╛╨╜╤Л ╨▓ `EDR-Win11-Test`; ╨╜╨╡ ╤А╨░╤Б╤Е╨╛╨┤╨╛╨▓╨░╤В╤М ╨╛╤Б╤В╨░╨▓╤И╨╕╨╣╤Б╤П
++   ╨▒╤О╨┤╨╢╨╡╤В Codex ╨╜╨░ ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╤Г ╤Н╤В╨╛╨╣ VM.
++2. ╨Ч╨░╤Д╨╕╨║╤Б╨╕╤А╨╛╨▓╨░╤В╤М ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╤С╨╜╨╜╤Л╨╡ ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В╤Л: A2/C2 PASS, ╨╖╨░╨║╤А╤Л╤В╤Л╨╣ PD-C1-02 ╨╕
++   ╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╜╤Л╨╣ security waiver; ╤Б╨╛╤Е╤А╨░╨╜╨╕╤В╤М ╨▓╤Б╨╡ evidence.
++3. ╨а╨░╨╖╨┤╨╡╨╗╨╕╤В╤М `TASK-WINDOWS-PROGRAMDATA-01`: ╨╖╨░╨▓╨╡╤А╤И╤С╨╜╨╜╤Л╨╣ ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╤С╨╜╨╜╤Л╨╣ ╨╛╨▒╤К╤С╨╝
++   ╨╛╤Д╨╛╤А╨╝╨╕╤В╤М ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛; ╨╛╤Б╤В╨░╨▓╤И╨╕╨╡╤Б╤П ╨╜╨╡╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╡ AC1тАУAC8 ╨┐╨╡╤А╨╡╨╜╨╡╤Б╤В╨╕ ╨▓ ╨╜╨╛╨▓╤Г╤О
++   lifecycle-acceptance ╨╖╨░╨┤╨░╤З╤Г. ╨Э╨╡ ╨┐╤А╨╕╤Б╨▓╨░╨╕╨▓╨░╤В╤М PASS ╨╜╨╡╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╝ ╤В╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╤П╨╝.
++4. ╨Я╨╛╨┤╨│╨╛╤В╨╛╨▓╨╕╤В╤М ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛ ╨┐╨╡╤А╨╡╤Е╨╛╨┤╤Г ╨╜╨░ GitHub Actions Windows runners ╨┤╨╗╤П
++   ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╨╖╨╕╤А╨╛╨▓╨░╨╜╨╜╤Л╤Е ╤В╨╡╤Б╤В╨╛╨▓, ╤Б╨▒╨╛╤А╨║╨╕ EXE ╨╕ ╨┐╤А╨╛╨▓╨╡╤А╨╛╨║ ╨▒╨╡╨╖ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨│╨╛ UAC.
++5. ╨Ф╨╗╤П ╨┐╤А╨╛╨▓╨╡╤А╨╛╨║, ╤В╤А╨╡╨▒╤Г╤О╤Й╨╕╤Е ╨╜╨░╤Б╤В╨╛╤П╤Й╨╡╨│╨╛ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨│╨╛ Windows-╤Б╨╡╨░╨╜╤Б╨░, ╨┐╤А╨╡╨┤╤Г╤Б╨╝╨╛╤В╤А╨╡╤В╤М
++   ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨╡ ╤А╤Г╤З╨╜╨╛╨╡ ╤В╨╡╤Б╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╜╨░ ╤З╨╕╤Б╤В╨╛╨╝ ╤В╨╡╤Б╤В╨╛╨▓╨╛╨╝ ╨║╨╛╨╝╨┐╤М╤О╤В╨╡╤А╨╡ ╨┐╨╡╤А╨╡╨┤ ╤А╨╡╨╗╨╕╨╖╨╛╨╝.
++6. ╨Т╨╡╤А╨╜╤Г╤В╤М╤Б╤П ╨║ ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨╣ ╤А╨░╨╖╤А╨░╨▒╨╛╤В╨║╨╡ EDR: ╨╕╨╜╤В╨╡╤А╤Д╨╡╨╣╤Б, ╨┐╨░╤Б╨┐╨╛╤А╤В╨░ ╨╕ ╤Б╨╡╤А╤В╨╕╤Д╨╕╨║╨░╤В╤Л,
++   ╨╖╨░╨│╤А╤Г╨╖╨║╨░ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨╛╨▓ ╨╕ ╨┤╤А╤Г╨│╨╕╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╕╨╡ ╤Д╤Г╨╜╨║╤Ж╨╕╨╕.
++
++╨Э╨╡ ╨╝╨╡╨╜╤П╤В╤М ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Г╤О ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╤Г; ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╤В╤М VM ╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛; ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╤В╤М
++commit/push/merge; ╨╜╨╡ ╨╕╨╖╨╝╨╡╨╜╤П╤В╤М ╤А╨░╨▒╨╛╤З╤Г╤О ╨▒╨░╨╖╤Г ╨▒╨╡╨╖ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П. ╨Э╨╛╨▓╤Л╨╡
++Codex reviews ╨▒╨╡╨╖ ╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨╛╤Б╤В╨╕ ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╤В╤М. ╨Ю╤Б╤В╨░╨▓╤И╨╕╨╡╤Б╤П 2 ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╤Е Codex
++calls ╤Б╨╛╤Е╤А╨░╨╜╤П╤О╤В╤Б╤П ╨╕ ╨╜╨╡ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╤О╤В╤Б╤П; ╨┐╨╛╨╗╨╜╤Л╨╣ TASK PASS ╨╜╨╡ ╨▓╤Л╨┤╨░╨╜.
++
++## WORKFLOW_ALIGNMENT_AND_STAGE_DESIGN_20261104
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М: ┬л╨Ф╨░╨▓╨░╨╣ ╨▓ ╤В╨░╨║╨╛╨╝ ╨┐╨╛╤А╤П╨┤╨║╨╡ ╨║╨░╨║ ╤В╤Л ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╕╨╗┬╗ тАФ ╨┐╨╛╤Б╨╗╨╡ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╤П
++╤Б╨╜╨░╤З╨░╨╗╨░ ╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╤В╤М ╨┐╤А╨░╨▓╨╕╨╗╨░ ╨╕ ╤Б╨╛╤Б╤В╨╛╤П╨╜╨╕╨╡, ╨╖╨░╤В╨╡╨╝ ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨╕╤В╤М ╨┐╨╗╨░╨╜ ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╡╨│╨╛ ╤Н╤В╨░╨┐╨░
++╨┤╨╗╤П ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╤П. ╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨░ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨░ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨╛╨▓ ╨╕ ╨┐╤А╨╛╨╡╨║╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡; ╤Н╤В╨╛ ╨╜╨╡ approval
++╤А╨╡╨░╨╗╨╕╨╖╨░╤Ж╨╕╨╕ UI/CI/lifecycle, dispatch, commit/push/merge/release ╨╕╨╗╨╕ ╤А╨░╨▒╨╛╤В╤Л ╤Б ╨С╨Ф.
++╨Я╨╛╨┤╨│╨╛╤В╨╛╨▓╨╗╨╡╨╜ NEXT-STAGE.md v1, SHA-256
++`32BEC04F5EAA100A740A6308D3F9DF37F15D97B7DB4D3F33EF52D1F17FD0309F`.
++╨Я╨╗╨░╨╜ ╨╛╤Б╤В╨░╤С╤В╤Б╤П DRAFT / AWAITING USER APPROVAL. ╨б╤В╨░╤А╤Л╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П ╨╕ ╤Б╤З╤С╤В╤З╨╕╨║╨╕
++╨╜╨╡ ╤Б╨▒╤А╨░╤Б╤Л╨▓╨░╤О╤В╤Б╤П; 2 ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╤Е Windows Codex calls ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л.
++
++## ROLE_SCHEME_APPROVED_20261104
++
++╨Я╨╛╤Б╨╗╨╡ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╤П ╤А╨╛╨╗╨╡╨╣ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╛╤В╨▓╨╡╤В╨╕╨╗: ┬л╨е╨╛╤А╨╛╤И╨╛, ╨┤╨░╨▓╨░╨╣ ╨╜╤Г ╤В╨╛╨│╨┤╨░ ╨┤╨░╨╗╤М╤И╨╡
++╨┐╤А╨╛╨┤╨╛╨╗╨╢╨╕╨╝ ╨╜╨░╤И╤Г ╤А╨░╨▒╨╛╤В╤Г┬╗. ╨б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨░ ╤Б╤Е╨╡╨╝╨░: ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨╣ ╤З╨░╤В Sol ╨┤╨╗╤П ╨╛╨▒╤Б╤Г╨╢╨┤╨╡╨╜╨╕╤П ╨╕
++╨┐╤А╨╛╨╡╨║╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╤П; Flash coordinator ╨╕ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ Flash implementer; ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ Pro
++R1 reviewer; Sol R2; Astra ╤Б╨╗╨╛╨╢╨╜╨░╤П ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░/R3/final acceptance.
++╨Я╨╛╤Б╤В╨╛╤П╨╜╨╜╤Л╨╡ ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╡ ╨░╨│╨╡╨╜╤В╤Л ╨╜╨╡ ╤В╤А╨╡╨▒╤Г╤О╤В╤Б╤П. ╨Ь╨╛╨┤╨╡╨╗╤М ╨║╨╗╨╕╨╡╨╜╤В╨░ ╨╜╨╡ ╨┐╨╡╤А╨╡╨║╨╗╤О╤З╨░╨╗╨░╤Б╤М.
++╨Ч╨░╤Д╨╕╨║╤Б╨╕╤А╨╛╨▓╨░╨╜╨╛ ╨▓ MODEL-ROUTING.md, SHA-256
++`8E526F59B21F88E418508629E30B13BF931FEF752983572CF026E6CBE63D635C`.
++╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ NEXT-STAGE ╨╛╤Б╤В╨░╤С╤В╤Б╤П ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡╨╝; ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╨╡ ╤А╨╛╨╗╨╡╨╣ ╨╜╨╡ ╤А╨░╨╖╤А╨╡╤И╨░╨╡╤В
++dispatch ╨╡╨│╨╛ ╨╖╨░╨┤╨░╤З, commit/push, VM ╨╕╨╗╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ ╤А╨░╨▒╨╛╤З╨╡╨╣ ╨С╨Ф.
++
++## CLOUD_WINDOWS_TESTING_DIRECTION_20261104
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О ╨╛╨▒╤К╤П╤Б╨╜╨╡╨╜╨╛: ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░/╨╕╤Б╨┐╤Л╤В╨░╨╜╨╕╤П EDR ╨╜╨░ ╨▓╤А╨╡╨╝╨╡╨╜╨╜╨╛╨╣ Windows-╨╝╨░╤И╨╕╨╜╨╡
++GitHub, ╨▒╨╡╨╖ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ ╨╜╨░ ╨╡╨│╨╛ ╨║╨╛╨╝╨┐╤М╤О╤В╨╡╤А; ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╤П ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╣ ╨┐╨╛╤Б╨╗╨╡ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨│╨╛
++╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П. ╨Ю╤В╨▓╨╡╤В: ┬л╨Э╤Г ╨▓╨╛╤В ╤В╨░╨║ ╨╜╨╛╤А╨╝╨░╨╗╤М╨╜╨╛. ╨Т╤А╨╛╨┤╨╡ ╨╝╨╜╨╡ ╨╜╤А╨░╨▓╨╕╤В╤Б╤П┬╗.
++╨Ч╨░╤Д╨╕╨║╤Б╨╕╤А╨╛╨▓╨░╨╜╨╛ ╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╕╨╡ ╨╜╨░╨┐╤А╨░╨▓╨╗╨╡╨╜╨╕╤П, ╨╜╨╡ ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╨╡ ╨▓╤Б╨╡╨│╨╛ NEXT-STAGE v1,
++╨╜╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╨╡ ╨╜╨░ dispatch/commit/push/run/release. ╨в╨╡╤Б╤В╨╛╨▓╨╛╨│╨╛ ╨Я╨Ъ ╨╜╨╡╤В.
++╨Я╤А╨╕╨╛╤А╨╕╤В╨╡╤В: Windows CI ╨╕ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨╛╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨┐╨╡╤А╨╡╨┤ UI; ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╤Л╨╣ UAC
++╨╕ ╤З╨╕╤Б╤В╨░╤П ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨░╤П Windows ╨╛╤Б╤В╨░╤О╤В╤Б╤П ╨╜╨╡╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╝╨╕. ╨С╨╗╨╕╨╢╨░╨╣╤И╨╕╨╣ scope
++╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨╗╨╡╨╜ ╨▓ TASK-CI-WINDOWS-01; lifecycle ╨╕ ╨╡╨│╨╛ ╨┐╤А╨╡╨╢╨╜╨╕╨╣ ╨▒╤О╨┤╨╢╨╡╤В ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛.
++
++## CI_WINDOWS_LOCAL_PREPARATION_AUTHORIZED_20261104
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨┐╨╛╤Б╨╗╨╡ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╤П ╨╗╨╛╨║╨░╨╗╤М╨╜╨╛ ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨╕╤В╤М ╨╛╨▒╨╗╨░╤З╨╜╤Г╤О ╨┐╤А╨╛╨▓╨╡╤А╨║╤Г ╨╕ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛
++╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╤В╤М GitHub ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╤О/╨╖╨░╨┐╤Г╤Б╨║: ┬л╨Ф╨░╨▓╨░╨╣, ╨┤╨░╨▓╨░╨╣ ╨┤╨╡╨╗╨░╨╡╨╝, ╨║╨░╨║ ╤В╤Л ╤Б╨║╨░╨╢╨╡╤И╤М┬╗.
++╨а╨░╨╖╤А╨╡╤И╨╡╨╜╤Л ╨╗╨╛╨║╨░╨╗╤М╨╜╨░╤П ╤А╨╡╨░╨╗╨╕╨╖╨░╤Ж╨╕╤П cloud smoke ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨║╨╕ ╨╕ OpenCode coordinator /
++╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ implementer / ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╤Л╨╣ routed review ╨┐╨╛ TASK-CI-WINDOWS-01.
++╨Р╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░ ╨┐╤А╨╛╨┤╤Г╨║╤В╨░ ╨╜╨╡ ╨╝╨╡╨╜╤П╨╡╤В╤Б╤П: hosted Windows runner, bundled runtimes,
++╤Б╨╕╨╜╤В╨╡╤В╨╕╤З╨╡╤Б╨║╨╕╨╡ ╨┤╨░╨╜╨╜╤Л╨╡, build/install/start/document/attachment/restart checks.
++╨б╨╛╨┤╨╡╤А╨╢╨░╤В╨╡╨╗╤М╨╜╤Л╨╣ scope/allowlist/╨┐╨╛╤А╤П╨┤╨╛╨║ ╨╖╨░╤Д╨╕╨║╤Б╨╕╤А╨╛╨▓╨░╨╜╤Л ╨▓ TASK-CI-WINDOWS-01,
++SHA-256 `DE3B5B2D12C1F76DBA775BC82C391DF85EFAC1FCDB67291BF20371BB72ECB950`.
++╨н╤В╨╛ ╨╡╨┤╨╕╨╜╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╣ ╤А╨░╨╖╤А╨╡╤И╤С╨╜╨╜╤Л╨╣ ╨▒╨╗╨╕╨╢╨░╨╣╤И╨╕╨╣ TASK; UI/lifecycle ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╤В╤М.
++No commit/push/remote Actions run/release/deploy. ╨Э╨╕╨║╨░╨║╨╛╨╣ host ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╕ EDR,
++╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П UAC/╤А╨░╨▒╨╛╤З╨╡╨╣ ╨С╨Ф ╨╕╨╗╨╕ ╨╖╨░╨┐╤Г╤Б╨║╨░ ╤Б╤В╨░╤А╨╛╨╣ VM. ╨Я╨╛╤Б╨╗╨╡ ╨╗╨╛╨║╨░╨╗╤М╨╜╨╛╨╣ ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨║╨╕
++╨┐╤А╨╡╨┤╤Б╤В╨░╨▓╨╕╤В╤М ╨║╨╛╨╜╨║╤А╨╡╤В╨╜╤Л╨╣ ╨┐╨░╨║╨╡╤В ╨┤╨╗╤П ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╨╕. ╨Я╨╛╨╗╨╜╤Л╨╣ PASS ╤В╤А╨╡╨▒╤Г╨╡╤В
++cloud evidence; ╨╗╨╛╨║╨░╨╗╤М╨╜╨╛╨╡ review ╨╜╨╡ ╨╖╨░╨╝╨╡╨╜╤П╨╡╤В run. ╨б╤В╨░╤А╤Л╨╡ budgets ╤Б╨╛╤Е╤А╨░╨╜╤П╤О╤В╤Б╤П.
+diff --git a/docs/workflow/HISTORY.md b/docs/workflow/HISTORY.md
+index f717f09..d8eea1c 100644
+--- a/docs/workflow/HISTORY.md
++++ b/docs/workflow/HISTORY.md
+@@ -1136,3 +1136,866 @@ credential ╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╜ ╤В╨╛╨╗╤М╨║╨╛ ╨▓ ╨┐╨░╨╝╤П╤В╨╕ ╨┐╤А╨╛╤Ж╨╡╤Б╤Б╨░
+ ╨▓╤Л╨▓╨╛╨┤╨╕╨╗╤Б╤П/╨╜╨╡ ╤Б╨╛╤Е╤А╨░╨╜╤П╨╗╤Б╤П, login/account/scopes ╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨╕╤Б╤М. ╨Ф╤А╤Г╨│╨╕╨╡ settings,
+ release/deployment/history ╨╜╨╡ ╨╖╨░╤В╤А╨░╨│╨╕╨▓╨░╨╗╨╕╤Б╤М. ╨д╨░╨║╤В╨╕╤З╨╡╤Б╨║╨╕╨╣ receipt тАФ
+ `%TEMP%/EDR-github-publication-result-20261027.json`.
++
++## 2026-10-27 тАФ Release v0.2.0 ╤А╨░╨╖╤А╨╡╤И╤С╨╜
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤П╨▓╨╜╨╛ ╨╛╨┤╨╛╨▒╤А╨╕╨╗ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╜╤Л╨╣ Release ╤Б ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║╨╛╨╝/╨╕╨╜╤Б╤В╤А╤Г╨║╤Ж╨╕╨╡╨╣.
++╨Ю╨┐╨╡╤А╨░╤Ж╨╕╨╛╨╜╨╜╤Л╨╣ [TASK-RELEASE-0.2.0](../tasks/TASK-RELEASE-0.2.0.md), R1,
++╨▒╨╡╨╖ source edits, A1/C1 review1/2 reserved/failed0. Target4e2107e, hosted
++CI40554797762 success ╨╕ public/anonymous access ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╤Л ╨┐╤А╨╛╤И╨╗╤Л╨╝ receipt.
++EXE SHA/size ╤Б╨╛╨▓╨┐╨░╨╗╨╕ ╤Б Windows acceptance, guide ╤Б╨║╨╛╨┐╨╕╤А╨╛╨▓╨░╨╜ ╨┐╨╛╨▒╨░╨╣╤В╨╜╨╛, ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨╗╨╡╨╜╤Л
++checksums/manual Russian notes, actual signature NotSigned. Releases collection
++╨┐╤Г╤Б╤В; connector ╨╜╨╡ ╨┐╨╛╨┤╨┤╨╡╤А╨╢╨░╨╗ tags collection (INVALID_ARGUMENT), ╤И╤В╨░╤В╨╜╤Л╨╣
++git ls-remote --tags ╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╨╗ ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╤Г╤О╤Й╨╕╨╣ v0.2.0. Release mutations ╨╡╤Й╤С ╨╜╨╡╤В.
++
++╨Э╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╤Л╨╣ release preflight ╨╖╨░╨┐╤Г╤Й╨╡╨╜: task_a530165d4a01/ctx_0e06832847db/
++term_4bdb9b75-985c-4ca2-8929-3e45fb1a2fca, requested/effective Sol/medium,
++turn_started observed, residualResources empty. ╨Я╤А╨╛╨▓╨╡╤А╤П╨╡╤В ╤В╨╛╨╗╤М╨║╨╛ AC1тАУ5,
++╨▒╨╡╨╖ ╨┐╨╛╨▓╤В╨╛╤А╨╜╤Л╤Е installer/tests/build ╨╕ ╨▒╨╡╨╖ writes. Parent ╨│╨╛╤В╨╛╨▓╨╕╤В ╨┐╤А╨╛╨▓╨╡╤А╨║╤Г
++3GitHub asset digests ╨╕ ╨┐╤Г╨▒╨╗╨╕╤З╨╜╨╛╨╣ ╨╖╨░╨│╤А╤Г╨╖╨║╨╕ ╨┐╨╛╤Б╨╗╨╡ ╤А╨░╨╖╤А╨╡╤И╤С╨╜╨╜╨╛╨╣ ╨┐╤Г╨▒╨╗╨╕╨║╨░╤Ж╨╕╨╕.
++
++Release preflight msg_71ad54609b15/task_a530165d4a01/ctx_0e06832847db:
++PASS AC1тАУ5,12/12 source hashes ╤Б╨╛╨▓╨┐╨░╨╗╨╕ ╤Б current/target, EXE/guide/checksums/notes
++╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╤Л ╨▒╨╡╨╖ ╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛╨│╨╛ product review ╨╕╨╗╨╕ test/build. Worker released,
++transcript captured, delivery_fa17676ebc33 ACKed. Native Sol/medium447,519input
++incl cached403,840, output2,593;1call, A1/C1 review1/2/failed0, old ledgers ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л.
++
++Tag v0.2.0 annotated ╤Б╨╛╨╖╨┤╨░╨╜ ╨╜╨░4e2107e5b006a81da15d5ffc23b88888440534b7;
++normal push ╨╕ remote peeled ref ╤Б╨╛╨▓╨┐╨░╨╗╨╕. GH CLI ╤Б╨╛╨╖╨┤╨░╨╗ draft425832655 ╨╕ ╨╖╨░╨│╤А╤Г╨╖╨╕╨╗
++╤А╨╛╨▓╨╜╨╛ EXE/guide/SHA256SUMS; ╨▓╤Б╨╡3server digest/size/state=uploaded ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╤Л.
++Body ╤Б╨╛╨▓╨┐╨░╨╗ ╤Б reviewed notes. ╨Я╨╛ ╤Г╨╢╨╡ ╨╕╨╝╨╡╤О╤Й╨╡╨╝╤Г╤Б╤П user approval ╨▓╤Л╨┐╨╛╨╗╨╜╨╡╨╜╨╛
++release edit --draft=false --latest; published_at2026-10-27T18:26:26Z,
++https://github.com/shahove93/EquipmentDocumentationRegistry/releases/tag/v0.2.0 .
++Main/source ╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨╕╤Б╤М, installer ╨╜╨╡ ╨┐╨╡╤А╨╡╤Б╨╛╨▒╨╕╤А╨░╨╗╤Б╤П/╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╤Б╤П, assets/history
++╨╜╨╡ ╤Г╨┤╨░╨╗╤П╨╗╨╕╤Б╤М. ╨Я╤Г╨▒╨╗╨╕╤З╨╜╨░╤П ╨╖╨░╨│╤А╤Г╨╖╨║╨░ ╨▓ fresh TEMP directory ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛;
++╤Д╨░╨║╤В╨╕╤З╨╡╤Б╨║╨╕╨╣ ╤А╨╡╨╖╤Г╨╗╤М╤В╨░╤В тАФ ╨▓ release-receipt.json, ╨╖╨░╤А╨░╨╜╨╡╨╡ ╨╜╨╡ ╨╛╨▒╤К╤П╨▓╨╗╤П╨╡╤В╤Б╤П ╤Г╤Б╨┐╨╡╤И╨╜╤Л╨╝.
++
++╨Ш╤В╨╛╨│ RELEASE v0.2.0: COMPLETE. Anonymous latest API ╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╨╗ public release
++425832655/v0.2.0, draft=false/prerelease=false ╨╕3uploaded assets. ╨Т╤Б╨╡3╨┐╤Г╨▒╨╗╨╕╤З╨╜╤Л╨╡
++╨╖╨░╨│╤А╤Г╨╖╨║╨╕ byte size/SHA256 ╤Б╨╛╨▓╨┐╨░╨╗╨╕ ╤Б ╨┐╤А╨╕╨╜╤П╤В╤Л╨╝╨╕/staged ╤Д╨░╨╣╨╗╨░╨╝╨╕ ╨╕ GitHub digests.
++EXE55379088/b75f7132тАжd21594d; guide16911/fa3348bcтАжaba9fd;
++SHA256SUMS185/ad928688тАжaed8e4. Initial download session ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╨░╤Б╤М ╨┤╨╛ receipt;
++╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╨╡ EXE/guide ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л ╨╕ ╤Е╨╡╤И╨╕╤А╨╛╨▓╨░╨╜╤Л, ╨╜╨╡╨┤╨╛╤Б╤В╨░╤О╤Й╨╕╨╣ checksum downloaded
++╨╛╨┤╨╜╨╕╨╝ bounded retry. Receipt status=complete_published_public_downloads_verified.
++Installer ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╤Б╤П; main/origin/main/tag target4e2107e ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л, ╨╕╤Б╤Е╨╛╨┤╨╜╨╕╨║╨╕
++╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨╕╤Б╤М. Final worker-list reclaimable0;2retained/9released. Workflow ╨╖╨░╨┐╨╕╤Б╨╕
++╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╡, ╨▒╨╡╨╖ ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╨╛╨│╨╛ source commit/push/CI. ╨а╨╡╨╗╨╕╨╖ ╨┐╨╡╤А╨╡╨┤╨░╨╜ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О.
++
++## TASK-README-PRESENTATION-02 тАФ authorization and frozen scope тАФ 2026-10-27
++
++User approved README polish for public GitHub, exactly two present UI screenshots
++now (replaceable after tomorrow's install check), concise stack/features/limits
++and download link, plus moving the long WSL2 setup into a developer guide.
++Frozen R0 checklist and file allowlist: `docs/tasks/TASK-README-PRESENTATION-02.md`,
++SHA256 `D00E7438B088D2883B2CC642E5AC630BC276210CBF676F5A3CFFC44A83EC183E`.
++Screenshot sources inspected: current Windows Sandbox documents UI and MVP05
++browser-test batches UI; both synthetic. Existing evidence remains untouched.
++User requested updating the public GitHub repo; normal commit/push allowed only
++after R0 PASS. No product, CI, release, settings or deployment changes.
++Task `task_e8a633256f42` created/ready in Run `run_5a6ffc6d06c6`, workspace
++current main HEAD4e2107e; one R0 implementation submission C1 reserved, no
++routine review/Codex calls, commit/push only after coordinator checklist PASS.
++Dispatch `ctx_531fcf8ad61a` started with requested/effective Codex
++gpt-6-luna/medium on current worktree; terminal
++`term_0fd69c28-ee76-4e88-a4a2-b224e8f755e8`; input accepted and turn start
++observed. C1 implementation active; actual usage/verdict pending worker_done.
++
++## TASK-README-PRESENTATION-02 тАФ C1 automatic acceptance тАФ 2026-10-27
++
++Dispatch `ctx_531fcf8ad61a` settled succeeded, worker_done `msg_82ea795eee04`;
++coordinator inspected changed docs and source/target PNG SHA equality. Checklist
++C1 FAIL, MAJOR README-AC2-01: the intro and alt text claim demonstration records
++in both screenshots, but the documents screen visibly has an empty list. This
++conflicts with the actual public image and frozen accurate-description criterion.
++Other criteria pass; `git diff --check` and worker link validation pass; tests/build
++NOT_RUN. A1 counters full reviews1/2, failed_reviews1/2, R0 Codex calls0.
++Within authorized C2, correct only the overview/caption/alt text to say the
++documents screenshot is an empty test state and the batches screenshot contains
++one synthetic `LOT-FINAL` record. Existing terminal remains live for reuse;
++delivery ACK waits until C2 terminal ownership is transferred.
++
++C2 Task `task_38d6136e0458` created as a child of `task_e8a633256f42`, frozen
++to correcting only README screenshot overview/captions/alt text. Immediate
++follow-up reused the settled Codex Luna/medium terminal
++`term_0fd69c28-ee76-4e88-a4a2-b224e8f755e8` under Dispatch `ctx_d3e1251c5c8e`;
++input accepted, turn started observed. C2 implementation active; no parallel
++writer or other workspace changes authorized.
++
++## TASK-README-PRESENTATION-02 тАФ final C2 acceptance тАФ 2026-10-27
++
++C2 worker `msg_582c91bc38a1`/Task `task_38d6136e0458`/Dispatch
++`ctx_d3e1251c5c8e` succeeded, editing README caption/overview only. Coordinator
++verified exact actual diff; images remained byte-identical to approved screenshot
++sources (43,708/33,413 bytes, expected SHA256); README has exactly2 screenshot
++links, 8 relative links; developer guide has5 relative links; all local targets
++resolve. `git diff --check` PASS (exit0); no tests/build run. C2 corrects the C1
++MAJOR screenshot-caption mismatch. Final R0 acceptance A1/C2 PASS, 2 full checks
++used of2, failed_reviews1; no Codex review calls. Native worker terminal reused
++across C1+C2: session `01a17ec6-760c-7510-8862-eeb04e3bc077`, aggregate input
++960,536 including cached910,720, output7,958, Codex gpt-6-luna. This is a
++session aggregate, not split between the two dispatches. C2 terminal release
++succeeded/transcript captured; `delivery_4c30f37e24a3` ACKed. Public-file commit
++and push authorized. Local commit `dccb14554cca3f688f20153f1f3eb41195740319`
++contains exactly README.md, docs/development.md and the two approved PNGs;
++fast-forward pushed to origin/main. GitHub API branch/main and commit endpoints
++both returned exact dccb145; anonymous public raw README shows the final content.
++Release/tag, CI workflow, code and settings did not change. GitHub browser surface
++was unavailable, so page rendering was not inspected in a browser; public content
++and branch were verified via connector. No product tests/build run.
++
++Coordinator validator had two non-product command issues during review: a first
++relative-link probe failed on the root README's empty parent path; a later combined
++optional annotated-tag expression failed under PowerShell parsing after the
++acceptance-specific checks had passed. A corrected bounded path parser then
++reported README8/dev-guide5 local links and2 image refs, all resolved; final
++`git diff --check` passed. Initial git add rejected Windows CRLF under the repo's
++LF policy; the two edited Markdown files were normalized to LF without content
++change, the scoped checks rerun, and git add/commit/push succeeded.
++
++Final resource reconciliation: C2 `ctx_d3e1251c5c8e` released successfully with
++transcript captured; delivery ACKed; worker-list `reclaimable` empty (retained3,
++released10). Native worker session usage for the reused C1+C2 terminal is recorded
++as a session aggregate in TASK; user-owned older terminals remain retained.
++
++## TASK-WINDOWS-PROGRAMDATA-01 тАФ approval and frozen scope тАФ 2026-10-28
++
++User approved the architecture: EDR remains installable in the user-selected
++Unicode path; PostgreSQL executables and persistent data use protected ASCII
++paths under `%ProgramData%\EDR`; installer requests administrator elevation;
++updates/reinstalls preserve DB and attachments. Explicit exclusions: temporary
++drive/path alias, PostgreSQL rebuild/replacement, another DB. No access to the
++user's live installation/data, no commit/push/release/deployment, no deletion of
++persistent data. R3 due to installer elevation, ACL and data migration.
++
++Added ADR-013, TASK-WINDOWS-PROGRAMDATA-01 and ROADMAP v1.4. Frozen acceptance
++covers Unicode and ASCII install paths, intended-user ACL (never broad Users
++access), source-preserving migration/reuse from `%LOCALAPPDATA%\EDR\data`,
++first/repeat run, stop, backup/restore, update/uninstall/reinstall, UAC identity,
++isolated Windows Sandbox evidence and Russian documentation. Existing standard
++installation is out of test scope. Run `run_9d6e68393645`, Orca Task
++`task_9ee7be1037f3`; baseline `dccb14554cca3f688f20153f1f3eb41195740319` on
++`main`. Frozen checklist created before dispatch; no code changes or dispatch yet.
++
++Dispatch `ctx_e84fe90a3516` started on the existing `main` worktree, terminal
++`term_709d4c52-ed53-4f3b-af53-c82e51c7d37c`; requested and effective launch
++settings both Codex `gpt-6.1-sol`/medium. Initial terminal preview showed
++`Unexpected status 403 Forbidden`; subsequent exact transcript confirmed the
++accepted task preamble and active workflow/file inspection, and `worker-show`
++reported `live` with no failure. Run inbox had no messages at that checkpoint.
++No worker code changes or completion evidence observed yet; do not duplicate or
++stop the live dispatch.
++
++Coordinator answered worker security question `msg_1a4f5404cfaf`: investigate a
++narrow original-user SID/lifecycle bridge within approved scope; retain private
++ACLs, do not grant broad Users access, and test same-account plus alternate-UAC
++flows in Sandbox. Stop/report only if no bridge can satisfy these criteria.
++Reply `msg_c34e4c6f9807` was delivered; subsequent inbox check was empty.
++
++Windows Sandbox identity probe (isolated under `%TEMP%`) reported `EnableLUA=0`
++and an administrator `WDAGUtilityAccount`; shell/process token returned only
++that same SID. This proves neither consent-mode nor alternate-credential UAC.
++Worker escalated that genuine prompt interaction is unavailable in its current
++native-UI-disabled execution host. Coordinator authorized continued bounded
++implementation and safe non-UI identity/lifecycle checks, with actual UAC prompt
++evidence explicitly NOT_RUN; do not count the affected frozen criteria as PASS.
++No host account, UAC policy, or user's installation/data may be changed. Worker
++question `msg_d5ffa964216e` answered by `msg_098322a1aed4`; delivery
++`delivery_d8316bf9c95c` acknowledged. Official Inno docs show
++`ExecAsOriginalUser` does not work at uninstall and `runasoriginaluser` applies
++only to `[Run]`; coordinator sent this design constraint in `msg_d4d6d46cba46`.
++
++Implementation Dispatch `ctx_e84fe90a3516` ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╤Б╤П ╤Б `worker_done/outcome=failed`.
++Final report: [TASK-WINDOWS-PROGRAMDATA-01 evidence](evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/report.md).
++╨Я╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╤Л 39 focused WSL tests (`39 passed, 1 warning`) ╨╕ ╨║╨╛╨╝╨┐╨╕╨╗╤П╤Ж╨╕╤П revision2
++Inno installer; ╤А╨╡╨░╨╗╤М╨╜╨░╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨▓ Sandbox ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╨╗╨░╤Б╤М ╨╜╨░ ╨╜╨╡╨╖╨░╨▓╨╡╤А╤И╤С╨╜╨╜╨╛╨╝ ╨╛╨╢╨╕╨┤╨░╨╜╨╕╨╕
++Microsoft CRT ╤Б ╨┐╤Г╤Б╤В╤Л╨╝╨╕/╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╤Г╤О╤Й╨╕╨╝╨╕ guest logs. Windows install/runtime/data
++lifecycle, native ACL, legacy DB migration ╨╕ UAC prompts ╨╛╤Б╤В╨░╤О╤В╤Б╤П NOT_RUN; ╨┐╨╛╤Н╤В╨╛╨╝╤Г
++project PASS ╨╜╨╡╤В.
++
++╨Ф╨╗╤П ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨│╨╛ R3 C1 review ╤Б╨╛╨╖╨┤╨░╨╜ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ Codex `gpt-6-astra`/high Dispatch
++`ctx_827705f548d7` (review Task `task_b43375551a8e`), ╨╜╨╛ ╨╛╨╜ ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╤Б╤П ╨╜╨░
++`agent_readiness` ╤Б `Agent startup blocked: agent-update-prompt`; provider ╨╜╨╡ ╨▒╤Л╨╗
++╨╖╨░╨┐╤Г╤Й╨╡╨╜ ╨╕ review ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╗╤Б╤П. Terminal `term_31ab41f7-8f51-4e4e-9ce7-f9dc0db15a69`
++╨┐╨╛╨║╨░╨╖╤Л╨▓╨░╨╡╤В Codex CLI update prompt (0.164.0 тЖТ 0.165.0). ╨Э╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╕╤Б╤М
++╨╜╨╡╤Г╤В╨▓╨╡╤А╨╢╨┤╤С╨╜╨╜╤Л╨╡ ╨│╨╗╨╛╨▒╨░╨╗╤М╨╜╤Л╨╡ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╤П ╨╕ ╨╜╨╡ ╨╛╨▒╤Е╨╛╨┤╨╕╨╗╤Б╤П ╨╕╨╜╤Б╤В╤А╤Г╨╝╨╡╨╜╤В╨░╨╗╤М╨╜╤Л╨╣ prompt; ╨╜╤Г╨╢╨╡╨╜
++╨▓╤Л╨▒╨╛╤А ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨▓ ╤Н╤В╨╛╨╝ terminal (Skip until next version) ╨╗╨╕╨▒╨╛ ╤П╨▓╨╜╨╛╨╡ ╤А╨╡╤И╨╡╨╜╨╕╨╡
++╤А╨░╨╖╤А╨╡╤И╨╕╤В╤М ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡ CLI. ╨Ъ╨╛╨┤ ╨╜╨╡ ╨║╨╛╨╝╨╝╨╕╤З╨╡╨╜ ╨╕ ╨╜╨╡ ╨╛╤В╨┐╤А╨░╨▓╨╗╨╡╨╜; ╨┤╨░╨╜╨╜╤Л╨╡/╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П
++╨╜╨╡ ╨╖╨░╤В╤А╨╛╨╜╤Г╤В╤Л.
++
++╨Я╨╛╨╖╨┤╨╜╨╡╨╣╤И╨░╤П ╨╖╨░╨┐╨╕╤Б╤М ╨╖╨░╨╝╨╡╨╜╤П╨╡╤В ╤Б╨╛╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨┐╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╡╨│╨╛ ╨░╨▒╨╖╨░╤Ж╨░: ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤П╨▓╨╜╨╛
++╤А╨░╨╖╤А╨╡╤И╨╕╨╗ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡ Codex CLI; ╨║╨╛╨╝╨░╨╜╨┤╨░ `npm install -g @openai/codex@0.165.0`
++╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╨░╤Б╤М exit 0, ╨░ `codex --version` ╨╕ `npm list -g @openai/codex --depth=0`
++╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╨╗╨╕ `0.165.0`. npm ╤Б╨╛╨╛╨▒╤Й╨╕╨╗ cleanup warning EPERM ╨┤╨╗╤П ╨╖╨░╨╜╤П╤В╨╛╨│╨╛ ╤Б╤В╨░╤А╨╛╨│╨╛
++`codex-code-mode-host.exe`, ╨╜╨╛ ╨┐╨░╨║╨╡╤В ╨╛╨▒╨╜╨╛╨▓╨╗╤С╨╜. Review retry `ctx_46bd3a45bb2e`
++(Codex Astra/high) ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╤Б╤П `worker_done` ╨╕ ╨▓╨╡╤А╨┤╨╕╨║╤В╨╛╨╝ FAIL. ╨Я╨╛╨╗╨╜╤Л╨╡ findings ╨╕
++╨╝╨░╤В╤А╨╕╤Ж╨░ AC: [TASK-WINDOWS-PROGRAMDATA-01-C1](reviews/TASK-WINDOWS-PROGRAMDATA-01-C1.md).
++╨Ъ╤А╨░╤В╨║╨╛: PD-C1-01/02/03 тАФ MAJOR (╨░╨╗╤М╤В╨╡╤А╨╜╨░╤В╨╕╨▓╨╜╤Л╨╡ data roots ╨╜╨╡ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨╕╤А╤Г╤О╤В╤Б╤П;
++Administrators ACE ╨▓╤Л╤Е╨╛╨┤╨╕╤В ╨╖╨░ AC3; ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╤Г╤О╤В ╨╛╨▒╤П╨╖╨░╤В╨╡╨╗╤М╨╜╤Л╨╡ native Windows/UAC
++╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓╨░); PD-C1-04 тАФ MINOR (╤А╨░╨╜╨╜╨╕╨╣ ╨╜╤Г╨╗╨╡╨▓╨╛╨╣ ╤А╨░╨╖╨╝╨╡╤А ╨╗╨╛╨│╨╛╨▓ ╤А╨░╤Б╤Е╨╛╨┤╨╕╤В╤Б╤П ╤Б
++╨┐╨╛╨╖╨┤╨╜╨╡╨╣╤И╨╕╨╝ snapshot). ╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨╡ ╤А╨╡╤И╨╡╨╜╨╕╨╡ ╨┐╨╛ ACL contract ╨╖╨░╨┐╤А╨╛╤И╨╡╨╜╨╛;
++╨┤╨╛ ╨╜╨╡╨│╨╛ AC3 ╨╜╨╡ ╨╕╨╖╨╝╨╡╨╜╤П╨╡╤В╤Б╤П. ╨Я╨╛╨╗╨╜╤Л╨╣ review slot 1/2; C2 ╨╡╤Й╤С ╨╜╨╡ ╨╜╨░╤З╨░╤В.
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨╡ ╤А╨╡╤И╨╡╨╜╨╕╨╡ `WINDOWS_PROGRAMDATA_ACL_CONFIRM_20261028` ╨╖╨░╨║╤А╤Л╨▓╨░╨╡╤В
++╨▓╨╛╨┐╤А╨╛╤Б PD-C1-02 ╨▒╨╡╨╖ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П frozen contract: ╨┤╨╛╤Б╤В╤Г╨┐ ╨║ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╕╨╝ ╨┤╨░╨╜╨╜╤Л╨╝
++EDR ╨┤╨╛╨╗╨╢╨╡╨╜ ╨╕╨╝╨╡╤В╤М ╤В╨╛╨╗╤М╨║╨╛ intended EDR SID ╨╕ SYSTEM. ╨Я╨╛╨┤╨│╨╛╤В╨╛╨▓╨╗╨╡╨╜ C2 frozen correction
++checklist ╨▓ TASK; ╨╖╨░╤А╨╡╨╖╨╡╤А╨▓╨╕╤А╨╛╨▓╨░╨╜ ╨▓╤В╨╛╤А╨╛╨╣ ╨╕ ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ full review slot ╨┐╨╛╨┤╤Е╨╛╨┤╨░ A1.
++C2 ╨╜╨╡ ╤П╨▓╨╗╤П╨╡╤В╤Б╤П ╨╜╨╛╨▓╨╛╨╣ ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨╛╨╣ ╨╕ ╨╜╨╡ ╨╝╨╡╨╜╤П╨╡╤В AC1тАУAC8. ╨Я╨╡╤А╨╡╨┤╨░╤З╨░ ╨╕╤Б╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤О
++╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨░ PD-C1-01/02/03/04; commit/push ╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П host install/data ╨╖╨░╨┐╤А╨╡╤Й╨╡╨╜╤Л.
++╨Ф╨╕╤Б╨┐╨░╤В╤З C2 implementation: Task `task_c9620c407c42`, Dispatch `ctx_c271897aa08d`,
++Codex `gpt-6.1-sol`/medium, Run `run_9d6e68393645`, existing `main` worktree.
++╨Э╨░ ╨╝╨╛╨╝╨╡╨╜╤В ╨╖╨░╨┐╨╕╤Б╨╕ worker ╨╜╨░╤Е╨╛╨┤╨╕╤В╤Б╤П ╨▓ `starting`; C2 writer ╨╛╨┤╨╕╨╜, reviewer ╨┐╨╛╨║╨░
++╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╤Б╤П ╨┤╨╛ ╨╡╨│╨╛ `worker_done`. Writer ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╤Б╤П `outcome=failed` ╨╕╨╖-╨╖╨░
++╨╜╨╡╨┤╨╛╤Б╤В╤Г╨┐╨╜╨╛╨│╨╛ native evidence; ╨┐╨╛╨┤╤А╨╛╨▒╨╜╨╛╤Б╤В╨╕: [A1/C2 implementation report](evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/report.md).
++Final evidence ╤Г╨║╨░╨╖╤Л╨▓╨░╨╡╤В 43 focused tests passed, native synthetic gate ╨╕
++inherited DACL checks, PowerShell parser exit 0, Inno SmokeBuild exit 0; Sandbox
++guest inventory ╨┐╤Г╤Б╤В ╨┐╨╛╤Б╨╗╨╡ bounded 67-second launch ╨╕ cancellation. UAC, ╨┤╤А╤Г╨│╨╕╨╡
++account tokens, installed Windows lifecycle ╨╕ migration ╨╛╤Б╤В╨░╤О╤В╤Б╤П NOT_RUN.
++╨Т╤В╨╛╤А╨╛╨╣ ╨╕ ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ full review slot ╨╖╨░╤А╨╡╨╖╨╡╤А╨▓╨╕╤А╨╛╨▓╨░╨╜: Task `task_58b34436de7d`,
++Dispatch `ctx_5d0b049b279d`, Codex `gpt-6-astra`/high, Run `run_9d6e68393645`.
++C2 review ╤Б╨▓╨╡╤А╤П╨╡╤В final diff ╨╕ artifacts ╨▒╨╡╨╖ ╨┐╨╛╨▓╤В╨╛╤А╨╡╨╜╨╕╤П ╨┐╨╛╨╗╨╜╤Л╤Е ╨┐╤А╨╛╨▓╨╡╤А╨╛╨║ ╨╕ ╨▒╨╡╨╖
++╨╜╨╛╨▓╨╛╨│╨╛ ╨╖╨░╨┐╤Г╤Б╨║╨░ Sandbox.
++
++╨Я╨╛╨╖╨┤╨╜╨╡╨╣╤И╨░╤П ╨╖╨░╨┐╨╕╤Б╤М supersedes ╨┐╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╕╨╣ ╤Б╤В╨░╤В╤Г╤Б `C2 review ╤Б╨▓╨╡╤А╤П╨╡╤В...`: reviewer
++`ctx_5d0b049b279d` ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗ ╨▓╤В╨╛╤А╨╛╨╣ full review `worker_done/outcome=failed`;
++╨┐╨╛╨┤╤А╨╛╨▒╨╜╨╛╤Б╤В╨╕ ╨▓ [A1/C2 review](reviews/TASK-WINDOWS-PROGRAMDATA-01-C2.md).
++PD-C1-01 ╨╕ PD-C1-02 ╨╕╤Б╨┐╤А╨░╨▓╨╗╨╡╨╜╤Л ╨┐╨╛ ╨║╨╛╨┤╤Г ╨╕ ╨┐╨╛╨┤╨┤╨╡╤А╨╢╨░╨╜╤Л synthetic evidence; PD-C1-04
++closed. Installed Windows lifecycle, cross-account ACL ╨╕ ╤А╨╡╨░╨╗╤М╨╜╤Л╨╡ UAC flows ╨╛╤Б╤В╨░╤О╤В╤Б╤П
++NOT_RUN (PD-C1-03/╨╛╤Б╤В╨░╤В╨╛╨║ PD-C1-01/02), ╨┐╨╛╤Н╤В╨╛╨╝╤Г AC1тАУAC7 ╨╜╨╡ ╨┐╤А╨╛╤И╨╗╨╕. ╨Я╨╛╨╗╨╜╤Л╨╡ review
++slots A1 2/2 ╨╕ failed reviews 2/2 ╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╜╤Л; ╤З╨╡╤В╤Л╤А╨╡ provider calls ╤Д╨░╨║╤В╨╕╤З╨╡╤Б╨║╨╕
++╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╜╤Л (C1 implementation/review, C2 implementation/review; input totals
++╨╜╨╡ ╨┐╤А╨╡╨┤╤Б╤В╨░╨▓╨╗╨╡╨╜╤Л), startup dispatch ╨┤╨╛ provider start ╨╜╨╡ ╤П╨▓╨╗╤П╨╡╤В╤Б╤П provider call.
++
++C3 diagnosis: [RCA](reviews/TASK-WINDOWS-PROGRAMDATA-01-C3-diagnosis.md). ╨Я╤А╨╕╤З╨╕╨╜╨░ тАФ
++╨╜╨╡╤В ╨╕╨╖╨╛╨╗╨╕╤А╨╛╨▓╨░╨╜╨╜╨╛╨╣ Windows ╤Б╤А╨╡╨┤╤Л ╤Б ╤А╨░╨▒╨╛╤З╨╡╨╣ ╨│╨╛╤Б╤В╨╡╨▓╨╛╨╣ ╨┤╨╛╤Б╤В╨░╨▓╨║╨╛╨╣, ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╤Л╨╝ UAC ╨╕
++╤В╨╡╤Б╤В╨╛╨▓╤Л╨╝╨╕ account tokens; ╨╜╨╛╨▓╤Л╨╣ Sandbox launch ╨╜╨╡ ╨▓╤Л╨┤╨░╨╗ guest inventory ╨╖╨░ 67.35s.
++A1 code approach ╨╜╨╡╨╗╤М╨╖╤П ╨┐╤А╨╕╨╜╨╕╨╝╨░╤В╤М ╨▒╨╡╨╖ ╤Н╤В╨╕╤Е ╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓. A1 ╤Б╨╗╨╛╤В╤Л ╨╕╤Б╤З╨╡╤А╨┐╨░╨╜╤Л; C3
++╤В╨╛╨╗╤М╨║╨╛ diagnosis, ╨▒╨╡╨╖ ╨║╨╛╨┤╨░ ╨╕ ╤В╤А╨╡╤В╤М╨╡╨│╨╛ review. TASK/STATE ╨┐╨╡╤А╨╡╨▓╨╡╨┤╨╡╨╜╤Л ╨▓ BLOCKED ╨┤╨╛
++╨┤╨╛╤Б╤В╤Г╨┐╨╜╨╛╤Б╤В╨╕ ╤В╤А╨╡╨▒╤Г╨╡╨╝╨╛╨│╨╛ ╤В╨╡╤Б╤В╨╛╨▓╨╛╨│╨╛ ╤А╨╡╤Б╤Г╤А╤Б╨░ ╨╕ ╤П╨▓╨╜╨╛╨│╨╛ ╨▓╨╛╨╖╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╤П ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П.
++╨Э╨╕ commit/push/release/deployment, ╨╜╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ host install/data ╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╗╨╕╤Б╤М.
++# 2026-10-29 тАФ approved offline Visual C++ prerequisite task
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╖╨░╨┐╤А╨╛╤Б╨╕╨╗ ╨▓╨║╨╗╤О╤З╨╕╤В╤М Microsoft Visual C++ Runtime ╨▓ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╛╤З╨╜╤Л╨╣
++╨┐╨░╨║╨╡╤В EDR ╨╕ ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╨╡╨│╨╛ ╨▓ VM. ╨Ш╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ supersedes ╤В╨╛╨╗╤М╨║╨╛ ╨┐╤А╨╡╨╢╨╜╨╕╨╣ flow ╨╕╨╖
++WINDOWS-LOCAL-01/ADR-012, ╨║╨╛╤В╨╛╤А╤Л╨╣ ╨╛╤В╨║╤А╤Л╨▓╨░╨╗ ╤Б╨░╨╣╤В Microsoft ╨┐╤А╨╕ ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╨╕╨╕ CRT;
++╨┐╤А╨╛╤З╨╕╨╡ ╨║╤А╨╕╤В╨╡╤А╨╕╨╕ Windows Local ╨╕ ProgramData ╨╜╨╡ ╨╝╨╡╨╜╤П╤О╤В╤Б╤П. ╨Ч╨░╤Д╨╕╨║╤Б╨╕╤А╨╛╨▓╨░╨╜╤Л
++ADR-014, TASK-WINDOWS-CRT-OFFLINE-01 ╨╕ ╨╛╤В╨┤╨╡╨╗╤М╨╜╨░╤П ╨╖╨░╨┐╨╕╤Б╤М approval. ╨Ю╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╤Л╨╣
++╨┐╨░╨║╨╡╤В x64 v14.51.36247.0 ╤Б╨║╨░╤З╨░╨╜ ╤Б Microsoft-supported permalink, Authenticode
++╨┐╨╛╨┤╨┐╨╕╤Б╤М ╨┤╨╡╨╣╤Б╤В╨▓╨╕╤В╨╡╨╗╤М╨╜╨░ (Microsoft Corporation), SHA-256
++843068991DAAA1F73AD9F6239BCE4D0F6A07A51F18C37EA2A867E9BECA71295C.
++
++╨Ю╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ A1/C1 task ╨╜╨╡ ╤Б╨▒╤А╨░╤Б╤Л╨▓╨░╨╡╤В ╨╕╤Б╤З╨╡╤А╨┐╨░╨╜╨╜╤Л╨╡ A1/C1/C2/C3 ╨╖╨░╨┐╨╕╤Б╨╕
++TASK-WINDOWS-PROGRAMDATA-01. ╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╨╡: ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨░╤П ╤А╨╡╨░╨╗╨╕╨╖╨░╤Ж╨╕╤П ╤Г╨┐╨░╨║╨╛╨▓╨║╨╕,
++evidence ╨╕ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨▓╨╛ ╨▓╤А╨╡╨╝╨╡╨╜╨╜╤Г╤О EDR-Win11-Test VM. Commit/push/release/deploy
++╨╜╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╤Л. ╨в╨╡╨║╤Г╤Й╨░╤П VM ╨╖╨░╨║╤А╤Л╤В╨░ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝ ╨╜╨░ ╤И╨░╨│╨╡ CRT prerequisite; ╨┐╨╡╤А╨╡╨┤
++╨┐╤А╨╛╨▓╨╡╤А╨║╨╛╨╣ ╨╜╨╛╨▓╨╛╨│╨╛ EXE ╨┐╨╛╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П ╤Б╨╜╨╛╨▓╨░ ╨┐╨╛╨┤╨║╨╗╤О╤З╨╕╤В╤М ╨╡╤С ╨╕ ╨▓╨║╨╗╤О╤З╨╕╤В╤М ╨┤╨╕╤Б╨║ C: host
++╤З╨╡╤А╨╡╨╖ Enhanced Session. Status ╤Н╤В╨╛╨│╨╛ task: APPROVED, implementation ╨╡╤Й╤С ╨╜╨╡
++dispatched ╨╜╨░ ╨╝╨╛╨╝╨╡╨╜╤В ╤Н╤В╨╛╨╣ ╨╖╨░╨┐╨╕╤Б╨╕.
++
++# 2026-10-29 тАФ offline CRT implementation dispatch
++
++Task `TASK-WINDOWS-CRT-OFFLINE-01` ╨╖╨░╨╝╨╛╤А╨╛╨╢╨╡╨╜ ╨║╨░╨║ R2 A1/C1; coordinator ╨╕╤Б╨┐╨╛╨╗╤М╨╖╤Г╨╡╤В
++existing ProgramData Run `run_9d6e68393645`, ╨╜╨╡ ╤Б╨╛╨╖╨┤╨░╨▓╨░╤П ╨╜╨╛╨▓╤Л╨╣ Run ╨╕ ╨╜╨╡ ╨╕╨╖╨╝╨╡╨╜╤П╤П ╨╡╨│╨╛
++╤Б╤З╤С╤В╤З╨╕╨║╨╕. Orca Task `task_41eb53413187`, Dispatch `ctx_38381b0cca45`, implementation
++Codex `gpt-6.1-sol`/medium (requested/effective ╤Б╨╛╨▓╨┐╨░╨╗╨╕), current `main` worktree,
++baseline commit `dccb14554cca3f688f20153f1f3eb41195740319`. Worker ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜
++installer/build/guide/focused checks/evidence; ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╤Г╤О VM ╨┐╤А╨╛╨▓╨╡╤А╨║╤Г ╨┐╨╛╤Б╨╗╨╡
++╨│╨╛╤В╨╛╨▓╨╜╨╛╤Б╤В╨╕ EXE ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В coordinator ╤Б╨╛╨▓╨╝╨╡╤Б╤В╨╜╨╛ ╤Б ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝.
++
++# 2026-10-29 тАФ offline CRT implementation completed; VM pending
++
++Worker `ctx_38381b0cca45` ╤Б╨╛╨╛╨▒╤Й╨╕╨╗ `worker_done/outcome=succeeded`: Microsoft v14
++14.51.36247.0 package validated and bundled; full temporary SmokeBuild exit 0;
++focused Pascal harness and PowerShell parser exit 0. Artifact SHA-256
++`6A6088D09445E25BF6DAF0939C8D5C7EC64CAA0E8DD07FCCF01B21A845C42000`. Report
++`docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/report.md` contains exact
++commands/logs/hashes and NOT_RUN limits. Coordinator independently confirmed
++the EXE hash; its Authenticode is NotSigned (local test artifact), while the
++embedded Microsoft package signature is valid. Coordinator released the settled
++worker terminal with transcript captured and acknowledged delivery.
++
++Project task is IMPLEMENTATION_COMPLETE / NOT_REVIEWED. Interactive offline VM
++test and routed R2 review are still required. No ProgramData acceptance or project
++PASS; no commit/push/release/deployment.
++
++# 2026-10-29 тАФ offline CRT VM evidence and R2 review
++
++Coordinator copied both user-provided VM screenshots into the new TASK evidence
++folder with SHA-256 recorded in `report.md`. Guest read-only registry query
++confirmed `Installed=1`, VC runtime 14.51.36247. Setup advanced past CRT and then
++stopped before EDR payload at the separate ProgramData interactive-account /
++protected-root guard. This is not a complete EDR installation or ProgramData
++acceptance. Frozen R2 review slot 1/2 for CRT TASK is reserved and dispatched:
++Orca Task `task_d55d6550e738`, Dispatch `ctx_5a73a16376fb`, Codex Astra/high
++(requested/effective match). Reviewer assesses whether AC5's CRT continuation
++evidence is sufficient, separately from ProgramData blocker; no tests rerun or
++code modified by reviewer. No commit/push/release/deployment.
++
++Independent R2 reviewer returned PASS for all seven frozen CRT task criteria.
++The review confirmed the source diff/hashes and existing build/focused evidence;
++it did not rerun checks or modify files. Criterion 5 is satisfied by the offline
++VM registry confirmation and setup reaching ProgramData preparation. The later
++ProgramData guard remains a distinct unresolved blocker and is explicitly not
++accepted by this CRT task. Reviewer delivery `msg_167c148465dd` and completion
++`msg_8e5555c3c93f` are retained in Orca Run `run_9d6e68393645`; reviewer
++terminal released after archive capture. No commit/push/release/deployment.
++
++# 2026-10-29 тАФ ProgramData explicit resume, A2/C1 reserved
++
++The user explicitly resumed TASK-WINDOWS-PROGRAMDATA-01 after A1 was blocked and
++asked to automate VM work as far as possible. Approved ADR-013 requirements and
++the original AC1тАУAC8 remain unchanged. A1's two FAIL reviews and four Codex calls
++remain recorded; no counters are reset. A2 uses the newly available interactive
++Windows 11 Hyper-V VM and the observed incomplete SmokeBuild bootstrap as distinct
++evidence/approach. Two remaining R3 Codex calls are reserved for A2/C1
++implementation and independent review; A2/C2 must not start without a valid
++remaining budget decision.
++
++User screenshots show elevated PowerShell as `EDR-TEST\vmadmin` can read the
++interactive `EDRUser` shell identity, both in session 11. The `EDR-Smoke` root is
++protected, owned by BUILTIN\Administrators, and exposes only SYSTEM, Administrators,
++and read/execute for EDRUser at the root; its only listed direct child is `runtime`.
++`state`, `control`, and `owner.json` were not listed. Exact provisioning exception
++is unknown; failure during first writable-state initialization is an inference,
++not a confirmed error. Screenshots are saved under
++`evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/` with hashes in its report.
++
++Host `Get-VM` and `Get-VMIntegrationService` queries returned an authorization
++error, including the attempted escalated query. This session cannot directly
++operate the Hyper-V guest desktop or run guest commands. No more manual probe is
++requested from the user; implementation/build and a one-run acceptance harness
++will be prepared where possible. No commit/push/release/deployment.
++
++A2/C1 implementation was dispatched as Orca Task `task_00c1b4aa116e`, Dispatch
++`ctx_37fc70a54976`, Codex `gpt-6.1-sol`/medium. The worker changed
++`provision.ps1` and `edr.iss`, added `test-programdata.ps1`, passed 43 focused tests,
++PowerShell parsing, Inno SmokeBuild compilation and `git diff --check`; EXE
++`C:/Users/user/AppData/Local/Temp/EDR-ProgramData-A2-C1/EDR-0.2.0-windows-x64.exe`
++SHA-256 `1CD3CEBA3121F5E2081B2C344673C503EE993B6A8845454741C003338134E906`.
++The prepared guest harness and native recovery/access checks were NOT_RUN because
++this session lacks Hyper-V authorization and guest PowerShell Direct credentials.
++Worker outcome is `failed`; its terminal was released with transcript captured.
++No independent review was dispatched, and the final R3 Codex call remains
++reserved. Product changes remain unreviewed and unaccepted. No commit/push/release.
++
++Coordinator code inspection (not an independent routed review) also noted that
++A2 assigns BUILTIN\Administrators ownership of the writable state directory.
++Although explicit data ACEs are intended-user + SYSTEM only, Windows owners can
++change a DACL; this may conflict with the strict access requirement. Keep the
++submission unaccepted until the reserved reviewer resolves this security question.
++
++## 2026-11-03 тАФ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨░ ╤А╨╛╨╗╨╡╨╣ DeepSeek / Codex
++
++╨Ч╨░╨┐╤А╨╛╤Б ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П: ┬л╨в╨░╨║╤Б, ╤В╨╡╨┐╨╡╤А╤М ╨╜╤Г╨╢╨╜╨╛ ╨╜╨░╤Б╤В╤А╨╛╨╕╤В╤М ╨╛╤А╨║╨╡╤Б╤В╤А╨░╤Ж╨╕╤О ╨╕ ╤А╨╛╨╗╨╕┬╗ ╨┐╨╛╤Б╨╗╨╡
++╨┐╨╛╨┤╨║╨╗╤О╤З╨╡╨╜╨╕╤П DeepSeek API. ╨Ю╨▒╨╜╨╛╨▓╨╗╨╡╨╜╤Л AGENTS.md ╨╕ MODEL-ROUTING.md; ╨┤╨╛╨▒╨░╨▓╨╗╨╡╨╜
++╨┐╤А╨╛╨╡╨║╤В╨╜╤Л╨╣ opencode.json. ╨Ъ╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А ╨╕ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ ╨╕╤Б╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М тАФ OpenCode Flash;
++╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╤Л╨╣ R1-╤А╨╡╨▓╤М╤О╨╡╤А тАФ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ OpenCode Pro; ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░, R2/R3 ╨╕ ╨╕╤В╨╛╨│╨╛╨▓╨░╤П
++╨┐╤А╨╕╤С╨╝╨║╨░ тАФ Codex Astra/high. ╨Ю╨┤╨╕╨╜╨░╨║╨╛╨▓╨╛╨╡ ╤Б╨╡╨╝╨╡╨╣╤Б╤В╨▓╨╛ Flash/Pro ╨╛╤В╨╝╨╡╤З╨╡╨╜╨╛ ╨║╨░╨║ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╕╨╡.
++
++╨Я╤А╨╛╨▓╨╡╤А╨║╨╕ ╨╕╨╖ D:/Antigravity/EquipmentDocumentationRegistry: `opencode debug config`
++(exit 0) ╨╖╨░╨│╤А╤Г╨╖╨╕╨╗ model/coordinator/build = deepseek/deepseek-flash,
++edr-reviewer = deepseek/deepseek-v4-pro, reviewer edit = deny.
++`git diff --check` (exit 0) ╨╜╨╡ ╨╛╨▒╨╜╨░╤А╤Г╨╢╨╕╨╗ ╨╛╤И╨╕╨▒╨╛╨║ whitespace; Git ╤Б╨╛╨╛╨▒╤Й╨╕╨╗ ╨╛╨▒╤Л╤З╨╜╤Л╨╡
++╨┐╤А╨╡╨┤╤Г╨┐╤А╨╡╨╢╨┤╨╡╨╜╨╕╤П CRLF ╨┤╨╗╤П ╤А╨░╨╜╨╡╨╡ ╨╕╨╖╨╝╨╡╨╜╤С╨╜╨╜╤Л╤Е ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╤Е ╤Д╨░╨╣╨╗╨╛╨▓. ╨Ъ╨╗╤О╤З╨╕, ╨│╨╗╨╛╨▒╨░╨╗╤М╨╜╨░╤П
++╨║╨╛╨╜╤Д╨╕╨│╤Г╤А╨░╤Ж╨╕╤П, ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤ ╨╕ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╨╡ ╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓╨░ ╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨╕╤Б╤М.
++
++╨н╤В╨╛ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨░ workflow, ╨╜╨╡ ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ PASS ╨╕ ╨╜╨╡ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╨╡ ╨▓╨╛╨╖╨╛╨▒╨╜╨╛╨▓╨╕╤В╤М
++TASK-WINDOWS-PROGRAMDATA-01. Run/Dispatch/workers ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╕╤Б╤М; ╤Б╨║╨▓╨╛╨╖╨╜╨░╤П ╨┐╤А╨╛╨▓╨╡╤А╨║╨░
++╨│╨╡╨╜╨╡╤А╨░╤Ж╨╕╨╕, tool calling ╨╕ Orca-╤Ж╨╕╨║╨╗╨░ NOT_RUN. ╨Я╤А╨╡╨┤╤Л╨┤╤Г╤Й╨╕╨╡ ╨▒╨╗╨╛╨║╨╡╤А╤Л, ╨┐╨╛╨┐╤Л╤В╨║╨╕,
++╤Б╤З╤С╤В╤З╨╕╨║╨╕ ╨╕ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л. ╨Я╤А╨╛╤Д╨╕╨╗╨╕ ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╤О╤В ╤Д╨╛╨╜╨╛╨▓╨╛╨│╨╛ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А╨░;
++╨▓╤Л╨▒╨╛╤А edr-coordinator ╨╕ ╨┐╨╛╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╣ ╨╖╨░╨┐╤Г╤Б╨║ ╤В╤А╨╡╨▒╤Г╤О╤В ╨┤╨╡╨╣╤Б╤В╨▓╤Г╤О╤Й╨╡╨│╨╛ runtime ╨╕
++╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨┐╨╛╨╗╨╜╨╛╨╝╨╛╤З╨╕╨╣ ╤В╨╡╨║╤Г╤Й╨╡╨│╨╛ TASK ╨┐╨╛ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨╛╨╝╤Г guide.
++
++### 2026-11-03 тАФ ╨┤╨╛╨▒╨░╨▓╨╗╨╡╨╜╨╕╨╡ Codex GPT-6.1 Sol
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╛╤В╨▓╨╡╤В╨╕╨╗ ┬л╤Е╨╛╤А╨╛╤И╨╛┬╗ ╨╜╨░ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╜╨╛╨╡ ╤А╨░╤Б╨┐╤А╨╡╨┤╨╡╨╗╨╡╨╜╨╕╨╡: Sol/high тАФ ╤А╨╡╨▓╤М╤О R2
++╨▓ ╤А╨░╨╝╨║╨░╤Е ╨┐╨╛╨╜╤П╤В╨╜╨╛╨╣ ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╤Л ╨╕ ╤А╨░╨╖╤А╨╡╤И╤С╨╜╨╜╤Л╨╣ ╤А╨░╨╖╨▒╨╛╤А ╤Б╨╗╨╛╨╢╨╜╤Л╤Е ╨╛╤И╨╕╨▒╨╛╨║; Astra/high тАФ
++╨╜╨╛╨▓╨░╤П ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░, ╤Б╨╗╨╛╨╢╨╜╨░╤П ╨▒╨╡╨╖╨╛╨┐╨░╤Б╨╜╨╛╤Б╤В╤М, R3 ╨╕ ╨╕╤В╨╛╨│╨╛╨▓╨░╤П ╨┐╤А╨╕╤С╨╝╨║╨░. ╨Ш╨╖╨╝╨╡╨╜╨╡╨╜╤Л
++MODEL-ROUTING.md ╨╕ ╤Б╨▓╨╛╨┤╨║╨░ STATE.md. Sol ╨┐╨╛╨╗╤Г╤З╨░╨╡╤В ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╤Л╨╣ ╨┐╨░╨║╨╡╤В ╨╕ ╨▓╨╛╨╖╨▓╤А╨░╤Й╨░╨╡╤В
++╨▓╨╡╤А╨┤╨╕╨║╤В ╨▒╨╡╨╖ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤Ж╨╕╨╕/╨╛╨╢╨╕╨┤╨░╨╜╨╕╤П; ╤И╤В╨░╤В╨╜╨╛╨╡ ╨┤╨▓╨╛╨╣╨╜╨╛╨╡ ╤А╨╡╨▓╤М╤О Sol + Astra ╨╜╨╡ ╨▓╨▓╨╛╨┤╨╕╤В╤Б╤П.
++╨г╤Б╨╗╨╛╨▓╨╕╤П ╤Н╨║╤Б╨┐╨╡╤А╤В╨╜╨╛╨╣ ╤Н╤Б╨║╨░╨╗╨░╤Ж╨╕╨╕ R1, ╤Б╤З╤С╤В╤З╨╕╨║╨╕, review slots ╨╕ ╨┐╤А╨╡╨╢╨╜╨╕╨╡ ╨▒╨╗╨╛╨║╨╡╤А╤Л ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л.
++TASK-WINDOWS-PROGRAMDATA-01 ╨╛╤Б╤В╨░╤С╤В╤Б╤П BLOCKED ╨╜╨░ ╨╝╨░╤А╤И╤А╤Г╤В╨╡ Astra. ╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤,
++OpenCode-╨┐╤А╨╛╤Д╨╕╨╗╨╕, ╨│╨╗╨╛╨▒╨░╨╗╤М╨╜╤Л╨╡ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨╕ ╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨╕╤Б╤М; Run/workers ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╕╤Б╤М.
++
++## 2026-11-03 тАФ ╨┐╤А╨╕╤С╨╝ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤Ж╨╕╨╕ Flash ╨╕ preflight VM
++
++╨Э╨╛╨▓╤Л╨╣ OpenCode Flash coordinator ╨┐╤А╨╕╨╜╤П╨╗ ╨╛╤З╨╡╤А╨╡╨┤╤М ╨┐╨╛ ╤Г╨║╨░╨╖╨░╨╜╨╕╤О ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П. Run
++`run_9d6e68393645` ╨┐╤А╨╕╨▓╤П╨╖╨░╨╜ ╨║╨╛╨╝╨░╨╜╨┤╨╛╨╣
++`orca orchestration run-use --id run_9d6e68393645 --json` (exit 0). ╨Ф╨╛ ╨┐╤А╨╕╨▓╤П╨╖╨║╨╕
++`run-current` ╨▓╨╛╨╖╨▓╤А╨░╤Й╨░╨╗ `null`. `task-list` ╨╕ `inbox` ╨┐╤А╨╛╤З╨╕╤В╨░╨╜╤Л: ╨▓╤Б╨╡ ╤Б╨╛╨╛╨▒╤Й╨╡╨╜╨╕╤П
++`handled`, ╨╜╨╛╨▓╤Л╤Е ╨╜╨╡╤В; A2/C1 dispatch `ctx_37fc70a54976` settled `failed`,
++terminal released; ╨┤╤А╤Г╨│╨╛╨│╨╛ ╨░╨║╤В╨╕╨▓╨╜╨╛╨│╨╛ writer ╨┐╨╛ EDR ╨╜╨╡╤В. Git: `main`, HEAD
++`dccb14554cca3f688f20153f1f3eb41195740319`, dirty worktree ╤Б╨╛╤Е╤А╨░╨╜╤С╨╜; commit/push
++╨╜╨╡ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╗╨╕╤Б╤М.
++
++Read-only host probe (CWD `D:/Antigravity/EquipmentDocumentationRegistry`):
++`Start-Process powershell.exe -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','C:\Users\user\AppData\Local\Temp\opencode\hyperv-probe.ps1' -Verb RunAs -PassThru -Wait`
++(exit 0) ╨╕ ╨▓╤В╨╛╤А╨╛╨╣ probe `hyperv-probe2.ps1` (exit 0). ╨а╨╡╨╖╤Г╨╗╤М╤В╨░╤В: `whoami`
++`win-kii4hna3i6n\user`, elevated=True. `Get-VM -Name EDR-Win11-Test`: Running,
++Generation 2, uptime 23:19:19, path `C:\HyperV\EDR-Win11-Test`; heartbeat, KVP,
++VSS ╨╕ time sync OK; ╤Б╨╡╤В╨╡╨▓╨╛╨╣ ╨░╨┤╨░╨┐╤В╨╡╤А `connected=False`. ╨Я╤А╨╡╨╢╨╜╨╕╨╣ ╨╛╤В╨║╨░╨╖
++Hyper-V authorization ╨▓ ╤Н╤В╨╛╨╝ ╤Б╨╡╨░╨╜╤Б╨╡ ╨╜╨╡ ╨▓╨╛╤Б╨┐╤А╨╛╨╕╨╖╨▓╨╛╨┤╨╕╤В╤Б╤П.
++
++`New-PSSession -VMName EDR-Win11-Test` ╨▒╨╡╨╖ `-Credential` ╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╤Б╤П
++ParameterBindingException (╨╛╨▒╤П╨╖╨░╤В╨╡╨╗╤М╨╜╤Л╨╣ ╨┐╨░╤А╨░╨╝╨╡╤В╤А Credential); guest credential
++╨╜╨╡╨┤╨╛╤Б╤В╤Г╨┐╨╡╨╜. `cmdkey /list` ╨╜╨╡ ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В ╨╖╨░╨┐╨╕╤Б╨╕ EDR/VM; host UAC: EnableLUA=1,
++ConsentPromptBehaviorAdmin=5, PromptOnSecureDesktop=1. Host UAC, ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░ ╨╕
++╨┤╨░╨╜╨╜╤Л╨╡ ╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨╕╤Б╤М. SHA-256 ╤В╨╡╨║╤Г╤Й╨╕╤Е ╨░╤А╤В╨╡╤Д╨░╨║╤В╨╛╨▓ ╤Б╨╛╨▓╨┐╨░╨┤╨░╤О╤В ╤Б
++`evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/implementation-hashes.json`:
++`provision.ps1` 57ABDD5DтАж1F2C, `edr.iss` 481B5C9CтАжE7BC, `test-programdata.ps1`
++23FD1B12тАж56E4, EXE 1CD3CEBAтАжE906. ╨н╤В╨╛ ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╨░╨╡╤В ╤Ж╨╡╨╗╨╛╤Б╤В╨╜╨╛╤Б╤В╤М ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨║╨╕, ╨╜╨╡
++native evidence ╨╕ ╨╜╨╡ PASS.
++
++╨а╨╡╤И╨╡╨╜╨╕╨╡: worker ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╤Б╤П, A2/C2 ╨╜╨╡ ╨╜╨░╤З╨░╤В, ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ Astra call (6/6) ╨╜╨╡
++╨┐╨╛╤В╤А╨░╤З╨╡╨╜. ╨в╨╛╤З╨╜╤Л╨╣ ╨▒╨╗╨╛╨║╨╡╤А тАФ ╨╛╤В╤Б╤Г╤В╤Б╤В╨▓╨╕╨╡ guest-credential ╨┤╨╗╤П PowerShell Direct.
++╨Ь╨╕╨╜╨╕╨╝╨░╨╗╤М╨╜╨╛╨╡ ╨╜╨╡╨╛╨▒╤Е╨╛╨┤╨╕╨╝╨╛╨╡ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П: ╨┐╤А╨╡╨┤╨╛╤Б╤В╨░╨▓╨╕╤В╤М ╨╛╨┤╨╕╨╜ guest admin
++credential (╤А╨╡╨║╨╛╨╝╨╡╨╜╨┤╤Г╨╡╤В╤Б╤П ╤Б╨╛╨╖╨┤╨░╨╜╨╜╤Л╨╣ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝ DPAPI-encrypted ╤Д╨░╨╣╨╗) ╨╗╨╕╨▒╨╛
++╨╛╨┤╨╜╨╛╨║╤А╨░╤В╨╜╨╛ ╨╖╨░╨┐╤Г╤Б╤В╨╕╤В╤М ╨│╨╛╤В╨╛╨▓╤Л╨╣ harness ╨▓ ╨║╨╛╨╜╤Б╨╛╨╗╨╕ VM. ╨а╤Г╤З╨╜╤Л╨╡ VM-╤Б╨║╤А╨╕╨┐╤В╤Л ╨╜╨╡
++╨╖╨░╨┐╤А╨░╤И╨╕╨▓╨░╤О╤В╤Б╤П. ╨б╤З╤С╤В╤З╨╕╨║╨╕ ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л: A1 C1/C2 FAIL (2/2 reviews), A2/C1
++implementation failed, ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡ review ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╛╤Б╤М, Codex calls 5/6.
++
++╨г╤В╨╛╤З╨╜╨╡╨╜╨╕╨╡ ╨┐╨╛╤Б╨╗╨╡ ╤З╤В╨╡╨╜╨╕╤П harness: PowerShell Direct ╤Б╨░╨╝ ╨┐╨╛ ╤Б╨╡╨▒╨╡ ╨╜╨╡ ╨╖╨░╨║╤А╨╛╨╡╤В
++A2/C1 evidence, ╨┤╨░╨╢╨╡ ╨┐╤А╨╕ ╨╜╨░╨╗╨╕╤З╨╕╨╕ guest-credential. `provision.ps1` ╨╜╨░╨╝╨╡╤А╨╡╨╜╨╜╨╛
++╤З╨╕╤В╨░╨╡╤В ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╤Л╨╣ shell token (`GetShellWindow`) ╨╕ ╤В╤А╨╡╨▒╤Г╨╡╤В ╤Б╨╛╨▓╨┐╨░╨┤╨╡╨╜╨╕╤П session
++ID, ╨░ `test-programdata.ps1` ╤В╤А╨╡╨▒╤Г╨╡╤В alternate-admin UAC. PS Direct ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В╤Б╤П ╨▓
++╨╜╨╡╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╤Б╨╡╤Б╤Б╨╕╨╕, ╨┐╨╛╤Н╤В╨╛╨╝╤Г ╨║╨╛╤А╤А╨╡╨║╤В╨╜╤Л╨╣ ╨┐╤Г╤В╤М тАФ ╨╛╨┤╨╜╨╛╨║╤А╨░╤В╨╜╤Л╨╣ ╨╖╨░╨┐╤Г╤Б╨║ ╨│╨╛╤В╨╛╨▓╨╛╨│╨╛
++harness ╨╕╨╖ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╤Б╨╡╤Б╤Б╨╕╨╕ `EDRUser` ╤Б ╨▓╨▓╨╛╨┤╨╛╨╝ `vmadmin` ╨▓ UAC. ╨н╤В╨╛ ╨╕ ╨╡╤Б╤В╤М
++╤В╤А╨╡╨▒╤Г╨╡╨╝╨╛╨╡ AC3/AC6 evidence; ╨╜╨╛╨▓╤Л╤Е ╤Б╨║╤А╨╕╨┐╤В╨╛╨▓ ╨╜╨╡ ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П. DPAPI-credential ╨╝╨╛╨╢╨╡╤В
++╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╤М╤Б╤П worker'╨╛╨╝ ╨┤╨╗╤П staging/retrieval ╤Д╨░╨╣╨╗╨╛╨▓ ╤З╨╡╤А╨╡╨╖ PS Direct, ╨╜╨╛ ╨╜╨╡
++╨╖╨░╨╝╨╡╨╜╤П╨╡╤В ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╤Л╨╣ UAC. Worker ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╤Б╤П; ╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ Astra call ╤Б╨╛╤Е╤А╨░╨╜╤С╨╜.
++
++PS Direct preflight 2026-11-03 20:58: `New-PSSession -VMName EDR-Win11-Test
++-Credential (Import-Clixml C:\Users\user\AppData\Local\Temp\opencode\edr-vm-cred.xml)`
++╨╖╨░╨▓╨╡╤А╤И╨╕╨╗╤Б╤П `PSDirectException` (╨╜╨╡╨▓╨╡╤А╨╜╤Л╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М/╨┐╨░╤А╨╛╨╗╤М) ╨┤╨╗╤П ╨▓╨░╤А╨╕╨░╨╜╤В╨╛╨▓
++`EDR-TEST\vmadmin`, `vmadmin`, `.\vmadmin`. ╨б╨╡╤Б╤Б╨╕╤П ╨╜╨╡ ╨╛╤В╨║╤А╤Л╨╗╨░╤Б╤М, guest ╨╜╨╡
++╨╕╨╖╨╝╨╡╨╜╤П╨╗╤Б╤П. Credential ╨╜╨╡ ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╤С╨╜; ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╛ ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╨┐╨░╤А╨╛╨╗╤М
++╨▓ ╨║╨╛╨╜╤Б╨╛╨╗╨╕ VM ╨╕ ╨┐╨╡╤А╨╡╤Б╨╛╨╖╨┤╨░╤В╤М DPAPI-╤Д╨░╨╣╨╗. Worker ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╤Б╤П.
++
++╨Я╨╛╨┐╤Л╤В╨║╨░ `1111` ╤З╨╡╤А╨╡╨╖ `runas /user:EDR-TEST\vmadmin cmd` ╨▓ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╣
++╨║╨╛╨╜╤Б╨╛╨╗╨╕ ╨▓╨╡╤А╨╜╤Г╨╗╨░ 1326 (╨╜╨╡╨▓╨╡╤А╨╜╤Л╨╣ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М/╨┐╨░╤А╨╛╨╗╤М); ╨┐╨╛╨▓╤В╨╛╤А ╨┐╨╛╤Б╨╗╨╡ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П
++`PasswordLastSet` ╤В╨░╨║╨╢╨╡ 1326. `cmdkey /list` ╨▓ ╤Б╨╡╤Б╤Б╨╕╨╕ EDRUser: ╤Б╨╛╤Е╤А╨░╨╜╤С╨╜╨╜╤Л╤Е
++credential ╨╜╨╡╤В. ╨Т╤Б╤В╤А╨╛╨╡╨╜╨╜╤Л╨╣ `╨Р╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А` (SID -500) ╨╛╤В╨║╨╗╤О╤З╤С╨╜; EDRUser ╨╜╨╡
++╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А; `vmadmin` тАФ ╨╡╨┤╨╕╨╜╤Б╤В╨▓╨╡╨╜╨╜╤Л╨╣ ╨░╨║╤В╨╕╨▓╨╜╤Л╨╣ ╨░╨┤╨╝╨╕╨╜ ╤Б ╨╜╨╡╨╕╨╖╨▓╨╡╤Б╤В╨╜╤Л╨╝ ╨┐╨░╤А╨╛╨╗╨╡╨╝.
++╨Ф╨░╨╗╤М╨╜╨╡╨╣╤И╨╕╨╣ ╨┐╨╛╨┤╨▒╨╛╤А ╨┐╨░╤А╨╛╨╗╤П ╨┐╤А╨╡╨║╤А╨░╤Й╤С╨╜.
++
++╨Ф╨╗╤П ╤А╤Г╤З╨╜╨╛╨│╨╛ ╨╖╨░╨┐╤Г╤Б╨║╨░ harness ╨▓╨║╨╗╤О╤З╤С╨╜ Guest Service Interface (╨▒╤Л╨╗ False) ╨╕
++╤З╨╡╤А╨╡╨╖ `Copy-VMFile -FileSource Host` ╤Б╨║╨╛╨┐╨╕╤А╨╛╨▓╨░╨╜╤Л ╨▓
++`C:\Users\EDRUser\Downloads\EDR-A2-C1\`: `test-programdata.ps1`,
++`provision.ps1`, SmokeBuild EXE. STAGE OK; host install/data/UAC ╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨╕╤Б╤М.
++╨Я╨╛╤Б╨╗╨╡ ╤Б╨▒╨╛╤А╨░ evidence ╨╕╨╜╤В╨╡╤А╤Д╨╡╨╣╤Б ╨▒╤Г╨┤╨╡╤В ╨╛╤В╨║╨╗╤О╤З╤С╨╜. VM-╨║╨╛╨╜╤Д╨╕╨│╤Г╤А╨░╤Ж╨╕╤П ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨░ ╨▓
++╤А╨░╨╝╨║╨░╤Е ╤А╨░╨╖╤А╨╡╤И╤С╨╜╨╜╨╛╨╣ ╤В╨╡╤Б╤В╨╛╨▓╨╛╨╣ VM.
++
++Harness ╨╖╨░╨┐╤Г╤Й╨╡╨╜ ╨▓ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╨╛╨╣ ╤Б╨╡╤Б╤Б╨╕╨╕ `EDRUser` ╤З╨╡╤А╨╡╨╖
++`powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test-programdata.ps1 -Installer .\EDR-0.2.0-windows-x64.exe`
++(╨┐╤А╤П╨╝╨╛╨╣ ╨╖╨░╨┐╤Г╤Б╨║ `.ps1` ╨▒╨╗╨╛╨║╨╕╤А╨╛╨▓╨░╨╗╤Б╤П ExecutionPolicy). UAC alternate-admin
++`EDR-TEST\vmadmin` ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╤С╨╜ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝. ╨б╨╛╨╖╨┤╨░╨╜ ╨░╤А╤В╨╡╤Д╨░╨║╤В
++`C:\Users\Public\EDR-A2-271e418c60654a3f893922560f22d2eb`; ╨▓ ╨╜╤С╨╝ ╨▓╤Б╨╡ ╤Б╨╡╨╝╤М
++╨║╨╡╨╣╤Б╨╛╨▓ (`fresh`, `runtime-only`, `unexpected`, `nonempty-runtime`, `wrong-acl`,
++`nonempty-state`, `old-owner`), `acceptance.log` 1094 B, `install.log`
++2 356 570 B, ╨║╨░╤В╨░╨╗╨╛╨│ `EDR ╨Я╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡`, `completed.txt` 95 B:
++"Provisioning/installation checks completed. Full AC1-AC8 runtime acceptance
++remains separate." ╨Ю╤И╨╕╨▒╨╛╨║ ╨▓ transcript ╨╜╨╡ ╨╜╨░╨╣╨┤╨╡╨╜╨╛. `Copy-VMFile -FileSource
++Guest` ╨▓ ╤Н╤В╨╛╨╣ ╨▓╨╡╤А╤Б╨╕╨╕ Hyper-V ╨╜╨╡ ╨┐╨╛╨┤╨┤╨╡╤А╨╢╨╕╨▓╨░╨╡╤В╤Б╤П; ╨┐╨╡╤А╨╡╨╜╨╛╤Б ╨░╤А╤В╨╡╤Д╨░╨║╤В╨╛╨▓ ╨╜╨░ host
++╤З╨╡╤А╨╡╨╖ PS Direct ╨╛╨╢╨╕╨┤╨░╨╡╤В ╨║╨╛╤А╤А╨╡╨║╤В╨╜╨╛╨│╨╛ credential. Worker ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╤Б╤П;
++╨┐╨╛╤Б╨╗╨╡╨┤╨╜╨╕╨╣ Astra call ╨╜╨╡ ╨┐╨╛╤В╤А╨░╤З╨╡╨╜.
++
++## 2026-11-03 тАФ A2/C1 native evidence collected
++
++Harness completions in the interactive `EDRUser` session, UAC `EDR-TEST\vmadmin`
++confirmed. Artifacts `C:\Users\Public\EDR-A2-271e418c60654a3f893922560f22d2eb`:
++all seven cases present. `fresh` exit 0; `runtime-only` exit 0; `unexpected`,
++`nonempty-runtime`, `wrong-acl`, `nonempty-state` exit 1 (expected fail-closed).
++`old-owner` exit 1 reproduces `phase=create-state`, `MethodInvocationException`,
++HRESULT `0x80131501`; this confirms the original owner-assignment failure.
++
++State SDDL in `fresh-state-sddl.txt` and `runtime-only-state-sddl.txt`:
++`O:BAG:S-1-5-21-1372313801-529795908-3681128659-513D:P(A;OICI;FA;;;SY)(A;OICI;FA;;;S-1-5-21-1372313801-529795908-3681128659-1002)`
++тАФ owner `BUILTIN\Administrators`, DACL only SYSTEM + intended EDRUser; no
++Administrators/Users/Everyone ACE. Alternate-admin read/list refusal passed.
++
++`install.log` 2,356,570 B ends `Installation process succeeded.` and
++`Need to restart Windows? No`; installed to Unicode `EDR ╨Я╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡` and
++prepared `C:\ProgramData\EDR-Smoke`. `completed.txt` records that full AC1тАУAC8
++runtime acceptance remains separate.
++
++Artifacts retrieved with PowerShell Direct using temporary local admin `edrtmp`
++(created by an elevated `mkadmin.ps1`, then deleted). 38 top-level files copied;
++guest/host SHA-256 0 mismatches; manifest at
++`docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/native-run-2026-11-03/native-manifest.json`.
++Guest Service Interface disabled; DPAPI file, `mkadmin.ps1`, temp credential
++scripts and `cmd17.txt` deleted; VM remains running with the artifact folder for
++inspection. No host installation/data or product code changes; no commit/push.
++
++Next: final reserved R3/Astra review of A2/C1 and the Administrators-ownership
++security question. Codex calls 5/6; the sixth is the last. Full AC1тАУAC8
++runtime/lifecycle remains NOT_RUN and is not claimed.
++
++Final R3/Astra review dispatched: Orca Task `task_73ff92e1d15a`, Dispatch
++`ctx_eab8ffd0568c`, Run `run_9d6e68393645`, agent `codex`, model
++`gpt-6-astra`, effort `high`, worktree current. The read-only spec covers the
++frozen A2/C1 checklist, the Administrators-ownership security question, C1
++findings PD-C1-01..04, remaining AC1тАУAC8 NOT_RUN items and evidence integrity.
++This is the sixth/final R3 Codex call. Awaiting the verdict; no project PASS or
++commit.
++
++## 2026-11-03 тАФ A2/C1 final R3 verdict: FAIL
++
++Independent read-only review Task `task_73ff92e1d15a`, Dispatch
++`ctx_eab8ffd0568c`, Codex `gpt-6-astra`/high, Run `run_9d6e68393645`, worktree
++current. `worker_done` msg_52b2a569b582; detailed verdict msg_77a6b801266e;
++record [TASK-WINDOWS-PROGRAMDATA-01-A2-C1](../reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C1.md).
++Verdict: **FAIL for A2/C1 only; no full TASK PASS**.
++
++PD-C1-02 is a BLOCKER: state owner `BUILTIN\Administrators` grants implicit
++WRITE_DAC, so an alternate administrator can change the state DACL even though
++the explicit data DACL contains only SYSTEM and intended EDRUser. The harness
++proves list refusal under the unchanged DACL, not owner-authority closure; the
++user's strict contract has no waiver. The review confirmed 38 native artifact
++hashes and seven implementation hashes match; the explicit Administrators data
++ACE removal and Unicode installer success stand. Full AC1тАУAC8 runtime/lifecycle
++remains NOT_RUN. PD-C1-01 code closed/native open; PD-C1-03 partially closed;
++PD-C1-04 closed.
++
++R3 Codex calls are now **6/6 consumed**. No A2/C2, A3, successor implementation
++or further review is initiated; that requires an explicit user budget/scope
++decision. No files, VM, queue or workflow state were changed by the reviewer;
++coordinator persisted this verdict only. Reviewer terminal released after
++archive capture. No PASS, commit, push, release or deployment.
++
++## 2026-11-03 тАФ user-approved owner waiver; A2/C2 verification
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤П╨▓╨╜╨╛ ╤Г╤В╨▓╨╡╤А╨┤╨╕╨╗ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨╛╨╡ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╡ security-╨║╨╛╨╜╤В╤А╨░╨║╤В╨░ ╨┐╨╛╤Б╨╗╨╡ FAIL
++A2/C1 (PD-C1-02): `BUILTIN\Administrators` ╤А╨░╨╖╤А╨╡╤И╤С╨╜ ╨║╨░╨║ Owner `state` ╨╕
++╨╖╨░╤Й╨╕╤Й╨░╨╡╨╝╤Л╤Е ╨┤╨╛╤З╨╡╤А╨╜╨╕╤Е ╨╛╨▒╤К╨╡╨║╤В╨╛╨▓; DACL ╨╛╤Б╤В╨░╤С╤В╤Б╤П ╤Б╤В╤А╨╛╨│╨╛╨╣ тАФ FullControl ╤В╨╛╨╗╤М╨║╨╛
++intended EDRUser + SYSTEM, ╨▒╨╡╨╖ ACE ╨┤╨╗╤П Administrators/Users/Everyone;
++╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╨░╤П ╨╖╨░╤Й╨╕╤В╨░ ╨╛╤В ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╤Е ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨╛╨▓ ╨╜╨╡ ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П; A3/broker ╨╜╨╡
++╤А╨░╨╖╤А╨░╨▒╨░╤В╤Л╨▓╨░╤В╤М; ╤А╨╡╤И╨╡╨╜╨╕╨╡ ╤Д╨╕╨║╤Б╨╕╤А╤Г╨╡╤В╤Б╤П ╨║╨░╨║ waiver; ╨╛╨▒╨╜╨╛╨▓╨╕╤В╤М ╨║╤А╨╕╤В╨╡╤А╨╕╨╕/╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨░╤Ж╨╕╤О;
++╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛ ╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М alternate-admin install, ╤Д╨░╨║╤В╨╕╤З╨╡╤Б╨║╨╕╨╡ ACL/Owner, ╨╛╤В╨║╨░╨╖
++╨╛╨▒╤Л╤З╨╜╨╛╨╝╤Г ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤О, ╤Б╨╛╤Е╤А╨░╨╜╨╜╨╛╤Б╤В╤М ╨┐╤А╨╕ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨╡/╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╕; ╨╖╨░╤В╨╡╨╝ ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡
++╤А╨╡╨▓╤М╤О; PASS ╤В╨╛╨╗╤М╨║╨╛ ╨┐╤А╨╕ ╨▓╤Л╨┐╨╛╨╗╨╜╨╡╨╜╨╕╨╕ ╨╛╨▒╨╜╨╛╨▓╨╗╤С╨╜╨╜╤Л╤Е ╨║╤А╨╕╤В╨╡╤А╨╕╨╡╨▓.
++
++╨Ч╨░╨┐╨╕╤Б╨░╨╜╨╛ ╨▓ [APPROVALS](APPROVALS.md#windows_programdata_owner_waiver_20261103),
++[ADR-013](../adr/ADR-013-windows-programdata-runtime.md), TASK ╨╕
++`docs/installation/windows.md`; ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╤Л AC3/AC6/AC7. ╨Ф╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╣ ╨▒╤О╨┤╨╢╨╡╤В: ╨┤╨╛
++3 Codex calls; ╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╜╨╛ 0/3; ╨┐╤А╨╡╨╢╨╜╨╕╨╡ 6/6 ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л, ╤Б╤З╤С╤В╤З╨╕╨║╨╕ ╨╜╨╡ ╤Б╨▒╤А╨░╤Б╤Л╨▓╨░╤О╤В╤Б╤П.
++A2/C1 FAIL ╨╛╤Б╤В╨░╤С╤В╤Б╤П ╨╕╤Б╤В╨╛╤А╨╕╤З╨╡╤Б╨║╨╕╨╝. ╨Ч╨░╨┐╤А╨╡╤Й╨╡╨╜╤Л push/merge ╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П ╤А╨░╨▒╨╛╤З╨╡╨╣ ╨С╨Ф.
++
++╨Ф╨░╨╗╤М╤И╨╡: ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨╛╨╡ ╨╛╨▒╨╜╨╛╨▓╨╗╨╡╨╜╨╕╨╡ `packaging/windows/test-programdata.ps1`
++(standard-user denial, owner, install/same-version update preservation), native
++run ╨▓ `EDR-Win11-Test`, ╨╖╨░╤В╨╡╨╝ ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡ Astra R3 review. ╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤ ╨╜╨╡
++╨╝╨╡╨╜╤П╨╡╤В╤Б╤П.
++
++A2/C2 harness update dispatched: Orca Task `task_93f1aaf7f85b`, Dispatch
++`ctx_a2cae507a052`, agent `opencode`, model `deepseek/deepseek-flash`, worktree
++current. Scope: only `packaging/windows/test-programdata.ps1` plus
++`docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/waiver-harness-update.md`;
++adds standard-user denial, owner/DACL record, install/same-version update
++preservation. No product code. Awaiting worker; no PASS/commit.
++
++A2/C2 harness update completed: `worker_done` msg_71251c0d8bc5, outcome
++`succeeded`. Only `packaging/windows/test-programdata.ps1` changed
++(SHA-256 `6B29C97A267C3E6C7B13A028B9E0F15985DBDFBD6247D2D18716D5B8428FB20D`),
++plus the evidence note. Parser 0 errors, `git diff --check` 0; product/provisioning/
++installer untouched. Native owner/DACL, standard-user denial and update
++preservation are NOT_RUN from the worker session; coordinator stages/runs in
++`EDR-Win11-Test`. Worker terminal released; no PASS/commit.
++
++## 2026-11-03 тАФ A2/C2 native waiver verification PASSED
++
++Updated `test-programdata.ps1` staged into `EDR-Win11-Test`; guest hashes matched
++test `6B29C9тАжFB20D`, provision `57ABDD5DтАж1F2C`, EXE `1CD3CEBAтАжE906`. The old
++synthetic `EDR-Smoke` root was removed for a fresh install; VM console switched
++from `vmadmin` to interactive `EDRUser`; temporary admin `edrtmp` used only for
++UAC elevation and deleted afterwards.
++
++Harness run: fresh install exit 0 (`install.log`), same-version update exit 0
++(`install-update.log`). Artifact
++`C:\Users\Public\EDR-A2-29717f64da36466f80b8393da042e44c`.
++`waiver-result.json` `passed: true`, no failures:
++
++- owner root/runtime/control/state = `S-1-5-32-544` (`BUILTIN\Administrators`);
++- state DACL protected, exactly `S-1-5-18` + intended EDRUser SID `тАж-1002`;
++  no Administrators/Users/Everyone ACE;
++- root/runtime/control metadata: SYSTEM + Administrators FullControl, EDRUser
++  ReadAndExecute; no Users/Everyone ACE;
++- temporary standard user `edrstdc747af` (SID `тАж-1005`, not admin) denied
++  listing `state` and reading `owner.json` (exit 10), then deleted;
++- preservation: `owner.json` SHA-256 `A8AB51F3тАж67D9A` unchanged, state SDDL/
++  owner/listing unchanged;
++- `completed.txt`: A2/C2 waiver verification passed; full AC1тАУAC8 remains
++  separate.
++
++52 guest files (53 host files incl. `native-manifest.json`) copied; SHA-256 0
++mismatches. Evidence:
++`docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/a2c2-native-run-2026-11-03/`.
++Cleanup: `edrtmp` deleted, Guest Service Interface disabled, temporary password
++files removed; host installation/data and product code unchanged; no commit/push.
++
++Next: independent Astra R3 review of the updated criteria/waiver; extra Codex
++0/3 used. Full original AC1-AC8 runtime/lifecycle remains NOT_RUN and is not
++claimed.
++
++A2/C2 independent review dispatched: Orca Task `task_25c974c32aa8`, Dispatch
++`ctx_fa9ce4db055c`, Run `run_9d6e68393645`, agent `codex`, model
++`gpt-6-astra`, effort `high`, worktree current. Read-only spec covers waiver
++consistency, native owner/ACL/standard-user/update-preservation evidence,
++harness diff/hashes, PD-C1-02 closure, and separation from the unrun full
++AC1-AC8 lifecycle. This is additional Codex call 1/3 (total 7/9); awaiting
++verdict; no PASS/commit.
++
++## 2026-11-03 тАФ A2/C2 independent review: scoped PASS; PD-C1-02 closed
++
++Independent read-only R3 review Task `task_25c974c32aa8`, Dispatch
++`ctx_fa9ce4db055c`, Codex `gpt-6-astra`/high. `worker_done`
++msg_4e00f2ffefbb; detailed verdict msg_d6cc212e7aa0; record
++[TASK-WINDOWS-PROGRAMDATA-01-A2-C2](../reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C2.md).
++Verdict: **PASS for A2/C2 waiver verification; PD-C1-02 CLOSED under the
++explicit user waiver. No full TASK PASS.**
++
++The review verified waiver consistency across APPROVALS/ADR/TASK/docs, elevated
++`EDR-TEST\edrtmp` (23:16:42тАУ23:17:29), both installer exits 0, owner
++`S-1-5-32-544`, state DACL exactly SYSTEM + EDRUser `-1002` without forbidden
++ACE, unchanged root metadata, unrelated standard-user denial (exit 10), and
++same-version update preservation of `owner.json` SHA-256/state SDDL/owner/listing.
++All 52 artifact hashes match; harness SHA-256 `6B29C9тАжFB20D`; seven synthetic
++cases preserved; six other implementation hashes match.
++
++MINOR findings: PD-A2C2-01 documentation precision (`vmadmin` vs `edrtmp`;
++counter 0/3 vs 1/3) тАФ coordinator corrected TASK wording/counter; PD-A2C2-02
++evidence detail (persisted root/runtime/control/state metadata snapshots vs
++in-memory leaf checks) тАФ recorded in the review; no forbidden ACE and no new
++review required. PD-C1-01/PD-C1-03 and full AC1тАУAC8 runtime/lifecycle remain
++OPEN/NOT_RUN for full TASK acceptance: PostgreSQL/attachments, migration,
++backup/restore, active-root maintenance, uninstall/reinstall, full UAC/identity
++matrix and ASCII application install.
++
++Additional Codex call 1/3 (total 7/9); no further implementation, correction or
++review requested/authorized. Reviewer terminal released after capture. No
++queue/STATE/TASK/ROADMAP edits by the reviewer; coordinator persisted the verdict
++only. No commit/push/release, no working-DB changes.
++
++## 2026-11-03 тАФ Variant B approved: full TASK acceptance
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨▓╤Л╨▒╤А╨░╨╗ ╨▓╨░╤А╨╕╨░╨╜╤В B: ╨┐╤А╨╛╨┤╨╛╨╗╨╢╨╕╤В╤М ╨┤╨╛ ╨┐╨╛╨╗╨╜╨╛╨│╨╛ TASK PASS ╨┐╨╛╤Б╨╗╨╡ scoped
++A2/C2 PASS/PD-C1-02 closure. ╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨░ ╨╛╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╜╨░╤П native acceptance ╨▓
++`EDR-Win11-Test`: app lifecycle ╨┐╨╛╨┤ `EDRUser` (start/stop, PostgreSQL, loopback,
++document/attachment, backup/restore, legacy transition, failed migration,
++ACL/denial), elevated update/uninstall/reinstall ╤Б ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╨╕╨╡╨╝ ╨┤╨░╨╜╨╜╤Л╤Е,
++post-install verification, ASCII application path, UAC/identity matrix ╨╕ ╨┐╨╛╨╗╨╜╤Л╨╣
++evidence pack.
++
++╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤ ╨╜╨╡ ╨╝╨╡╨╜╤П╤В╤М; ╨┐╤А╨╕ ╨╛╨▒╨╜╨░╤А╤Г╨╢╨╡╨╜╨╕╨╕ ╨┤╨╡╤Д╨╡╨║╤В╨░ ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М╤Б╤П ╨╕ ╨╖╨░╨┐╤А╨╛╤Б╨╕╤В╤М
++╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛╨╡ ╤А╨╡╤И╨╡╨╜╨╕╨╡. ╨С╤О╨┤╨╢╨╡╤В: 2 ╨╛╤Б╤В╨░╨▓╤И╨╕╤Е╤Б╤П ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╤Е Codex calls (╨▓╤Б╨╡╨│╨╛ 7/9),
++╨╛╨┤╨╕╨╜ ╨╜╨░ ╨┐╨╛╨╗╨╜╤Л╨╣ Astra R3 review ╨╕ ╨╛╨┤╨╕╨╜ ╤А╨╡╨╖╨╡╤А╨▓; ╨╛ ╨┐╤А╨╡╨▓╤Л╤И╨╡╨╜╨╕╨╕ ╤Б╨╛╨╛╨▒╤Й╨╕╤В╤М ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛.
++╨Ч╨░╨┐╤А╨╡╤Й╨╡╨╜╤Л commit/push/merge/release ╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П ╤А╨░╨▒╨╛╤З╨╡╨╣ ╨С╨Ф.
++
++Next: test-only lifecycle harness (app phase as EDRUser; installer phases
++elevated), native evidence, ╨╖╨░╤В╨╡╨╝ ╨╜╨╡╨╖╨░╨▓╨╕╤Б╨╕╨╝╨╛╨╡ review.
++
++Full acceptance lifecycle harness dispatched: Orca Task `task_c00e9d33b581`,
++Dispatch `ctx_2484e29240ff`, agent `opencode`, model `deepseek/deepseek-flash`,
++worktree current. Scope: add test-only `packaging/windows/test-programdata-lifecycle.py`
++(app/verify phases), `packaging/windows/test-programdata-installer.ps1`
++(update/uninstall/reinstall), and `full-acceptance-harness.md`; no product code.
++Awaiting worker; native execution NOT_RUN.
++
++Full acceptance harness delivered: `worker_done` msg_05ac5207cbcd, outcome
++`succeeded`. Two test-only files added: `test-programdata-lifecycle.py` (SHA-256
++`36B0DB71тАжDE9775`), `test-programdata-installer.ps1` (`036852DCтАжE0BA3`), plus
++`full-acceptance-harness.md`. Python AST/py_compile and PowerShell parser passed;
++`git diff --check` 0; product/provisioning/installer/existing files untouched.
++Native lifecycle, installer/uninstaller/reinstall, ACL and UAC evidence are
++NOT_RUN and remain the coordinator's stage. Worker terminal released; no PASS/
++commit.
++
++## 2026-11-03 тАФ Full acceptance app-start defect
++
++App-lifecycle phase run as interactive `EDRUser` against the installed SmokeBuild
++at `C:\Users\Public\EDR-A2-29717f64da36466f80b8393da042e44c\EDR ╨Я╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡`.
++Preflight passed (no existing ProgramData data, no legacy data), then the app
++failed immediately:
++
++```text
++EDR: ImportError: cannot import name 'BIGINT' from 'sqlalchemy.dialects.postgresql' (unknown location)
++```
++
++The lifecycle harness stopped with `Supervisor failed`, exit 1; `/health`,
++PostgreSQL, document/attachment, backup/restore, legacy, failed-migration and
++installer phases were not reached. `work-app-20261103-234635` and its supervisor
++log later returned `ObjectNotFound` and could not be retrieved. Evidence:
++`docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/full-acceptance-defect-2026-11-03/`
++(`vm-thumb73.png` `F27E0D6DтАжDFEE0D`, `vm-thumb72.png`
++`7B91BD7DтАжB3F984F43`, report.md).
++
++This is an installed runtime/packaging failure, not a lifecycle-harness failure;
++root cause is not established (possible incomplete/stale bundled SQLAlchemy
++payload or package path). No product code or packaging change was attempted.
++Guest Service Interface disabled; no host data changes; no commit/push.
++
++Per the user's rule, stopped for a separate defect decision. Two additional
++Codex calls remain reserved and are not spent on this incomplete package.
++
++## 2026-11-03 тАФ defect root cause; session stopped
++
++Root cause established as **packaging**: `packaging/windows/edr.iss:43`
++`Excludes: "postgresql\*"` excluded the nested
++`packages\sqlalchemy\dialects\postgresql\*` files. The installer log
++(`a2c2-native-run-2026-11-03/install.log:21`) shows the dialect directory created
++but no `__init__.py`/`base.py` entries; the source payload contains them, and the
++local SQLAlchemy 2.1.3 imports `BIGINT` successfully. The installed app therefore
++sees an empty namespace package and fails with the observed ImportError.
++
++User chose option 1 (bounded packaging fix), but then stopped the session for the
++night **before any fix worker was dispatched**. No product, packaging, installer
++or workflow state was changed after the defect evidence; Guest Service Interface
++is disabled; no temp admin exists; no commit/push/DB changes.
++
++Resumption point: add an explicit `[Files]` copy for
++`{#Payload}\packages\sqlalchemy\dialects\postgresql\*` into `{app}`, rebuild the
++SmokeBuild EXE outside `dist/`, reinstall in `EDR-Win11-Test`, repeat the
++app-phase, then continue the full acceptance phases. Two additional Codex calls
++remain reserved (total 7/9).
++
++Packaging fix worker dispatched: Orca Task `task_23cd52e33f44`, Dispatch
++`ctx_53973eb29a2f`, agent `opencode`, model `deepseek/deepseek-flash`, worktree
++current. Scope: only `packaging/windows/edr.iss` explicit SQLAlchemy dialect
++copy, rebuild SmokeBuild EXE outside `dist/` using the existing ISCC/payload/
++redist, add `fix.md`; no product code, no installer/VM execution. Awaiting
++worker; no PASS/commit.
++
++Packaging fix applied: `worker_done` msg_43a2fbc183f4, Task
++`task_23cd52e33f44`/Dispatch `ctx_53973eb29a2f`, outcome `succeeded`. Only
++`packaging/windows/edr.iss` (SHA-256
++`C912AE4A8614C3B6516DACD094A8356B555B889BBF4A464C931DF14073A8AD7C`) and
++`fix.md` were written. The new explicit `[Files]` entry copies
++`packages\sqlalchemy\dialects\postgresql\*`; the build log compresses
++`array.py`, `base.py`, `__init__.py`. Rebuilt SmokeBuild EXE:
++`C:\Users\user\AppData\Local\Temp\EDR-ProgramData-A2C3\EDR-0.2.0-windows-x64.exe`
++SHA-256 `157921702CC0C9B673ADF7EF30E89943D5158313A6C5471814066417ABDFF877`,
++compile exit 0. Product code/provisioning hashes unchanged. Binary listing of the
++EXE is NOT_VERIFIED (no Inno extractor); coordinator must reinstall and inspect
++the install log. Worker terminal released; no PASS/commit.
++
++Update attempt 2026-11-04: elevated `test-programdata-installer.ps1 -Phase update`
++with the fixed EXE returned `EXIT=0`. Afterwards the installed app root
++`C:\Users\Public\EDR-A2-29717...\EDR ╨Я╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡` disappeared;
++`C:\Program Files\EDR` and `C:\Program Files (x86)\EDR` are absent. Staging
++scripts under user/Public paths also disappeared or became inaccessible
++(`EDR-A2-Full`, `EDR-A2-Acceptance`, `EDR-Acceptance`); only the fixed EXE and
++some folders remained. The app-phase cannot locate an installed app and could not
++run. This is a VM/installer-update environment issue, not the SQLAlchemy
++packaging defect; no product code was changed. Full acceptance is paused pending
++a decision on the VM/installer environment. Two Codex calls remain reserved; no
++commit/push/DB.
++
++## 2026-11-04 тАФ VM/installer cleanup diagnosis approved
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨▓╤Л╨▒╤А╨░╨╗ ╨▓╨░╤А╨╕╨░╨╜╤В 3: ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╤М ╤В╨╛╤З╨╜╤Г╤О ╨┐╤А╨╕╤З╨╕╨╜╤Г ╨╕╤Б╤З╨╡╨╖╨╜╨╛╨▓╨╡╨╜╨╕╤П
++╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨╛╨│╨╛ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╤П ╨╕ ╤В╨╡╤Б╤В╨╛╨▓╤Л╤Е ╤Б╨║╤А╨╕╨┐╤В╨╛╨▓ ╨┐╨╛╤Б╨╗╨╡ update. ╨в╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╤П:
++╨┐╤А╨╛╨▓╨╡╤А╨╕╤В╤М ╨┐╨╛╨▓╨╡╨┤╨╡╨╜╨╕╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╤Й╨╕╨║╨░ ╨┐╤А╨╕ update, ╨╝╨╡╤Е╨░╨╜╨╕╨╖╨╝╤Л ╨╛╤З╨╕╤Б╤В╨║╨╕ VM/test harness,
++install logs/exit code/╨┐╨░╤А╨░╨╝╨╡╤В╤А╤Л/╨╖╨░╤А╨╡╨│╨╕╤Б╤В╤А╨╕╤А╨╛╨▓╨░╨╜╨╜╤Л╨╣ ╨┐╤Г╤В╤М, ╨▓╨╛╤Б╨┐╤А╨╛╨╕╨╖╨▓╨╡╤Б╤В╨╕ ╤Б
++╤Д╨╕╨║╤Б╨░╤Ж╨╕╨╡╨╣ ╤Д╨░╨╣╨╗╨╛╨▓╨╛╨╣ ╤Б╨╕╤Б╤В╨╡╨╝╤Л, ╨╜╨╡ ╤Б╤З╨╕╤В╨░╤В╤М EXIT=0 ╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓╨╛╨╝. ╨а╨░╨╖╤А╨╡╤И╤С╨╜
++╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╤З╨╡╤Б╨║╨╕╨╣ fresh install ╨▓ `C:\EDR-App` ╨┐╨╛╤Б╨╗╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╕╤П ╨┐╤А╨╕╤З╨╕╨╜╤Л, ╨╜╨╛
++update lifecycle ╨▓╤Б╤С ╤А╨░╨▓╨╜╨╛ ╨╛╨▒╤П╨╖╨░╤В╨╡╨╗╨╡╨╜. ╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╤Л╨╣ ╨║╨╛╨┤/╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░ ╨╜╨╡ ╨╝╨╡╨╜╤П╤О╤В╤Б╤П;
++╤А╨░╨▒╨╛╤З╨░╤П ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╨░/╨С╨Ф ╨╜╨╡ ╨╖╨░╤В╤А╨░╨│╨╕╨▓╨░╤О╤В╤Б╤П; no commit/push/merge/release. ╨Ь╨░╨║╤Б╨╕╨╝╤Г╨╝ 1
++╨╕╨╖ ╨┤╨▓╤Г╤Е ╨╛╤Б╤В╨░╨▓╤И╨╕╤Е╤Б╤П Codex calls ╨╜╨░ ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╤Г; ╨▓╤В╨╛╤А╨╛╨╣ тАФ ╨╜╨░ review/╨┐╨╛╨▓╤В╨╛╤А╨╜╤Г╤О
++╨┐╤А╨╛╨▓╨╡╤А╨║╤Г.
++
++Diagnostic worker dispatched: Orca Task `task_f7755a0fceba`, Dispatch
++`ctx_5c3a57829409`, agent `opencode`, model `deepseek/deepseek-flash`, worktree
++current. Scope: test-only `packaging/windows/diagnose-edr-cleanup.ps1` plus
++`vm-installer-cleanup-diagnosis.md`; collect filesystem/registry/installer logs/
++event logs/Defender/scheduled tasks/USN/markers, create temporary `edrtmp` for
++retrieval. No product code, no installer/VM execution by worker. Awaiting worker.
++
++## 2026-11-04 тАФ cleanup diagnosis result; elevated-session handoff
++
++Diagnostic bundle retrieved and saved at
++`docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/`
++(43 files, 17.7 MB; full 95 MB USN raw CSV excluded). Key findings:
++
++- The app root `C:\Users\Public\EDR-A2-29717...` **exists** with 7055 EDR files;
++  the fixed `packages\sqlalchemy\dialects\postgresql\__init__.py` and `base.py`
++  are present (created 2026-11-04 08:38).
++- Staging `C:\Users\Public\EDR-Acceptance` and
++  `C:\Users\EDRUser\Downloads\EDR-A2-Acceptance` exist with scripts, fixed EXE,
++  `installer-update.log` (3,062,643 B) and `installer-phase.json`; they were not
++  deleted.
++- Installer log: fixed EXE `/DIR` correct, appended to the existing uninstall log,
++  no app-root deletion; update exit 0.
++- Defender threats/detections empty; all markers persist 60 s; no cleanup/Storage
++  process observed. USN candidates are file create/close/rename around installs,
++  not deletion of the app root.
++- ACL probe: app root/`EDR ╨Я╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡` grant IU/SU/S-1-5-3 Modify; Downloads
++  staging grants EDRUser FullControl. The earlier EDRUser
++  `Test-Path`/`Get-ChildItem` false results are an ACL/visibility/tooling false
++  negative, not deletion. The exact token/visibility cause remains open.
++
++The user chose to launch Orca/OpenCode **as administrator once** (option 2) so
++remaining host commands are elevated without repeated UAC. Coordinator handoff:
++new elevated session should run-use `run_9d6e68393645`, read STATE/HISTORY/TASK/
++APPROVALS, and resume at the known-path app phase. No product/architecture
++changes; 0/1 diagnostic Codex calls used; no commit/push.
++
++## 2026-11-04 тАФ testing strategy change; VM stopped; TASK split
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╕╨╗ ╨┤╨░╨╗╤М╨╜╨╡╨╣╤И╨╕╨╡ ╨┐╤А╨╛╨│╨╛╨╜╤Л ╨▓ `EDR-Win11-Test`, ╨╖╨░╨┐╤А╨╡╤В╨╕╨╗ ╤В╤А╨░╤В╨╕╤В╤М
++╨╛╤Б╤В╨░╨▓╤И╨╕╨╣╤Б╤П Codex budget ╨╜╨░ ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╤Г ╤Н╤В╨╛╨╣ VM, ╨╖╨░╤Д╨╕╨║╤Б╨╕╤А╨╛╨▓╨░╨╗ A2/C2 PASS,
++╨╖╨░╨║╤А╤Л╤В╤Л╨╣ PD-C1-02 ╨╕ security waiver, ╨╕ ╤А╨░╨╖╨┤╨╡╨╗╨╕╨╗
++`TASK-WINDOWS-PROGRAMDATA-01`. ╨Ю╤Б╤В╨░╨▓╤И╨╕╨╡╤Б╤П ╨╜╨╡╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╡ AC1тАУAC8 lifecycle
++╨┐╨╡╤А╨╡╨╜╨╡╤Б╨╡╨╜╤Л ╨▓ ╨╜╨╛╨▓╤Л╨╣ [TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01](../tasks/TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01.md);
++╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╤С╨╜╨╜╤Л╨╣ ╨╛╨▒╤К╤С╨╝ ╨╛╤Д╨╛╤А╨╝╨╗╨╡╨╜ ╨║╨░╨║ PARTIAL/CLOSED ╨▓
++[TASK-WINDOWS-PROGRAMDATA-01](../tasks/TASK-WINDOWS-PROGRAMDATA-01.md).
++
++╨Э╨╛╨▓╤Л╨╣ ╨┐╤А╨╛╤Ж╨╡╤Б╤Б ╤В╨╡╤Б╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╤П: GitHub Actions Windows runners ╨┤╨╗╤П ╨░╨▓╤В╨╛╨╝╨░╤В╨╕╨╖╨╕╤А╤Г╨╡╨╝╤Л╤Е
++╤В╨╡╤Б╤В╨╛╨▓/╤Б╨▒╨╛╤А╨║╨╕/ silent lifecycle тАФ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡
++[TASK-CI-WINDOWS-01](../tasks/TASK-CI-WINDOWS-01.md); ╨╜╨░╤Б╤В╨╛╤П╤Й╨╕╨╣ ╨╕╨╜╤В╨╡╤А╨░╨║╤В╨╕╨▓╨╜╤Л╨╣
++UAC тАФ ╤В╨╛╨╗╤М╨║╨╛ ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╝ ╤А╤Г╤З╨╜╤Л╨╝ ╤В╨╡╤Б╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡╨╝ ╨╜╨░ ╤З╨╕╤Б╤В╨╛╨╝ ╨Я╨Ъ ╨┐╨╡╤А╨╡╨┤ ╤А╨╡╨╗╨╕╨╖╨╛╨╝.
++
++╨Т╨╛╨╖╨▓╤А╨░╤В ╨║ ╤Д╤Г╨╜╨║╤Ж╨╕╨╛╨╜╨░╨╗╤М╨╜╨╛╨╣ ╤А╨░╨╖╤А╨░╨▒╨╛╤В╨║╨╡ EDR: ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜ ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╕╨╣ TASK
++[TASK-EDR-UI-PASSPORTS-01](../tasks/TASK-EDR-UI-PASSPORTS-01.md)
++(╨┐╨░╤Б╨┐╨╛╤А╤В╨░/╤Б╨╡╤А╤В╨╕╤Д╨╕╨║╨░╤В╤Л, document-upload UX ╨╜╨░ ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╡╨╝ API); ╤Б╤В╨░╤В╤Г╤Б PROPOSED,
++worker/Codex review ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╕╤Б╤М. ╨а╨╡╤И╨╡╨╜╨╕╨╡ ╨╖╨░╨┐╨╕╤Б╨░╨╜╨╛ ╨▓ APPROVALS
++`TESTING_STRATEGY_AND_TASK_SPLIT_20261104`; STATE ╨┐╨╡╤А╨╡╨┐╨╕╤Б╨░╨╜ (2,735 bytes).
++
++Packaging fix ╨╕ ╨┤╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╨░ ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л: EXE
++`157921702CC0C9B673ADF7EF30E89943D5158313A6C5471814066417ABDFF877`;
++app root ╨╕ fixed dialect files ╨┐╤А╨╕╤Б╤Г╤В╤Б╤В╨▓╤Г╤О╤В; cleanup/Defender ╨╜╨╡ ╨╛╨▒╨╜╨░╤А╤Г╨╢╨╡╨╜╤Л;
++╨┐╤А╨╡╨╢╨╜╨╕╨╡ EDRUser `Test-Path` false ╨▒╤Л╨╗╨╕ ACL/visibility. ╨Я╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╨░╤П ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░
++╨╜╨╡ ╨╝╨╡╨╜╤П╨╗╨░╤Б╤М; 2 ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╤Е Codex calls ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л ╨╕ ╨╜╨╡ ╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╜╤Л; no
++commit/push/merge ╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П ╤А╨░╨▒╨╛╤З╨╡╨╣ ╨С╨Ф.
++
++## 2026-11-04 тАФ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨░ ╨┤╨░╨╗╤М╨╜╨╡╨╣╤И╨╡╨╣ ╤А╨░╨▒╨╛╤В╤Л ╨╕ ╨┐╤А╨╛╨╡╨║╤В ╤Б╨╗╨╡╨┤╤Г╤О╤Й╨╡╨│╨╛ ╤Н╤В╨░╨┐╨░
++
++╨Я╨╛ ╨┐╨╛╤А╤Г╤З╨╡╨╜╨╕╤О ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П ╨▓╤Л╨┐╨╛╨╗╨╜╨╡╨╜╨╛ ╤В╨╛╨╗╤М╨║╨╛ ╤Б╨╛╨┐╤А╨╛╨▓╨╛╨╢╨┤╨╡╨╜╨╕╨╡ workflow ╨╕ ╨┐╤А╨╛╨╡╨║╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡
++Codex, ╨▒╨╡╨╖ ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╨╛╨╣ ╤А╨╡╨░╨╗╨╕╨╖╨░╤Ж╨╕╨╕ ╨╕ ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤Ж╨╕╨╕ ╨╕╤Б╨┐╨╛╨╗╨╜╨╡╨╜╨╕╤П. ROADMAP ╨╕╤Б╨┐╤А╨░╨▓╨╗╨╡╨╜:
++OpenCode ╨▓╨╡╨┤╤С╤В ╨╛╤З╨╡╤А╨╡╨┤╤М, Codex ╨┐╤А╨╛╨╡╨║╤В╨╕╤А╤Г╨╡╤В/╨┐╤А╨╕╨╜╨╕╨╝╨░╨╡╤В ╨┐╨╛ ╨╝╨░╤А╤И╤А╤Г╤В╤Г; ╨╕╤Б╤В╨╛╤А╨╕╤З╨╡╤Б╨║╨╛╨╡
++╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╨╡ push ╨╖╨░╨▓╨╡╤А╤И╤С╨╜╨╜╨╛╨│╨╛ ╤Н╤В╨░╨┐╨░ ╨╜╨╡ ╨┐╤А╨╕╨╝╨╡╨╜╤П╨╡╤В╤Б╤П ╨║ ╤В╨╡╨║╤Г╤Й╨╕╨╝ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П╨╝.
++NEXT-STAGE.md v1 ╤Д╨╕╨║╤Б╨╕╤А╤Г╨╡╤В dirty baseline, ╤А╨░╨╖╨│╤А╨░╨╜╨╕╤З╨╡╨╜╨╕╨╡ scoped PASS ╨╕ ╨╜╨╡╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╨╛╨│╨╛
++Windows lifecycle, UI-╨╕╨╜╨▓╨╡╨╜╤В╨░╤А╨╕╨╖╨░╤Ж╨╕╤О ╨╕ ╨┐╨╛╤Б╨╗╨╡╨┤╨╛╨▓╨░╤В╨╡╨╗╤М╨╜╨╛╤Б╤В╤М UI тЖТ Windows build CI тЖТ
++╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ lifecycle тЖТ ╨╕╤В╨╛╨│╨╛╨▓╨░╤П ╨┐╤А╨╕╤С╨╝╨║╨░. ╨б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╨╡ proposals ╤Б╨╜╨░╨▒╨╢╨╡╨╜╤Л ╤Б╤Б╤Л╨╗╨║╨╛╨╣
++╨╜╨░ ╤Г╤В╨╛╤З╨╜╨╡╨╜╨╕╨╡; frozen checklists ╨╕ ╨┐╤А╨╡╨╢╨╜╨╕╨╡ acceptance ╨╜╨╡ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╤Л.
++
++╨Ш╤Б╤Е╨╛╨┤╨╜╨╕╨║╨╕ ╨┐╤А╨╛╤Б╨╝╨╛╤В╤А╨╡╨╜╤Л, ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╕ ╤В╨╡╤Б╤В╤Л ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╕╤Б╤М. git HEAD
++`dccb14554cca3f688f20153f1f3eb41195740319`, main; tracked/untracked ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л.
++Orca live ownership ╨╕ ╤А╨░╨▒╨╛╤В╨╛╤Б╨┐╨╛╤Б╨╛╨▒╨╜╨╛╤Б╤В╤М ╨╝╨╛╨┤╨╡╨╗╨╡╨╣ ╨╜╨╡ ╨┐╤А╨╛╨▓╨╡╤А╤П╨╗╨╕╤Б╤М; ╨┐╨╡╤А╨╡╨┤ dispatch ╤Н╤В╨╛
++╨╛╨▒╤П╨╖╨░╨╜╨╜╨╛╤Б╤В╤М ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А╨░. ╨Э╨╡╤В Run/worker/VM/commit/push ╨╕╨╗╨╕ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╨╣ ╤А╨░╨▒╨╛╤З╨╡╨╣ ╨С╨Ф.
++╨Я╨╗╨░╨╜ ╨╜╨╡ ╤Г╤В╨▓╨╡╤А╨╢╨┤╤С╨╜; next owner тАФ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М (╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╨╡/╤Г╤В╨╛╤З╨╜╨╡╨╜╨╕╨╡ ╨┐╨╗╨░╨╜╨░), ╨╖╨░╤В╨╡╨╝
++OpenCode coordinator. APPROVALS ╤Б╨╛╨┤╨╡╤А╨╢╨╕╤В ╤В╨╛╤З╨╜╤Г╤О ╤Д╤А╨░╨╖╤Г ╨╕ SHA-256 ╨┐╤А╨╛╨╡╨║╤В╨░ ╨┐╨╗╨░╨╜╨░.
++
++## 2026-11-04 тАФ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤Г╤В╨▓╨╡╤А╨┤╨╕╨╗ ╤Б╤Е╨╡╨╝╤Г ╤А╨╛╨╗╨╡╨╣
++
++╨б╤Е╨╡╨╝╨░ ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨│╨╛ ╤З╨░╤В╨░ Sol ╨╕ ╨╕╤Б╨┐╨╛╨╗╨╜╨╡╨╜╨╕╤П/╤А╨╡╨▓╤М╤О DeepSeek/Codex ╨╖╨░╨┐╨╕╤Б╨░╨╜╨░ ╨▓
++MODEL-ROUTING ╨╕ APPROVALS; STATE ╤Г╤В╨╛╤З╨╜╤С╨╜. ╨Ш╨╖╨╝╨╡╨╜╨╡╨╜╤Л ╤В╨╛╨╗╤М╨║╨╛ workflow records.
++╨н╤В╨╛ ╤Б╨╛╨┐╤А╨╛╨▓╨╛╨╢╨┤╨╡╨╜╨╕╨╡ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨╕, ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║ ╨╛╤З╨╡╤А╨╡╨┤╨╕. NEXT-STAGE ╨╜╨╡ ╤Г╤В╨▓╨╡╤А╨╢╨┤╤С╨╜;
++╨┐╤А╨╛╨┤╨╛╨╗╨╢╨░╨╡╤В╤Б╤П ╨╛╨▒╤Б╤Г╨╢╨┤╨╡╨╜╨╕╨╡ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨│╨╛ ╤Б╤Ж╨╡╨╜╨░╤А╨╕╤П. Run/workers/╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨┐╤А╨╛╨┤╤Г╨║╤В╨░
++╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╕╤Б╤М; ╨┐╤А╨╡╨╢╨╜╨╕╨╡ ╨╕╨╖╨╝╨╡╨╜╨╡╨╜╨╕╤П ╨╕ ╨▒╤О╨┤╨╢╨╡╤В╤Л ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л.
++
++## 2026-11-04 тАФ ╨╛╨▒╨╗╨░╤З╨╜╨░╤П Windows-╨┐╤А╨╛╨▓╨╡╤А╨║╨░ ╨┐╨╡╤А╨╡╨┤ UI
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨┐╨╛╨┤╨┤╨╡╤А╨╢╨░╨╗ GitHub-hosted Windows testing; ╤В╨╡╤Б╤В╨╛╨▓╨╛╨│╨╛ ╨Я╨Ъ ╨╜╨╡╤В.
++TASK-CI-WINDOWS-01 ╤Г╤В╨╛╤З╨╜╤С╨╜: ╤Б╤Г╤Й╨╡╤Б╤В╨▓╤Г╤О╤Й╨╕╨╡ Ubuntu jobs ╤Б╨╛╤Е╤А╨░╨╜╤П╤О╤В╤Б╤П, ╨┐╨╡╤А╨▓╤Л╨╣ Windows
++job ╤Б╨╛╨▒╨╕╤А╨░╨╡╤В/╤Г╤Б╤В╨░╨╜╨░╨▓╨╗╨╕╨▓╨░╨╡╤В EXE, ╨╖╨░╨┐╤Г╤Б╨║╨░╨╡╤В ╤Г╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨╜╨╛╨╡ ╨┐╤А╨╕╨╗╨╛╨╢╨╡╨╜╨╕╨╡, ╨┐╤А╨╛╨▓╨╡╤А╤П╨╡╤В
++╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В/╨▓╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨┐╨╛╤Б╨╗╨╡ restart ╨╕ ╤Б╨╛╤Е╤А╨░╨╜╤П╨╡╤В artifacts. ╨Я╨╛╨╗╨╜╤Л╨╣ lifecycle ╨╛╤Б╤В╨░╤С╤В╤Б╤П
++╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╝. ╨н╤В╨╛ proposal ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨║╨╕, ╨▒╨╡╨╖ routed PASS ╨╕ ╨▒╨╡╨╖ dispatch/commit/push/run.
++STATE ╨╛╨▒╨╜╨╛╨▓╨╗╤С╨╜. ╨Ш╤Б╤Е╨╛╨┤╨╜╤Л╨╣ NEXT-STAGE v1 ╨╜╨╡ ╤Г╤В╨▓╨╡╤А╨╢╨┤╤С╨╜; ╨╡╨│╨╛ ╨┐╨╛╤А╤П╨┤╨╛╨║ UI-first ╨▒╨╛╨╗╤М╤И╨╡
++╨╜╨╡ ╨░╨║╤В╤Г╨░╨╗╨╡╨╜. Host install/data ╨╕ VM ╨╜╨╡ ╨╖╨░╤В╤А╨░╨│╨╕╨▓╨░╨╗╨╕╤Б╤М.
+diff --git a/docs/workflow/MODEL-ROUTING.md b/docs/workflow/MODEL-ROUTING.md
+index 9bdfe19..7220eb8 100644
+--- a/docs/workflow/MODEL-ROUTING.md
++++ b/docs/workflow/MODEL-ROUTING.md
+@@ -1,21 +1,75 @@
+-# Codex model routing
++# DeepSeek / Codex model routing
+ 
+-Current project routing after the user's 2026-10-26 decision to stop using
+-Nemotron. All project coordination, implementation and review use Codex through
+-Orca, with distinct worker contexts for implementation and independent review.
++Updated 2026-11-03 at the user's request to configure orchestration after
++connecting DeepSeek API. Supersedes Codex-only coordination; the Nemotron ban
++remains. Separate Orca contexts implement and independently review each TASK.
++Product scope, permissions, blocked status and existing attempt counts persist.
++
++## ╨б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╜╨░╤П ╤Б╤Е╨╡╨╝╨░ ╨╛╨▒╤Й╨╡╨╜╨╕╤П ╨╕ ╨╕╤Б╨┐╨╛╨╗╨╜╨╡╨╜╨╕╤П тАФ 2026-11-04
++
++╨Ю╤Б╨╜╨╛╨▓╨╜╨╛╨╣ ╤З╨░╤В ╤Б ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝ тАФ GPT-6.1 Sol: ╨╛╨▒╤Б╤Г╨╢╨┤╨╡╨╜╨╕╨╡ ╨╕╨┤╨╡╨╣, ╨╝╨╛╨┤╨╡╨╗╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡,
++╤В╤А╨╡╨▒╨╛╨▓╨░╨╜╨╕╤П, ╨┐╤А╨╛╨╡╨║╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╨╡ ╨╕ ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨║╨░ ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╤Л/╨┐╨╗╨░╨╜╨░ ╨┤╨╗╤П ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╤П.
++╨н╤В╨╛ ╤Ж╨╡╨╗╨╡╨▓╨░╤П ╤А╨╛╨╗╤М; ╨╖╨░╨┐╨╕╤Б╤М ╨▓ ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨░╤Е ╨╜╨╡ ╨┐╨╡╤А╨╡╨║╨╗╤О╤З╨░╨╡╤В ╨╝╨╛╨┤╨╡╨╗╤М ╤В╨╡╨║╤Г╤Й╨╡╨│╨╛ ╨║╨╗╨╕╨╡╨╜╤В╨░.
++╨б╨╗╨╛╨╢╨╜╨░╤П ╨╜╨╛╨▓╨░╤П ╨░╤А╤Е╨╕╤В╨╡╨║╤В╤Г╤А╨░, R3/security review ╨╕ ╤Д╨╕╨╜╨░╨╗╤М╨╜╨░╤П ╨┐╤А╨╕╤С╨╝╨║╨░ тАФ Astra.
++DeepSeek Flash ╤З╨╡╤А╨╡╨╖ OpenCode/Orca ╨║╨╛╨╛╤А╨┤╨╕╨╜╨╕╤А╤Г╨╡╤В ╨╕╤Б╨┐╨╛╨╗╨╜╨╡╨╜╨╕╨╡; ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ Flash worker
++╨┐╨╕╤И╨╡╤В ╨║╨╛╨┤ ╨╕ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В ╤В╨╡╤Б╤В╤Л. ╨Ю╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ Pro reviewer ╨┐╤А╨╕╨╜╨╕╨╝╨░╨╡╤В ╨╛╨▒╤Л╤З╨╜╤Л╨╡ R1 ╨╖╨░╨┤╨░╤З╨╕;
++Sol ╨┐╤А╨╕╨╜╨╕╨╝╨░╨╡╤В R2. ╨Я╨╛╤Б╤В╨╛╤П╨╜╨╜╤Л╨╡ ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╨╡ ╨░╨│╨╡╨╜╤В╤Л ╨╜╨╡ ╨╜╤Г╨╢╨╜╤Л: ╨┤╨╛╨║╤Г╨╝╨╡╨╜╤В╨░╤Ж╨╕╤О ╨▓╨╡╨┤╤С╤В
++╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А, ╨┐╤А╨╛╨▓╨╡╤А╨║╨╕ ╨▓╤Л╨┐╨╛╨╗╨╜╤П╨╡╤В ╨╕╤Б╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М, ╨┤╨╛╨║╨░╨╖╨░╤В╨╡╨╗╤М╤Б╤В╨▓╨░ ╨╛╤Ж╨╡╨╜╨╕╨▓╨░╨╡╤В ╤А╨╡╨▓╤М╤О╨╡╤А.
++
++╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╤Г╤В╨▓╨╡╤А╨┤╨╕╨╗ ╤А╨░╤Б╨┐╤А╨╡╨┤╨╡╨╗╨╡╨╜╨╕╨╡ ╤А╨╛╨╗╨╡╨╣ ╨┐╨╛╤Б╨╗╨╡ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╤П ╤Н╤В╨╛╨╣ ╤Б╤Е╨╡╨╝╤Л.
++╨н╤В╨╛ ╨╜╨╡ ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╨╡ ╨┐╤А╨╛╨┤╤Г╨║╤В╨╛╨▓╨╛╨│╨╛ NEXT-STAGE ╨╕╨╗╨╕ ╨╖╨░╨┐╤Г╤Б╨║ ╨╡╨│╨╛ TASK. ╨Ф╨░╨╗╤М╨╜╨╡╨╣╤И╨░╤П
++╤А╨░╨╖╤А╨░╨▒╨╛╤В╨║╨░ ╤В╤А╨╡╨▒╤Г╨╡╤В ╤Б╨╛╨│╨╗╨░╤Б╨╛╨▓╨░╨╜╨╜╨╛╨│╨╛ ╨╛╨▒╤К╤С╨╝╨░; ╨┐╨╛╤Б╨╗╨╡ ╨╡╨│╨╛ ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╨╕╤П ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А
++╨▓╨╡╨┤╤С╤В ╨┐╨╛╤Б╨╗╨╡╨┤╨╛╨▓╨░╤В╨╡╨╗╤М╨╜╨╛╤Б╤В╤М ╨▒╨╡╨╖ ╨┐╨╛╨▓╤В╨╛╤А╨╜╨╛╨│╨╛ ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П ╤Б╤В╨░╤А╤В╨░ ╨║╨░╨╢╨┤╨╛╨╣ ╨╖╨░╨┤╨░╤З╨╕.
+ 
+ | Role / work | Model | Effort |
+ | --- | --- | --- |
+-| Coordinator: queue, evidence and workflow | `gpt-6.1-sol` | medium |
+-| Bounded, repetitive implementation or mechanical checks | `gpt-6-luna` | medium |
+-| Cross-module implementation from an approved design | `gpt-6.1-sol` | medium |
+-| Routine independent R1 review | `gpt-6.1-sol` | medium |
+-| R2/R3 review, architecture or difficult authorized diagnosis | `gpt-6-astra` | high |
+-
+-Use explicit `--agent codex --model <id> --effort <level>` at every worker
+-launch. Verify both requested and effective launch settings and actual provider
+-metadata. Do not silently inherit an `ultra` effort setting. Keep one active
+-writer per TASK and use a separate context for its reviewer.
++| Main user chat: discussion, requirements, modeling and design proposals | `gpt-6.1-sol` | client setting |
++| OpenCode coordinator: queue, evidence and workflow | `deepseek/deepseek-flash` | provider default |
++| Separate OpenCode implementer within an approved TASK | `deepseek/deepseek-flash` | provider default |
++| Separate OpenCode independent R1 reviewer | `deepseek/deepseek-v4-pro` | provider default |
++| R2 review within an established architecture; bounded authorized diagnosis | `gpt-6.1-sol` | high |
++| R3 review, new architecture, difficult security questions, final stage acceptance | `gpt-6-astra` | high |
++
++R0 acceptance uses the evidence checklist without Codex. R1 requires a separate
++OpenCode reviewer; R2/R3 and final stage acceptance require Codex. The coordinator
++does not write product code or make new architectural decisions. Codex returns
++its bounded architectural/review decision and ends its turn; it does not poll.
++
++Use `--agent opencode --model <provider/model>` for OpenCode workers in the
++existing worktree. The installed Orca schema supports this with a verified host
++CLI and available model; OpenCode `--effort` is unsupported. For bounded R2 review
++use `--agent codex --model gpt-6.1-sol --effort high`; for the Astra route use
++`--agent codex --model gpt-6-astra --effort high`. Read the installed guide
++before launches. Verify requested/effective model and actual provider metadata;
++unsupported verification blocks launch rather than authorizing global rewrites.
++Keep one active writer per TASK and a separate context for its reviewer.
++
++Sol receives a bounded TASK/checklist, actual diff, evidence pack and previous
++findings; it returns a verdict and ends its turn. R1 diagnosis is allowed only
++at the escalation point defined by routing-and-budget.md, not as routine review.
++Do not automatically add a second Codex review after a valid Sol verdict. A
++necessary escalation preserves the logical TASK's counters and review slots.
++TASK-WINDOWS-PROGRAMDATA-01 remains on Astra for its existing R3/security review;
++this routing update neither resumes it nor allocates another review slot.
++
++Project `opencode.json` supplies primary profiles `edr-coordinator`, `build`
++(implementer, default) and `edr-reviewer`. Select `edr-coordinator` for the
++coordinator session. Profiles are not workers or a scheduler. Orca `--agent`
++selects the integration, not an OpenCode profile: every Dispatch spec must state
++the role, AGENTS.md, TASK, frozen checklist, baseline, allowlist, permissions and
++return protocol explicitly. Reviewer specs prohibit edits, including shell edits,
++and provide the actual diff and evidence pack. Do not substitute native OpenCode
++subagents for Orca workers. Do not guess a profile-selection launch flag.
++
++Flash and Pro share a model family. This limits model diversity; independence
++requires separate sessions and the frozen evidence-based review. Do not silently
++connect other providers or replace a required Codex review with DeepSeek.
++
++Setup evidence: OpenCode 1.19.3 lists DeepSeek credentials and both model IDs;
++authenticated GET https://api.deepseek.com/models returned both successfully.
++This verifies authentication/catalog only, not generation/tool calling or an
++end-to-end Orca cycle. No Run or workers were started for workflow maintenance.
++TASK-WINDOWS-PROGRAMDATA-01 remains BLOCKED with its previous counters intact.
+ 
+ Budgets, risk classes, retries and evidence follow
+ `autonomous-development/references/routing-and-budget.md` and
+diff --git a/docs/workflow/STATE.md b/docs/workflow/STATE.md
+index c33dac7..83887ee 100644
+--- a/docs/workflow/STATE.md
++++ b/docs/workflow/STATE.md
+@@ -1,9 +1,30 @@
+-# ╨в╨╡╨║╤Г╤Й╨░╤П ╤Б╨▓╨╛╨┤╨║╨░ workflow
++я╗┐# ╨в╨╡╨║╤Г╤Й╨░╤П ╤Б╨▓╨╛╨┤╨║╨░ workflow
+ 
+-- **PASS тАФ TASK-WINDOWS-LOCAL-01 A1/C1, R2.** Source commit `681129da0de734ef290c4c51a1036c300f76cdce`; [╨┐╤А╨╕╤С╨╝╨║╨░](reviews/TASK-WINDOWS-LOCAL-01-C1-supplement.md), [evidence](evidence/TASK-WINDOWS-LOCAL-01-clean-windows.md). ╨Ш╤Б╤В╨╛╤А╨╕╤З╨╡╤Б╨║╨╕╨╣ C1 BLOCKED ╤Б╨╛╤Е╤А╨░╨╜╤С╨╜, ╨┤╨╛╨┐╨╛╨╗╨╜╨╡╨╜╨╕╨╡ G01/G02 PASS;12 source hashes/EXE ╤Б╨╛╨▓╨┐╨░╨╗╨╕, fullreview1/2/failed0 ╨▒╨╡╨╖ ╤Б╨▒╤А╨╛╤Б╨░.
+-- ╨з╨╕╤Б╤В╨░╤П Win11 x64 build26100: install, Microsoft prerequisite flow, ╨╜╨░╤Б╤В╨╛╤П╤Й╨╕╨╣ ╤П╤А╨╗╤Л╨║/React UI, synthetic restart/backup/restore/update/uninstall ╨┐╨╛╨┤╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╤Л. Backend3803/native32/frontend evidence ╨┐╨╡╤А╨╡╨╕╤Б╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╨╜╤Л. Win10/╨┐╤А╨╛╤З╨╕╨╡ builds NOT_RUN; R01 MINOR ╨▓ backlog. EXE55,379,088bytes, SHA256 b75f7132тАжd21594d, ╤В╨╛╨╗╤М╨║╨╛ ╨╗╨╛╨║╨░╨╗╤М╨╜╨╛ `%TEMP%/edr-windows-build/release`; raw Sandbox artifacts ╨╜╨╡ ╨┐╤Г╨▒╨╗╨╕╨║╤Г╤О╤В╤Б╤П.
+-- **TASK-GITHUB-PRESENTATION-01 тАФ C2 PASS.** README/CONTRIBUTING/templates/CI: commit `61bbdc3be7ad49f58f6e773c5c5d8c7163af0352`; [review](reviews/TASK-GITHUB-PRESENTATION-01-C2.md). ╨б╤В╨░╤А╤Л╨╡ FAIL/╨┐╤А╨╡╨┤╨╡╨╗╤Л ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л.
+-- **LOCAL PASS тАФ TASK-CI-PORTABILITY-01 R1 A1/C1.** [TASK](../tasks/TASK-CI-PORTABILITY-01.md), [review](reviews/TASK-CI-PORTABILITY-01-C1.md). Path import+2cwd only,5tests passed. Independent Sol ctx_868bb502c577 PASS; local review1/2/failed0. Commit/push approved, new hosted CI pending. Old run40543432652:5cwd failures/3798passed preserved. Actual delivery HEAD/CI in local `%TEMP%/EDR-github-publication-result-20261027.json`.
+-- **COMPLETE тАФ ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╣ MVP+Batch.** MVP06 Stage PASS; [FINAL-REPORT](FINAL-REPORT.md), [stage review](reviews/TASK-MVP-06-stage-acceptance.md). Product delivery06f5806, ╨┐╤А╨╡╨╢╨╜╤П╤П docs publication1c362598. Backlog MVP06-ST-001 narrative drift, Batch evidence MOCK, DocumentтЖТBatch/Product ╨▓╨╜╨╡ scope.
+-- Worker usage Windows20,170,051input/4calls: [receipt](evidence/TASK-WINDOWS-LOCAL-01-usage.json). ╨Ю╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ publication audit336,958input/1call; cached ╨▓╨║╨╗╤О╤З╤С╨╜, coordinator ╨╛╤В╨┤╨╡╨╗╤М╨╜╨╛. Workers settled; user-owned terminals retained. ╨Я╨╛╨╗╨╜╨░╤П ╨╕╤Б╤В╨╛╤А╨╕╤П, approvals ╨╕ ╨╗╨╛╨║╨░╨╗╤М╨╜╤Л╨╡ Git/CI receipts ╤Б╨╛╤Е╤А╨░╨╜╤П╤О╤В╤Б╤П ╨▒╨╡╨╖ ╤Б╨▒╤А╨╛╤Б╨░.
+-- Repository **PUBLIC** by explicit user request;48commits/704blobs disclosure audit found no credible secrets/data, API verified. [HISTORY](HISTORY.md), [APPROVALS](APPROVALS.md). Next: commit/push and hosted CI observation; local receipt remains actual status authority.
++- **2026-11-04: ╨╗╨╛╨║╨░╨╗╤М╨╜╨░╤П ╨┐╨╛╨┤╨│╨╛╤В╨╛╨▓╨║╨░ TASK-CI-WINDOWS-01 ╤А╨░╨╖╤А╨╡╤И╨╡╨╜╨░.**
++  [╨Я╨╗╨░╨╜ v1](NEXT-STAGE.md) тАФ DRAFT; ╨┐╨╛╤А╤П╨┤╨╛╨║ ╤Г╤В╨╛╤З╨╜╤С╨╜: ╤Б╨╜╨░╤З╨░╨╗╨░ [Windows CI](../tasks/TASK-CI-WINDOWS-01.md),
++  ╨╖╨░╤В╨╡╨╝ UI. Dispatch CI ╤А╨░╨╖╤А╨╡╤И╤С╨╜; commit/push/cloud run ╨╖╨░╨┐╤А╨╡╤Й╨╡╨╜╤Л. [╨а╨░╨╖╤А╨╡╤И╨╡╨╜╨╕╤П](APPROVALS.md),
++  [╨╕╤Б╤В╨╛╤А╨╕╤П](HISTORY.md). Next owner: OpenCode coordinator; UI/lifecycle ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╤В╤М.
++- ╨а╨╛╨╗╨╕ ╤Г╤В╨▓╨╡╤А╨╢╨┤╨╡╨╜╤Л 2026-11-04: ╨╛╤Б╨╜╨╛╨▓╨╜╨╛╨╣ ╤З╨░╤В Sol; ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╡ Flash coordinator/implementer; Pro R1; Sol/high R2;
++  Astra/high R3 ╨╕ ╤Д╨╕╨╜╨░╨╗. [MODEL-ROUTING](MODEL-ROUTING.md). ROADMAP ╨┐╤А╨╕╨▓╨╡╨┤╤С╨╜
++  ╨║ ╤Н╤В╨╕╨╝ ╤А╨╛╨╗╤П╨╝. Orca live ownership ╨╕ generation/tool calling ╨╖╨┤╨╡╤Б╤М ╨╜╨╡ ╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╤Л;
++  ╨┐╨╡╤А╨╡╨┤ dispatch ╤Б╨▓╨╡╤А╤П╨╡╤В ╨║╨╛╨╛╤А╨┤╨╕╨╜╨░╤В╨╛╤А. Bootstrap: Orca ready, active workers=[];
++  generation/tool calling ╨╡╤Й╤С ╨╜╨╡ ╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╤Л. CI verdict NOT_REVIEWED.
++- **VM EDR-Win11-Test ╨╛╤Б╤В╨░╨╜╨╛╨▓╨╗╨╡╨╜╨░ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╨╡╨╝.** ╨Э╨╡ ╨▓╨╛╨╖╨╛╨▒╨╜╨╛╨▓╨╗╤П╤В╤М. ╨б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л
++  2 ╨┤╨╛╨┐╨╛╨╗╨╜╨╕╤В╨╡╨╗╤М╨╜╤Л╤Е Windows Codex calls; ╨╜╨╛╨▓╨╛╨╡ ╨┐╤А╨╡╨┤╨╗╨╛╨╢╨╡╨╜╨╕╨╡ ╨╕╤Е ╨╜╨╡ ╤А╨░╤Б╤Е╨╛╨┤╤Г╨╡╤В.
++- **WINDOWS-PROGRAMDATA-01 тАФ PARTIAL/CLOSED**, ╨╜╨╡ ╨┐╨╛╨╗╨╜╤Л╨╣ PASS.
++  [TASK](../tasks/TASK-WINDOWS-PROGRAMDATA-01.md): A2/C2 waiver PASS,
++  PD-C1-02 ╨╖╨░╨║╤А╤Л╤В. Packaging SQLAlchemy fix ╨┐╨╡╤А╨╡╤Б╨╛╨▒╤А╨░╨╜; EXE SHA-256
++  `157921702CC0C9B673ADF7EF30E89943D5158313A6C5471814066417ABDFF877`.
++  [╨Ф╨╕╨░╨│╨╜╨╛╤Б╤В╨╕╨║╨░](evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/vm-cleanup-diagnosis-2026-11-04/):
++  app/staging ╨┐╤А╨╕╤Б╤Г╤В╤Б╤В╨▓╤Г╤О╤В; ╨┐╤А╨╡╨╢╨╜╨╕╨╣ false ╤Б╨▓╤П╨╖╨░╨╜ ╤Б ACL/visibility.
++- ╨Э╨╡╨┐╤А╨╛╨▓╨╡╤А╨╡╨╜╨╜╤Л╨╡ AC1тАУAC8/runtime packaging тАФ [lifecycle TASK](../tasks/TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01.md).
++  [CI](../tasks/TASK-CI-WINDOWS-01.md) ╨╕ [UI](../tasks/TASK-EDR-UI-PASSPORTS-01.md)
++  PROPOSED, ╤Г╤В╨╛╤З╨╜╨╡╨╜╤Л ╨┐╨╗╨░╨╜╨╛╨╝ v1. CI build ╨╜╨╡ ╨╖╨░╨╝╨╡╨╜╤П╨╡╤В lifecycle/UAC acceptance.
++- CRT offline PASS: [evidence](evidence/TASK-WINDOWS-CRT-OFFLINE-01/report.md),
++  R2 `task_d55d6550e738` / `ctx_5a73a16376fb`.
++  Windows local PASS: [review](reviews/TASK-WINDOWS-LOCAL-01-C1-supplement.md).
++  MVP+Batch COMPLETE: [FINAL-REPORT](FINAL-REPORT.md), `06f5806`.
++- Workspace main, HEAD `dccb14554cca3f688f20153f1f3eb41195740319`; dirty tracked
++  ╨╕ untracked ╤Д╨░╨╣╨╗╤Л ╤Б╨╛╤Е╤А╨░╨╜╨╡╨╜╤Л. ╨Ш╤Е ╨╜╨░╨╗╨╕╤З╨╕╨╡ ╨╜╨╡ ╨╛╨╖╨╜╨░╤З╨░╨╡╤В ╨┐╤А╨╕╤С╨╝╨║╤Г ╨▓╤Б╨╡╨│╨╛ diff.
++  No commit/push/merge/release/deployment; ╤А╨░╨▒╨╛╤З╤Г╤О ╨С╨Ф ╨╜╨╡ ╨╝╨╡╨╜╤П╤В╤М. ╨Я╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╕╨╡
++  ╤В╨╡╤А╨╝╨╕╨╜╨░╨╗╤Л ╤Б╨╛╤Е╤А╨░╨╜╨╕╤В╤М. ╨Я╤А╨╛╨▓╨╡╤А╨║╨╕ ╨┐╤А╨╛╨┤╤Г╨║╤В╨░ ╨┐╤А╨╕ ╨╜╨░╤Б╤В╤А╨╛╨╣╨║╨╡ ╨╜╨╡ ╨╖╨░╨┐╤Г╤Б╨║╨░╨╗╨╕╤Б╤М.
+diff --git a/packaging/windows/build.ps1 b/packaging/windows/build.ps1
+index 47297a0..f9d844f 100644
+--- a/packaging/windows/build.ps1
++++ b/packaging/windows/build.ps1
+@@ -1,4 +1,4 @@
+-# Build on Windows x64 with Python 3.12, Inno Setup 6.7.3 and a prebuilt React UI.
++я╗┐# Build on Windows x64 with Python 3.12, Inno Setup 6.7.3 and a prebuilt React UI.
+ # Runtime users do not need any of these build tools.
+ [CmdletBinding()]
+ param(
+@@ -20,12 +20,13 @@ if (& $BuilderPython -c "import sys; print('.'.join(map(str,sys.version_info[:2]
+     throw 'Use a Windows x64 CPython 3.12 builder'
+ }
+ New-Item -ItemType Directory -Path $work | Out-Null
++$crtPath = Join-Path $work 'vc_redist.x64.exe'
++$crt = & "$PSScriptRoot/fetch-vcredist.ps1" -Destination $crtPath
+ $payload = New-Item -ItemType Directory -Path "$work/payload"
+ & $BuilderPython "$PSScriptRoot/prepare.py" $PythonArchive $PostgresArchive $payload
+ if ($LASTEXITCODE) { throw 'Runtime archive extraction failed' }
+ if (!(Test-Path -LiteralPath "$payload/postgresql/bin/postgres.exe")) { throw 'Invalid EDB PostgreSQL archive' }
+-# User-approved prerequisite flow: do not redistribute Microsoft CRT, including
+-# the two CRT files supplied in the upstream embedded Python archive.
++# Use the serviced system CRT installed by the embedded official prerequisite.
+ Get-ChildItem -LiteralPath "$payload/python" -File -Filter 'vcruntime*.dll' | Remove-Item
+ Copy-Item -LiteralPath "$repo/app" -Destination $payload -Recurse
+ Copy-Item -LiteralPath "$repo/alembic" -Destination $payload -Recurse
+@@ -69,11 +70,11 @@ $hashes = @{}
+ foreach ($inputPath in $inputs) { $hashes[[IO.Path]::GetFileName($inputPath)] = (Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash }
+ $packages = & $pipPython -m pip --disable-pip-version-check list --path "$payload/packages" --format=json
+ @{ version=$Version; python='3.12.10'; postgresql='18.6-5'; inno='6.7.3'; archives=$hashes;
+-   selfContained=$false; smokeBuild=[bool]$SmokeBuild; prerequisite='Microsoft Visual C++ x64 >=14.44 (not bundled)';
++   selfContained=$true; smokeBuild=[bool]$SmokeBuild; prerequisite=$crt;
+    packages=@($packages | ConvertFrom-Json); builtUtc=[DateTime]::UtcNow.ToString('o') } |
+     ConvertTo-Json -Depth 10 | Set-Content -LiteralPath "$payload/build-manifest.json" -Encoding utf8
+ $prototypeArg = @()
+ if ($SmokeBuild) { $prototypeArg += '/DSmokeBuild' }
+-& $Iscc @prototypeArg "/DPayload=$payload" "/DOutput=$work" "/DAppVersion=$Version" "$PSScriptRoot/edr.iss"
++& $Iscc @prototypeArg "/DRedist=$crtPath" "/DPayload=$payload" "/DOutput=$work" "/DAppVersion=$Version" "$PSScriptRoot/edr.iss"
+ if ($LASTEXITCODE) { throw "Inno Setup failed: $LASTEXITCODE" }
+ Write-Output "Installer directory: $work"
+diff --git a/packaging/windows/edr.iss b/packaging/windows/edr.iss
+index e98e949..c1e9046 100644
+--- a/packaging/windows/edr.iss
++++ b/packaging/windows/edr.iss
+@@ -1,6 +1,11 @@
+ #ifndef AppVersion
+   #define AppVersion "0.2.0"
+ #endif
++#ifdef SmokeBuild
++  #define ProductRoot "EDR-Smoke"
++#else
++  #define ProductRoot "EDR"
++#endif
+ [Setup]
+ #ifdef SmokeBuild
+ AppId={{F9E86E04-F461-4CE5-94CF-A4C91E932A8E}
+@@ -9,14 +14,14 @@ AppId={{9E6BCA3D-7531-4A33-9A38-E44241D72A81}
+ #endif
+ AppName=Equipment Documentation Registry
+ AppVersion={#AppVersion}
+-DefaultDirName={localappdata}\Programs\EDR
++DefaultDirName={autopf}\EDR
+ #ifdef SmokeBuild
+ DefaultGroupName=EDR Smoke Test
+ #else
+ DefaultGroupName=EDR
+ #endif
+ DisableProgramGroupPage=no
+-PrivilegesRequired=lowest
++PrivilegesRequired=admin
+ ArchitecturesAllowed=x64os
+ ArchitecturesInstallIn64BitMode=x64os
+ MinVersion=10.0
+@@ -34,11 +39,21 @@ Name: "ru"; MessagesFile: "compiler:Languages\Russian.isl"
+ Name: "en"; MessagesFile: "compiler:Default.isl"
+ 
+ [Files]
+-Source: "{#Payload}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
++Source: "{#Redist}"; DestName: "vc_redist.x64.exe"; Flags: dontcopy
++Source: "{#Payload}\*"; Excludes: "postgresql\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
++; The broad exclude above also matches the nested SQLAlchemy dialect directory;
++; copy it explicitly so dialects\postgresql\__init__.py and base.py are installed.
++Source: "{#Payload}\packages\sqlalchemy\dialects\postgresql\*"; DestDir: "{app}\packages\sqlalchemy\dialects\postgresql"; Flags: ignoreversion recursesubdirs createallsubdirs
++Source: "{#Payload}\postgresql\*"; DestDir: "{commonappdata}\{#ProductRoot}\runtime\postgresql"; Flags: ignoreversion recursesubdirs createallsubdirs
++Source: "provision.ps1"; Flags: dontcopy
++Source: "provision.ps1"; DestDir: "{commonappdata}\{#ProductRoot}\runtime"; Flags: ignoreversion
++
++[UninstallDelete]
++Type: files; Name: "{app}\windows-product.txt"
+ 
+ [Icons]
+ Name: "{group}\EDR"; Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{app}\launcher.ps1"" start"; WorkingDir: "{app}"
+-Name: "{userdesktop}\EDR"; Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{app}\launcher.ps1"" start"; WorkingDir: "{app}"; Tasks: desktopicon
++Name: "{commondesktop}\EDR"; Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{app}\launcher.ps1"" start"; WorkingDir: "{app}"; Tasks: desktopicon
+ Name: "{group}\Stop EDR"; Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File ""{app}\launcher.ps1"" stop"; WorkingDir: "{app}"
+ Name: "{group}\Windows guide"; Filename: "{app}\Windows-guide.md"
+ 
+@@ -46,58 +61,102 @@ Name: "{group}\Windows guide"; Filename: "{app}\Windows-guide.md"
+ Name: desktopicon; Description: "Create EDR desktop shortcut"
+ 
+ [Code]
+-const
+-  MicrosoftRuntimeUrl = 'https://learn.microsoft.com/en-US/cpp/windows/latest-supported-vc-redist?view=msvc-160';
++var
++  OwnsMaintenance: Boolean;
+ 
+-function HasCrtFile(Name: String): Boolean;
++function HasRequiredCrt(): Boolean;
+ var
+-  MS, LS: Cardinal;
++  Installed, Major, Minor: Cardinal;
++  Key: String;
+ begin
+-  Result := GetVersionNumbers(ExpandConstant('{sys}\' + Name), MS, LS);
+-  if Result then
+-    Result := MS >= ((14 shl 16) or 44);
++  Key := 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64';
++  Result := RegQueryDWordValue(HKLM64, Key, 'Installed', Installed) and
++    RegQueryDWordValue(HKLM64, Key, 'Major', Major) and
++    RegQueryDWordValue(HKLM64, Key, 'Minor', Minor);
++  if Result then Result := (Installed = 1) and
++    ((Major > 14) or ((Major = 14) and (Minor >= 44)));
+ end;
+ 
+-function InitializeSetup(): Boolean;
++function PrepareCrt(var NeedsRestart: Boolean): String;
+ var
+-  ErrorCode: Integer;
++  Code: Integer;
+ begin
+-  Result := HasCrtFile('msvcp140.dll') and HasCrtFile('vcruntime140.dll') and HasCrtFile('vcruntime140_1.dll');
+-#ifdef SmokeBuild
+-  // Test-only switch: verifies the absent-runtime path without touching Windows DLLs.
+-  if ExpandConstant('{param:EDRTestMissingCRT|0}') = '1' then Result := False;
+-#endif
+-  if not Result then begin
+-    if not WizardSilent then begin
+-      MsgBox('EDR: ╤В╤А╨╡╨▒╤Г╨╡╤В╤Б╤П Microsoft Visual C++ Runtime x64 14.44 ╨╕╨╗╨╕ ╨╜╨╛╨▓╨╡╨╡. ╨Ю╤В╨║╤А╨╛╨╡╤В╤Б╤П ╨╛╤Д╨╕╤Ж╨╕╨░╨╗╤М╨╜╨░╤П ╤Б╤В╤А╨░╨╜╨╕╤Ж╨░ Microsoft. ╨г╤Б╤В╨░╨╜╨╛╨▓╨╕╤В╨╡ ╨┐╨░╨║╨╡╤В x64 (Windows ╨╝╨╛╨╢╨╡╤В ╨╖╨░╨┐╤А╨╛╤Б╨╕╤В╤М ╨┐╤А╨░╨▓╨░ ╨░╨┤╨╝╨╕╨╜╨╕╤Б╤В╤А╨░╤В╨╛╤А╨░), ╨╖╨░╤В╨╡╨╝ ╨┐╨╛╨▓╤В╨╛╤А╨╕╤В╨╡ ╤Г╤Б╤В╨░╨╜╨╛╨▓╨║╤Г EDR.', mbInformation, MB_OK);
+-      ShellExec('open', MicrosoftRuntimeUrl, '', '', SW_SHOWNORMAL, ewNoWait, ErrorCode);
+-    end;
+-    Log('Missing Microsoft Visual C++ x64 >=14.44. Install prerequisite: ' + MicrosoftRuntimeUrl);
++  Result := '';
++  if HasRequiredCrt() then begin
++    Log('EDR CRT: sufficient installed x64 runtime; skipping prerequisite');
++    exit;
+   end;
++  Log('EDR CRT: installing embedded Microsoft x64 prerequisite before provisioning');
++  ExtractTemporaryFile('vc_redist.x64.exe');
++  if not Exec(ExpandConstant('{tmp}\vc_redist.x64.exe'),
++    '/install /quiet /norestart /log "' + ExpandConstant('{tmp}\EDR-vcredist.log') + '"',
++    ExpandConstant('{tmp}'), SW_HIDE, ewWaitUntilTerminated, Code) then begin
++    Result := 'EDR: cannot start embedded Microsoft Visual C++ x64 prerequisite. EDR installation stopped.';
++    exit;
++  end;
++  Log('EDR CRT exit code: ' + IntToStr(Code));
++  if (Code = 3010) or (Code = 1641) then begin
++    NeedsRestart := True;
++    Result := 'EDR: Microsoft Visual C++ requires a Windows restart. Restart Windows and run EDR setup again; EDR has not been installed.';
++  end else if Code <> 0 then
++    Result := 'EDR: Microsoft Visual C++ prerequisite failed (code ' + IntToStr(Code) + '). EDR installation stopped. See EDR-vcredist.log in setup temporary directory.'
++  else if not HasRequiredCrt() then
++    Result := 'EDR: Microsoft Visual C++ x64 runtime validation failed after installation. EDR installation stopped.';
+ end;
+ 
+-function StopEDR(): Boolean;
++function RunControl(Script, Action: String): Boolean;
+ var
+   ResultCode: Integer;
++  Diagnostic: AnsiString;
++  DiagnosticPath: String;
+ begin
+-  Result := True;
+-  if FileExists(ExpandConstant('{app}\python\python.exe')) then
+-    Result := Exec(ExpandConstant('{app}\python\python.exe'), '-B -m app.windows_local stop',
+-      ExpandConstant('{app}'), SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
++  DiagnosticPath := ExpandConstant('{tmp}\EDR-provision-error.txt');
++  DeleteFile(DiagnosticPath);
++  Result := Exec(ExpandConstant('{sys}\WindowsPowerShell\v1.0\powershell.exe'),
++    '-NoProfile -ExecutionPolicy Bypass -File "' + Script + '" -Action ' + Action + ' -Product {#ProductRoot} -DiagnosticPath "' + DiagnosticPath + '"',
++    ExpandConstant('{tmp}'), SW_HIDE, ewWaitUntilTerminated, ResultCode) and (ResultCode = 0);
++  if not Result then begin
++    if LoadStringFromFile(DiagnosticPath, Diagnostic) then Log(String(Diagnostic));
++    Log('EDR provision process exit: ' + IntToStr(ResultCode));
++  end;
+ end;
+ 
+ function PrepareToInstall(var NeedsRestart: Boolean): String;
+ begin
+-  Result := '';
+-  if not StopEDR() then
+-    Result := 'EDR could not stop safely. Close maintenance operations and retry. Data has been preserved.';
++  Result := PrepareCrt(NeedsRestart);
++  if Result <> '' then begin
++    Log(Result);
++    exit;
++  end;
++  ExtractTemporaryFile('provision.ps1');
++  if not RunControl(ExpandConstant('{tmp}\provision.ps1'), 'prepare') then
++    Result := 'EDR could not validate the interactive account, protected ProgramData or stop safely. Data preserved; see EDR provision phase and HRESULT in setup log.'
++  else OwnsMaintenance := True;
++end;
++
++procedure CurStepChanged(CurStep: TSetupStep);
++begin
++  if CurStep = ssPostInstall then
++    if not SaveStringToFile(ExpandConstant('{app}\windows-product.txt'), '{#ProductRoot}', False) then
++      RaiseException('Cannot save EDR product identity');
+ end;
+ 
+ function InitializeUninstall(): Boolean;
+ begin
+-  Result := StopEDR();
++  Result := RunControl(ExpandConstant('{commonappdata}\{#ProductRoot}\runtime\provision.ps1'), 'stop');
++  OwnsMaintenance := Result;
+   if not Result then
+     MsgBox('EDR could not stop safely. Uninstall cancelled; data preserved.', mbError, MB_OK);
+ end;
+ 
+-// No UninstallDelete and no data-directory entries: user data is never removed.
++procedure DeinitializeSetup();
++begin
++  if OwnsMaintenance then DeleteFile(ExpandConstant('{commonappdata}\{#ProductRoot}\maintenance'));
++end;
++
++procedure DeinitializeUninstall();
++begin
++  if OwnsMaintenance then DeleteFile(ExpandConstant('{commonappdata}\{#ProductRoot}\maintenance'));
++end;
++
++// UninstallDelete covers only the generated product marker, never persistent state.
+diff --git a/packaging/windows/smoke.ps1 b/packaging/windows/smoke.ps1
+index 0a1916d..11604a0 100644
+--- a/packaging/windows/smoke.ps1
++++ b/packaging/windows/smoke.ps1
+@@ -2,16 +2,18 @@
+ param(
+     # Build with ISCC /DSmokeBuild to use a different uninstall registry identity.
+     [Parameter(Mandatory=$true)][string]$Installer,
+-    [Parameter(Mandatory=$true)][string]$WorkDirectory
++    [Parameter(Mandatory=$true)][string]$WorkDirectory,
++    [string]$InstallDirectoryName = 'application'
+ )
+ $ErrorActionPreference = 'Stop'
++if (![Security.Principal.WindowsIdentity]::GetCurrent().Name.EndsWith('\WDAGUtilityAccount')) {
++    throw 'Run this destructive synthetic lifecycle only in a fresh Windows Sandbox, never on the host'
++}
+ $work = [IO.Path]::GetFullPath($WorkDirectory)
+ if (Test-Path -LiteralPath $work) { throw 'Use a fresh smoke directory; existing data must be preserved' }
+ New-Item -ItemType Directory -Path $work | Out-Null
+-$installPath = "$work/application"
+-$previousLocalAppData = $env:LOCALAPPDATA
++$installPath = Join-Path $work $InstallDirectoryName
+ try {
+-    $env:LOCALAPPDATA = "$work/profile"
+     . "$PSScriptRoot/launcher.ps1"
+     if (!(Test-EdrCrt)) { throw 'Host CRT prerequisite is not available' }
+     if (Test-EdrCrt -Directory "$work/nonexistent-crt") { throw 'Missing CRT incorrectly detected as present' }
+@@ -25,7 +27,7 @@ try {
+     $setup = Start-Process -FilePath $Installer -ArgumentList @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART',
+         ('/DIR="' + $installPath + '"'),('/GROUP="' + $group + '"'),'/TASKS=',('/LOG="' + "$work/install.log" + '"')) -WindowStyle Hidden -Wait -PassThru
+     if ($setup.ExitCode) { throw "Install failed: $($setup.ExitCode)" }
+-    $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut("$env:APPDATA/Microsoft/Windows/Start Menu/Programs/$group/EDR.lnk")
++    $shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut("$([Environment]::GetFolderPath('CommonPrograms'))/$group/EDR.lnk")
+     if ($shortcut.TargetPath -notlike '*powershell.exe' -or $shortcut.Arguments -notlike '*launcher.ps1*start') {
+         throw 'Installed launcher shortcut is invalid'
+     }
+@@ -41,7 +43,5 @@ try {
+         $runtimeExit = $LASTEXITCODE
+     } finally { $ErrorActionPreference = 'Stop' }
+     if ($runtimeExit) { throw "Runtime smoke failed: $runtimeExit" }
+-    Write-Output "HOST_NATIVE_SMOKE succeeded; clean Windows VM remains a separate check. Artifacts: $work"
+-} finally {
+-    $env:LOCALAPPDATA = $previousLocalAppData
+-}
++    Write-Output "SANDBOX_SMOKE succeeded; actual UAC credential prompt remains a separate check. Artifacts: $work"
++} catch { throw }
+diff --git a/packaging/windows/smoke.py b/packaging/windows/smoke.py
+index 1ce1a5f..f3b0e02 100644
+--- a/packaging/windows/smoke.py
++++ b/packaging/windows/smoke.py
+@@ -3,6 +3,7 @@ import argparse
+ import hashlib
+ import json
+ import os
++import shutil
+ from pathlib import Path
+ import subprocess
+ import time
+@@ -16,7 +17,7 @@ parser.add_argument("--installer", type=Path, required=True)
+ args = parser.parse_args()
+ install, work = args.install, args.work
+ python = install / "python/python.exe"
+-data = Path(os.environ["LOCALAPPDATA"]) / "EDR/data"
++data = Path(os.environ["ProgramData"]) / "EDR-Smoke/state/data"
+ base = "http://127.0.0.1:18765"
+ events = []
+ 
+@@ -36,7 +37,8 @@ def run(*command, expected=0):
+ 
+ 
+ def cli(command, *rest, root=data, expected=0):
+-    return run(python, "-B", "-m", "app.windows_local", command, *rest, "--data-dir", root, expected=expected)
++    options = [] if root == data else ["--data-dir", root]
++    return run(python, "-B", "-m", "app.windows_local", command, *rest, *options, expected=expected)
+ 
+ 
+ def request(path, payload=None, headers=None):
+@@ -53,8 +55,9 @@ def start(root=data):
+     global running_root
+     running_root = root
+     log = (work / ("supervisor-" + str(time.time_ns()) + ".log")).open("wb")
++    options = [] if root == data else ["--data-dir", str(root)]
+     process = subprocess.Popen([str(python), "-B", "-m", "app.windows_local", "start", "--no-browser",
+-                               "--data-dir", str(root)], cwd=install, stdout=log, stderr=log)
++                               *options], cwd=install, stdout=log, stderr=log)
+     deadline = time.monotonic() + 90
+     while time.monotonic() < deadline:
+         assert process.poll() is None, "Supervisor failed; inspect supervisor log"
+@@ -78,6 +81,14 @@ os.chdir(work)
+ running = None
+ try:
+     running = start()
++    assert str(data).isascii()
++    assert not (install / "postgresql").exists()
++    assert (data.parents[1] / "runtime/postgresql/bin/postgres.exe").exists()
++    acl = run("powershell.exe", "-NoProfile", "-Command",
++              f"(Get-Acl -LiteralPath '{data}').GetAccessRules($true,$true,[Security.Principal.SecurityIdentifier]) | ForEach-Object {{$_.IdentityReference.Value}} | ConvertTo-Json")
++    assert "S-1-5-32-545" not in json.loads(acl.stdout)
++    assert "S-1-1-0" not in json.loads(acl.stdout)
++    record("split_paths_and_private_acl", data=str(data), install=str(install), principals=json.loads(acl.stdout))
+     assert b'<div id="root">' in request("/", headers={"Accept": "text/html"})
+     document_type = request("/document-types", {"name": "Windows synthetic smoke"})
+     doc = request("/documents", {"document_type_id": document_type["id"], "number": "WINDOWS-SMOKE"})
+@@ -109,11 +120,11 @@ try:
+     assert request(file_url) == pdf
+     stop(*running)
+     running = None
+-    backup = work / "backup.zip"
++    backup = data.parent / "backups/smoke-backup.zip"
+     cli("backup", backup)
+     cli("backup", backup, expected=1)
+     cli("restore", backup, expected=1)
+-    recovered = work / "recovered"
++    recovered = data.parent / "recovered"
+     cli("restore", backup, root=recovered)
+     running = start(recovered)
+     assert request(f"/documents/{doc['id']}")["number"] == "WINDOWS-SMOKE"
+@@ -121,6 +132,22 @@ try:
+     stop(*running, root=recovered)
+     running = None
+     record("restart_backup_restore", archive=str(backup), recovered=str(recovered))
++    # Retain an untouched synthetic original, then exercise the actual default
++    # legacy transition. Source data and attachments must remain byte-identical.
++    frozen = data.with_name('data.before-legacy')
++    data.rename(frozen)
++    legacy = Path(os.environ['LOCALAPPDATA']) / 'EDR/data'
++    legacy.parent.mkdir(parents=True, exist_ok=True)
++    shutil.copytree(frozen, legacy)
++    source_hashes = {str(p.relative_to(legacy)): hashlib.sha256(p.read_bytes()).hexdigest()
++                     for p in legacy.rglob('*') if p.is_file()}
++    running = start()
++    assert request(file_url) == pdf
++    stop(*running)
++    running = None
++    assert source_hashes == {str(p.relative_to(legacy)): hashlib.sha256(p.read_bytes()).hexdigest()
++                             for p in legacy.rglob('*') if p.is_file()}
++    record('legacy_transition_preserves_source', source=str(legacy), source_files=source_hashes)
+     # A real Alembic failure against the clone must leave pointer and original rows untouched.
+     before = (data / "runtime.json").read_bytes()
+     marker = data / "attachments/smoke-preserve.txt"
+@@ -153,7 +180,15 @@ try:
+     assert marker.read_bytes() == b"preserve"
+     assert (data / "postgres/PG_VERSION").exists()
+     record("update_uninstall_preserve_data", data=str(data))
+-    record("HOST_NATIVE_SMOKE_SUCCEEDED", clean_vm="NOT_RUN")
++    assert backup.exists()
++    run(args.installer, "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", f"/DIR={install}", "/NOICONS", "/TASKS=", f"/LOG={work / 'reinstall.log'}")
++    running = start()
++    assert request(file_url) == pdf
++    stop(*running)
++    running = None
++    assert backup.exists()
++    record("reinstall_preserves_database_attachments_backup")
++    record("SANDBOX_SMOKE_SUCCEEDED", actual_uac_prompt="NOT_RUN")
+ finally:
+     if running is not None:
+         # Preserve all test directories even on failure; only stop owned processes.
+diff --git a/tests/test_windows_local.py b/tests/test_windows_local.py
+index 832fa3d..4f59503 100644
+--- a/tests/test_windows_local.py
++++ b/tests/test_windows_local.py
+@@ -221,7 +221,7 @@ def test_postgres_paths_preserve_file_identity(tmp_path):
+     try:
+         translated = postgres_path(existing)
+     except ValueError:
+-        # An NTFS volume with 8.3 disabled must fail safely, not feed ANSI paths to PG.
++        # Windows PostgreSQL receives only actual ASCII paths, never aliases.
+         assert os.name == "nt"
+         assert existing.read_bytes() == b"identity"
+         return
+@@ -230,3 +230,126 @@ def test_postgres_paths_preserve_file_identity(tmp_path):
+     assert Path(future).name == "file.dump"
+     if os.name == "nt":
+         assert translated.isascii() and future.isascii()
++
++
++def test_installed_layout_checks_intended_sid_and_bom(tmp_path, monkeypatch):
++    import app.windows_layout as layout
++    import app.windows_local as local
++    monkeypatch.setattr(layout, "product_root", lambda install: tmp_path)
++    monkeypatch.setattr(local, "current_sid", lambda: "S-1-5-21-1000")
++    (tmp_path / "owner.json").write_text(json.dumps({"format": 1, "sid": "S-1-5-21-1000", "legacy": str(tmp_path / "old")}), encoding="utf-8-sig")
++    assert layout.installed_layout(tmp_path) == (tmp_path, tmp_path / "old")
++    (tmp_path / "maintenance").touch()
++    with pytest.raises(RuntimeError, match="maintenance"):
++        layout.installed_layout(tmp_path)
++    (tmp_path / "maintenance").unlink()
++    monkeypatch.setattr(local, "current_sid", lambda: "S-1-5-21-2000")
++    with pytest.raises(PermissionError, match="another Windows account"):
++        layout.installed_layout(tmp_path)
++
++
++def legacy_data(tmp_path):
++    source = tmp_path / "legacy"
++    (source / "postgres").mkdir(parents=True)
++    (source / "postgres/PG_VERSION").write_text("18")
++    (source / "attachments").mkdir()
++    (source / "attachments/╤Б╨╕╨╜╤В╨╡╤В╨╕╨║╨░.pdf").write_bytes(b"%PDF-legacy")
++    (source / "runtime.json").write_text('{"password":"test","active":"original","revision":"old"}')
++    return source
++
++
++@pytest.mark.parametrize("failure", ["copy", "validate", "stop"])
++def test_failed_legacy_transition_never_publishes_or_changes_source(tmp_path, monkeypatch, failure):
++    from contextlib import contextmanager
++    import app.windows_layout as layout
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    original = {p.relative_to(source): p.read_bytes() for p in source.rglob("*") if p.is_file()}
++    class FakeRuntime:
++        def __init__(self, stage, install):
++            self.config = {"active": "original"}
++        @contextmanager
++        def database(self):
++            yield
++            if failure == "stop":
++                raise RuntimeError("synthetic stop failure")
++        def validate_pair(self, database):
++            if failure == "validate":
++                raise RuntimeError("synthetic validation failure")
++    monkeypatch.setattr("app.windows_local.Runtime", FakeRuntime)
++    if failure == "copy":
++        monkeypatch.setattr(layout.shutil, "copyfile", lambda *a: (_ for _ in ()).throw(OSError("synthetic copy failure")))
++    with pytest.raises((RuntimeError, OSError), match="synthetic"):
++        layout.migrate_legacy(source, target, tmp_path / "install")
++    assert not target.exists()
++    assert list(target.parent.glob("data.migrate-*"))
++    assert {p.relative_to(source): p.read_bytes() for p in source.rglob("*") if p.is_file()} == original
++
++
++def test_legacy_transition_publishes_only_after_validation_and_stop(tmp_path, monkeypatch):
++    from contextlib import contextmanager
++    from app.windows_layout import migrate_legacy
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    events = []
++    class FakeRuntime:
++        def __init__(self, stage, install):
++            self.config = {"active": "original"}
++        @contextmanager
++        def database(self):
++            assert not target.exists()
++            yield
++            events.append("stopped")
++        def validate_pair(self, database):
++            assert not target.exists()
++            events.append("validated")
++    monkeypatch.setattr("app.windows_local.Runtime", FakeRuntime)
++    migrate_legacy(source, target, tmp_path / "install")
++    assert events == ["validated", "stopped"]
++    for path in source.rglob("*"):
++        if path.is_file():
++            assert path.read_bytes() == (target / path.relative_to(source)).read_bytes()
++    assert not list(target.parent.glob("data.migrate-*"))
++
++
++def test_legacy_transition_refuses_locked_or_orphan_cluster(tmp_path):
++    from app.windows_layout import migrate_legacy
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    with exclusive(source):
++        with pytest.raises(Busy):
++            migrate_legacy(source, target, tmp_path / "install")
++    (source / "postgres/postmaster.pid").write_text("123")
++    with pytest.raises(ValueError, match="may be running"):
++        migrate_legacy(source, target, tmp_path / "install")
++    assert not target.exists()
++
++
++def test_legacy_transition_rejects_links(tmp_path):
++    from app.windows_layout import migrate_legacy
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    outside = tmp_path / "outside"
++    outside.write_bytes(b"private")
++    (source / "attachments/link").symlink_to(outside)
++    with pytest.raises(ValueError, match="Links/reparse"):
++        migrate_legacy(source, target, tmp_path / "install")
++    assert not target.exists()
++    assert outside.read_bytes() == b"private"
++
++
++@pytest.mark.parametrize("relative", ["outside.zip", "state/data/leak.zip", "state/backups/nested/copy.zip"])
++def test_windows_backup_refuses_unprotected_destination(tmp_path, relative):
++    from app.windows_layout import checked_backup_destination
++    with pytest.raises(ValueError, match="protected state/backups"):
++        checked_backup_destination(tmp_path, tmp_path / relative)
++
++
++def test_windows_backup_accepts_protected_destination(tmp_path):
++    from app.windows_layout import checked_backup_destination
++    destination = tmp_path / "state/backups/synthetic.zip"
++    assert checked_backup_destination(tmp_path, destination) == destination.resolve()

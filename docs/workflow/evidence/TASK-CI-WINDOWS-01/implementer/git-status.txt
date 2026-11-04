@@ -1,0 +1,48 @@
+﻿ M AGENTS.md
+ M ROADMAP.md
+ M app/windows_local.py
+ M docs/installation/windows.md
+ M docs/workflow/APPROVALS.md
+ M docs/workflow/HISTORY.md
+ M docs/workflow/MODEL-ROUTING.md
+ M docs/workflow/STATE.md
+ M packaging/windows/build.ps1
+ M packaging/windows/edr.iss
+ M packaging/windows/smoke.ps1
+ M packaging/windows/smoke.py
+ M tests/test_windows_local.py
+?? .github/workflows/windows-installer.yml
+?? app/windows_layout.py
+?? docs/adr/ADR-013-windows-programdata-runtime.md
+?? docs/adr/ADR-014-windows-offline-vcredist.md
+?? docs/tasks/TASK-CI-WINDOWS-01.md
+?? docs/tasks/TASK-EDR-UI-PASSPORTS-01.md
+?? docs/tasks/TASK-README-PRESENTATION-02.md
+?? docs/tasks/TASK-RELEASE-0.2.0.md
+?? docs/tasks/TASK-WINDOWS-CRT-OFFLINE-01.md
+?? docs/tasks/TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01.md
+?? docs/tasks/TASK-WINDOWS-PROGRAMDATA-01.md
+?? docs/workflow/NEXT-STAGE.md
+?? docs/workflow/evidence/TASK-CI-WINDOWS-01/
+?? docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01-approval.md
+?? docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/
+?? docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/
+?? docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/
+?? docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/
+?? docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/
+?? docs/workflow/reviews/TASK-CI-WINDOWS-01-C1.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C1.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C2.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C1.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C2.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C3-diagnosis.md
+?? opencode.json
+?? packaging/windows/ci-installer.ps1
+?? packaging/windows/ci-installer.py
+?? packaging/windows/diagnose-edr-cleanup.ps1
+?? packaging/windows/fetch-vcredist.ps1
+?? packaging/windows/provision.ps1
+?? packaging/windows/test-crt.ps1
+?? packaging/windows/test-programdata-installer.ps1
+?? packaging/windows/test-programdata-lifecycle.py
+?? packaging/windows/test-programdata.ps1

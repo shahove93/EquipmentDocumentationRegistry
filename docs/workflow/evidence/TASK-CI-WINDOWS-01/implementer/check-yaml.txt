@@ -1,0 +1,2 @@
+YAML_OK jobs=windows-installer trigger=workflow_dispatch upload_artifact_if_always=true
+EXIT=0 

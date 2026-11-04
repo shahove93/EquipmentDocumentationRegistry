@@ -1,0 +1,28 @@
+C2 negative-guard re-check (C3), reproducible
+==============================================
+
+CWD: D:\Antigravity\EquipmentDocumentationRegistry
+Host: Windows; Windows PowerShell 5.1.26100.9711.
+
+Preparation (exact command):
+  $base = Join-Path $env:TEMP 'edr-ci-c2-negative'
+  if (Test-Path -LiteralPath $base) { Remove-Item -LiteralPath $base -Recurse -Force }
+  Remove-Item Env:GITHUB_ACTIONS,Env:CI,Env:RUNNER_OS,Env:RUNNER_ENVIRONMENT -ErrorAction SilentlyContinue
+
+Invocation (exact command):
+  powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass -File packaging/windows/ci-installer.ps1 -Exe (Join-Path $env:TEMP 'edr-ci-c2-negative\missing.exe') -WorkDirectory (Join-Path $env:TEMP 'edr-ci-c2-negative\work') -InstallDirectory (Join-Path $env:TEMP 'edr-ci-c2-negative\install')
+
+Script exit code: 2 (non-zero, as required)
+
+Transcript (stdout+stderr):
+  ci-installer guard failed: GITHUB_ACTIONS must be exactly true
+  ci-installer guard failed: CI must be exactly true
+  ci-installer guard failed: RUNNER_OS must be exactly Windows
+  ci-installer guard failed: RUNNER_ENVIRONMENT must be exactly github-hosted
+  ci-installer guard failed: built installer EXE is missing: C:\Users\user\AppData\Local\Temp\edr-ci-c2-negative\missing.exe
+
+Post-conditions:
+  INSTALL_DIR_CREATED=False
+  WORK_DIR_CREATED=False
+
+No install occurred and nothing was created by the script.
