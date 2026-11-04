@@ -1,4 +1,4 @@
-# Build on Windows x64 with Python 3.12, Inno Setup 6.7.3 and a prebuilt React UI.
+﻿# Build on Windows x64 with Python 3.12, Inno Setup 6.7.3 and a prebuilt React UI.
 # Runtime users do not need any of these build tools.
 [CmdletBinding()]
 param(
@@ -20,12 +20,13 @@ if (& $BuilderPython -c "import sys; print('.'.join(map(str,sys.version_info[:2]
     throw 'Use a Windows x64 CPython 3.12 builder'
 }
 New-Item -ItemType Directory -Path $work | Out-Null
+$crtPath = Join-Path $work 'vc_redist.x64.exe'
+$crt = & "$PSScriptRoot/fetch-vcredist.ps1" -Destination $crtPath
 $payload = New-Item -ItemType Directory -Path "$work/payload"
 & $BuilderPython "$PSScriptRoot/prepare.py" $PythonArchive $PostgresArchive $payload
 if ($LASTEXITCODE) { throw 'Runtime archive extraction failed' }
 if (!(Test-Path -LiteralPath "$payload/postgresql/bin/postgres.exe")) { throw 'Invalid EDB PostgreSQL archive' }
-# User-approved prerequisite flow: do not redistribute Microsoft CRT, including
-# the two CRT files supplied in the upstream embedded Python archive.
+# Use the serviced system CRT installed by the embedded official prerequisite.
 Get-ChildItem -LiteralPath "$payload/python" -File -Filter 'vcruntime*.dll' | Remove-Item
 Copy-Item -LiteralPath "$repo/app" -Destination $payload -Recurse
 Copy-Item -LiteralPath "$repo/alembic" -Destination $payload -Recurse
@@ -69,11 +70,11 @@ $hashes = @{}
 foreach ($inputPath in $inputs) { $hashes[[IO.Path]::GetFileName($inputPath)] = (Get-FileHash -LiteralPath $inputPath -Algorithm SHA256).Hash }
 $packages = & $pipPython -m pip --disable-pip-version-check list --path "$payload/packages" --format=json
 @{ version=$Version; python='3.12.10'; postgresql='18.6-5'; inno='6.7.3'; archives=$hashes;
-   selfContained=$false; smokeBuild=[bool]$SmokeBuild; prerequisite='Microsoft Visual C++ x64 >=14.44 (not bundled)';
+   selfContained=$true; smokeBuild=[bool]$SmokeBuild; prerequisite=$crt;
    packages=@($packages | ConvertFrom-Json); builtUtc=[DateTime]::UtcNow.ToString('o') } |
     ConvertTo-Json -Depth 10 | Set-Content -LiteralPath "$payload/build-manifest.json" -Encoding utf8
 $prototypeArg = @()
 if ($SmokeBuild) { $prototypeArg += '/DSmokeBuild' }
-& $Iscc @prototypeArg "/DPayload=$payload" "/DOutput=$work" "/DAppVersion=$Version" "$PSScriptRoot/edr.iss"
+& $Iscc @prototypeArg "/DRedist=$crtPath" "/DPayload=$payload" "/DOutput=$work" "/DAppVersion=$Version" "$PSScriptRoot/edr.iss"
 if ($LASTEXITCODE) { throw "Inno Setup failed: $LASTEXITCODE" }
 Write-Output "Installer directory: $work"

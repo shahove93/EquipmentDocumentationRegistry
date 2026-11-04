@@ -77,6 +77,8 @@ def exclusive(data: Path):
 
 
 def checked_data(path: Path, install: Path = INSTALL) -> Path:
+    from app.windows_layout import no_links
+    no_links(path)
     data = path.resolve()
     installation = install.resolve()
     if data == installation or installation in data.parents or data in installation.parents:
@@ -86,8 +88,7 @@ def checked_data(path: Path, install: Path = INSTALL) -> Path:
     return data
 
 
-def private_directory(path: Path):
-    path.mkdir(parents=True, exist_ok=True)
+def current_sid():
     if os.name == "nt":
         # Numeric SID works with non-English Windows and Cyrillic user names.
         import ctypes
@@ -115,15 +116,42 @@ def private_directory(path: Path):
             if not advapi.ConvertSidToStringSidW(sid, ctypes.byref(sid_text)):
                 raise OSError("Cannot convert user SID")
             try:
-                subprocess.run(["icacls.exe", str(path), "/inheritance:r", "/grant:r",
-                                f"*{sid_text.value}:(OI)(CI)F", "*S-1-5-18:(OI)(CI)F"],
-                               check=True, capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+                return sid_text.value
             finally:
                 kernel.LocalFree(ctypes.cast(sid_text, ctypes.c_void_p))
         finally:
             kernel.CloseHandle(token)
-    else:
+
+
+def private_directory(path: Path):
+    from app.windows_layout import no_links
+    no_links(path)
+    if os.name != "nt":
+        path.mkdir(parents=True, exist_ok=True, mode=0o700)
         path.chmod(0o700)
+        return
+    import ctypes
+    import ctypes.wintypes as wt
+    # Replace the complete DACL, including explicit broad ACEs; /grant:r alone
+    # would retain existing explicit Users/Everyone grants. Only the intended
+    # account and SYSTEM may access user data, including backup/staging paths.
+    descriptor = ctypes.c_void_p()
+    advapi = ctypes.WinDLL("advapi32", use_last_error=True)
+    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
+    advapi.ConvertStringSecurityDescriptorToSecurityDescriptorW.argtypes = [wt.LPCWSTR, wt.DWORD, ctypes.POINTER(ctypes.c_void_p), ctypes.c_void_p]
+    advapi.SetFileSecurityW.argtypes = [wt.LPCWSTR, wt.DWORD, ctypes.c_void_p]
+    kernel.LocalFree.argtypes = [ctypes.c_void_p]
+    sddl = f"D:P(A;OICI;FA;;;{current_sid()})(A;OICI;FA;;;SY)"
+    if not advapi.ConvertStringSecurityDescriptorToSecurityDescriptorW(sddl, 1, ctypes.byref(descriptor), None):
+        raise OSError("Cannot construct private data ACL")
+    try:
+        # Installed state parent is already private. Restore/migration stages
+        # inherit that protection before any contents are written.
+        path.mkdir(parents=True, exist_ok=True)
+        if not advapi.SetFileSecurityW(str(path), 0x80000004, descriptor):
+            raise OSError("Cannot protect EDR data directory")
+    finally:
+        kernel.LocalFree(descriptor)
 
 
 def ensure_port_free(port):
@@ -134,31 +162,12 @@ def ensure_port_free(port):
 
 
 def postgres_path(path: Path) -> str:
-    """EDB's initdb embeds Windows ANSI paths in bootstrap SQL; use ASCII aliases.
-
-    Never change Windows' system locale or move existing data to work around it.
-    On volumes without 8.3 aliases, fail before invoking PostgreSQL and explain
-    that an ASCII installation/data path is required.
-    """
-    if os.name != "nt":
-        return str(path)
-    import ctypes
-    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
-    kernel.GetShortPathNameW.argtypes = [ctypes.c_wchar_p, ctypes.c_wchar_p, ctypes.c_uint]
-    kernel.GetShortPathNameW.restype = ctypes.c_uint
-    existing = path.resolve()
-    suffix = []
-    while not existing.exists():
-        if existing.parent == existing:
-            raise OSError("PostgreSQL filesystem root is unavailable")
-        suffix.insert(0, existing.name)
-        existing = existing.parent
-    output = ctypes.create_unicode_buffer(32768)
-    if not kernel.GetShortPathNameW(str(existing), output, len(output)):
-        raise OSError("Cannot resolve PostgreSQL filesystem path")
-    result = str(Path(output.value).joinpath(*suffix))
-    if not result.isascii():
-        raise ValueError("PostgreSQL requires ASCII installation/data paths or available Windows 8.3 aliases; existing data preserved")
+    """Use actual ASCII paths; no temporary drives or 8.3 aliases."""
+    from app.windows_layout import no_links
+    no_links(path)
+    result = str(path.resolve())
+    if os.name == "nt" and not result.isascii():
+        raise ValueError("PostgreSQL requires ASCII paths; existing data preserved")
     return result
 
 
@@ -166,7 +175,14 @@ class Runtime:
     def __init__(self, data: Path, install: Path = INSTALL, *, restoring=False):
         self.data = checked_data(data, install)
         self.install = install
-        self.pg = install / "postgresql" / "bin"
+        if os.name == "nt":
+            from app.windows_layout import installed_layout
+            root, _ = installed_layout(install)
+            self.pg = root / "runtime" / "postgresql" / "bin"
+            if root / "state" not in self.data.parents:
+                raise ValueError("Windows data must stay inside protected ProgramData state")
+        else:
+            self.pg = install / "postgresql" / "bin"
         self.cluster = data / "postgres"
         self.config = None
         self.restoring = restoring
@@ -186,7 +202,7 @@ class Runtime:
             log.flush()
             result = subprocess.run([postgres_path(self.pg / (program + ".exe")),
                                      *(postgres_path(arg) if isinstance(arg, Path) else str(arg) for arg in args)],
-                                    env=env, stdout=log, stderr=subprocess.STDOUT,
+                                    env=env, cwd=self.data, stdout=log, stderr=subprocess.STDOUT,
                                     creationflags=0x08000000 if os.name == "nt" else 0)
         if check and result.returncode:
             # No command/env/password echo; full DB diagnostic stays in local PG logs.
@@ -316,6 +332,11 @@ class Runtime:
                 request.unlink(missing_ok=True)
 
     def backup(self, destination: Path):
+        if os.name == "nt":
+            from app.windows_layout import installed_layout, checked_backup_destination
+            root, _ = installed_layout(self.install)
+            destination = checked_backup_destination(root, destination)
+            private_directory(destination.parent)
         if destination.exists() or self.data == destination or self.data in destination.parents:
             raise ValueError("Backup must be a new file outside the data directory")
         with self.database():
@@ -443,21 +464,37 @@ def stop(data: Path):
     raise Busy("EDR has not stopped; update/uninstall must not proceed")
 
 
-def main(argv=None):
+def _main(argv=None):
     parser = argparse.ArgumentParser(description="EDR Windows local runtime")
     parser.add_argument("command", choices=["start", "stop", "backup", "restore"])
     parser.add_argument("file", nargs="?", type=Path)
-    parser.add_argument("--data-dir", type=Path,
-                        default=Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "EDR" / "data")
+    parser.add_argument("--data-dir", type=Path)
     parser.add_argument("--no-browser", action="store_true")
     args = parser.parse_args(argv)
-    data = checked_data(args.data_dir)
     try:
+        legacy = None
+        if os.name == "nt":
+            from app.windows_layout import installed_layout
+            root, legacy = installed_layout(INSTALL)
+            private_directory(root / "state" / "backups")
+            default_data = root / "state" / "data"
+        else:
+            default_data = Path.home() / ".edr" / "data"
+        data = checked_data(args.data_dir or default_data)
+        if os.name == "nt" and root / "state" not in data.parents:
+            raise ValueError("Windows data must stay inside protected ProgramData state")
+        # Reject unsupported PG paths before creating a directory or lock.
+        postgres_path(data)
         if args.command == "stop":
             stop(data)
         else:
             try:
                 with exclusive(data):
+                    if os.name == "nt" and (root / "maintenance").exists():
+                        raise Busy("Installer maintenance is in progress")
+                    if legacy is not None and args.data_dir is None and args.command != "restore":
+                        from app.windows_layout import migrate_legacy
+                        migrate_legacy(legacy, data, INSTALL)
                     runtime = Runtime(data)
                     if args.command == "start":
                         runtime.start(not args.no_browser)
@@ -485,6 +522,21 @@ def main(argv=None):
         if os.name == "nt" and sys.stderr is None:
             import ctypes
             ctypes.windll.user32.MessageBoxW(None, message, "EDR", 0x10)
+        return 1
+
+
+def main(argv=None):
+    if os.name != "nt":
+        return _main(argv)
+    from app.windows_layout import runtime_gate
+    try:
+        # Held across every command and every supported state root, including
+        # startup, migration, backup and restore into an absent target.
+        with runtime_gate(INSTALL):
+            return _main(argv)
+    except Exception as error:
+        if sys.stderr is not None:
+            print(f"EDR: {type(error).__name__}: {error}", file=sys.stderr)
         return 1
 
 
