@@ -1,0 +1,27 @@
+Negative control: temporarily reverted alembic/env.py to
+`fileConfig(config.config_file_name)` (no encoding), then ran the new test.
+Expected failure proves the test exercises the real downstream env.py/fileConfig
+chain, not only the loader/parser.
+
+CWD=/mnt/d/Antigravity/EquipmentDocumentationRegistry
+$ .venv/bin/python -m pytest -q tests/test_windows_local.py -k "alembic_env_fileconfig_reads_utf8_chain" -p no:cacheprovider
+FAILED tests/test_windows_local.py::test_alembic_env_fileconfig_reads_utf8_chain
+1 failed, 46 deselected, 1 warning in 5.65s
+NEGATIVE_CONTROL_EXIT=1
+
+Relevant traceback (abridged):
+alembic/env.py:13: in <module>
+    fileConfig(config.config_file_name)
+/usr/lib/python3.14/logging/config.py:79: in fileConfig
+    cp.read(fname, encoding=encoding)
+tests/test_windows_local.py:421: in forced_locale_decode
+    return original_read(self, filenames, encoding=encoding)
+UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 3635: character maps to <undefined>
+
+The negative control was rerun with a repo-local backup
+(`env-fileconfig/implementer/env.py.bak`, deleted afterwards); no external
+temporary directory is used.
+alembic/env.py was restored byte-for-byte afterwards;
+SHA-256 79752F720472BB754999F23B5742EED9194F1F18CF58A1BF648B57D58C92092C
+matches the fixed-file hash recorded in the report. No other file was changed by
+the negative control.

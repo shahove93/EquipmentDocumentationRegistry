@@ -1,0 +1,13 @@
+diff --git a/alembic/env.py b/alembic/env.py
+index f409286..9f5fa09 100644
+--- a/alembic/env.py
++++ b/alembic/env.py
+@@ -10,7 +10,7 @@ from alembic import context
+ config = context.config
+ 
+ if config.config_file_name is not None:
+-    fileConfig(config.config_file_name)
++    fileConfig(config.config_file_name, encoding="utf-8")
+     project_root = Path(config.config_file_name).resolve().parent
+ else:
+     project_root = Path.cwd()

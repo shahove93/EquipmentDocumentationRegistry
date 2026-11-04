@@ -1,0 +1,4 @@
+CWD=/mnt/d/Antigravity/EquipmentDocumentationRegistry
+HEAD=8e5253b31494aba2e59efe1c8741cd7374e35322
+$ .venv/bin/python -m py_compile app/windows_local.py alembic/env.py tests/test_windows_local.py
+EXIT=0

@@ -1,0 +1,78 @@
+def test_alembic_config_reads_utf8_and_preserves_here(tmp_path):
+    from app.windows_local import load_alembic_config
+    ini = tmp_path / "alembic.ini"
+    ini.write_text(
+        "[alembic]\nscript_location = %(here)s/alembic\n# комментарий UTF-8\n",
+        encoding="utf-8",
+    )
+    cfg = load_alembic_config(ini)
+    location = Path(cfg.get_main_option("script_location"))
+    assert location.resolve() == (tmp_path / "alembic").resolve()
+    assert cfg.config_file_name == str(ini)
+
+
+def test_alembic_config_cp1252_regression(monkeypatch):
+    import configparser
+    from alembic.config import Config
+    from app.windows_local import load_alembic_config
+    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
+    original = configparser.ConfigParser.read
+
+    def forced_cp1252(self, filenames, encoding=None):
+        return original(self, filenames, encoding="cp1252")
+
+    monkeypatch.setattr(configparser.ConfigParser, "read", forced_cp1252)
+    with pytest.raises(UnicodeDecodeError) as raised:
+        Config(str(ini)).file_config
+    assert raised.value.start == 3635
+    assert raised.value.object[raised.value.start] == 0x81
+    assert load_alembic_config(ini).get_main_option("script_location")
+
+
+def test_alembic_config_head_and_unicode_path(tmp_path):
+    from alembic.script import ScriptDirectory
+    from app.windows_local import load_alembic_config
+    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
+    assert ScriptDirectory.from_config(load_alembic_config(ini)).get_current_head() == "e4b8c2d16a70"
+    unicode_dir = tmp_path / "Данные"
+    unicode_dir.mkdir()
+    unicode_ini = unicode_dir / "alembic.ini"
+    unicode_ini.write_text("[alembic]\nscript_location = %(here)s/alembic\n", encoding="utf-8")
+    cfg = load_alembic_config(unicode_ini)
+    location = Path(cfg.get_main_option("script_location"))
+    assert "Данные" in str(location)
+    assert location.resolve() == (unicode_dir / "alembic").resolve()
+
+
+def test_alembic_env_fileconfig_reads_utf8_chain(tmp_path, monkeypatch):
+    import configparser
+    from contextlib import nullcontext
+    import logging.config
+    from alembic import command
+    from alembic import context as alembic_context
+    from app.windows_local import load_alembic_config
+
+    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
+    cfg = load_alembic_config(ini)
+    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://edr:test@127.0.0.1:5432/test")
+    monkeypatch.setenv("STORAGE_ROOT", str(tmp_path / "storage"))
+    original_read = configparser.ConfigParser.read
+
+    def forced_locale_decode(self, filenames, encoding=None):
+        if encoding in (None, "locale"):
+            encoding = "cp1252"
+        return original_read(self, filenames, encoding=encoding)
+
+    monkeypatch.setattr(configparser.ConfigParser, "read", forced_locale_decode)
+
+    # Downstream alembic/env.py logging read without explicit UTF-8 still fails.
+    with pytest.raises(UnicodeDecodeError) as raised:
+        logging.config.fileConfig(cfg.config_file_name)
+    assert raised.value.start == 3635
+    assert raised.value.object[raised.value.start] == 0x81
+
+    # The real offline migrate chain executes the fixed env.py/fileConfig path.
+    monkeypatch.setattr(alembic_context, "configure", lambda *args, **kwargs: None)
+    monkeypatch.setattr(alembic_context, "begin_transaction", nullcontext)
+    monkeypatch.setattr(alembic_context, "run_migrations", lambda *args, **kwargs: None)
+    command.upgrade(cfg, "head", sql=True)

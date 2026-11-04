@@ -1,0 +1,5 @@
+warning: in the working copy of 'app/windows_local.py', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/workflow/APPROVALS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/workflow/HISTORY.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'tests/test_windows_local.py', CRLF will be replaced by LF the next time Git touches it
+docs/workflow/HISTORY.md:2342: new blank line at EOF.

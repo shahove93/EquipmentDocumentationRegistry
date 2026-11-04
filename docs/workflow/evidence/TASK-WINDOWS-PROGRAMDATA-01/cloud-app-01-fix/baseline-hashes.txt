@@ -1,0 +1,2 @@
+﻿648F15B5E08185D4FA9FAB4ED457D81ABD31CDD0878EB439E87065D30E613C4A  D:\Antigravity\EquipmentDocumentationRegistry\app\windows_local.py
+6F1A32489FCB7C956AE2337E75678F0F9338A70F11F8D73E9BA05C82BB384999  D:\Antigravity\EquipmentDocumentationRegistry\tests\test_windows_local.py

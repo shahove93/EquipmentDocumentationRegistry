@@ -171,6 +171,20 @@ def postgres_path(path: Path) -> str:
     return result
 
 
+def load_alembic_config(path: Path):
+    """Load alembic.ini explicitly as UTF-8; never let the OS locale decode it."""
+    from alembic.config import Config
+    cfg = Config()
+    parser = cfg.file_config            # empty parser; no file read yet
+    here = path.resolve().parent.as_posix()
+    parser.defaults()["here"] = here    # preserve %(here)s semantics
+    cfg.config_args["here"] = here
+    with path.open("r", encoding="utf-8") as stream:
+        parser.read_file(stream)
+    cfg.config_file_name = str(path)
+    return cfg
+
+
 class Runtime:
     def __init__(self, data: Path, install: Path = INSTALL, *, restoring=False):
         self.data = checked_data(data, install)
@@ -279,9 +293,8 @@ class Runtime:
 
     def migrate(self):
         from alembic import command
-        from alembic.config import Config
         from alembic.script import ScriptDirectory
-        cfg = Config(str(self.install / "alembic.ini"))
+        cfg = load_alembic_config(self.install / "alembic.ini")
         head = ScriptDirectory.from_config(cfg).get_current_head()
         if self.config["active"] and self.config["revision"] == head:
             return

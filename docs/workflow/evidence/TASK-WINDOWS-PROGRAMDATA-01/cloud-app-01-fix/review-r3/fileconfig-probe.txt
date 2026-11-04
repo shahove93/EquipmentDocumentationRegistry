@@ -1,0 +1,13 @@
+﻿CLOUD-UTF8-R3-01 independent reproduction (read-only; no migration env/DB)
+======================================================================
+Loader: app.windows_local.load_alembic_config(Path.cwd()/"alembic.ini")
+Result: loader_ok True
+
+Force configparser.ConfigParser.read to encoding="cp1252" (runner locale),
+then call logging.config.fileConfig(cfg.config_file_name) as alembic/env.py does:
+
+fileConfig FAIL UnicodeDecodeError 'charmap' codec can't decode byte 0x81 in position 3635: character maps to <undefined>
+
+Source: alembic/env.py:12-13 fileConfig(config.config_file_name)
+Python: logging.config.fileConfig(fname, defaults=None, disable_existing_loggers=True, encoding=None)
+        -> cp.read(fname, encoding=encoding); encoding=None -> locale

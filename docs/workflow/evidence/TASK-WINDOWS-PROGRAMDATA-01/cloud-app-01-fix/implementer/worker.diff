@@ -1,0 +1,88 @@
+diff --git a/app/windows_local.py b/app/windows_local.py
+index db613d1..d2a2aab 100644
+--- a/app/windows_local.py
++++ b/app/windows_local.py
+@@ -171,6 +171,20 @@ def postgres_path(path: Path) -> str:
+     return result
+ 
+ 
++def load_alembic_config(path: Path):
++    """Load alembic.ini explicitly as UTF-8; never let the OS locale decode it."""
++    from alembic.config import Config
++    cfg = Config()
++    parser = cfg.file_config            # empty parser; no file read yet
++    here = path.resolve().parent.as_posix()
++    parser.defaults()["here"] = here    # preserve %(here)s semantics
++    cfg.config_args["here"] = here
++    with path.open("r", encoding="utf-8") as stream:
++        parser.read_file(stream)
++    cfg.config_file_name = str(path)
++    return cfg
++
++
+ class Runtime:
+     def __init__(self, data: Path, install: Path = INSTALL, *, restoring=False):
+         self.data = checked_data(data, install)
+@@ -279,9 +293,8 @@ class Runtime:
+ 
+     def migrate(self):
+         from alembic import command
+-        from alembic.config import Config
+         from alembic.script import ScriptDirectory
+-        cfg = Config(str(self.install / "alembic.ini"))
++        cfg = load_alembic_config(self.install / "alembic.ini")
+         head = ScriptDirectory.from_config(cfg).get_current_head()
+         if self.config["active"] and self.config["revision"] == head:
+             return
+--- a/tests/test_windows_local.py
++++ b/tests/test_windows_local.py
+@@ -353,3 +353,49 @@
+     from app.windows_layout import checked_backup_destination
+     destination = tmp_path / "state/backups/synthetic.zip"
+     assert checked_backup_destination(tmp_path, destination) == destination.resolve()
++
++
++def test_alembic_config_reads_utf8_and_preserves_here(tmp_path):
++    from app.windows_local import load_alembic_config
++    ini = tmp_path / "alembic.ini"
++    ini.write_text(
++        "[alembic]\nscript_location = %(here)s/alembic\n# комментарий UTF-8\n",
++        encoding="utf-8",
++    )
++    cfg = load_alembic_config(ini)
++    location = Path(cfg.get_main_option("script_location"))
++    assert location.resolve() == (tmp_path / "alembic").resolve()
++    assert cfg.config_file_name == str(ini)
++
++
++def test_alembic_config_cp1252_regression(monkeypatch):
++    import configparser
++    from alembic.config import Config
++    from app.windows_local import load_alembic_config
++    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
++    original = configparser.ConfigParser.read
++
++    def forced_cp1252(self, filenames, encoding=None):
++        return original(self, filenames, encoding="cp1252")
++
++    monkeypatch.setattr(configparser.ConfigParser, "read", forced_cp1252)
++    with pytest.raises(UnicodeDecodeError) as raised:
++        Config(str(ini)).file_config
++    assert raised.value.start == 3635
++    assert raised.value.object[raised.value.start] == 0x81
++    assert load_alembic_config(ini).get_main_option("script_location")
++
++
++def test_alembic_config_head_and_unicode_path(tmp_path):
++    from alembic.script import ScriptDirectory
++    from app.windows_local import load_alembic_config
++    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
++    assert ScriptDirectory.from_config(load_alembic_config(ini)).get_current_head() == "e4b8c2d16a70"
++    unicode_dir = tmp_path / "Данные"
++    unicode_dir.mkdir()
++    unicode_ini = unicode_dir / "alembic.ini"
++    unicode_ini.write_text("[alembic]\nscript_location = %(here)s/alembic\n", encoding="utf-8")
++    cfg = load_alembic_config(unicode_ini)
++    location = Path(cfg.get_main_option("script_location"))
++    assert "Данные" in str(location)
++    assert location.resolve() == (unicode_dir / "alembic").resolve()

@@ -1,0 +1,269 @@
+diff --git a/alembic/env.py b/alembic/env.py
+index f409286..9f5fa09 100644
+--- a/alembic/env.py
++++ b/alembic/env.py
+@@ -10,7 +10,7 @@ from alembic import context
+ config = context.config
+ 
+ if config.config_file_name is not None:
+-    fileConfig(config.config_file_name)
++    fileConfig(config.config_file_name, encoding="utf-8")
+     project_root = Path(config.config_file_name).resolve().parent
+ else:
+     project_root = Path.cwd()
+diff --git a/app/windows_local.py b/app/windows_local.py
+index db613d1..d2a2aab 100644
+--- a/app/windows_local.py
++++ b/app/windows_local.py
+@@ -171,6 +171,20 @@ def postgres_path(path: Path) -> str:
+     return result
+ 
+ 
++def load_alembic_config(path: Path):
++    """Load alembic.ini explicitly as UTF-8; never let the OS locale decode it."""
++    from alembic.config import Config
++    cfg = Config()
++    parser = cfg.file_config            # empty parser; no file read yet
++    here = path.resolve().parent.as_posix()
++    parser.defaults()["here"] = here    # preserve %(here)s semantics
++    cfg.config_args["here"] = here
++    with path.open("r", encoding="utf-8") as stream:
++        parser.read_file(stream)
++    cfg.config_file_name = str(path)
++    return cfg
++
++
+ class Runtime:
+     def __init__(self, data: Path, install: Path = INSTALL, *, restoring=False):
+         self.data = checked_data(data, install)
+@@ -279,9 +293,8 @@ class Runtime:
+ 
+     def migrate(self):
+         from alembic import command
+-        from alembic.config import Config
+         from alembic.script import ScriptDirectory
+-        cfg = Config(str(self.install / "alembic.ini"))
++        cfg = load_alembic_config(self.install / "alembic.ini")
+         head = ScriptDirectory.from_config(cfg).get_current_head()
+         if self.config["active"] and self.config["revision"] == head:
+             return
+diff --git a/tests/test_windows_local.py b/tests/test_windows_local.py
+index 832fa3d..c1875a9 100644
+--- a/tests/test_windows_local.py
++++ b/tests/test_windows_local.py
+@@ -221,7 +221,7 @@ def test_postgres_paths_preserve_file_identity(tmp_path):
+     try:
+         translated = postgres_path(existing)
+     except ValueError:
+-        # An NTFS volume with 8.3 disabled must fail safely, not feed ANSI paths to PG.
++        # Windows PostgreSQL receives only actual ASCII paths, never aliases.
+         assert os.name == "nt"
+         assert existing.read_bytes() == b"identity"
+         return
+@@ -230,3 +230,206 @@ def test_postgres_paths_preserve_file_identity(tmp_path):
+     assert Path(future).name == "file.dump"
+     if os.name == "nt":
+         assert translated.isascii() and future.isascii()
++
++
++def test_installed_layout_checks_intended_sid_and_bom(tmp_path, monkeypatch):
++    import app.windows_layout as layout
++    import app.windows_local as local
++    monkeypatch.setattr(layout, "product_root", lambda install: tmp_path)
++    monkeypatch.setattr(local, "current_sid", lambda: "S-1-5-21-1000")
++    (tmp_path / "owner.json").write_text(json.dumps({"format": 1, "sid": "S-1-5-21-1000", "legacy": str(tmp_path / "old")}), encoding="utf-8-sig")
++    assert layout.installed_layout(tmp_path) == (tmp_path, tmp_path / "old")
++    (tmp_path / "maintenance").touch()
++    with pytest.raises(RuntimeError, match="maintenance"):
++        layout.installed_layout(tmp_path)
++    (tmp_path / "maintenance").unlink()
++    monkeypatch.setattr(local, "current_sid", lambda: "S-1-5-21-2000")
++    with pytest.raises(PermissionError, match="another Windows account"):
++        layout.installed_layout(tmp_path)
++
++
++def legacy_data(tmp_path):
++    source = tmp_path / "legacy"
++    (source / "postgres").mkdir(parents=True)
++    (source / "postgres/PG_VERSION").write_text("18")
++    (source / "attachments").mkdir()
++    (source / "attachments/синтетика.pdf").write_bytes(b"%PDF-legacy")
++    (source / "runtime.json").write_text('{"password":"test","active":"original","revision":"old"}')
++    return source
++
++
++@pytest.mark.parametrize("failure", ["copy", "validate", "stop"])
++def test_failed_legacy_transition_never_publishes_or_changes_source(tmp_path, monkeypatch, failure):
++    from contextlib import contextmanager
++    import app.windows_layout as layout
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    original = {p.relative_to(source): p.read_bytes() for p in source.rglob("*") if p.is_file()}
++    class FakeRuntime:
++        def __init__(self, stage, install):
++            self.config = {"active": "original"}
++        @contextmanager
++        def database(self):
++            yield
++            if failure == "stop":
++                raise RuntimeError("synthetic stop failure")
++        def validate_pair(self, database):
++            if failure == "validate":
++                raise RuntimeError("synthetic validation failure")
++    monkeypatch.setattr("app.windows_local.Runtime", FakeRuntime)
++    if failure == "copy":
++        monkeypatch.setattr(layout.shutil, "copyfile", lambda *a: (_ for _ in ()).throw(OSError("synthetic copy failure")))
++    with pytest.raises((RuntimeError, OSError), match="synthetic"):
++        layout.migrate_legacy(source, target, tmp_path / "install")
++    assert not target.exists()
++    assert list(target.parent.glob("data.migrate-*"))
++    assert {p.relative_to(source): p.read_bytes() for p in source.rglob("*") if p.is_file()} == original
++
++
++def test_legacy_transition_publishes_only_after_validation_and_stop(tmp_path, monkeypatch):
++    from contextlib import contextmanager
++    from app.windows_layout import migrate_legacy
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    events = []
++    class FakeRuntime:
++        def __init__(self, stage, install):
++            self.config = {"active": "original"}
++        @contextmanager
++        def database(self):
++            assert not target.exists()
++            yield
++            events.append("stopped")
++        def validate_pair(self, database):
++            assert not target.exists()
++            events.append("validated")
++    monkeypatch.setattr("app.windows_local.Runtime", FakeRuntime)
++    migrate_legacy(source, target, tmp_path / "install")
++    assert events == ["validated", "stopped"]
++    for path in source.rglob("*"):
++        if path.is_file():
++            assert path.read_bytes() == (target / path.relative_to(source)).read_bytes()
++    assert not list(target.parent.glob("data.migrate-*"))
++
++
++def test_legacy_transition_refuses_locked_or_orphan_cluster(tmp_path):
++    from app.windows_layout import migrate_legacy
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    with exclusive(source):
++        with pytest.raises(Busy):
++            migrate_legacy(source, target, tmp_path / "install")
++    (source / "postgres/postmaster.pid").write_text("123")
++    with pytest.raises(ValueError, match="may be running"):
++        migrate_legacy(source, target, tmp_path / "install")
++    assert not target.exists()
++
++
++def test_legacy_transition_rejects_links(tmp_path):
++    from app.windows_layout import migrate_legacy
++    source = legacy_data(tmp_path)
++    target = tmp_path / "state/data"
++    target.parent.mkdir()
++    outside = tmp_path / "outside"
++    outside.write_bytes(b"private")
++    (source / "attachments/link").symlink_to(outside)
++    with pytest.raises(ValueError, match="Links/reparse"):
++        migrate_legacy(source, target, tmp_path / "install")
++    assert not target.exists()
++    assert outside.read_bytes() == b"private"
++
++
++@pytest.mark.parametrize("relative", ["outside.zip", "state/data/leak.zip", "state/backups/nested/copy.zip"])
++def test_windows_backup_refuses_unprotected_destination(tmp_path, relative):
++    from app.windows_layout import checked_backup_destination
++    with pytest.raises(ValueError, match="protected state/backups"):
++        checked_backup_destination(tmp_path, tmp_path / relative)
++
++
++def test_windows_backup_accepts_protected_destination(tmp_path):
++    from app.windows_layout import checked_backup_destination
++    destination = tmp_path / "state/backups/synthetic.zip"
++    assert checked_backup_destination(tmp_path, destination) == destination.resolve()
++
++
++def test_alembic_config_reads_utf8_and_preserves_here(tmp_path):
++    from app.windows_local import load_alembic_config
++    ini = tmp_path / "alembic.ini"
++    ini.write_text(
++        "[alembic]\nscript_location = %(here)s/alembic\n# комментарий UTF-8\n",
++        encoding="utf-8",
++    )
++    cfg = load_alembic_config(ini)
++    location = Path(cfg.get_main_option("script_location"))
++    assert location.resolve() == (tmp_path / "alembic").resolve()
++    assert cfg.config_file_name == str(ini)
++
++
++def test_alembic_config_cp1252_regression(monkeypatch):
++    import configparser
++    from alembic.config import Config
++    from app.windows_local import load_alembic_config
++    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
++    original = configparser.ConfigParser.read
++
++    def forced_cp1252(self, filenames, encoding=None):
++        return original(self, filenames, encoding="cp1252")
++
++    monkeypatch.setattr(configparser.ConfigParser, "read", forced_cp1252)
++    with pytest.raises(UnicodeDecodeError) as raised:
++        Config(str(ini)).file_config
++    assert raised.value.start == 3635
++    assert raised.value.object[raised.value.start] == 0x81
++    assert load_alembic_config(ini).get_main_option("script_location")
++
++
++def test_alembic_config_head_and_unicode_path(tmp_path):
++    from alembic.script import ScriptDirectory
++    from app.windows_local import load_alembic_config
++    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
++    assert ScriptDirectory.from_config(load_alembic_config(ini)).get_current_head() == "e4b8c2d16a70"
++    unicode_dir = tmp_path / "Данные"
++    unicode_dir.mkdir()
++    unicode_ini = unicode_dir / "alembic.ini"
++    unicode_ini.write_text("[alembic]\nscript_location = %(here)s/alembic\n", encoding="utf-8")
++    cfg = load_alembic_config(unicode_ini)
++    location = Path(cfg.get_main_option("script_location"))
++    assert "Данные" in str(location)
++    assert location.resolve() == (unicode_dir / "alembic").resolve()
++
++
++def test_alembic_env_fileconfig_reads_utf8_chain(tmp_path, monkeypatch):
++    import configparser
++    from contextlib import nullcontext
++    import logging.config
++    from alembic import command
++    from alembic import context as alembic_context
++    from app.windows_local import load_alembic_config
++
++    ini = Path(__file__).resolve().parents[1] / "alembic.ini"
++    cfg = load_alembic_config(ini)
++    monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://edr:test@127.0.0.1:5432/test")
++    monkeypatch.setenv("STORAGE_ROOT", str(tmp_path / "storage"))
++    original_read = configparser.ConfigParser.read
++
++    def forced_locale_decode(self, filenames, encoding=None):
++        if encoding in (None, "locale"):
++            encoding = "cp1252"
++        return original_read(self, filenames, encoding=encoding)
++
++    monkeypatch.setattr(configparser.ConfigParser, "read", forced_locale_decode)
++
++    # Downstream alembic/env.py logging read without explicit UTF-8 still fails.
++    with pytest.raises(UnicodeDecodeError) as raised:
++        logging.config.fileConfig(cfg.config_file_name)
++    assert raised.value.start == 3635
++    assert raised.value.object[raised.value.start] == 0x81
++
++    # The real offline migrate chain executes the fixed env.py/fileConfig path.
++    monkeypatch.setattr(alembic_context, "configure", lambda *args, **kwargs: None)
++    monkeypatch.setattr(alembic_context, "begin_transaction", nullcontext)
++    monkeypatch.setattr(alembic_context, "run_migrations", lambda *args, **kwargs: None)
++    command.upgrade(cfg, "head", sql=True)

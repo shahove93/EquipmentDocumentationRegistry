@@ -1,0 +1,20 @@
+﻿CLOUD-APP-01 reproduction (read-only, no app startup/DB)
+=========================================================
+alembic.ini: 5218 bytes; first non-ASCII offset 3593; failing byte offset 3635 = 0x81
+context_utf8: "# URL намеренно не задан здесь: он подставляется из переменной о"
+
+cp1252_decode:
+UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 3635: character maps to <undefined>
+
+actual Alembic Config path with cp1252 forced:
+UnicodeDecodeError: 'charmap' codec can't decode byte 0x81 in position 3635: character maps to <undefined>
+  alembic/config.py:250 file_config -> alembic/util/compat.py:130 read(encoding="locale")
+
+proposed explicit-UTF-8 loader:
+ScriptDirectory.from_config(cfg).get_current_head() = e4b8c2d16a70
+expected = e4b8c2d16a70
+script_location = ./alembic
+%(here)s temp-config probe: /tmp/.../alembic (correct)
+
+Environment: WSL Python 3.14 + pinned Alembic 1.20.0 (official PyPI sdist matches).
+App runtime: embedded CPython 3.12.10, Alembic 1.20.0.

@@ -1,0 +1,87 @@
+﻿{
+    "finding":  "CLOUD-APP-01",
+    "owner":  "original Windows ProgramData/runtime + lifecycle logical TASK (not TASK-CI-WINDOWS-01)",
+    "kind":  "read-only RCA",
+    "cloud_run":  {
+                      "id":  41886936093,
+                      "head":  "8e5253b31494aba2e59efe1c8741cd7374e35322",
+                      "conclusion":  "failure",
+                      "failed_step":  "Silent install and installed-runtime checks",
+                      "exact_error":  "UnicodeDecodeError: \u0027charmap\u0027 codec can\u0027t decode byte 0x81 in position 3635: character maps to \u003cundefined\u003e",
+                      "traceback_in_cloud_log":  false,
+                      "traceback_absent_reason":  "app/windows_local.py catches and prints only EDR: \u003ctype\u003e: \u003cmessage\u003e (lines 518-519,537-539)",
+                      "artifact":  {
+                                       "id":  13352476524,
+                                       "size_bytes":  73228696,
+                                       "local_download":  "timed out twice; partial 4.9MB; remote retained"
+                                   }
+                  },
+    "versions":  {
+                     "app_python":  "3.12.10 (embedded build contract)",
+                     "alembic":  "1.20.0",
+                     "probe_environment":  "WSL Python 3.14 + pinned Alembic 1.20.0 (package source)"
+                 },
+    "files":  {
+                  "alembic_ini_sha256":  "601C011C280A625DA1DE37DE891A1A7DCA97263C67461167CE63676A195EF52E",
+                  "alembic_ini_bytes":  5218,
+                  "first_non_ascii_offset":  3593,
+                  "failing_byte_offset":  3635,
+                  "failing_byte":  129,
+                  "app_windows_local_sha256":  "648F15B5E08185D4FA9FAB4ED457D81ABD31CDD0878EB439E87065D30E613C4A",
+                  "read_call_site":  "app/windows_local.py:284 Config(str(self.install / \"alembic.ini\"))"
+              },
+    "source_facts":  {
+                         "config_init_has_encoding":  false,
+                         "file_config":  "alembic/config.py Config.file_config -\u003e compat.read_config_parser",
+                         "read_config_parser":  "file_config.read(file_argument, encoding=\"locale\")",
+                         "runner_locale_effect":  "cp1252 on windows-latest; 0x81 invalid",
+                         "official_sdist":  "https://files.pythonhosted.org/packages/ed/aa/02910bdb8e2f1444f6654d5b296cd827d126f82209050ee7b1000f92ac4b/alembic-1.20.0.tar.gz",
+                         "official_sdist_lines":  "alembic/util/compat.py:130 encoding=\"locale\"; alembic/config.py:250 read_config_parser; __version__=1.20.0"
+                     },
+    "reproduction":  {
+                         "direct_cp1252":  "FAIL at 3635 / 0x81",
+                         "forced_config_path_cp1252":  "FAIL at 3635 / 0x81",
+                         "proposed_loader_head":  "e4b8c2d16a70",
+                         "expected_head":  "e4b8c2d16a70",
+                         "proposed_here_interpolation":  "verified with temp %(here)s config"
+                     },
+    "fix_proposal":  {
+                         "preferred":  "explicit UTF-8 Config loader (Config(); cfg.file_config; parser.defaults()[\"here\"]=...; read_file(encoding=\"utf-8\"); cfg.config_file_name=...)",
+                         "allowlist":  [
+                                           "app/windows_local.py",
+                                           "tests/test_windows_local.py",
+                                           "optional docs note"
+                                       ],
+                         "rejected":  [
+                                          "PYTHONUTF8=1/-X utf8 process-wide workaround",
+                                          "errors=replace/ignore",
+                                          "silent conversion"
+                                      ]
+                     },
+    "unit_tests":  [
+                       "test_alembic_config_reads_utf8",
+                       "test_alembic_config_cp1252_regression",
+                       "test_alembic_head_unchanged"
+                   ],
+    "decision_required":  {
+                              "reopen_original_task":  "scoped product fix",
+                              "review":  "decide whether to spend one of two reserved Windows Codex calls",
+                              "run":  "one new cloud run after fix+review"
+                          },
+    "accounting":  {
+                       "ci_full_reviews":  4,
+                       "ci_codex_calls":  "4/4",
+                       "programdata_lifecycle_counters":  "preserved",
+                       "reserved_windows_calls":  "untouched"
+                   },
+    "non_actions":  {
+                        "product_edits":  false,
+                        "host_install":  false,
+                        "vm":  false,
+                        "db":  false,
+                        "commit":  false,
+                        "push":  false,
+                        "run":  false,
+                        "new_codex_review":  false
+                    }
+}
