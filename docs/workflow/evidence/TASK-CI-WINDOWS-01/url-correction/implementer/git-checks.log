@@ -1,0 +1,82 @@
+﻿CWD=D:\Antigravity\EquipmentDocumentationRegistry
+--- git diff --check (whole working tree) ---
+git : warning: in the working copy of 'docs/installation/windows.md', CRLF will be replaced by LF the next time Git tou
+ches it
+строка:1 знак:272
++ ... -check (whole working tree) ---"); $o = git diff --check 2>&1 | Out-S ...
++                                             ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: in the working copy of 'docs/workflow/APPROVALS.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'docs/workflow/HISTORY.md', CRLF will be replaced by LF the next time Git touches it
+warning: in the working copy of 'tests/test_windows_local.py', CRLF will be replaced by LF the next time Git touches it
+docs/workflow/HISTORY.md:2192: new blank line at EOF.
+EXIT_CODE=2
+
+--- git diff --check -- .github/workflows/windows-installer.yml docs/installation/windows.md (allowlisted) ---
+git : warning: in the working copy of 'docs/installation/windows.md', CRLF will be replaced by LF the next time Git tou
+ches it
+строка:1 знак:528
++ ... --"); $o2 = git diff --check -- .github/workflows/windows-installer.y ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: in the... Git touches it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+EXIT_CODE=0
+
+--- git status --porcelain ---
+ M .github/workflows/windows-installer.yml
+ M AGENTS.md
+ M ROADMAP.md
+ M docs/installation/windows.md
+ M docs/workflow/APPROVALS.md
+ M docs/workflow/HISTORY.md
+ M docs/workflow/MODEL-ROUTING.md
+ M docs/workflow/STATE.md
+ M packaging/windows/smoke.ps1
+ M packaging/windows/smoke.py
+ M tests/test_windows_local.py
+?? docs/adr/ADR-013-windows-programdata-runtime.md
+?? docs/adr/ADR-014-windows-offline-vcredist.md
+?? docs/tasks/TASK-CI-WINDOWS-01.md
+?? docs/tasks/TASK-EDR-UI-PASSPORTS-01.md
+?? docs/tasks/TASK-README-PRESENTATION-02.md
+?? docs/tasks/TASK-RELEASE-0.2.0.md
+?? docs/tasks/TASK-WINDOWS-CRT-OFFLINE-01.md
+?? docs/tasks/TASK-WINDOWS-LIFECYCLE-ACCEPTANCE-01.md
+?? docs/tasks/TASK-WINDOWS-PROGRAMDATA-01.md
+?? docs/workflow/NEXT-STAGE.md
+?? docs/workflow/evidence/TASK-CI-WINDOWS-01/CI-CLOUD-01-diagnosis.md
+?? docs/workflow/evidence/TASK-CI-WINDOWS-01/cloud-run-41881330228/
+?? docs/workflow/evidence/TASK-CI-WINDOWS-01/inno-6.7.3-verification.json
+?? docs/workflow/evidence/TASK-CI-WINDOWS-01/url-correction/
+?? docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01-approval.md
+?? docs/workflow/evidence/TASK-WINDOWS-CRT-OFFLINE-01/
+?? docs/workflow/evidence/TASK-WINDOWS-LOCAL-01-sandbox/
+?? docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/
+?? docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A1-C2/
+?? docs/workflow/evidence/TASK-WINDOWS-PROGRAMDATA-01-A2-C1/
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C1.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-A2-C2.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C1.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C2.md
+?? docs/workflow/reviews/TASK-WINDOWS-PROGRAMDATA-01-C3-diagnosis.md
+?? opencode.json
+?? packaging/windows/diagnose-edr-cleanup.ps1
+?? packaging/windows/test-crt.ps1
+?? packaging/windows/test-programdata-installer.ps1
+?? packaging/windows/test-programdata-lifecycle.py
+?? packaging/windows/test-programdata.ps1
+EXIT_CODE=0
+
+--- protected-file hashes vs baseline-hashes.txt ---
+DIFF D:\Antigravity\EquipmentDocumentationRegistry\.github\workflows\windows-installer.yml base=7A256F572EC97760DF255EAE6E6E9E99989D7A00D68C456D15362FD27AD8DA21 now=DA22EDF5E8A00E291667FA7DC38C8ADEAF40B96CC9761CDB2B2424844D8FEBCB
+DIFF D:\Antigravity\EquipmentDocumentationRegistry\docs\installation\windows.md base=E68366289EDA94264DFEA815CB817BD3293218F1A87BAD727B80D9AEEFD4881E now=CFC8BC96685FE156E228F7B6D316E261A649D2B6190F187CEF6EFC0B0EAE6D41
+OK   D:\Antigravity\EquipmentDocumentationRegistry\packaging\windows\build.ps1 5F2C7729C1B0AD61C471A6EB3D753D69928901637D398D5B9EA4970BAB38D593
+OK   D:\Antigravity\EquipmentDocumentationRegistry\packaging\windows\edr.iss C912AE4A8614C3B6516DACD094A8356B555B889BBF4A464C931DF14073A8AD7C
+OK   D:\Antigravity\EquipmentDocumentationRegistry\packaging\windows\ci-installer.ps1 764AB73A1C3BAD3AD49FC774AF61891AC690A3566C8B7E4F349D9583098D2F05
+OK   D:\Antigravity\EquipmentDocumentationRegistry\packaging\windows\ci-installer.py 5EC794D5BC39ABD5772639BE1F9B28BA08CF772F92EF1F049442F75DE51B9FA5
+OK   D:\Antigravity\EquipmentDocumentationRegistry\app\windows_local.py 648F15B5E08185D4FA9FAB4ED457D81ABD31CDD0878EB439E87065D30E613C4A
+OK   D:\Antigravity\EquipmentDocumentationRegistry\app\windows_layout.py C7081F5A4C400E89D862865D5A6EEB4450B98C024CB8C90A2EA891372B08F8E0
+OK   D:\Antigravity\EquipmentDocumentationRegistry\packaging\windows\smoke.ps1 16EABA34D7F94499E47E92CE9F6427D217364D3E1E588619F25C7B1F6E10A170
+OK   D:\Antigravity\EquipmentDocumentationRegistry\packaging\windows\smoke.py F75E2012C1DAEF9B09E2092A8AA27B32ECE55FDACB23A48F8633FE33C9DECCB3

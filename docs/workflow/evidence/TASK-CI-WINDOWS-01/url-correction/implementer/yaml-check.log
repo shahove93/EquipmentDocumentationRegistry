@@ -1,0 +1,21 @@
+﻿CWD=D:\Antigravity\EquipmentDocumentationRegistry
+CMD=python docs\workflow\evidence\TASK-CI-WINDOWS-01\url-correction\implementer\check_yaml.py
+[PASS] trigger is workflow_dispatch only :: {'workflow_dispatch': None}
+[PASS] permissions.contents == read :: {'contents': 'read'}
+[PASS] exactly one job named windows-installer :: ['windows-installer']
+[PASS] INNO_VERSION remains 6.7.3 :: '6.7.3'
+[PASS] INNO_SETUP_URL is official immutable release :: 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe'
+[PASS] INNO_SETUP_SHA256 pinned :: '9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732'
+[PASS] one upload-artifact step :: 1
+[PASS] upload step uses if: always() :: 'always()'
+[PASS] single Inno Setup install step :: 1
+[PASS] hash compare precedes Start-Process :: Get-FileHash before Start-Process
+[PASS] hash mismatch throws
+[PASS] Authenticode status Valid checked
+[PASS] Authenticode signer CN=Pyrsys B.V. checked
+[PASS] signature check precedes Start-Process
+[PASS] ISCC FileVersion 6.7.3 check retained :: FileVersion regex present
+[PASS] ISCC check still after installation
+
+ALL STRUCTURAL ASSERTIONS PASSED
+EXIT_CODE=0

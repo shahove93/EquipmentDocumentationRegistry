@@ -1,0 +1,9 @@
+﻿CWD=D:\Antigravity\EquipmentDocumentationRegistry
+CMD=& 'C:\Users\user\AppData\Local\Temp\opencode\actionlint\actionlint.exe' .github/workflows/windows-installer.yml
+actionlint version:
+1.7.12
+installed by downloading from release page
+built with go1.26.1 compiler for windows/amd64
+stdout/stderr:
+
+EXIT_CODE=0

@@ -1,0 +1,33 @@
+﻿CWD=D:\Antigravity\EquipmentDocumentationRegistry
+PowerShellVersion=5.1.26100.9711
+Installer=C:\Users\user\AppData\Local\Temp\opencode\inno-diag\innosetup-6.7.3.exe (not installed/executed)
+
+=== CASE correct ===
+CMD=powershell.exe -NoProfile -ExecutionPolicy Bypass -File docs\workflow\evidence\TASK-CI-WINDOWS-01\url-correction\implementer\fail-closed-proof.ps1 -Setup <installer> -Mode correct
+mode: correct
+setup: C:\Users\user\AppData\Local\Temp\opencode\inno-diag\innosetup-6.7.3.exe
+actual SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+expected SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+Authenticode status: Valid
+Authenticode signer: CN=Pyrsys B.V., O=Pyrsys B.V., S=Noord-Holland, C=NL
+VERIFICATION_OK
+EXIT_CODE=0
+
+=== CASE wrong-hash ===
+CMD=powershell.exe -NoProfile -ExecutionPolicy Bypass -File docs\workflow\evidence\TASK-CI-WINDOWS-01\url-correction\implementer\fail-closed-proof.ps1 -Setup <installer> -Mode wrong-hash
+mode: wrong-hash
+setup: C:\Users\user\AppData\Local\Temp\opencode\inno-diag\innosetup-6.7.3.exe
+actual SHA256: 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+expected SHA256: 0000000000000000000000000000000000000000000000000000000000000000
+SHA-256 mismatch for C:\Users\user\AppData\Local\Temp\opencode\inno-diag\innosetup-6.7.3.exe: expected 0000000000000000
+000000000000000000000000000000000000000000000000, got 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732
+D:\Antigravity\EquipmentDocumentationRegistry\docs\workflow\evidence\TASK-CI-WINDOWS-01\url-correction\implementer\fail
+-closed-proof.ps1:22 ����:5
++     throw "SHA-256 mismatch for $($Setup): expected $expectedHash, go ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (SHA-256 mismatc...3C056C66E97B732:String) [], RuntimeException
+    + FullyQualifiedErrorId : SHA-256 mismatch for C:\Users\user\AppData\Local\Temp\opencode\inno-diag\innosetup-6.7.3 
+   .exe: expected 0000000000000000000000000000000000000000000000000000000000000000, got 9C73C3BAE7ED48D44112A0F48E667  
+  42C00090BDB5BEF71D9D3C056C66E97B732
+ 
+EXIT_CODE=1

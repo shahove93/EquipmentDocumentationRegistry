@@ -259,11 +259,13 @@ Job в одной эфемерной VM выполняет следующую ц
    Эти значения взяты из существующего build contract
    (`TASK-WINDOWS-CRT-OFFLINE-01/manifest.json`,
    `TASK-WINDOWS-PROGRAMDATA-01-A1-C1-prerequisites/build-manifest.json`).
-3. Ставится Inno Setup **6.7.3** с официального URL; job проверяет
-   `FileVersion` установленного `ISCC.exe` и падает, если это не `6.7.3`.
-   Версия подтверждается по `FileVersion`, а не по байтам: закреплённый SHA-256
-   установщика Inno Setup не записан, поэтому байтовая воспроизводимость не
-   гарантируется.
+3. Ставится Inno Setup **6.7.3** с официального immutable release
+   `https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe`.
+   Перед запуском установщика job проверяет его SHA-256
+   `9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732`
+   и действительную Authenticode-подпись с `CN=Pyrsys B.V.` (при несоответствии
+   job падает), а после установки — `FileVersion` установленного `ISCC.exe`
+   `6.7.3`.
 4. `packaging/windows/build.ps1` собирает установщик в новом `-WorkDirectory`
    с загруженными архивами, `frontend/dist`, найденным `ISCC.exe` и
    `-BuilderPython` из `setup-python`. Путь, размер и SHA-256 собранного EXE

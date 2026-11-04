@@ -24,7 +24,8 @@ jobs:
       PYTHON_ZIP_SHA256: '4ACBED6DD1C744B0376E3B1CF57CE906F9DC9E95E68824584C8099A63025A3C3'
       POSTGRES_ZIP_URL: 'https://get.enterprisedb.com/postgresql/postgresql-18.6-5-windows-x64-binaries.zip'
       POSTGRES_ZIP_SHA256: 'E2246BA91D22345BC3D017586C09EDE52D9DF180B1EEB480F050445F1CAD84E2'
-      INNO_SETUP_URL: 'https://files.jrsoftware.org/is/6/innosetup-6.7.3.exe'
+      INNO_SETUP_URL: 'https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe'
+      INNO_SETUP_SHA256: '9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732'
     steps:
       - name: Check out source
         uses: actions/checkout@v7
@@ -86,6 +87,18 @@ jobs:
           }
           $setup = Join-Path $env:RUNNER_TEMP 'innosetup-6.7.3.exe'
           Invoke-WebRequest -UseBasicParsing -Uri $env:INNO_SETUP_URL -OutFile $setup
+          $actualHash = (Get-FileHash -LiteralPath $setup -Algorithm SHA256).Hash
+          if ($actualHash -ne $env:INNO_SETUP_SHA256) {
+              throw "SHA-256 mismatch for $($setup): expected $($env:INNO_SETUP_SHA256), got $actualHash"
+          }
+          $signature = Get-AuthenticodeSignature -LiteralPath $setup
+          if ($signature.Status -ne 'Valid') {
+              throw "Inno Setup installer signature status is not Valid: $($signature.Status)"
+          }
+          if ($signature.SignerCertificate.Subject -notmatch 'CN=Pyrsys B\.V\.') {
+              throw "Inno Setup installer signer is not Pyrsys B.V.: $($signature.SignerCertificate.Subject)"
+          }
+          Write-Output "Inno Setup installer verified: $($setup) sha256=$actualHash signer=$($signature.SignerCertificate.Subject)"
           $process = Start-Process -FilePath $setup -Wait -PassThru -ArgumentList @(
               '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-', "/DIR=$innoDir"
           )

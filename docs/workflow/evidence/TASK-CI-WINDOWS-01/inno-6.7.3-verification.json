@@ -1,0 +1,91 @@
+{
+  "task": "TASK-CI-WINDOWS-01",
+  "finding": "CI-CLOUD-01",
+  "kind": "C3 diagnosis",
+  "date_utc": "2026-11-04",
+  "accounting": {
+    "approach": "A1",
+    "full_reviews_used": "2/2",
+    "failed_reviews": 1,
+    "codex_calls_ci": "2/4",
+    "third_a1_review": false,
+    "a2_started": false,
+    "run_executed_during_diagnosis": false
+  },
+  "failed_url": {
+    "url": "https://files.jrsoftware.org/is/6/innosetup-6.7.3.exe",
+    "http_status": 404,
+    "used_by_run": "41881330228"
+  },
+  "official_page": {
+    "url": "https://jrsoftware.org/isdl.php",
+    "http_status": 200,
+    "notes": "Inno Setup 7.1.1 recommended; Inno Setup 6.7.4 listed for 6.x; downloads via GitHub"
+  },
+  "files_directory": {
+    "url": "https://files.jrsoftware.org/is/6/",
+    "http_status": 200,
+    "notes": "only .issig files and readme.txt; no .exe files",
+    "readme": {
+      "url": "https://files.jrsoftware.org/is/6/readme.txt",
+      "http_status": 200,
+      "text": "In March 2026 Inno Setup download links were updated to use immutable releases on GitHub"
+    }
+  },
+  "inno_6_7_3": {
+    "url": "https://github.com/jrsoftware/issrc/releases/download/is-6_7_3/innosetup-6.7.3.exe",
+    "http_status": 200,
+    "bytes": 10592232,
+    "sha256": "9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732",
+    "authenticode": {
+      "status": "Valid",
+      "signer_subject": "CN=Pyrsys B.V., O=Pyrsys B.V., S=Noord-Holland, C=NL",
+      "thumbprint": "E0AB19C8D38CBF9C44709925122A7A02F8C70CB7"
+    },
+    "github_attestation": {
+      "command": "gh release verify-asset is-6_7_3 innosetup-6.7.3.exe --repo jrsoftware/issrc",
+      "exit_code": 0,
+      "attested_sha256": "9c73c3bae7ed48d44112a0f48e66742c00090bdb5bef71d9d3c056c66e97b732"
+    },
+    "issig": {
+      "url": "https://files.jrsoftware.org/is/6/innosetup-6.7.3.exe.issig",
+      "http_status": 200,
+      "bytes": 376,
+      "sha256": "18DA06B0F8CA6021A42E023EBD02FE10D37A30A43639C08CC8B15363243663A0",
+      "format": "issig-v2",
+      "file_size_match": true,
+      "file_hash_match": true,
+      "key_id_match": true,
+      "ecdsa_p256_signature_valid": true,
+      "public_key_url": "https://files.jrsoftware.org/is/misc/def02.ispublickey",
+      "public_key_http_status": 200
+    },
+    "installer_product_version": "6.7.3",
+    "iscc_file_version_local": "NOT_VERIFIED (no install; innoextract 1.9 supports only up to Inno 6.0.5 and failed on 6.7.3); CI post-install FileVersion check remains authoritative"
+  },
+  "inno_6_7_4_alternative": {
+    "url": "https://github.com/jrsoftware/issrc/releases/download/is-6_7_4/innosetup-6.7.4.exe",
+    "http_status": 200,
+    "bytes": 10604576,
+    "sha256": "A549929319F9120716677C685535CA4671E4B937B5FDC87E2585F32D8EB30E8C",
+    "authenticode": {
+      "status": "Valid",
+      "signer_subject": "CN=Pyrsys B.V., O=Pyrsys B.V., S=Noord-Holland, C=NL"
+    },
+    "github_attestation": {
+      "command": "gh release verify-asset is-6_7_4 innosetup-6.7.4.exe --repo jrsoftware/issrc",
+      "exit_code": 0
+    },
+    "requires_version_decision": true
+  },
+  "recommended_plan": {
+    "approach": "bounded A1 correction (not a new approach)",
+    "allowlist": [".github/workflows/windows-installer.yml", "docs/installation/windows.md (optional CI note)"],
+    "changes": [
+      "set INNO_SETUP_URL to the official immutable GitHub is-6_7_3 release URL",
+      "add and verify INNO_SETUP_SHA256 = 9C73C3BAE7ED48D44112A0F48E66742C00090BDB5BEF71D9D3C056C66E97B732 before running the installer",
+      "verify Authenticode signer Pyrsys B.V. and keep the post-install ISCC FileVersion == 6.7.3 check"
+    ],
+    "process": "C3 diagnosis only; no third A1 full review; user decision required for scoped re-verification and one new run approval; no automatic run/commit/push"
+  }
+}
